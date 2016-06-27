@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux'
-import '../node_modules/react-mdl/extra/material.js';
 import Root from './components/Root/RootContainer';
 import store from './store';
 

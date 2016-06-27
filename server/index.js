@@ -59,5 +59,22 @@ if (config.env === 'development') {
   const relayServer = new Koa();
   relayServer.use(convert(historyApiFallback()));
   relayServer.use(mount('/', serve(path.join(__dirname, '../build'))));
-  relayServer.listen(config.port, () => console.log(chalk.green(`Relay is listening on port ${config.port}`)));
+  
+  const http_server =  relayServer.listen(config.port, () => console.log(chalk.green(`Relay is listening on port ${config.port}`)));
+
+  const horizon_server = horizon(http_server, {
+    auth: {
+      token_secret: 'my_super_secret_secret'
+    },
+    project_name: "horizon_test",
+    auto_create_collection: true,
+    auto_create_index: true,
+    permissions: true,
+  });
+
+  horizon_server.add_auth_provider(eve_sso, {
+    id: '56e9bfbd864f4e7fbc68c64dd71675f4',
+    path: 'eve_sso',
+    secret: 'zD7gIy7GNmbcLFybtQwZPGpz2boBwtzoMt0WtIxA',
+  });
 }
