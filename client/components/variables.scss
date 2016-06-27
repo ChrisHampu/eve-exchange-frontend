@@ -1,0 +1,19 @@
+/* ==========================================================================
+   COLOR
+   ========================================================================== */
+$white: #FFFFFF;
+$black: #333333;
+$gray: #E3E3E3;
+$blue: #00BCD4;
+$black-light: #2B2D2E;
+
+$base-color: #333a41;
+$base-color-light: color($base-color lightness(+10%));
+$base-color-lighter: color($base-color lightness(+25%));
+$base-color-lightest: color($base-color lightness(+40%));
+$base-color-darker: color($base-color lightness(-5%));
+$base-color-darkest: color($base-color lightness(-10%));
+
+$gold-color: #eba91b;
+$blue-color: #59c8e2;
+$blue-color-darker: color($blue-color lightness(-15%));

@@ -1,0 +1,15 @@
+@import '../variables.scss';
+
+.header {
+  display: flex;
+  background-color: $base-color-darker !important;
+
+  > div {
+    margin-top: 0 !important;
+    margin-right: 1rem !important;
+
+    > div > div {
+      background-color: $base-color-darker !important;
+    }
+  }
+}
