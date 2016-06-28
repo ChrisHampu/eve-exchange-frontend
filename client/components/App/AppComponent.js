@@ -1,6 +1,7 @@
 import React from 'react';
 import 'normalize.css/normalize.css';
 import s from './App.scss';
+import store from '../../store';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -23,6 +24,7 @@ export default class App extends React.Component {
   };
 
   render() {
+
     return (
       <div className={s.root}>
         <MuiThemeProvider muiTheme={getMuiTheme(theme)}>

@@ -61,6 +61,8 @@ export function redirectIfAuthed() {
 
 export function requireAccess(requiredAccessLevel) {
 
+  const _requiredAccessLevel = requiredAccessLevel;
+
   return async (nextState, transition) => {
 
     //redirectToLogin(transition);
@@ -73,11 +75,7 @@ export function requireAccess(requiredAccessLevel) {
 
     await getCurrentUser().then(() => {
 
-      console.log(store.getState());
-      console.log(requiredAccessLevel);
-      console.log(store.getState().auth.groups.indexOf(requiredAccessLevel) );
-
-      if (!userHasGroup(requiredAccessLeve1)) {
+      if (!userHasGroup(_requiredAccessLevel)) {
 
         console.log("No required access level");
         redirectToLogin(transition);

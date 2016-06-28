@@ -1,0 +1,13 @@
+@import '../variables.scss';
+
+.root {
+  padding: 1rem 1rem 0;
+  flex: 1;
+
+  .page_title {
+    color: $base-color-lightest;
+    font-size: 1.8rem;
+    font-weight: 300;
+    padding-bottom: 1rem;
+  }
+}

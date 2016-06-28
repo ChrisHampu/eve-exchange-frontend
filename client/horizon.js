@@ -1,12 +1,18 @@
 import Horizon from '@horizon/client';
 import store from './store';
 import { updateUser } from './actions/authActions';
+import 'whatwg-fetch';
+import Promise from 'bluebird';
+import { parseString } from 'xml2js';
+
+const parseXml = Promise.promisify(parseString);
 
 const horizon = Horizon({ authType: { type: 'token', storeLocally: true }});
 let userData = null;
 
 if (hasAuthToken()) {
   horizon("users").fetch().subscribe(()=>{}, ()=>{}, ()=>{});
+  horizon("users_auth").fetch().subscribe(()=>{}, ()=>{}, ()=>{});
 }
 
 export function clearAuthToken() {
@@ -45,9 +51,22 @@ export function getCurrentUser() {
       return;
     }
 
-    horizon.currentUser().fetch().subscribe( user => {
+    horizon.currentUser().fetch().subscribe( async (user) => {
+
+      user.id = user.info;
+
+      const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${user.id}`);
+      const body = await res.text();
+      const xml = await parseXml(body);
+
+      const info = xml.eveapi.result[0];
+
+      user.corporation = info.corporation[0];
+      user.name = info.characterName[0];
+
       userData = user;
-      store.dispatch(updateUser(userData));
+      store.dispatch(updateUser(user));
+
       resolve(user);
     }, 
     err => { console.log(err); reject(err) },
