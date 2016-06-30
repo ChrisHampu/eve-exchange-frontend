@@ -1,10 +1,16 @@
 /* eslint-disable global-require */
 import React from 'react';
-import { select, axisLeft, axisBottom } from '../../d3.js';
+import { select, axisLeft, axisBottom, axisRight } from '../../d3.js';
 import s from './Axis.scss';
 import cx from 'classnames';
 
 export default class Axis extends React.Component {
+
+  static propTypes = {
+
+    format: React.PropTypes.string,
+    tickSize: React.PropTypes.number
+  };
 
   constructor(props) {
     super(props);
@@ -22,12 +28,25 @@ export default class Axis extends React.Component {
       case "left":
         this.state.axis = axisLeft(this.props.scale);
         break;
+      case "right":
+        this.state.axis = axisRight(this.props.scale);
+        break;
     }
   }
 
   update() {
 
-    this.state.axis.ticks(this.props.ticks);
+    if (this.props.format) {
+      this.state.axis.ticks(this.props.ticks, this.props.format);
+    }
+    else {
+      this.state.axis.ticks(this.props.ticks);
+    }
+
+    if (this.props.tickSize) {
+      this.state.axis.tickSize(this.props.tickSize, 0, 0);
+    }
+
     this.state.axis(select(this.refs.axis));
   }
 

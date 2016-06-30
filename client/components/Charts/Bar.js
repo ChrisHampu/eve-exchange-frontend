@@ -45,7 +45,7 @@ export default class CandleStick extends React.Component {
 
     return (
       <g>
-        <rect x={this.state.cx} y={this.state.cy} width={this.state.barWidth} height={this.state.barHeight} fill={this.state.fill} />
+        <rect onMouseOver={(ev)=>{this.props.mouseOver(ev,this.props.dataElem,"volume");}} mouseOut={()=>{this.props.mouseOut();}} x={this.state.cx} y={this.state.cy} width={this.state.barWidth} height={this.state.barHeight} fill={this.state.fill} />
       </g>
     )
   }

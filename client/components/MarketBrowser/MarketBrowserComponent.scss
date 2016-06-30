@@ -33,13 +33,26 @@
     }
   }
 
-  .market_item_chart_container {
-    max-height: 350px;
-    height: 350px;
-    width: 100%;
+  .market_item_view_body {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 
-    svg {
-      box-sizing: border-box;
+    .market_item_chart_container {
+      width: 100%;
+      flex: 1;
+      min-height: 50%;
+
+      svg {
+        box-sizing: border-box;
+      }
+    }
+
+    .market_item_order_container {
+      margin-top: 20px;
+      flex: 1;
+      overflow-y: scroll;
     }
   }
 }

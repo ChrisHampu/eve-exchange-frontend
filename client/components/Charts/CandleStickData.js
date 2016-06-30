@@ -32,7 +32,7 @@ export default class CandleStickData extends React.Component {
         {
           this.props.data.map((el, i) => {
             return (
-              <CandleStick key={i} dataElem={el} xScale={this.props.xScale} yScale={this.props.yScale} candleWidth={candleWidth} />
+              <CandleStick mouseOver={this.props.mouseOver} mouseOut={this.props.mouseOut} key={i} dataElem={el} xScale={this.props.xScale} yScale={this.props.yScale} candleWidth={candleWidth} />
             )
           })
         }
