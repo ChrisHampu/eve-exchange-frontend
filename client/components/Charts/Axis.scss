@@ -1,0 +1,13 @@
+@import '../variables.scss';
+
+.root {
+  text {
+
+    fill: $base-color-lightest !important;
+  }
+
+  line, path {
+
+    stroke: $base-color-lightest !important;
+  }
+}

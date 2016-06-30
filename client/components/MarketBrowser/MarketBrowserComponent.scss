@@ -3,3 +3,131 @@
 .root {
 
 }
+
+.market_browser_container {
+  overflow: hidden;
+  height: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  width: 100%;
+}
+
+.market_item_view {
+  width: 100%;
+  color: $base-color-lightest;
+  flex: 2;
+
+  .market_item_view_header {
+    width: 100%;
+    border-bottom: 2px solid $base-color-lighter;
+    padding-bottom: 20px;
+    .market_item_view_header_name {
+      font-size: 1.5rem;
+      font-weight: 300;
+      display: inline-block;
+    }
+    .market_item_view_header_menus {
+      position: absolute;
+      right: 25px;
+      display: inline-block;
+    }
+  }
+
+  .market_item_chart_container {
+    max-height: 350px;
+    height: 350px;
+    width: 100%;
+
+    svg {
+      box-sizing: border-box;
+    }
+  }
+}
+
+.market_browser {
+  //background-color: $base-color-darkest;
+  background-color: #262b2f;
+  color: $text-grey;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+  margin-right: 20px;
+  border: 1px solid $base-color-darkest;
+  max-width: 600px;
+  width: 600px;
+  font-size: 0.9em;
+  font-weight: 700;
+  box-shadow: rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px;
+  flex: 1;
+  box-sizing: border-box;
+
+  .market_browser_search {
+    font-weight: 300;
+    padding-left: 1rem;
+
+    label {
+      color: $blue-color !important;
+      line-height: 0px !important;
+    }
+
+    input {
+      margin-top: 0 !important;
+    }
+
+    hr:first-child {
+      border-color: rgba(255,255,255,0.5) !important;
+    }
+
+    hr:not(:first-child) {
+      border-color: $blue-color !important;
+    }
+  }
+
+  .market_browser_row {
+    cursor: pointer;
+    width: 100%;
+    //margin-left: 10px;
+
+    .market_browser_row_meta {
+      padding: 0.5rem;
+
+      &:hover {
+        background-color: $base-color;
+      }
+
+      svg {
+        vertical-align: middle;
+        fill: #eba91b !important;
+      }
+
+      .market_browser_row_name {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    .market_browser_item {
+      padding: 0.35rem 0 0.35rem 1rem;
+
+      &:hover {
+        background-color: $base-color;
+      }
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+ 
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(88, 95, 103);
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: #262b2f;
+}

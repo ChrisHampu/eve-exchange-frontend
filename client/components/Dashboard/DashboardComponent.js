@@ -2,23 +2,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
+import { browserHistory } from 'react-router'
+import cx from 'classnames';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
+import s from './DashboardComponent.scss';
+
+// Material UI
 import Paper from 'material-ui/Paper';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import s from './DashboardComponent.scss';
 import Divider from 'material-ui/Divider';
-
+import Badge from 'material-ui/Badge';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import Avatar from 'material-ui/Avatar';
-import { browserHistory } from 'react-router'
-import cx from 'classnames';
+import IconButton from 'material-ui/IconButton';
 
 // Icons
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import ProfileIcon from 'material-ui/svg-icons/action/account-box';
 import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
 import ShoppingIcon from 'material-ui/svg-icons/action/shopping-cart';
+import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
+import LeftArrowIcon from 'material-ui/svg-icons/navigation/arrow-back';
 
 const MainMenu = [
   {
@@ -118,7 +123,22 @@ class Dashboard extends React.Component {
         </Paper>
         <div className={s.body_container}>
           <Toolbar className={s.dashboard_header}>
-            <ToolbarGroup float='right'>
+            <ToolbarGroup firstChild={true} className={cx(s.dashboard_toolbar)}>
+              <IconButton className={s.dashboard_header_backbutton} onClick={()=>{ browserHistory.goBack(); }} style={{width: "56px", height: "56px"}} tooltip="Go Back">
+                <LeftArrowIcon />
+              </IconButton>
+            </ToolbarGroup>
+            <ToolbarGroup className={cx(s.dashboard_toolbar, s.dashboard_toolbar_right)}>
+              <div className={s.dashboard_header_notifications_container}>
+                <Badge
+                  className={s.dashboard_header_notifications}
+                  badgeContent={0}
+                >
+                  <IconButton style={{width: "56px", height: "56px"}} tooltip="Notifications">
+                    <NotificationsIcon />
+                  </IconButton>
+                </Badge>
+              </div>
               <div className={s.dashboard_user}>
                 <div className={s.dashboard_user_inner}>
                   <div>
@@ -136,7 +156,7 @@ class Dashboard extends React.Component {
           </Toolbar>
           { this.props.main !== undefined ? this.props.main :
             <DashboardPage title="Dashboard">
-            
+
             </DashboardPage>
           }
         </div>

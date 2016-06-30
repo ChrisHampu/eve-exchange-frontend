@@ -80,9 +80,46 @@
       height: 60px !important;
       background-color: $base-color-darker !important;
 
-      > div {
+      .dashboard_toolbar {
+        float: left;
+      }
+
+      .dashboard_toolbar.dashboard_toolbar_right {
         float: right;
       }
+
+      .dashboard_header_backbutton svg {
+          fill: $base-color-lightest !important;
+      }
+
+      .dashboard_header_notifications_container {
+        display: inline-block;
+        padding-right: 0.2rem;
+        vertical-align: middle;
+
+        .dashboard_header_notifications {
+          padding: 0 0.4rem 0 0 !important;
+          display: flex;
+          height: 60px;
+          align-items: center;
+
+          svg {
+            fill: $base-color-lightest !important;
+          }
+
+          > span {
+            width: 20px !important;
+            height: 20px !important;
+            display: flex;
+            color: #ffffff !important;
+            background-color: $blue-color-darker !important;
+            top: 8px !important;
+            right: 8px !important;
+          }
+        }
+      }
+
+
 
       .dashboard_user {
         display: inline-block;

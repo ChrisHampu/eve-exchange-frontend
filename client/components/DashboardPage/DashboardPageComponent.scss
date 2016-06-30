@@ -3,7 +3,10 @@
 .root {
   padding: 1rem 1rem 0;
   flex: 1;
-
+  display: flex;
+  flex-direction: inherit;
+  align-items: flex-start;
+  
   .page_title {
     color: $base-color-lightest;
     font-size: 1.8rem;
