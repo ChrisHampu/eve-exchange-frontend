@@ -14,6 +14,10 @@ export default class CandleStick extends React.Component {
 
   constructor(props) {
     super(props)
+
+    this.state = {
+      fill: this.props.dataElem.open <= this.props.dataElem.close ? "#2E7D32" : "#C62828"
+    };
   }
 
   update() {
@@ -29,8 +33,7 @@ export default class CandleStick extends React.Component {
       wx1: this.props.xScale(el.date),
       wy1: this.props.yScale(el.high),
       wx2: this.props.xScale(el.date),
-      wy2: this.props.yScale(el.low),
-      fill: el.open <= el.close ? "#2E7D32" : "#C62828"
+      wy2: this.props.yScale(el.low)
     });
   }
 
@@ -45,12 +48,30 @@ export default class CandleStick extends React.Component {
     this.update();
   }
 
+  handleMouseOver(ev) {
+
+    this.props.mouseOver(ev,this.props.dataElem,"ohlc");
+
+    this.setState({
+      fill: this.props.dataElem.open <= this.props.dataElem.close ? "rgb(71, 152, 75)" : "rgb(222, 75, 75)"
+    });
+  }
+
+  handleMouseOut() {
+
+    this.props.mouseOut();
+
+    this.setState({
+      fill: this.props.dataElem.open <= this.props.dataElem.close ? "#2E7D32" : "#C62828"
+    });
+  }
+
   render() {
 
     return (
       <g>
         <line x1={this.state.wx1} y1={this.state.wy1} x2={this.state.wx2} y2={this.state.wy2} strokeWidth={2} stroke={this.state.fill} />
-        <rect onMouseOver={(ev)=>{this.props.mouseOver(ev,this.props.dataElem,"ohlc");}} mouseOut={()=>{this.props.mouseOut();}} x={this.state.cx} y={this.state.cy} width={this.state.candleWidth} height={this.state.candleHeight} fill={this.state.fill} />
+        <rect onMouseOver={(ev)=>{this.handleMouseOver(ev);}} onMouseOut={()=>{this.handleMouseOut();}} x={this.state.cx} y={this.state.cy} width={this.state.candleWidth} height={this.state.candleHeight} fill={this.state.fill} />
       </g>
     )
   }

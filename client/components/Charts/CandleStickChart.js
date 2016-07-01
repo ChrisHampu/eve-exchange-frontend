@@ -8,6 +8,8 @@ import VolumeData from './BarChartData';
 import Axis from './Axis';
 import Indicator from './Indicator';
 
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+
 const data = [
   {
     date: new Date(Date.now()),
@@ -142,7 +144,7 @@ export default class Chart extends React.Component {
       ohlcOffset: Math.floor(this.props.height*0.75),
       volHeight: Math.floor(this.props.height*0.25),
       margin: {
-        top: 20,
+        top: 10,
         right: 35,
         bottom: 30,
         left: 50
@@ -169,6 +171,7 @@ export default class Chart extends React.Component {
 
     const minDate = new Date(Math.min(...data.map((el) => { return el.date; })));
     const maxDate = new Date(Math.max(...data.map((el) => { return el.date; })));
+
 
     this.state.xScale.domain([
       new Date(minDate.getTime()),
@@ -256,7 +259,7 @@ export default class Chart extends React.Component {
     }
 
     return (
-      <div ref="tooltip" style={{padding: "0.35rem", fontSize: "0.8rem", fontWeight: "300", background: "rgb(38, 43, 47)", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}>
+      <div ref="tooltip" style={{transition: "all 350ms ease-in-out", padding: "0.35rem", fontSize: "0.8rem", fontWeight: "300", background: "rgb(38, 43, 47)", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}>
         {contents}
       </div>
     );
@@ -269,10 +272,10 @@ export default class Chart extends React.Component {
 
     if (presentation === "spread") {
       x = ev.currentTarget.cx.baseVal.value + this.state.margin.left + ev.currentTarget.r.baseVal.value / 2;
-      y = ev.currentTarget.cy.baseVal.value - 5;
+      y = ev.currentTarget.cy.baseVal.value - 15;
     } else {
       x = ev.currentTarget.x.baseVal.value + this.state.margin.left + ev.currentTarget.width.baseVal.value / 2;
-      y = ev.currentTarget.y.baseVal.value - (presentation === "volume" ? 5 : 25);
+      y = ev.currentTarget.y.baseVal.value - (presentation === "volume" ? 15 : 35);
     }
 
     this.setState({
@@ -309,20 +312,40 @@ export default class Chart extends React.Component {
 
     return (
       <div style={{position: "relative"}}>
-        <svg width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
-          <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
-            <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${this.state.height}px)`}} />
-            <Axis anchor="left" scale={this.state.yScale} ticks={5} />
-            <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} />
-            <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${this.state.width}px)`}} format="%" />
+        <RadioButtonGroup name="timespan" defaultSelected="minutes" className={s.radios}>
+          <RadioButton
+            value="minutes"
+            label="5 Minutes"
+          />
+          <RadioButton
+            value="hours"
+            label="1 Hour"
+          />
+          <RadioButton
+            value="days"
+            label="1 Day"
+          />
+          <RadioButton
+            value="months"
+            label="1 Month"
+          />
+        </RadioButtonGroup>
+        <div className={s.chart}>
+          <svg width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
+            <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
+              <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${this.state.height}px)`}} />
+              <Axis anchor="left" scale={this.state.yScale} ticks={5} />
+              <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} />
+              <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${this.state.width}px)`}} format="%" />
 
-            <CandleStickData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={data} viewportWidth={this.state.width} xScale={this.state.xScale} yScale={this.state.yScale} />
-            <VolumeData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={data} viewportWidth={this.state.width} viewportHeight={this.state.height} xScale={this.state.xScale} yScale={this.state.volScale} />
+              <CandleStickData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={data} viewportWidth={this.state.width} xScale={this.state.xScale} yScale={this.state.yScale} />
+              <VolumeData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={data} viewportWidth={this.state.width} viewportHeight={this.state.height} xScale={this.state.xScale} yScale={this.state.volScale} />
 
-            <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={aggregates} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={(el) => { return el.date;}} yAccessor={(el) => { return el.spread/100;}} />
-          </g>
-        </svg>
-        {this.renderTooltip()}
+              <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={aggregates} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={(el) => { return el.date;}} yAccessor={(el) => { return el.spread/100;}} />
+            </g>
+          </svg>
+          {this.renderTooltip()}
+        </div>
       </div>
     );
   }

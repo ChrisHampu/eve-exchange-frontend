@@ -1,6 +1,49 @@
 /* eslint-disable global-require */
 import React from 'react';
 
+class Circle extends React.Component {
+
+  static propTypes = {
+
+    cx: React.PropTypes.number,
+    cy: React.PropTypes.number,
+    data: React.PropTypes.object,
+    r: React.PropTypes.number
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fill: "#eba91b"
+    };
+  }
+
+  handleMouseOver(ev) {
+
+    this.props.mouseOver(ev, this.props.data, "spread");
+
+    this.setState({
+      fill: "rgb(255, 222, 78)"
+    });
+  }
+
+  handleMouseOut() {
+
+    this.props.mouseOut();
+
+    this.setState({
+      fill: "#eba91b"
+    });
+  }
+
+  render() {
+    return (
+      <circle cx={this.props.cx} cy={this.props.cy} onMouseOver={(ev)=>{ this.handleMouseOver(ev); }} onMouseOut={()=>{ this.handleMouseOut(); }}  fill={this.state.fill} r={this.props.r} />
+    )
+  }
+}
+
 export default class Indicator extends React.Component {
 
   static propTypes = {
@@ -13,21 +56,11 @@ export default class Indicator extends React.Component {
   };
 
   constructor(props) {
-    super(props)
-  }
+    super(props);
 
-  update() {
-
-
-  }
-
-  componentWillMount() {
-
-
-  }
-
-  componentWillReceiveProps(nextProps) {
-
+    this.state = {
+      circleFill: "#eba91b"
+    };
   }
 
   render() {
@@ -57,7 +90,7 @@ export default class Indicator extends React.Component {
       {
         this.props.data.map((el, i) => {
           return (
-            <circle onMouseOver={(ev)=>{this.props.mouseOver(ev,el,"spread");}} mouseOut={()=>{this.props.mouseOut();}} key={i} cx={this.props.xScale(this.props.xAccessor(el))} cy={this.props.yScale(this.props.yAccessor(el))} r="5" fill="#eba91b"/>
+            <Circle data={el} mouseOver={this.props.mouseOver} mouseOut={this.props.mouseOut} key={i} cx={this.props.xScale(this.props.xAccessor(el))} cy={this.props.yScale(this.props.yAccessor(el))} r={5} />
           );
         })
       }

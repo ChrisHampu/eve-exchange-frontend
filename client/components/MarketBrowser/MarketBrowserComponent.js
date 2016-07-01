@@ -5,6 +5,7 @@ import s from './MarketBrowserComponent.scss';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import CandleStickChart from '../Charts/CandleStickChart';
 import cx from 'classnames';
+import horizon from '../../horizon';
 
 // Market group data
 import marketGroups from '../../sde/market_groups';
@@ -15,6 +16,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 // Icons
 import ArrowDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
@@ -22,6 +24,10 @@ import ArrowRightIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-right'
 
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
+
+horizon('orders').watch().subscribe(msg => console.log(msg));
+
+horizon('orders').store({region: 1, buy: 2, sell: 3});
 
 class MarketBrowserListItem extends React.Component {
 
@@ -156,85 +162,89 @@ class MarketItemViewComponent extends React.Component {
             </IconMenu>
           </div>
         </div>
-        <div className={s.market_item_view_body}>
-          <div ref="market_container" className={s.market_item_chart_container}>
-            <CandleStickChart width={this.state.containerWidth > 0 ? this.state.containerWidth-72 : 0} height={this.state.containerHeight}/>
-          </div>
-          <div className={s.market_item_order_container}>
-            <Table selectable={false} wrapperStyle={{paddingBottom: "20px"}} style={{backgroundColor: "rgb(38, 43, 47)"}}>
-              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow style={{height: "30px"}}>
-                  <TableHeaderColumn colSpan="3" style={{height: "30px", textAlign: 'center'}}>
-                    Active Sell Orders
-                  </TableHeaderColumn>
-                </TableRow>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableHeaderColumn style={{height: "30px"}}>Location</TableHeaderColumn>
-                  <TableHeaderColumn style={{height: "30px"}}>Price</TableHeaderColumn>
-                  <TableHeaderColumn style={{height: "30px"}}>Volume Remaining</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody stripedRows={true} displayRowCheckbox={false}>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
-                </TableRow>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
-                </TableRow>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
-                </TableRow>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
-                </TableRow>
-              </TableBody>
-            </Table>
-            <Table selectable={false} wrapperStyle={{paddingBottom: "60px"}} style={{backgroundColor: "rgb(38, 43, 47)"}}>
-              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow style={{height: "30px"}}>
-                  <TableHeaderColumn colSpan="3" style={{height: "30px", textAlign: 'center'}}>
-                    Active Buy Orders
-                  </TableHeaderColumn>
-                </TableRow>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableHeaderColumn style={{height: "30px"}}>Location</TableHeaderColumn>
-                  <TableHeaderColumn style={{height: "30px"}}>Price</TableHeaderColumn>
-                  <TableHeaderColumn style={{height: "30px"}}>Volume Remaining</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody stripedRows={true} displayRowCheckbox={false}>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
-                </TableRow>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
-                </TableRow>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
-                </TableRow>
-                <TableRow selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
-        </div>
+        <Tabs style={{height: "100%"}} contentContainerClassName={s.tab_content}>
+          <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
+            <div ref="market_container" className={s.market_item_chart_container}>
+              <CandleStickChart width={this.state.containerWidth > 0 ? this.state.containerWidth-72 : 0} height={this.state.containerHeight}/>
+            </div>
+          </Tab>
+          <Tab label="Orders" style={{backgroundColor: "rgb(38, 43, 47)"}}>
+            <div className={s.market_item_order_container}>
+              <Table selectable={false} wrapperStyle={{paddingBottom: "20px"}} style={{backgroundColor: "rgb(38, 43, 47)"}}>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow style={{height: "30px"}}>
+                    <TableHeaderColumn colSpan="3" style={{height: "30px", textAlign: 'center'}}>
+                      Active Sell Orders
+                    </TableHeaderColumn>
+                  </TableRow>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableHeaderColumn style={{height: "30px"}}>Location</TableHeaderColumn>
+                    <TableHeaderColumn style={{height: "30px"}}>Price</TableHeaderColumn>
+                    <TableHeaderColumn style={{height: "30px"}}>Volume Remaining</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody stripedRows={true} displayRowCheckbox={false}>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
+                  </TableRow>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
+                  </TableRow>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
+                  </TableRow>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
+                  </TableRow>
+                </TableBody>
+              </Table>
+              <Table selectable={false} wrapperStyle={{paddingBottom: "60px"}} style={{backgroundColor: "rgb(38, 43, 47)"}}>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow style={{height: "30px"}}>
+                    <TableHeaderColumn colSpan="3" style={{height: "30px", textAlign: 'center'}}>
+                      Active Buy Orders
+                    </TableHeaderColumn>
+                  </TableRow>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableHeaderColumn style={{height: "30px"}}>Location</TableHeaderColumn>
+                    <TableHeaderColumn style={{height: "30px"}}>Price</TableHeaderColumn>
+                    <TableHeaderColumn style={{height: "30px"}}>Volume Remaining</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody stripedRows={true} displayRowCheckbox={false}>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
+                  </TableRow>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
+                  </TableRow>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
+                  </TableRow>
+                  <TableRow selectable={false} style={{height: "30px"}}>
+                    <TableRowColumn style={{height: "30px"}}>Jita</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1,000,000,000 ISK</TableRowColumn>
+                    <TableRowColumn style={{height: "30px"}}>1000</TableRowColumn>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </Tab>
+        </Tabs>
       </div>
     )
   }
