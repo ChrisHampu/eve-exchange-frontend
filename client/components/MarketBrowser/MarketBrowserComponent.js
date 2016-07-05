@@ -6,6 +6,8 @@ import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import CandleStickChart from '../Charts/CandleStickChart';
 import cx from 'classnames';
 import horizon from '../../horizon';
+import fuzzy from 'fuzzy';
+import { subscribeItem, unsubscribeItem } from '../../market';
 
 // Market group data
 import marketGroups from '../../sde/market_groups';
@@ -25,9 +27,9 @@ import ArrowRightIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-right'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 
-horizon('orders').watch().subscribe(msg => console.log(msg));
+//horizon('orders').watch().subscribe(msg => console.log(msg));
 
-horizon('orders').store({region: 1, buy: 2, sell: 3});
+//horizon('orders').store({region: 1, buy: 2, sell: 3});
 
 class MarketBrowserListItem extends React.Component {
 
@@ -256,15 +258,82 @@ export default class MarketBrowserComponent extends React.Component {
     super(props);
 
     this.state = {
-      selectedItem: null
+      selectedItem: null,
+      searchText: ""
     };
   }
 
   selectItem(item) {
 
+    if (this.state.selectedItem !== null) {
+
+      unsubscribeItem(this.state.selectedItem.id, 0);
+    }
+
+    subscribeItem(item.id, 0);
+
     this.setState({
       selectedItem: item
     });
+  }
+
+  handleSearchText(ev) {
+
+    this.setState({
+      searchText: ev.currentTarget.value
+    })
+  }
+
+  _getGroups(group, accumulator) {
+
+    if (group.items && group.items.length) {
+
+      const items = fuzzy.filter(this.state.searchText, group.items, { extract: item => item.name });
+
+      if (items.length) {
+
+        const _items = items.map((el) => {
+          return group.items[el.index]
+        });
+
+        accumulator.push({...group, items: _items});
+      }
+
+      return;
+    }
+
+    const children = [];
+
+    for (const child of group.childGroups) {
+
+      this._getGroups(child, children);
+    }
+
+    if (children.length) {
+      accumulator.push({...group, childGroups: children});
+    }
+  }
+
+  getGroups() {
+
+    if (this.state.searchText.length === 0) {
+      return marketGroups;
+    }
+
+    const groups = [];
+
+    for (const group of marketGroups) {
+
+      const add = [];
+
+      this._getGroups(group, add);
+
+      if (add.length) {
+        groups.push(...add);
+      }
+    }
+    
+    return groups;
   }
 
   renderMarketBrowser() {
@@ -275,9 +344,10 @@ export default class MarketBrowserComponent extends React.Component {
           className={s.market_browser_search}
           hintText="Search"
           floatingLabelText="Search market"
+          onChange={(ev)=>{this.handleSearchText(ev)}}
         />
         { 
-          marketGroups.map((el, i) => {
+          this.getGroups().map((el, i) => {
             return(<MarketBrowserListItem selector={(item)=>{this.selectItem(item);}} element={el} key={i} depth={0} />);
           })
         }
