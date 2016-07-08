@@ -6,9 +6,10 @@ export default class Bar extends React.Component {
 
   static propTypes = {
 
+    xValue: React.PropTypes.object,
+    yValue: React.PropTypes.number,
     xScale: React.PropTypes.func,
     yScale: React.PropTypes.func,
-    dataElem: React.PropTypes.object,
     barWidth: React.PropTypes.number,
     viewportHeight: React.PropTypes.number
   };
@@ -24,12 +25,10 @@ export default class Bar extends React.Component {
 
   update() {
 
-    const el = this.props.dataElem;
-
     this.setState({
-      cx: this.props.xScale(el.date) - 0.5 * this.props.barWidth,
-      cy: this.props.viewportHeight - this.props.yScale(el.volume),
-      barHeight: this.props.yScale(el.volume),
+      cx: this.props.xScale(this.props.xValue) - 0.5 * this.props.barWidth,
+      cy: this.props.viewportHeight - this.props.yScale(this.props.yValue),
+      barHeight: this.props.yScale(this.props.yValue),
       barWidth: this.props.barWidth,
     });
   }
@@ -47,7 +46,7 @@ export default class Bar extends React.Component {
 
   handleMouseOver(ev) {
 
-    this.props.mouseOver(ev,this.props.dataElem,"volume");
+    this.props.mouseOver(ev, { volume: this.props.yValue }, "volume");
 
     this.setState({
       mouseOver: true,
@@ -60,7 +59,7 @@ export default class Bar extends React.Component {
     this.props.mouseOut();
 
     this.setState({
-      mouseOver: true,
+      mouseOver: false,
       fill: "#59c8e2"
     });
   }

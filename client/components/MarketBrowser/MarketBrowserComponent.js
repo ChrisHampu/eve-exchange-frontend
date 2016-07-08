@@ -167,7 +167,7 @@ class MarketItemViewComponent extends React.Component {
         <Tabs style={{height: "100%"}} contentContainerClassName={s.tab_content}>
           <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
             <div ref="market_container" className={s.market_item_chart_container}>
-              <CandleStickChart width={this.state.containerWidth > 0 ? this.state.containerWidth-72 : 0} height={this.state.containerHeight}/>
+              <CandleStickChart item={this.props.item} width={this.state.containerWidth > 0 ? this.state.containerWidth-72 : 0} height={this.state.containerHeight}/>
             </div>
           </Tab>
           <Tab label="Orders" style={{backgroundColor: "rgb(38, 43, 47)"}}>
@@ -264,13 +264,6 @@ export default class MarketBrowserComponent extends React.Component {
   }
 
   selectItem(item) {
-
-    if (this.state.selectedItem !== null) {
-
-      unsubscribeItem(this.state.selectedItem.id, 0);
-    }
-
-    subscribeItem(item.id, 0);
 
     this.setState({
       selectedItem: item

@@ -32,8 +32,9 @@ export default class BarChartData extends React.Component {
       <g>
         {
           this.props.data.map((el, i) => {
+
             return (
-              <Bar mouseOver={this.props.mouseOver} mouseOut={this.props.mouseOut} key={i} dataElem={el} xScale={this.props.xScale} yScale={this.props.yScale} barWidth={barWidth} viewportHeight={this.props.viewportHeight}/>
+              <Bar mouseOver={this.props.mouseOver} mouseOut={this.props.mouseOut} key={i} xValue={el.time} yValue={el.buyVolume} xScale={this.props.xScale} yScale={this.props.yScale} barWidth={barWidth} viewportHeight={this.props.viewportHeight}/>
             )
           })
         }

@@ -1,10 +1,12 @@
 import { createStore, combineReducers } from 'redux'
 import { routerReducer as routing } from 'react-router-redux'
-import authReducer from './reducers/authReducer';
+import auth from './reducers/authReducer';
+import market from './reducers/marketReducer';
 
 const store = createStore(combineReducers({
-  auth: authReducer,
+  auth,
+  market,
   routing
-}), {});
+}), {}, window.devToolsExtension && window.devToolsExtension());
 
 export default store;

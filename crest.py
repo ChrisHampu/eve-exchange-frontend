@@ -1,80 +1,198 @@
+import multiprocessing
 import requests
 import json
 import time
-import concurrent.futures
+from datetime import datetime
 import rethinkdb as r
 
-conn = r.connect(db='market')
+import csv
 
-start = time.perf_counter()
+Profile = False
+PrintCSV = False
+PrintJSON = False
 
-rr = requests.get("https://crest-tq.eveonline.com/market/10000002/orders/all/")
+HorizonDB = 'horizon_test'
+AggregateTable = 'aggregates_ea16eaa4f573'
 
-js = rr.json()
-global total
-total = 0
-##items = []
+def split_list(alist, wanted_parts=1):
+  length = len(alist)
+  return [ alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
+      for i in range(wanted_parts) ]
 
-print("Inserting page 1")
+def loadPages(pages):
+  conn, inserted = (r.connect(db='market'), 0)
 
-pages = js['pageCount']
-total += len(js['items'])
+  for i in pages:
+    req = requests.get("https://crest-tq.eveonline.com/market/10000002/orders/all/?page=%s" % i)
+    j = req.json()
+    if 'items' not in j:
+      continue
+    r.table("orders").insert(j['items'], durability="soft", return_changes=False, conflict="replace").run(conn)
+    inserted += len(j['items'])
 
-print(r.table("orders").insert(js['items'], durability="soft", return_changes=False, conflict="replace").run(conn))
+  return inserted
 
-print("1 is done")
+if __name__ == '__main__':
 
-def loadPage(number):
-	global total
-	print('loading page %s' % number)
-	req = requests.get("https://crest-tq.eveonline.com/market/10000002/orders/all/?page=%s" % number)
-	j = req.json()
-	print("page %s has %s items " % (number, len(j['items'])))
-	total += len(j['items'])
-	print('inserting page %s' % number)
-	print(r.table("orders").insert(j['items'], durability="soft", return_changes=False, conflict="replace").run(conn))
-	print('%s is done' % number)
-	return total
+  conn, agg_conn, horizon_conn, start,  =  (r.connect(db='market'), r.connect(db='market'), r.connect(db=HorizonDB), time.perf_counter())
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+  dt = datetime.now()
 
-	future_to_url = {executor.submit(loadPage, i): i for i in range(2,pages+1)}
+  print("Executing at %s" % dt)
 
-	for future in concurrent.futures.as_completed(future_to_url):
+  tt = dt.timetuple()
 
-		url = future_to_url[future]
+  if (tt.tm_hour == 13 and tt.tm_min == 55):
 
-		print("inserted")
+    print("Flushing stale market orders")
 
-		#print(data)
+    r.db('market').table('orders').delete({}).run(conn)
 
-print(time.perf_counter() - start)
-print(total)
+    print("Stale orders flushed")
 
-##start = time.perf_counter()
+  req = requests.get("https://crest-tq.eveonline.com/market/10000002/orders/all/")
 
-##print(time.perf_counter() - start)
+  js = req.json()
 
-#{"buy": false, "issued": "2016-06-02T16:30:22", "price": 19999998.99, "volume": 1, "duration": 14, "id": 4558325263, "minVolume": 1, "volumeEntered": 1, "range": "region", "stationID": 60003760, "type": 13873}
+  pageCount = js['pageCount']
 
-'''
+  r.table("orders").insert(js['items'], durability="soft", return_changes=False, conflict="replace").run(conn)
 
-r.db('market')
-  .table('orders2')
-  .sample(1000)
-  .group("name")
-  .map(function(doc) {
-    return { total: doc("price"), price: doc("price"), count: 1, max: doc("price"), min: doc("price") } 
-  })
-  .reduce(function(left, right) { return {
-    'max': r.branch(r.gt(left('max'), right('max')), left('max'), right('max')), 
-    'min': r.branch(r.gt(left('min'), right('min')), right('min'), left('min')), 
-    	'total': left('total').add(right('total')),
-      'count': left('count').add(right('count'))
-  }})
+  print("Working on %s pages" % pageCount)
+
+  workers = max(multiprocessing.cpu_count(), pageCount)
+
+  work = split_list(range(2,pageCount+1), workers)
+
+  with multiprocessing.Pool(processes=workers) as pool:
+
+    results = [pool.apply_async(loadPages, ([work[i]])) for i in range(0, len(work))]
+
+    print("Wrote %s documents" % (sum([res.get() for res in results])))
+
+  print("Finished in %s seconds " % (time.perf_counter() - start))
+
+  print("Starting aggregation")
+  aggTimer = time.perf_counter()
+
+  aggregates = (r.table('orders')
+  .filter( lambda doc: doc['buy'] == True and doc['price'] > 1 )
+  .group("type")
+  .map( lambda doc: { 'type': doc["type"], 'total': doc["price"], 'price': doc["price"], 'max': doc["price"], 'min': doc["price"], 'volume': doc["volume"] } )
   .ungroup()
-   .map(function(group) {
-     return { 'name': group("group"), 'max': group("reduction")("max"), min: group("reduction")("min"), 'avg': group("reduction")("total").div(group("reduction")("count")) }
-  });
+  .map( lambda doc: 
+    doc["reduction"].order_by(r.desc("price")).slice(0, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+      'type': doc["group"],
+      'count': r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max(),
+      'total': rec["price"],
+      'price': rec["price"],
+      'max': rec["price"],
+      'min': rec["price"],
+      'volume': rec["volume"]
+    })
+    .reduce( lambda left, right: {
+      'max': r.branch(r.gt(left['max'], right['max']), left['max'], right['max']),
+      'min': r.branch(r.gt(left['min'], right['min']), right['min'], left['min']),
+      'total': left['total'].add(right['total']),
+      'volume': left['volume'].add(right['volume']),
+      'count': left['count'],
+      'type': left['type'],
+      'price': left['price']
+    })
+  )
+  .map( lambda doc: {
+    'type': doc["type"],
+    'buymax': doc["max"],
+    'buymin': doc["min"],
+    'buyavg': doc["total"].div(doc["count"]),
+    'count': doc["count"],
+    'volume': doc["volume"]
+  })
+  .union(
+    r.table('orders')
+    .filter({'buy': False})
+    .group("type")
+    .map( lambda doc: {
+      'type': doc["type"], 'total': doc["price"], 'price': doc["price"], 'max': doc["price"], 'min': doc["price"], 'volume': doc["volume"]
+    })
+    .ungroup()
+    .map( lambda doc: {
+        'sell': doc["reduction"].order_by(r.asc("price")).slice(0, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+            'type': doc["group"],
+            'count': r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max(),
+            'total': rec["price"],
+            'price': rec["price"],
+            'max': rec["price"],
+            'min': rec["price"],
+            'volume': rec["volume"]
+        })
+        .reduce( lambda left, right: {
+            'max': r.branch(r.gt(left['max'], right['max']), left['max'], right['max']),
+            'min': r.branch(r.gt(left['min'], right['min']), right['min'], left['min']),
+            'total': left['total'].add(right['total']),
+            'volume': left['volume'].add(right['volume']),
+            'count': left['count'],
+            'type': left['type'],
+            'price': left['price']
+        }),
+        'percentile': doc["reduction"].order_by(r.asc("price")).slice(0, r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+            'count': r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max(),
+            'total': rec["price"],
+        })
+        .reduce( lambda left, right: {
+          'total': left['total'].add(right['total']),
+          'count': left['count'],
+        })
+    })
+    .map( lambda doc: {
+        'type': doc["sell"]["type"],
+        'sellmax': doc["sell"]["max"],
+        'sellmin': doc["sell"]["min"],
+        'sellavg': doc["sell"]["total"].div(doc["sell"]["count"]),
+        'fifthPercentile': doc["percentile"]["total"].div(doc["percentile"]["count"]),
+        'volume': doc["sell"]["volume"]
+    })
+  )
+  .group("type")
+  .ungroup()
+  .map( lambda group: {
+      '$hz_v$': 0,
+      'frequency': "minutes",
+      'time': r.now(),
+      'type': group["group"],
+      'sellAvg': group["reduction"][1]["sellavg"].default(0),
+      'sellMin': group["reduction"][1]["sellmin"].default(0),
+      'sellMax': group["reduction"][1]["sellmax"].default(0),
+      'sellFifthPercentile': group["reduction"][1]["fifthPercentile"].default(0),
+      'sellVolume': group["reduction"][1]["volume"].default(0),
+      'buyVolume': group["reduction"][0]["volume"].default(0),
+      'close': group["reduction"][0]["buyavg"].default(0),
+      'low': group["reduction"][0]["buymin"].default(0),
+      'high': group["reduction"][0]["buymax"].default(0),
+      'spread': r.expr(100).sub(group["reduction"][0]["buyavg"].default(1).div(group["reduction"][1]["fifthPercentile"].default(1)).mul(r.expr(100))),
+      'spreadValue': group["reduction"][1]["fifthPercentile"].default(1).div(100).mul(r.expr(100).sub(group["reduction"][0]["buyavg"].default(1).div(group["reduction"][1]["fifthPercentile"].default(1)).mul(r.expr(100)))),
+      'tradeValue': group["reduction"][0]["volume"].default(0).mul(group["reduction"][1]["fifthPercentile"].default(1).div(100).mul(r.expr(100).sub(group["reduction"][0]["buyavg"].default(1).div(group["reduction"][1]["fifthPercentile"].default(1)).mul(r.expr(100)))))
+  })
+  .run(agg_conn, array_limit=300000, profile=Profile)
+  )
 
-'''
+  data = aggregates
+
+  r.table(AggregateTable).insert(data, return_changes=False).run(horizon_conn)
+
+  print("Aggregation finished in %s seconds" % (time.perf_counter() - aggTimer))
+  print("Total time taken is %s seconds" % (time.perf_counter() - start))
+  
+  if PrintJSON:
+    print("Dumping json data")
+    with open('aggregates.json', 'w', newline='') as file:
+      json.dump(data, file)
+
+  if PrintCSV:
+    print("Dumping csv data")
+    with open('aggregates.csv', 'w', newline='') as csvfile:
+      writer = csv.DictWriter(csvfile, delimiter=',', quotechar='"', fieldnames=data[0].keys(), quoting=csv.QUOTE_MINIMAL)
+      writer.writeheader()
+      for row in data:
+        writer.writerow(row)
+

@@ -1,135 +1,25 @@
 /* eslint-disable global-require */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { scaleTime, scaleLinear, timeHour } from '../../d3.js';
+import { connect } from 'react-redux';
+import store from '../../store';
+import { scaleTime, scaleLinear, timeHour, timeMinute } from '../../d3.js';
 import s from './CandleStickChart.scss';
 import CandleStickData from './CandleStickData';
 import VolumeData from './BarChartData';
 import Axis from './Axis';
 import Indicator from './Indicator';
+import { subscribeItem, unsubscribeItem } from '../../market';
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
-const data = [
-  {
-    date: new Date(Date.now()),
-    open: 5,
-    close: 3,
-    high: 8,
-    low: 1,
-    volume: 152
-  },
-  {
-    date: new Date(Date.now() + 2000000),
-    open: 2,
-    close: 4,
-    high: 5,
-    low: 1,
-    volume: 196
-  },
-  {
-    date: new Date(Date.now() + 4000000),
-    open: 7,
-    close: 5,
-    high: 11,
-    low: 4,
-    volume: 126
-  },
-  {
-    date: new Date(Date.now() + 6000000),
-    open: 6,
-    close: 10,
-    high: 11,
-    low: 3,
-    volume: 214
-  },
-  {
-    date: new Date(Date.now() + 8000000),
-    open: 9,
-    close: 6,
-    high: 11,
-    low: 3,
-    volume: 169
-  },
-  {
-    date: new Date(Date.now() + 10000000),
-    open: 6,
-    close: 7,
-    high: 11,
-    low: 3,
-    volume: 223
-  },
-  {
-    date: new Date(Date.now() + 12000000),
-    open: 4,
-    close: 9,
-    high: 11,
-    low: 3,
-    volume: 136
-  },
-  {
-    date: new Date(Date.now() + 14000000),
-    open: 9,
-    close: 5,
-    high: 14,
-    low: 6,
-    volume: 204
-  },
-  {
-    date: new Date(Date.now() + 16000000),
-    open: 12,
-    close: 10,
-    high: 14,
-    low: 9,
-    volume: 102
-  },
-  {
-    date: new Date(Date.now() + 18000000),
-    open: 6,
-    close: 7,
-    high: 11,
-    low: 3,
-    volume: 143
-  },
-  {
-    date: new Date(Date.now() + 20000000),
-    open: 5,
-    close: 3,
-    high: 7,
-    low: 1,
-    volume: 96
-  }
-];
-
-const aggregates = [
-  {
-    date: new Date(Date.now() + 2000000),
-    spread: 25
-  },
-  {
-    date: new Date(Date.now() + 4000000),
-    spread: 15
-  },
-  {
-    date: new Date(Date.now() + 6000000),
-    spread: 12
-  },
-  {
-    date: new Date(Date.now() + 8000000),
-    spread: 19
-  },
-  {
-    date: new Date(Date.now() + 10000000),
-    spread: 29
-  }
-];
-
-export default class Chart extends React.Component {
+class Chart extends React.Component {
 
   static propTypes = {
 
     width: React.PropTypes.number,
-    height: React.PropTypes.number
+    height: React.PropTypes.number,
+    item: React.PropTypes.object
   };
 
   constructor(props) {
@@ -162,6 +52,8 @@ export default class Chart extends React.Component {
 
   updateScales() {
 
+    const data = this.getAggregateData();
+
     this.state.height = this.props.height - this.state.margin.top - this.state.margin.bottom;
     this.state.width = this.props.width - this.state.margin.left - this.state.margin.right;
 
@@ -169,8 +61,8 @@ export default class Chart extends React.Component {
     this.state.ohlcOffset = Math.floor(this.state.height*0.75);
     this.state.volHeight = Math.floor(this.state.height*0.25);
 
-    const minDate = new Date(Math.min(...data.map((el) => { return el.date; })));
-    const maxDate = new Date(Math.max(...data.map((el) => { return el.date; })));
+    const minDate = new Date(Math.min(...data.map((el) => { return el.time; })));
+    const maxDate = new Date(Math.max(...data.map((el) => { return el.time; })));
 
 
     this.state.xScale.domain([
@@ -179,7 +71,7 @@ export default class Chart extends React.Component {
     ]);
 
     this.state.yScale.domain([Math.min(...data.map((el) => { return el.low})), Math.max(...data.map((el) => { return el.high}))]);
-    this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.volume}))*0.95), Math.ceil(Math.max(...data.map((el) => { return el.volume}))*1.05)]);
+    this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.buyVolume}))*0.95), Math.ceil(Math.max(...data.map((el) => { return el.buyVolume}))*1.05)]);
     this.state.percentScale.domain([0, 1]);
 
     this.state.xScale.range([0, this.state.width]);
@@ -192,7 +84,7 @@ export default class Chart extends React.Component {
     this.state.volScale.clamp(true);
     this.state.percentScale.clamp(true);
 
-    this.state.xScale.nice(timeHour);
+    this.state.xScale.nice(timeMinute);
     this.state.yScale.nice([5]);
     this.state.volScale.nice([25]);;
 
@@ -216,8 +108,23 @@ export default class Chart extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
+    if (this.props.item.id !== nextProps.item.id) {
+      unsubscribeItem(this.props.item.id, 0);
+    }
+
+    subscribeItem(nextProps.item.id, 0);
+
     this.props = nextProps;
     this.updateScales();
+  }
+
+  getAggregateData() {
+
+    if (typeof this.props.market.region[0] !== 'undefined' && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined') {
+      return this.props.market.region[0].item[this.props.item.id].aggregates;
+    }
+
+    return [];
   }
 
   renderTooltip() {
@@ -338,10 +245,10 @@ export default class Chart extends React.Component {
               <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} />
               <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${this.state.width}px)`}} format="%" />
 
-              <CandleStickData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={data} viewportWidth={this.state.width} xScale={this.state.xScale} yScale={this.state.yScale} />
-              <VolumeData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={data} viewportWidth={this.state.width} viewportHeight={this.state.height} xScale={this.state.xScale} yScale={this.state.volScale} />
+              <CandleStickData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} viewportWidth={this.state.width} xScale={this.state.xScale} yScale={this.state.yScale} />
+              <VolumeData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} viewportWidth={this.state.width} viewportHeight={this.state.height} xScale={this.state.xScale} yScale={this.state.volScale} />
 
-              <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={aggregates} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={(el) => { return el.date;}} yAccessor={(el) => { return el.spread/100;}} />
+              <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return el.spread/100;}} />
             </g>
           </svg>
           {this.renderTooltip()}
@@ -350,3 +257,9 @@ export default class Chart extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function(store) {
+  return { market: store.market };
+}
+
+export default connect(mapStateToProps)(Chart);

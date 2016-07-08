@@ -25,14 +25,14 @@ export default class CandleStick extends React.Component {
     const el = this.props.dataElem;
 
     this.setState({
-      cx: this.props.xScale(el.date) - 0.5 * this.props.candleWidth,
+      cx: this.props.xScale(el.time) - 0.5 * this.props.candleWidth,
       cy: this.props.yScale(Math.max(el.open, el.close)),
-      candleHeight: Math.abs(this.props.yScale(el.open) - this.props.yScale(el.close)),
+      candleHeight: Math.max(3, Math.abs(this.props.yScale(el.open) - this.props.yScale(el.close))),
       candleWidth: this.props.candleWidth,
 
-      wx1: this.props.xScale(el.date),
+      wx1: this.props.xScale(el.time),
       wy1: this.props.yScale(el.high),
-      wx2: this.props.xScale(el.date),
+      wx2: this.props.xScale(el.time),
       wy2: this.props.yScale(el.low)
     });
   }
