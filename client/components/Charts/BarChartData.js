@@ -23,7 +23,7 @@ export default class BarChartData extends React.Component {
 
     var xRange = this.props.xScale.range();
     var width = Math.abs(xRange[0] - xRange[1]);
-    var barWidth = (this.props.viewportWidth / (this.props.data.length + 2)) * 0.3;
+    var barWidth = (this.props.viewportWidth / (this.props.data.length + 2)) * 0.2;
 
     if (width < 100)
       return (<g />);

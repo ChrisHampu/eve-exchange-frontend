@@ -9,6 +9,8 @@ import CandleStickData from './CandleStickData';
 import VolumeData from './BarChartData';
 import Axis from './Axis';
 import Indicator from './Indicator';
+import Area from './Area';
+import Tooltip from './Tooltip';
 import { subscribeItem, unsubscribeItem } from '../../market';
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
@@ -41,16 +43,23 @@ class Chart extends React.Component {
       },
       height: 350,
       width: 600,
-      tooltipVisible: false,
-      tooltipUpdated: false,
-      tooltipItem: null,
-      tooltipX: 0,
-      tooltipY: 0,
-      tooltipPresentation: "ohlc"
+      frequency: "minutes"
     }
   }
 
   updateScales() {
+
+    let timePadding = 300000;
+
+    switch( this.state.frequency) {
+
+      case "hours":
+      break;
+      case "days":
+      break;
+      case "months":
+      break;
+    }
 
     const data = this.getAggregateData();
 
@@ -64,14 +73,20 @@ class Chart extends React.Component {
     const minDate = new Date(Math.min(...data.map((el) => { return el.time; })));
     const maxDate = new Date(Math.max(...data.map((el) => { return el.time; })));
 
+    minDate.setTime(minDate.getTime() - timePadding);
+    maxDate.setTime(maxDate.getTime() + timePadding);
 
     this.state.xScale.domain([
       new Date(minDate.getTime()),
       new Date(maxDate.getTime())
     ]);
 
-    this.state.yScale.domain([Math.min(...data.map((el) => { return el.low})), Math.max(...data.map((el) => { return el.high}))]);
+    //this.state.yScale.domain([Math.min(...data.map((el) => { return el.low})), Math.max(...data.map((el) => { return el.high}))]);
+    this.state.yScale.domain([Math.min(...data.map((el) => { return el.open})), Math.max(...data.map((el) => { return el.close}))]);
+
     this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.buyVolume}))*0.95), Math.ceil(Math.max(...data.map((el) => { return el.buyVolume}))*1.05)]);
+    
+
     this.state.percentScale.domain([0, 1]);
 
     this.state.xScale.range([0, this.state.width]);
@@ -86,7 +101,8 @@ class Chart extends React.Component {
 
     this.state.xScale.nice(timeMinute);
     this.state.yScale.nice([5]);
-    this.state.volScale.nice([25]);;
+    //this.state.volScale.nice([25]);;
+    //this.state.percentScale.nice([5]);
 
     this.setState({
       xScale: this.state.xScale,
@@ -127,92 +143,14 @@ class Chart extends React.Component {
     return [];
   }
 
-  renderTooltip() {
-
-    if (!this.state.tooltipItem) {
-      return;
-    }
-
-    let contents = null;
-
-    switch(this.state.tooltipPresentation) {
-
-      case "volume":
-        contents = (
-          <div>
-            Volume: {this.state.tooltipItem.volume}
-          </div>
-        );
-        break;
-
-      case "ohlc":
-        contents = (
-          <div>
-            Open: {this.state.tooltipItem.open}<br />
-            High: {this.state.tooltipItem.high}<br />
-            Low: {this.state.tooltipItem.low}<br />
-            Close: {this.state.tooltipItem.close}<br />
-          </div>
-        );
-        break;
-
-      case "spread":
-        contents = (
-          <div>
-            Spread: {this.state.tooltipItem.spread}%
-          </div>
-        );
-        break;
-    }
-
-    return (
-      <div ref="tooltip" style={{transition: "all 350ms ease-in-out", padding: "0.35rem", fontSize: "0.8rem", fontWeight: "300", background: "rgb(38, 43, 47)", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}>
-        {contents}
-      </div>
-    );
-  }
-
   handleMouseOver(ev, item, presentation) {
 
-    let x = 0;
-    let y = 0;
-
-    if (presentation === "spread") {
-      x = ev.currentTarget.cx.baseVal.value + this.state.margin.left + ev.currentTarget.r.baseVal.value / 2;
-      y = ev.currentTarget.cy.baseVal.value - 15;
-    } else {
-      x = ev.currentTarget.x.baseVal.value + this.state.margin.left + ev.currentTarget.width.baseVal.value / 2;
-      y = ev.currentTarget.y.baseVal.value - (presentation === "volume" ? 15 : 35);
-    }
-
-    this.setState({
-      tooltipUpdated: true,
-      tooltipVisible: false,
-      tooltipItem: item,
-      tooltipX: x,
-      tooltipY: y,
-      tooltipPresentation: presentation
-    });
+    this.refs.tooltip.showTooltip(ev, item, presentation);
   }
 
   handleMouseOut(ev) {
 
-    this.setState({
-      tooltipVisible: false,
-      tooltipUpdated: false
-    });
-  }
-
-  componentDidUpdate() {
-
-    if (this.state.tooltipUpdated === true && this.state.tooltipVisible === false) {
-
-      this.setState({
-        tooltipVisible: true,
-        tooltipX: this.state.tooltipX - ReactDOM.findDOMNode(this.refs.tooltip).clientWidth / 2,
-        tooltipY: this.state.tooltipY - ReactDOM.findDOMNode(this.refs.tooltip).clientHeight / 2,
-      });
-    }
+    this.refs.tooltip.hideTooltip();
   }
 
   render() {
@@ -245,18 +183,20 @@ class Chart extends React.Component {
               <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} />
               <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${this.state.width}px)`}} format="%" />
 
-              <CandleStickData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} viewportWidth={this.state.width} xScale={this.state.xScale} yScale={this.state.yScale} />
+              <Area mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={this.state.ohlcHeight} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return el.close;}} />
               <VolumeData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} viewportWidth={this.state.width} viewportHeight={this.state.height} xScale={this.state.xScale} yScale={this.state.volScale} />
 
               <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return el.spread/100;}} />
             </g>
           </svg>
-          {this.renderTooltip()}
+          <Tooltip margin={this.state.margin} ref="tooltip" />
         </div>
       </div>
     );
   }
 }
+//              <CandleStickData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} viewportWidth={this.state.width} xScale={this.state.xScale} yScale={this.state.yScale} />
+
 
 const mapStateToProps = function(store) {
   return { market: store.market };

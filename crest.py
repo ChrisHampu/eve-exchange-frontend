@@ -78,14 +78,13 @@ if __name__ == '__main__':
   aggregates = (r.table('orders')
   .filter( lambda doc: doc['buy'] == True and doc['price'] > 1 )
   .group("type")
-  .map( lambda doc: { 'type': doc["type"], 'total': doc["price"], 'price': doc["price"], 'max': doc["price"], 'min': doc["price"], 'volume': doc["volume"] } )
+  .map( lambda doc: { 'price': doc["price"], 'volume': doc["volume"] } )
   .ungroup()
   .map( lambda doc: 
     doc["reduction"].order_by(r.desc("price")).slice(0, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
       'type': doc["group"],
-      'count': r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max(),
+      'count': 1,
       'total': rec["price"],
-      'price': rec["price"],
       'max': rec["price"],
       'min': rec["price"],
       'volume': rec["volume"]
@@ -95,9 +94,8 @@ if __name__ == '__main__':
       'min': r.branch(r.gt(left['min'], right['min']), right['min'], left['min']),
       'total': left['total'].add(right['total']),
       'volume': left['volume'].add(right['volume']),
-      'count': left['count'],
+      'count': left['count'].add(right['count']),
       'type': left['type'],
-      'price': left['price']
     })
   )
   .map( lambda doc: {
@@ -113,13 +111,13 @@ if __name__ == '__main__':
     .filter({'buy': False})
     .group("type")
     .map( lambda doc: {
-      'type': doc["type"], 'total': doc["price"], 'price': doc["price"], 'max': doc["price"], 'min': doc["price"], 'volume': doc["volume"]
+      'price': doc["price"], 'volume': doc["volume"]
     })
     .ungroup()
     .map( lambda doc: {
         'sell': doc["reduction"].order_by(r.asc("price")).slice(0, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
             'type': doc["group"],
-            'count': r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max(),
+            'count': 1,
             'total': rec["price"],
             'price': rec["price"],
             'max': rec["price"],
@@ -131,17 +129,17 @@ if __name__ == '__main__':
             'min': r.branch(r.gt(left['min'], right['min']), right['min'], left['min']),
             'total': left['total'].add(right['total']),
             'volume': left['volume'].add(right['volume']),
-            'count': left['count'],
+            'count': left['count'].add(right['count']),
             'type': left['type'],
             'price': left['price']
         }),
         'percentile': doc["reduction"].order_by(r.asc("price")).slice(0, r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
-            'count': r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max(),
+            'count': 1,
             'total': rec["price"],
         })
         .reduce( lambda left, right: {
           'total': left['total'].add(right['total']),
-          'count': left['count'],
+          'count': left['count'].add(right['count']),
         })
     })
     .map( lambda doc: {

@@ -70,7 +70,7 @@ export default class CandleStick extends React.Component {
 
     return (
       <g>
-        <line x1={this.state.wx1} y1={this.state.wy1} x2={this.state.wx2} y2={this.state.wy2} strokeWidth={2} stroke={this.state.fill} />
+        <line onMouseOver={(ev)=>{this.handleMouseOver(ev);}} onMouseOut={()=>{this.handleMouseOut();}} x1={this.state.wx1} y1={this.state.wy1} x2={this.state.wx2} y2={this.state.wy2} strokeWidth={2} stroke={this.state.fill} />
         <rect onMouseOver={(ev)=>{this.handleMouseOver(ev);}} onMouseOut={()=>{this.handleMouseOut();}} x={this.state.cx} y={this.state.cy} width={this.state.candleWidth} height={this.state.candleHeight} fill={this.state.fill} />
       </g>
     )

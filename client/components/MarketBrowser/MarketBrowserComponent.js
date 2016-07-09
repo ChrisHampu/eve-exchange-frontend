@@ -27,10 +27,6 @@ import ArrowRightIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-right'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 
-//horizon('orders').watch().subscribe(msg => console.log(msg));
-
-//horizon('orders').store({region: 1, buy: 2, sell: 3});
-
 class MarketBrowserListItem extends React.Component {
 
   static propTypes = {
