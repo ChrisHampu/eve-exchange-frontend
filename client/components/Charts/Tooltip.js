@@ -112,7 +112,7 @@ export default class Tooltip extends React.Component {
       case "spread":
         contents = (
           <div>
-            Spread: {this.state.tooltipItem.spread}%
+            Spread: {Math.round(this.state.tooltipItem.spread*Math.pow(10,2))/Math.pow(10,2)}%
           </div>
         );
         break;

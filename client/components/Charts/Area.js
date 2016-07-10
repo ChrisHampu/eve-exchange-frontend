@@ -113,6 +113,8 @@ export default class Area extends React.Component {
               cy={this.props.yScale(this.props.yAccessor(el))}
               r={this.state.closestPoint === el ? 8 : 5}
               style={{transition: "r 350ms ease-in-out"}}
+              mouseOver={(ev)=>{this.handleMouseOver(ev);}}
+              mouseOut={(ev)=>{this.handleMouseOut();}}
             />
           );
         })
