@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { formatNumber } from '../../utilities';
 
 export default class Tooltip extends React.Component {
 
@@ -51,7 +52,8 @@ export default class Tooltip extends React.Component {
   hideTooltip() {
 
     this.setState({
-      tooltipVisible: false
+      tooltipVisible: false,
+      tooltipUpdated: false,
     })
   }
 
@@ -80,7 +82,7 @@ export default class Tooltip extends React.Component {
       case "volume":
         contents = (
           <div>
-            Volume: {this.state.tooltipItem.volume}
+            Volume: {formatNumber(this.state.tooltipItem.volume)}
           </div>
         );
         break;
@@ -88,10 +90,10 @@ export default class Tooltip extends React.Component {
       case "ohlc":
         contents = (
           <div>
-            Open: {this.state.tooltipItem.open}<br />
-            High: {this.state.tooltipItem.high}<br />
-            Low: {this.state.tooltipItem.low}<br />
-            Close: {this.state.tooltipItem.close}<br />
+            Open: {formatNumber(this.state.tooltipItem.open)}<br />
+            High: {formatNumber(this.state.tooltipItem.high)}<br />
+            Low: {formatNumber(this.state.tooltipItem.low)}<br />
+            Close: {formatNumber(this.state.tooltipItem.close)}<br />
           </div>
         );
         break;
@@ -99,10 +101,10 @@ export default class Tooltip extends React.Component {
       case "area":
         contents = (
           <div>
-            High: {this.state.tooltipItem.high}<br />
-            Low: {this.state.tooltipItem.low}<br />
-            Buy: {this.state.tooltipItem.close}<br />
-            Sell: {this.state.tooltipItem.sellFifthPercentile}<br />
+            High: {formatNumber(this.state.tooltipItem.high)}<br />
+            Low: {formatNumber(this.state.tooltipItem.low)}<br />
+            Buy: {formatNumber(this.state.tooltipItem.close)}<br />
+            Sell: {formatNumber(this.state.tooltipItem.sellFifthPercentile)}<br />
           </div>
         );
         break;
@@ -119,7 +121,7 @@ export default class Tooltip extends React.Component {
     return (
       <div 
         ref="tooltip"
-        style={{transition: "all 350ms ease-in-out", padding: "0.35rem", fontSize: "0.8rem", fontWeight: "300", background: "rgb(38, 43, 47)", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}
+        style={{transition: "all 350ms ease-in-out", fontWeight: "bold", padding: "0.35rem", fontSize: "0.8rem", background: "rgb(38, 43, 47)", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}
         >
         {contents}
       </div>

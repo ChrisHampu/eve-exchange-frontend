@@ -12,6 +12,7 @@ PrintCSV = False
 PrintJSON = False
 
 HorizonDB = 'horizon_test'
+OrdersTable = 'orders_a5a3c74f257e'
 AggregateTable = 'aggregates_ea16eaa4f573'
 
 def split_list(alist, wanted_parts=1):
@@ -20,21 +21,22 @@ def split_list(alist, wanted_parts=1):
       for i in range(wanted_parts) ]
 
 def loadPages(pages):
-  conn, inserted = (r.connect(db='market'), 0)
+  horizon_conn, inserted = (r.connect(db=HorizonDB), 0)
 
   for i in pages:
     req = requests.get("https://crest-tq.eveonline.com/market/10000002/orders/all/?page=%s" % i)
     j = req.json()
     if 'items' not in j:
       continue
-    r.table("orders").insert(j['items'], durability="soft", return_changes=False, conflict="replace").run(conn)
+    for item in j['items']: item['$hz_v$'] = 0
+    r.table(OrdersTable).insert(j['items'], durability="soft", return_changes=False, conflict="replace").run(horizon_conn)
     inserted += len(j['items'])
 
   return inserted
 
 if __name__ == '__main__':
 
-  conn, agg_conn, horizon_conn, start,  =  (r.connect(db='market'), r.connect(db='market'), r.connect(db=HorizonDB), time.perf_counter())
+  agg_conn, horizon_conn, start,  =  (r.connect(db=HorizonDB), r.connect(db=HorizonDB), time.perf_counter())
 
   dt = datetime.now()
 
@@ -56,7 +58,9 @@ if __name__ == '__main__':
 
   pageCount = js['pageCount']
 
-  r.table("orders").insert(js['items'], durability="soft", return_changes=False, conflict="replace").run(conn)
+  for item in js['items']: item['$hz_v$'] = 0
+
+  r.table(OrdersTable).insert(js['items'], durability="soft", return_changes=False, conflict="replace").run(horizon_conn)
 
   print("Working on %s pages" % pageCount)
 
@@ -75,13 +79,13 @@ if __name__ == '__main__':
   print("Starting aggregation")
   aggTimer = time.perf_counter()
 
-  aggregates = (r.table('orders')
+  aggregates = (r.table(OrdersTable)
   .filter( lambda doc: doc['buy'] == True and doc['price'] > 1 )
   .group("type")
   .map( lambda doc: { 'price': doc["price"], 'volume': doc["volume"] } )
   .ungroup()
   .map( lambda doc: 
-    doc["reduction"].order_by(r.desc("price")).slice(0, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+    doc["reduction"].order_by(r.desc("price")).slice(1, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
       'type': doc["group"],
       'count': 1,
       'total': rec["price"],
@@ -107,7 +111,7 @@ if __name__ == '__main__':
     'volume': doc["volume"]
   })
   .union(
-    r.table('orders')
+    r.table(OrdersTable)
     .filter({'buy': False})
     .group("type")
     .map( lambda doc: {
@@ -115,7 +119,7 @@ if __name__ == '__main__':
     })
     .ungroup()
     .map( lambda doc: {
-        'sell': doc["reduction"].order_by(r.asc("price")).slice(0, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+        'sell': doc["reduction"].order_by(r.asc("price")).slice(1, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
             'type': doc["group"],
             'count': 1,
             'total': rec["price"],
@@ -133,7 +137,7 @@ if __name__ == '__main__':
             'type': left['type'],
             'price': left['price']
         }),
-        'percentile': doc["reduction"].order_by(r.asc("price")).slice(0, r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+        'percentile': doc["reduction"].order_by(r.asc("price")).slice(1, r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
             'count': 1,
             'total': rec["price"],
         })

@@ -124,12 +124,6 @@ class Chart extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
-    if (this.props.item.id !== nextProps.item.id) {
-      unsubscribeItem(this.props.item.id, 0);
-    }
-
-    subscribeItem(nextProps.item.id, 0);
-
     this.props = nextProps;
     this.updateScales();
   }

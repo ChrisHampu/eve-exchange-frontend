@@ -1,0 +1,13 @@
+@import '../variables.scss';
+
+.market_item_order_container {
+  margin-top: 20px;
+  flex: 1;
+  flex-direction: column;
+  display: flex;
+  height: 100%;
+
+  > div {
+    flex: 0.44;
+  }
+}
