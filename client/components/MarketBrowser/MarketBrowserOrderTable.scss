@@ -1,13 +1,71 @@
 @import '../variables.scss';
 
 .market_item_order_container {
-  margin-top: 20px;
+  padding-top: 20px;
   flex: 1;
-  flex-direction: column;
+
   display: flex;
-  height: 100%;
+  flex-direction: column;
 
   > div {
-    flex: 0.44;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: row;
+  }
+
+  table {
+    padding: 0px 24px;
+    width: 50%;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    table-layout: fixed;
+    font-family: Roboto, sans-serif;
+    background-color: rgb(38, 43, 47);
+  }
+
+  tr {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(255, 255, 255, 0.298039);
+    color: rgb(255, 255, 255); 
+  }
+
+  thead {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(255, 255, 255, 0.298039);
+  }
+
+  tbody {
+    tr:nth-of-type(2n) {
+      background-color: rgba(153, 156, 160, 0.4);
+    }
+  }
+
+  th {
+    font-weight: normal;
+    font-size: 12px;
+    padding-left: 24px;
+    padding-right: 24px;
+    height: 30px;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(235, 169, 27);
+    position: relative;
+    background-color: inherit;
+  }
+
+  td {
+    padding-left: 24px;
+    padding-right: 24px;
+    height: 30px;
+    text-align: left;
+    font-size: 13px;
+    overflow: hidden;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    
   }
 }

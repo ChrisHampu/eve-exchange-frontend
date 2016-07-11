@@ -16,11 +16,14 @@
   width: 100%;
   color: $base-color-lightest;
   flex: 2;
+  display: flex;
+  flex-direction: column;
 
   .market_item_view_header {
     width: 100%;
     border-bottom: 2px solid $base-color-light;
     padding-bottom: 10px;
+
     .market_item_view_header_name {
       font-size: 1.5rem;
       font-weight: 300;
@@ -43,11 +46,19 @@
     }
   }
 
+  .tab_container {
+    display: flex !important;
+  }
+
   .tab_content {
-    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
     > div {
       height: 100%;
+      display: flex;
+      flex-direction: column;
     }
   }
 

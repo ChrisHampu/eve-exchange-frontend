@@ -123,11 +123,6 @@ class MarketItemViewComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      containerWidth: 0,
-      containerHeight: 0
-    };
-
     subscribeItem(this.props.item.id, 0);
   }
 
@@ -138,14 +133,6 @@ class MarketItemViewComponent extends React.Component {
     }
 
     subscribeItem(nextProps.item.id, 0);
-  }
-
-  componentDidMount() {
-
-    this.setState({
-      containerWidth: ReactDOM.findDOMNode(this.refs.market_container).clientWidth,
-      containerHeight: ReactDOM.findDOMNode(this.refs.market_container).clientHeight
-    });
   }
 
   render() {
@@ -172,10 +159,10 @@ class MarketItemViewComponent extends React.Component {
             </IconMenu>
           </div>
         </div>
-        <Tabs style={{height: "100%"}} contentContainerClassName={s.tab_content}>
+        <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
           <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
             <div ref="market_container" className={s.market_item_chart_container}>
-              <CandleStickChart item={this.props.item} width={this.state.containerWidth > 0 ? this.state.containerWidth-72 : 0} height={this.state.containerHeight}/>
+              <CandleStickChart style={{flex: 1}} item={this.props.item} />
             </div>
           </Tab>
           <Tab label="Orders" style={{backgroundColor: "rgb(38, 43, 47)"}}>

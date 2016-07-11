@@ -93,7 +93,7 @@ export default class Tooltip extends React.Component {
             Open: {formatNumber(this.state.tooltipItem.open)}<br />
             High: {formatNumber(this.state.tooltipItem.high)}<br />
             Low: {formatNumber(this.state.tooltipItem.low)}<br />
-            Close: {formatNumber(this.state.tooltipItem.close)}<br />
+            Close: {formatNumber(this.state.tooltipItem.buyFifthPercentile)}<br />
           </div>
         );
         break;
@@ -103,7 +103,7 @@ export default class Tooltip extends React.Component {
           <div>
             High: {formatNumber(this.state.tooltipItem.high)}<br />
             Low: {formatNumber(this.state.tooltipItem.low)}<br />
-            Buy: {formatNumber(this.state.tooltipItem.close)}<br />
+            Buy: {formatNumber(this.state.tooltipItem.buyFifthPercentile)}<br />
             Sell: {formatNumber(this.state.tooltipItem.sellFifthPercentile)}<br />
           </div>
         );

@@ -80,12 +80,14 @@ if __name__ == '__main__':
   aggTimer = time.perf_counter()
 
   aggregates = (r.table(OrdersTable)
-  .filter( lambda doc: doc['buy'] == True and doc['price'] > 1 )
+  .filter( lambda doc: (doc['buy'] == True) & (doc['price'] > 1 ) )
   .group("type")
-  .map( lambda doc: { 'price': doc["price"], 'volume': doc["volume"] } )
+  .map( lambda doc: { 
+    'price': doc["price"], 'volume': doc["volume"] 
+  })
   .ungroup()
-  .map( lambda doc: 
-    doc["reduction"].order_by(r.desc("price")).slice(1, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+  .map( lambda doc: {
+    'buy': doc["reduction"].order_by(r.desc("price")).slice(0, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
       'type': doc["group"],
       'count': 1,
       'total': rec["price"],
@@ -100,15 +102,23 @@ if __name__ == '__main__':
       'volume': left['volume'].add(right['volume']),
       'count': left['count'].add(right['count']),
       'type': left['type'],
+    }),
+    'buyPercentile': doc["reduction"].order_by(r.desc("price")).slice(0, r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+      'count': 1,
+      'total': rec["price"],
     })
-  )
+    .reduce( lambda left, right: {
+      'total': left['total'].add(right['total']),
+      'count': left['count'].add(right['count']),
+    })
+  })
   .map( lambda doc: {
-    'type': doc["type"],
-    'buymax': doc["max"],
-    'buymin': doc["min"],
-    'buyavg': doc["total"].div(doc["count"]),
-    'count': doc["count"],
-    'volume': doc["volume"]
+    'type': doc["buy"]["type"],
+    'buymax': doc["buy"]["max"],
+    'buymin': doc["buy"]["min"],
+    'buyavg': doc["buy"]["total"].div(doc["buy"]["count"]),
+    'buyFifthPercentile': doc["buyPercentile"]["total"].div(doc["buyPercentile"]["count"]),
+    'volume': doc["buy"]["volume"]
   })
   .union(
     r.table(OrdersTable)
@@ -119,27 +129,27 @@ if __name__ == '__main__':
     })
     .ungroup()
     .map( lambda doc: {
-        'sell': doc["reduction"].order_by(r.asc("price")).slice(1, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
-            'type': doc["group"],
-            'count': 1,
-            'total': rec["price"],
-            'price': rec["price"],
-            'max': rec["price"],
-            'min': rec["price"],
-            'volume': rec["volume"]
+        'sell': doc["reduction"].order_by(r.asc("price")).slice(0, r.expr([1, r.expr(0.95).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+          'type': doc["group"],
+          'count': 1,
+          'total': rec["price"],
+          'price': rec["price"],
+          'max': rec["price"],
+          'min': rec["price"],
+          'volume': rec["volume"]
         })
         .reduce( lambda left, right: {
-            'max': r.branch(r.gt(left['max'], right['max']), left['max'], right['max']),
-            'min': r.branch(r.gt(left['min'], right['min']), right['min'], left['min']),
-            'total': left['total'].add(right['total']),
-            'volume': left['volume'].add(right['volume']),
-            'count': left['count'].add(right['count']),
-            'type': left['type'],
-            'price': left['price']
+          'max': r.branch(r.gt(left['max'], right['max']), left['max'], right['max']),
+          'min': r.branch(r.gt(left['min'], right['min']), right['min'], left['min']),
+          'total': left['total'].add(right['total']),
+          'volume': left['volume'].add(right['volume']),
+          'count': left['count'].add(right['count']),
+          'type': left['type'],
+          'price': left['price']
         }),
-        'percentile': doc["reduction"].order_by(r.asc("price")).slice(1, r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
-            'count': 1,
-            'total': rec["price"],
+        'sellPercentile': doc["reduction"].order_by(r.asc("price")).slice(0, r.expr([1, r.expr(0.05).mul(doc["reduction"].count()).floor()]).max()).map( lambda rec: {
+          'count': 1,
+          'total': rec["price"],
         })
         .reduce( lambda left, right: {
           'total': left['total'].add(right['total']),
@@ -147,33 +157,34 @@ if __name__ == '__main__':
         })
     })
     .map( lambda doc: {
-        'type': doc["sell"]["type"],
-        'sellmax': doc["sell"]["max"],
-        'sellmin': doc["sell"]["min"],
-        'sellavg': doc["sell"]["total"].div(doc["sell"]["count"]),
-        'fifthPercentile': doc["percentile"]["total"].div(doc["percentile"]["count"]),
-        'volume': doc["sell"]["volume"]
+      'type': doc["sell"]["type"],
+      'sellmax': doc["sell"]["max"],
+      'sellmin': doc["sell"]["min"],
+      'sellavg': doc["sell"]["total"].div(doc["sell"]["count"]),
+      'sellFifthPercentile': doc["sellPercentile"]["total"].div(doc["sellPercentile"]["count"]),
+      'volume': doc["sell"]["volume"]
     })
   )
   .group("type")
   .ungroup()
   .map( lambda group: {
-      '$hz_v$': 0,
-      'frequency': "minutes",
-      'time': r.now(),
-      'type': group["group"],
-      'sellAvg': group["reduction"][1]["sellavg"].default(0),
-      'sellMin': group["reduction"][1]["sellmin"].default(0),
-      'sellMax': group["reduction"][1]["sellmax"].default(0),
-      'sellFifthPercentile': group["reduction"][1]["fifthPercentile"].default(0),
-      'sellVolume': group["reduction"][1]["volume"].default(0),
-      'buyVolume': group["reduction"][0]["volume"].default(0),
-      'close': group["reduction"][0]["buyavg"].default(0),
-      'low': group["reduction"][0]["buymin"].default(0),
-      'high': group["reduction"][0]["buymax"].default(0),
-      'spread': r.expr(100).sub(group["reduction"][0]["buyavg"].default(1).div(group["reduction"][1]["fifthPercentile"].default(1)).mul(r.expr(100))),
-      'spreadValue': group["reduction"][1]["fifthPercentile"].default(1).div(100).mul(r.expr(100).sub(group["reduction"][0]["buyavg"].default(1).div(group["reduction"][1]["fifthPercentile"].default(1)).mul(r.expr(100)))),
-      'tradeValue': group["reduction"][0]["volume"].default(0).mul(group["reduction"][1]["fifthPercentile"].default(1).div(100).mul(r.expr(100).sub(group["reduction"][0]["buyavg"].default(1).div(group["reduction"][1]["fifthPercentile"].default(1)).mul(r.expr(100)))))
+    '$hz_v$': 0,
+    'frequency': "minutes",
+    'time': r.now(),
+    'type': group["group"],
+    'sellAvg': group["reduction"][1]["sellavg"].default(0),
+    'sellMin': group["reduction"][1]["sellmin"].default(0),
+    'sellMax': group["reduction"][1]["sellmax"].default(0),
+    'sellFifthPercentile': group["reduction"][1]["sellFifthPercentile"].default(0),
+    'sellVolume': group["reduction"][1]["volume"].default(0),
+    'buyVolume': group["reduction"][0]["volume"].default(0),
+    'buyFifthPercentile': group["reduction"][0]["buyFifthPercentile"].default(0),
+    'close': group["reduction"][0]["buyavg"].default(0),
+    'low': group["reduction"][0]["buymin"].default(0),
+    'high': group["reduction"][0]["buymax"].default(0),
+    'spread': r.expr(100).sub(group["reduction"][0]["buyFifthPercentile"].default(1).div(group["reduction"][1]["sellFifthPercentile"].default(1)).mul(r.expr(100))),
+    'spreadValue': group["reduction"][1]["fifthPercentile"].default(1).div(100).mul(r.expr(100).sub(group["reduction"][0]["buyFifthPercentile"].default(1).div(group["reduction"][1]["sellFifthPercentile"].default(1)).mul(r.expr(100)))),
+    'tradeValue': group["reduction"][0]["volume"].default(0).mul(group["reduction"][1]["sellFifthPercentile"].default(1).div(100).mul(r.expr(100).sub(group["reduction"][0]["buyFifthPercentile"].default(1).div(group["reduction"][1]["sellFifthPercentile"].default(1)).mul(r.expr(100)))))
   })
   .run(agg_conn, array_limit=300000, profile=Profile)
   )

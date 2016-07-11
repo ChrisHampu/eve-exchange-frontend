@@ -63,8 +63,8 @@ class Chart extends React.Component {
 
     const data = this.getAggregateData();
 
-    this.state.height = this.props.height - this.state.margin.top - this.state.margin.bottom;
-    this.state.width = this.props.width - this.state.margin.left - this.state.margin.right;
+    this.state.height = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom - 10;
+    this.state.width = ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth - this.state.margin.left - this.state.margin.right - 10;
 
     this.state.ohlcHeight = Math.floor(this.state.height*0.70);
     this.state.ohlcOffset = Math.floor(this.state.height*0.75);
@@ -85,7 +85,6 @@ class Chart extends React.Component {
     this.state.yScale.domain([Math.min(...data.map((el) => { return el.open})), Math.max(...data.map((el) => { return el.close}))]);
 
     this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.buyVolume}))*0.95), Math.ceil(Math.max(...data.map((el) => { return el.buyVolume}))*1.05)]);
-    
 
     this.state.percentScale.domain([0, 1]);
 
@@ -117,7 +116,7 @@ class Chart extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
 
     this.updateScales();
   }
@@ -150,7 +149,7 @@ class Chart extends React.Component {
   render() {
 
     return (
-      <div style={{position: "relative"}}>
+      <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%" }}>
         <RadioButtonGroup name="timespan" defaultSelected="minutes" className={s.radios}>
           <RadioButton
             value="minutes"
@@ -169,7 +168,7 @@ class Chart extends React.Component {
             label="1 Month"
           />
         </RadioButtonGroup>
-        <div className={s.chart}>
+        <div ref="chart_anchor" className={s.chart}>
           <svg width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
             <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
               <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${this.state.height}px)`}} />
