@@ -25,6 +25,7 @@ export default function auth(state = { groups: ["guest"], id: null, name: "", co
       }
 
       return { ...state, groups: groups, id: id, name: name, corporation: corporation };
+
     default:
       return state;
   }  

@@ -1,6 +1,7 @@
 import Horizon from '@horizon/client';
 import store from './store';
 import { updateUser } from './actions/authActions';
+import { updateUserSettings } from './actions/settingsActions';
 import 'whatwg-fetch';
 import Promise from 'bluebird';
 import { parseString } from 'xml2js';
@@ -9,11 +10,23 @@ const parseXml = Promise.promisify(parseString);
 
 const horizon = Horizon({ authType: { type: 'token', storeLocally: true }});
 let userData = null;
+let currentSettings = null;
 
 if (hasAuthToken()) {
   horizon("users").fetch().subscribe(()=>{}, ()=>{}, ()=>{});
-  horizon("users_auth").fetch().subscribe(()=>{}, ()=>{}, ()=>{});
 }
+
+store.subscribe(() => {
+
+  if (store.getState().settings !== currentSettings && store.getState().settings.userID) {
+
+    currentSettings = store.getState().settings;
+    console.log("saving settings");
+    console.log(currentSettings);
+
+    horizon('user_settings').replace(currentSettings);
+  }
+});
 
 export function clearAuthToken() {
 
@@ -66,6 +79,17 @@ export function getCurrentUser() {
 
       userData = user;
       store.dispatch(updateUser(user));
+
+      horizon('user_settings').find({userID: user.id}).fetch().subscribe( settings => {
+
+        if (settings === null) {
+
+          horizon('user_settings').store({userID: user.id});
+        } else {
+          store.dispatch(updateUserSettings(user.id, settings));
+        }
+
+      });
 
       resolve(user);
     }, 

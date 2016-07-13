@@ -2,31 +2,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import s from './MarketBrowserComponent.scss';
-import MarketBrowserOrderTable from './MarketBrowserOrderTable';
-import DashboardPage from '../DashboardPage/DashboardPageComponent';
-import CandleStickChart from '../Charts/CandleStickChart';
 import cx from 'classnames';
-import horizon from '../../horizon';
 import fuzzy from 'fuzzy';
-import { subscribeItem, unsubscribeItem } from '../../market';
+
+// Components
+import MarketItemViewComponent from './MarketItemViewComponent';
+import DashboardPage from '../DashboardPage/DashboardPageComponent';
 
 // Market group data
 import marketGroups from '../../sde/market_groups';
 
 // Material UI
 import TextField from 'material-ui/TextField';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton/IconButton';
-
-import {Tabs, Tab} from 'material-ui/Tabs';
 
 // Icons
 import ArrowDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import ArrowRightIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
 
 class MarketBrowserListItem extends React.Component {
 
@@ -108,67 +99,6 @@ class MarketBrowserListItem extends React.Component {
         {
           this.renderItems()
         }
-      </div>
-    )
-  }
-}
-
-class MarketItemViewComponent extends React.Component {
-
-  static propTypes = {
-
-    item: React.PropTypes.object
-  };
-
-  constructor(props) {
-    super(props);
-
-    subscribeItem(this.props.item.id, 0);
-  }
-
-  componentWillReceiveProps(nextProps) {
-
-    if (this.props.item.id !== nextProps.item.id) {
-      unsubscribeItem(this.props.item.id, 0);
-    }
-
-    subscribeItem(nextProps.item.id, 0);
-  }
-
-  render() {
-    return (
-      <div className={s.market_item_view}>
-        <div className={s.market_item_view_header}>
-          <div className={s.market_item_view_header_name}>
-            {this.props.item.name}
-          </div>
-          <div className={s.market_item_view_header_menus}>
-            <IconButton onClick={()=>{this.props.selector(null);}} tooltip="Close">
-              <CloseIcon />
-            </IconButton>
-            <IconMenu
-              iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-              targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            >
-              <MenuItem type="text" primaryText="Refresh" />
-              <MenuItem type="text" primaryText="Send feedback" />
-              <MenuItem type="text" primaryText="Settings" />
-              <MenuItem type="text" primaryText="Help" />
-              <MenuItem type="text" primaryText="Sign out" />
-            </IconMenu>
-          </div>
-        </div>
-        <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
-          <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
-            <div ref="market_container" className={s.market_item_chart_container}>
-              <CandleStickChart style={{flex: 1}} item={this.props.item} />
-            </div>
-          </Tab>
-          <Tab label="Orders" style={{backgroundColor: "rgb(38, 43, 47)"}}>
-              <MarketBrowserOrderTable item={this.props.item}/>
-          </Tab>
-        </Tabs>
       </div>
     )
   }

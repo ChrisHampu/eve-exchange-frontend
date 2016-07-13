@@ -1,0 +1,59 @@
+@import '../variables.scss';
+
+.market_item_view {
+  width: 100%;
+  color: $base-color-lightest;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+
+  .market_item_view_header {
+    width: 100%;
+    border-bottom: 2px solid $base-color-light;
+    padding-bottom: 10px;
+
+    .market_item_view_header_name {
+      font-size: 1.5rem;
+      font-weight: 300;
+      display: inline-block;
+      padding-top: 12px;
+    }
+    .market_item_view_header_menus {
+      position: absolute;
+      right: 25px;
+      display: inline-block;
+    }
+  }
+
+  .market_item_chart_container {
+    width: 100%;
+    flex: 1;
+    height: 80%;
+
+    svg {
+      box-sizing: border-box;
+    }
+  }
+
+  .tab_container {
+    display: flex !important;
+  }
+
+  .tab_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .market_item_order_container {
+    margin-top: 20px;
+    flex: 1;
+    overflow-y: scroll;
+  }
+}

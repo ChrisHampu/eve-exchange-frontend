@@ -81,7 +81,7 @@ class MarketBrowserOrderTable extends React.Component {
             </thead>
             <tbody>
               {
-                topSell ? topSell.map((el, i) => {
+                topSell.length ? topSell.map((el, i) => {
                   return (
                     <tr key={i}>
                       <td>{stationIDToName[el.stationID] || "Citadel"}</td>
