@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import { browserHistory } from 'react-router'
 import cx from 'classnames';
-import DashboardPage from '../DashboardPage/DashboardPageComponent';
+import DashboardView from './DashboardView';
 import s from './DashboardComponent.scss';
 
 // Material UI
@@ -154,10 +154,9 @@ class Dashboard extends React.Component {
               <Avatar className={s.dashboard_avatar} src={`https://image.eveonline.com/Character/${this.props.auth.id}_64.jpg`} size={48} /> 
             </ToolbarGroup>
           </Toolbar>
-          { this.props.main !== undefined ? this.props.main :
-            <DashboardPage title="Dashboard">
-
-            </DashboardPage>
+          {
+            this.props.main !== undefined ? this.props.main :
+            <DashboardView />
           }
         </div>
       </div>

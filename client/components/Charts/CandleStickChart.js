@@ -41,8 +41,8 @@ class Chart extends React.Component {
         bottom: 30,
         left: 50
       },
-      height: 350,
-      width: 600,
+      height: 0,
+      width: 0,
       frequency: "minutes"
     }
   }

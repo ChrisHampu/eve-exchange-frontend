@@ -7,6 +7,9 @@
   flex-direction: inherit;
   align-items: flex-start;
   position: relative;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  box-sizing: border-box;
   
   .page_title {
     color: $base-color-lightest;

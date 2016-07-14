@@ -16,23 +16,19 @@ export default function settings(state = initialState, action) {
 
     case "PIN_CHART":
 
-    console.log(action);
-
-      if (!action.id || state.pinned_charts.indexOf(action.id) !== -1) {
+      if (!action.item || typeof state.pinned_charts[action.item.id] !== 'undefined') {
         return state;
       }
 
-      return { ...state, pinned_charts: [...state.pinned_charts, action.id ] };
+      return { ...state, pinned_charts: { ...state.pinned_charts, [action.item.id]: action.item.name } };
 
     case "UNPIN_CHART":
 
-    console.log(action);
-
-      if (!action.id || state.pinned_charts.indexOf(action.id) === -1) {
+      if (!action.id || typeof state.pinned_charts[action.item.id] === 'undefined') {
         return state;
       }
 
-      return { ...state, pinned_charts: [...state.pinned_charts.filter(el => el !== action.id)] };
+      return { ...state, pinned_charts: { ...state.pinned_charts, [action.item.id]: undefined } };
 
     default:
       return state;

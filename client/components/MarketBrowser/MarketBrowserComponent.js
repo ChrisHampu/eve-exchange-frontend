@@ -181,6 +181,38 @@ export default class MarketBrowserComponent extends React.Component {
     return groups;
   }
 
+  _itemIDToName(group, id, name) {
+
+    if (group.items && group.items.length) {
+
+      for (const item of group.items) {
+
+        if (item.id === id) {
+          name = item.name;
+          return;
+        }
+      }
+    }
+
+    for (const child of group.childGroups) {
+
+      this._itemIDToName(child, id, name);
+    }
+  }
+
+  itemIDToName(id) {
+
+    let searchID = id.toString();
+    let name = "";
+
+    for (const group of marketGroups) {
+
+      this._itemIDToName(group, searchID, name);
+    }
+
+    return name;
+  }
+
   renderMarketBrowser() {
 
     return (
@@ -201,6 +233,9 @@ export default class MarketBrowserComponent extends React.Component {
   }
 
   render() {
+
+    console.log(this.itemIDToName(29668));
+
     return (
       <DashboardPage title="Market Browser" className={s.root}>
         <div className={s.market_browser_container}>

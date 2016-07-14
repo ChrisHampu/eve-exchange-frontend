@@ -42,12 +42,12 @@ class MarketItemViewComponent extends React.Component {
 
   isChartPinned() {
 
-    return this.props.settings.pinned_charts.indexOf(parseInt(this.props.item.id)) !== -1;
+    return this.props.settings.pinned_charts[this.props.item.id] || false;
   }
 
   pinChart() {
 
-    store.dispatch(pinChartToDashboard(parseInt(this.props.item.id)));
+    store.dispatch(pinChartToDashboard(this.props.item));
   }
 
   unPinChart() {

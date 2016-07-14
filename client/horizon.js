@@ -18,6 +18,8 @@ if (hasAuthToken()) {
 
 store.subscribe(() => {
 
+  console.log(store.getState());
+
   if (store.getState().settings !== currentSettings && store.getState().settings.userID) {
 
     currentSettings = store.getState().settings;
@@ -80,15 +82,15 @@ export function getCurrentUser() {
       userData = user;
       store.dispatch(updateUser(user));
 
-      horizon('user_settings').find({userID: user.id}).fetch().subscribe( settings => {
+      horizon('user_settings').find({userID: user.id}).fetch().defaultIfEmpty().subscribe( settings => {
 
         if (settings === null) {
 
           horizon('user_settings').store({userID: user.id});
         } else {
+
           store.dispatch(updateUserSettings(user.id, settings));
         }
-
       });
 
       resolve(user);
