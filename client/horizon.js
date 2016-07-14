@@ -80,16 +80,7 @@ export function getCurrentUser() {
       userData = user;
       store.dispatch(updateUser(user));
 
-      horizon('user_settings').find({userID: user.id}).fetch().defaultIfEmpty().subscribe( settings => {
-
-        if (settings === null) {
-
-          horizon('user_settings').store({userID: user.id});
-        } else {
-
-          store.dispatch(updateUserSettings(user.id, settings));
-        }
-      });
+      doHorizonSubscriptions();
 
       resolve(user);
     }, 
@@ -99,6 +90,21 @@ export function getCurrentUser() {
 
     return;
 	});
+}
+
+function doHorizonSubscriptions() {
+
+  horizon('user_settings').find({userID: userData.id}).fetch().defaultIfEmpty().subscribe( settings => {
+
+    if (settings === null) {
+
+      horizon('user_settings').store({userID: userData.id});
+    } else {
+
+      store.dispatch(updateUserSettings(userData.id, settings));
+    }
+  });
+
 }
 
 export default horizon;

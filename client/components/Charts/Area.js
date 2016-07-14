@@ -3,9 +3,6 @@ import React from 'react';
 import { area, curveCatmullRom, line } from '../../d3.js';
 import Circle from './Circle';
 
-// TODO: Show sell price as area
-// Set y scale to the max(buy, sell)
-
 export default class Area extends React.Component {
 
   static propTypes = {
@@ -65,6 +62,10 @@ export default class Area extends React.Component {
   }
 
   render() {
+
+    if (!this.props.viewportHeight) {
+      return <g />;
+    }
 
     const _area = area()
       .x(d => this.props.xScale(this.props.xAccessor(d)))

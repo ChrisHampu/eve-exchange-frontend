@@ -3,7 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import s from './MarketBrowserComponent.scss';
 import cx from 'classnames';
-import fuzzy from 'fuzzy';
 import { browserHistory } from 'react-router'
 import { getMarketGroupTree } from '../../market';
 
