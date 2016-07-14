@@ -8,7 +8,7 @@ import DashboardComponent from '../components/Dashboard/DashboardComponent';
 import ProfileComponent from '../components/Profile/ProfileComponent';
 import AdminComponent from '../components/Admin/AdminComponent';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
-
+import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -20,7 +20,9 @@ export default (
       <IndexRoute component={OnboardingComponent} />
       <Route path="dashboard" component={DashboardComponent} onEnter={requireAccess("standard")}>
         <Route path="profile" components={{main: ProfileComponent}} />
-        <Route path="browser" components={{main: MarketBrowserComponent}} />
+        <Route path="browser" components={{main: MarketBrowserComponent}}>
+          <Route path=":id" component={MarketItemViewComponent} />
+        </Route>
         <Route path="admin" components={{main: AdminComponent}} />
       </Route>
     </Route>

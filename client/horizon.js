@@ -18,8 +18,6 @@ if (hasAuthToken()) {
 
 store.subscribe(() => {
 
-  console.log(store.getState());
-
   if (store.getState().settings !== currentSettings && store.getState().settings.userID) {
 
     currentSettings = store.getState().settings;

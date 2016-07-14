@@ -24,11 +24,14 @@ export default function settings(state = initialState, action) {
 
     case "UNPIN_CHART":
 
-      if (!action.id || typeof state.pinned_charts[action.item.id] === 'undefined') {
+      if (!action.id || typeof state.pinned_charts[action.id] === 'undefined') {
         return state;
       }
 
-      return { ...state, pinned_charts: { ...state.pinned_charts, [action.item.id]: undefined } };
+      let charts = Object.assign({}, state.pinned_charts);
+      delete charts[action.id];
+
+      return { ...state, pinned_charts: charts };
 
     default:
       return state;

@@ -1,13 +1,9 @@
 import store from './store';
 import { setAggregateData, setOrderData } from './actions/marketActions';
 import horizon from './horizon';
+import marketGroups from './sde/market_groups'
 
 const subscriptions = [];
-
-function watchPredicate(data) {
-
-	console.log(data);
-}
 
 export function subscribeItem(id, region) {
 
@@ -57,4 +53,89 @@ export function unsubscribeItem(id, region) {
 		subscriptions[idx].orderSubscription.unsubscribe();
 		subscriptions.splice(idx, 1);
 	}
+}
+
+function _getGroups(group, searchText, accumulator) {
+
+  if (group.items && group.items.length) {
+
+    const items = fuzzy.filter(searchText, group.items, { extract: item => item.name });
+
+    if (items.length) {
+
+      const _items = items.map((el) => {
+        return group.items[el.index]
+      });
+
+      accumulator.push({...group, items: _items});
+    }
+
+    return;
+  }
+
+  const children = [];
+
+  for (const child of group.childGroups) {
+
+    _getGroups(child, children);
+  }
+
+  if (children.length) {
+    accumulator.push({...group, childGroups: children});
+  }
+}
+
+export function getMarketGroupTree(searchText) {
+
+  if (!searchText || searchText.length === 0) {
+    return marketGroups;
+  }
+
+  const groups = [];
+
+  for (const group of marketGroups) {
+
+    const add = [];
+
+    _getGroups(group, searchText, add);
+
+    if (add.length) {
+      groups.push(...add);
+    }
+  }
+  
+  return groups;
+}
+
+
+export function itemIDToName(id) {
+
+  let searchID = typeof id === "string" ? id : id.toString();
+  let name = "";
+
+  const _itemIDToName = (group, id, functor) => {
+
+	  if (group.items && group.items.length) {
+
+	    for (const item of group.items) {
+
+	      if (item.id === id) {
+	        name = item.name;
+	        return;
+	      }
+	    }
+	  }
+
+	  for (const child of group.childGroups) {
+
+	    functor(child, id, functor);
+	  }
+	}
+
+  for (const group of marketGroups) {
+
+    _itemIDToName(group, searchID, _itemIDToName);
+  }
+
+  return name;
 }

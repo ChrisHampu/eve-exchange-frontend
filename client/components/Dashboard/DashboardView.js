@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import s from './DashboardView.scss';
 import { subscribeItem, unsubscribeItem } from '../../market';
+import { unPinChartFromDashboard } from '../../actions/settingsActions';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import CandleStickChart from '../Charts/CandleStickChart';
 
@@ -13,6 +14,10 @@ import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 class DashboardView extends React.Component {
+
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
 
   render() {
 
@@ -54,8 +59,8 @@ class DashboardView extends React.Component {
                             targetOrigin={{horizontal: 'right', vertical: 'top'}}
                             className={s.chart_menu}
                           >
-                            <MenuItem type="text" primaryText="Remove" onTouchTap={()=>{}}/>
-                            <MenuItem type="text" primaryText="View in Browser" onTouchTap={()=>{}}/>
+                            <MenuItem type="text" primaryText="Remove" onTouchTap={()=>{store.dispatch(unPinChartFromDashboard(item.id))}} />
+                            <MenuItem type="text" primaryText="View in Browser" onTouchTap={()=>{this.context.router.push(`/dashboard/browser/${item.id}`)}} />
                           </IconMenu>
                         </div>
                         <div className={s.chart}>

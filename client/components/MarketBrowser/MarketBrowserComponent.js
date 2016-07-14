@@ -4,13 +4,12 @@ import ReactDOM from 'react-dom';
 import s from './MarketBrowserComponent.scss';
 import cx from 'classnames';
 import fuzzy from 'fuzzy';
+import { browserHistory } from 'react-router'
+import { getMarketGroupTree } from '../../market';
 
 // Components
 import MarketItemViewComponent from './MarketItemViewComponent';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
-
-// Market group data
-import marketGroups from '../../sde/market_groups';
 
 // Material UI
 import TextField from 'material-ui/TextField';
@@ -106,6 +105,10 @@ class MarketBrowserListItem extends React.Component {
 
 export default class MarketBrowserComponent extends React.Component {
 
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
 
@@ -117,9 +120,7 @@ export default class MarketBrowserComponent extends React.Component {
 
   selectItem(item) {
 
-    this.setState({
-      selectedItem: item
-    });
+    this.context.router.push(`/dashboard/browser/${item.id}`);
   }
 
   handleSearchText(ev) {
@@ -127,90 +128,6 @@ export default class MarketBrowserComponent extends React.Component {
     this.setState({
       searchText: ev.currentTarget.value
     })
-  }
-
-  _getGroups(group, accumulator) {
-
-    if (group.items && group.items.length) {
-
-      const items = fuzzy.filter(this.state.searchText, group.items, { extract: item => item.name });
-
-      if (items.length) {
-
-        const _items = items.map((el) => {
-          return group.items[el.index]
-        });
-
-        accumulator.push({...group, items: _items});
-      }
-
-      return;
-    }
-
-    const children = [];
-
-    for (const child of group.childGroups) {
-
-      this._getGroups(child, children);
-    }
-
-    if (children.length) {
-      accumulator.push({...group, childGroups: children});
-    }
-  }
-
-  getGroups() {
-
-    if (this.state.searchText.length === 0) {
-      return marketGroups;
-    }
-
-    const groups = [];
-
-    for (const group of marketGroups) {
-
-      const add = [];
-
-      this._getGroups(group, add);
-
-      if (add.length) {
-        groups.push(...add);
-      }
-    }
-    
-    return groups;
-  }
-
-  _itemIDToName(group, id, name) {
-
-    if (group.items && group.items.length) {
-
-      for (const item of group.items) {
-
-        if (item.id === id) {
-          name = item.name;
-          return;
-        }
-      }
-    }
-
-    for (const child of group.childGroups) {
-
-      this._itemIDToName(child, id, name);
-    }
-  }
-
-  itemIDToName(id) {
-
-    let searchID = id.toString();
-    let name = "";
-
-    for (const group of marketGroups) {
-
-      this._itemIDToName(group, searchID, name);
-    }
-
-    return name;
   }
 
   renderMarketBrowser() {
@@ -224,7 +141,7 @@ export default class MarketBrowserComponent extends React.Component {
           onChange={(ev)=>{this.handleSearchText(ev)}}
         />
         { 
-          this.getGroups().map((el, i) => {
+          getMarketGroupTree(this.state.searchText).map((el, i) => {
             return(<MarketBrowserListItem selector={(item)=>{this.selectItem(item);}} element={el} key={i} depth={0} />);
           })
         }
@@ -234,13 +151,11 @@ export default class MarketBrowserComponent extends React.Component {
 
   render() {
 
-    console.log(this.itemIDToName(29668));
-
     return (
       <DashboardPage title="Market Browser" className={s.root}>
         <div className={s.market_browser_container}>
           {this.renderMarketBrowser()}
-          {this.state.selectedItem!==null ? <MarketItemViewComponent selector={(item)=>{this.selectItem(item);}} item={this.state.selectedItem}/> : false}
+          {this.props.children}
         </div>
       </DashboardPage>
     );
