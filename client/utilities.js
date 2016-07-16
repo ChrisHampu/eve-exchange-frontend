@@ -1,4 +1,5 @@
 
+// Formats a raw number with appropriate comma and decimal placement
 export function formatNumber(number) {
     var _number = Math.round(number*Math.pow(10,2))/Math.pow(10,2);
     var parts = _number.toString().split(".");

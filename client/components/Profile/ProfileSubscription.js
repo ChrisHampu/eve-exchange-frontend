@@ -4,12 +4,16 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import s from './ProfileSubscription.scss';
 import cx from 'classnames';
+import { performPremiumUpgrade, performPremiumDowngrade, performWithdrawal } from '../../actions/subscriptionActions';
+import { formatNumber } from '../../utilities';
 
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
 const PremiumPrice = 125000000;
@@ -21,7 +25,10 @@ class Subscription extends React.Component {
 
     this.state = {
       subFilter: 0,
-      withdrawal: null
+      withdrawal: null,
+      subUpgradeDialogOpen: false,
+      subDowngradeDialogOpen: false,
+      withdrawalDialogOpen: false
     };
   }
 
@@ -30,7 +37,7 @@ class Subscription extends React.Component {
       case false:
         return "Free";
       case true:
-        return "Premium";
+        return <span style={{color: "rgb(235, 169, 27)"}}>Premium</span>;
     }
   }
 
@@ -43,11 +50,13 @@ class Subscription extends React.Component {
                             labelColor="rgb(235, 169, 27)"
                             label="Upgrade to Premium"
                             disabledBackgroundColor="rgb(30, 35, 39)"
-                            disabled={this.props.subscription.balance < PremiumPrice}/>;
+                            disabled={this.props.subscription.balance < PremiumPrice}
+                            onTouchTap={this.openSubUpgrade} />;
     } else {
       button = <RaisedButton backgroundColor="rgb(30, 35, 39)"
                             labelColor="rgb(235, 169, 27)"
-                            label="Downgrade to Free"/>;
+                            label="Downgrade to Free"
+                            onTouchTap={this.openSubDowngrade} />;
     }
 
     return (
@@ -70,7 +79,8 @@ class Subscription extends React.Component {
                 The upgrade process will be instant upon clicking the above button and confirming your subscription.</span>;
       }
     } else {
-      info = <span>If you downgrade your account, you will lose access to all premium features and forfeit the remaining time for your active subscription.</span>;
+      info = <span>If you downgrade your account, you will lose access to all premium features and forfeit the remaining time for your active subscription.<br />
+                Your balance will remain the same and can be used to upgrade again.</span>;
     }
 
     return (
@@ -100,7 +110,7 @@ class Subscription extends React.Component {
   renderWithdrawal() {
 
     if (this.props.subscription.balance === 0) {
-      //return null;
+      return null;
     }
 
     return (
@@ -121,8 +131,9 @@ class Subscription extends React.Component {
                       labelColor="rgb(235, 169, 27)"
                       label="Request Withdrawal"
                       disabledBackgroundColor="rgb(30, 35, 39)"
-                      disabled={this.state.withdrawal === 0 || this.state.withdrawal > this.props.subscription.balance}
-                      style={{marginBottom: ".8rem"}} />
+                      disabled={!this.state.withdrawal || Number.isNaN(this.state.withdrawal) || parseInt(this.state.withdrawal) > this.props.subscription.balance || parseInt(this.state.withdrawal) < 0}
+                      style={{marginBottom: ".8rem"}}
+                      onTouchTap={this.openWithdrawalDialog} />
         <div>
         You may request a withdrawal at any time. Please allow up to 24 hours for processing.
         </div>
@@ -133,10 +144,112 @@ class Subscription extends React.Component {
   setSubFilter = (event, index, value) => this.setState({subFilter: value});
   setWithdrawal = (event) => this.setState({withdrawal: event.target.value});
 
+  openSubUpgrade = () => this.setState({subUpgradeDialogOpen: true});
+  closeSubUpgrade = () => this.setState({subUpgradeDialogOpen: false});
+
+  openSubDowngrade = () => this.setState({subDowngradeDialogOpen: true});
+  closeSubDowngrade = () => this.setState({subDowngradeDialogOpen: false});
+
+  openWithdrawalDialog = () => this.setState({withdrawalDialogOpen: true});
+  closeWithdrawalDialog = () => this.setState({withdrawalDialogOpen: false});
+
+  doPremiumUpgrade() {
+
+    store.dispatch(performPremiumUpgrade());
+
+    this.closeSubUpgrade();
+  };
+
+  doPremiumDowngrade() {
+    store.dispatch(performPremiumDowngrade());
+
+    this.closeSubDowngrade();
+  }
+
+  doWithdrawal() {
+    store.dispatch(performWithdrawal(this.state.withdrawal));
+
+    this.closeWithdrawalDialog();
+  }
+
   render() {
+
+    const subUpgradeActions = [
+      <FlatButton
+        label="Cancel"
+        labelStyle={{color: "rgb(235, 169, 27)"}}
+        primary={true}
+        onTouchTap={this.closeSubUpgrade}
+      />,
+      <FlatButton
+        label="Confirm"
+        labelStyle={{color: "rgb(235, 169, 27)"}}
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={()=>{this.doPremiumUpgrade()}}
+      />,
+    ];
+
+    const subDowngradeActions = [
+      <FlatButton
+        label="Cancel"
+        labelStyle={{color: "rgb(235, 169, 27)"}}
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.closeSubDowngrade}
+      />,
+      <FlatButton
+        label="Confirm"
+        labelStyle={{color: "rgb(235, 169, 27)"}}
+        primary={true}
+        onTouchTap={()=>{this.doPremiumDowngrade()}}
+      />,
+    ];
+
+    const withdrawalDialogActions = [
+      <FlatButton
+        label="Cancel"
+        labelStyle={{color: "rgb(235, 169, 27)"}}
+        primary={true}
+        onTouchTap={this.closeWithdrawalDialog}
+      />,
+      <FlatButton
+        label="Confirm"
+        labelStyle={{color: "rgb(235, 169, 27)"}}
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={()=>{this.doWithdrawal()}}
+      />,
+    ];
 
     return (
       <div className={s.root}>
+        <Dialog
+          actions={subUpgradeActions}
+          modal={false}
+          open={this.state.subUpgradeDialogOpen}
+          onRequestClose={this.closeSubUpgrade}
+        >
+          Please confirm your upgrade to premium account services.
+        </Dialog>
+        <Dialog
+          actions={subDowngradeActions}
+          modal={false}
+          open={this.state.subDowngradeDialogOpen}
+          onRequestClose={this.closeSubDowngrade}
+        >
+          Please confirm your downgrade to free account services.<br />
+          Any remaining time on your active subscription will be lost.
+        </Dialog>
+        <Dialog
+          actions={withdrawalDialogActions}
+          modal={false}
+          open={this.state.withdrawalDialogOpen}
+          onRequestClose={this.closeWithdrawalDialog}
+        >
+          Please confirm your withdrawal request.<br />
+          Allow up to 24 hours for your request to be processed.
+        </Dialog>
         <div className={s.subscription_info}>
           <div className={s.info_row}>
             <div className={s.info_key}>
@@ -159,7 +272,7 @@ class Subscription extends React.Component {
               Current Balance:
             </div>
             <div className={s.info_value}>
-              {this.props.subscription.balance} ISK
+              {formatNumber(this.props.subscription.balance)} ISK
             </div>
           </div>
           {this.renderSubscriptionButtons()}
@@ -194,13 +307,13 @@ class Subscription extends React.Component {
                 <TableRow selectable={false}>
                   <TableRowColumn>{(new Date()).toString()}</TableRowColumn>
                   <TableRowColumn>Widthrawal</TableRowColumn>
-                  <TableRowColumn style={{color: "red"}}>-125,000,000 ISK</TableRowColumn>
+                  <TableRowColumn style={{color: "red"}}>-{formatNumber(125000000)} ISK</TableRowColumn>
                   <TableRowColumn>Subscription Fee</TableRowColumn>
                 </TableRow>
                 <TableRow selectable={false}>
                   <TableRowColumn>{(new Date()).toString()}</TableRowColumn>
                   <TableRowColumn>Deposit</TableRowColumn>
-                  <TableRowColumn style={{color: "green"}}>+125,000,000 ISK</TableRowColumn>
+                  <TableRowColumn style={{color: "green"}}>+{formatNumber(125000000)} ISK</TableRowColumn>
                   <TableRowColumn>Player Deposit</TableRowColumn>
                 </TableRow>
               </TableBody>
