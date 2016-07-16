@@ -7,7 +7,7 @@ export default class DashboardPageComponent extends React.Component {
 
   render() {
     return (
-      <div className={s.root} style={this.props.style}>
+      <div className={cx(s.root, this.props.className)} style={this.props.style}>
         <div className={s.page_title}>
           {this.props.title}
         </div>

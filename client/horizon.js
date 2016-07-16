@@ -2,6 +2,8 @@ import Horizon from '@horizon/client';
 import store from './store';
 import { updateUser } from './actions/authActions';
 import { updateUserSettings } from './actions/settingsActions';
+import { updateNotifications } from './actions/notificationsActions';
+import { updateSubscription } from './actions/SubscriptionActions';
 import 'whatwg-fetch';
 import Promise from 'bluebird';
 import { parseString } from 'xml2js';
@@ -98,11 +100,35 @@ function doHorizonSubscriptions() {
 
     if (settings === null) {
 
+      // Create empty settings if the user has no settings already
       horizon('user_settings').store({userID: userData.id});
     } else {
 
       store.dispatch(updateUserSettings(userData.id, settings));
     }
+  });
+
+  horizon('notifications').findAll({userID: userData.id}).watch().defaultIfEmpty().subscribe( notifications => {
+
+    if (!notifications) {
+      return;
+    }
+
+    console.log(notifications);
+
+    store.dispatch(updateNotifications(notifications.sort((el1, el2) => el2.time - el1.time)));
+  });
+
+  horizon('subscription').find({userID: userData.id}).watch().defaultIfEmpty().subscribe( subscription => {
+
+    if (!subscription) {
+      horizon('subscription').store({userID: userData.id, balance: 0, deposit_history: [], withdrawal_history: [], level: 0});
+      return;
+    }
+
+    console.log(subscription);
+
+    store.dispatch(updateSubscription(userData.id, subscription));
   });
 
 }

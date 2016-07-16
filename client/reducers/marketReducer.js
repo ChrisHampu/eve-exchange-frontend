@@ -33,7 +33,7 @@ export default function market(state = { region: {} }, action) {
 
       if ( typeof state.region[0].item[action.id] === 'undefined') {
 
-        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { aggregates: action.data } }}  } };
+        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { orders: [], aggregates: action.data } }}  } };
       }
 
       return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], aggregates: action.data } }}  } };
@@ -50,7 +50,7 @@ export default function market(state = { region: {} }, action) {
 
       if ( typeof state.region[0].item[action.id] === 'undefined') {
 
-        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { orders: action.data } }}  } };
+        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { aggregates: [], orders: action.data } }}  } };
       }
 
       return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], orders: action.data } }}  } };

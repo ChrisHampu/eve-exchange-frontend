@@ -118,6 +118,12 @@
             right: 8px !important;
           }
         }
+
+        .dashboard_header_notifications.dashboard_header_notifications_unread {
+          > span {
+            background-color: #cc2424 !important;
+          }
+        }
       }
 
 

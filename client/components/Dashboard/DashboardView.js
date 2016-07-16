@@ -26,55 +26,62 @@ class DashboardView extends React.Component {
 
     return (
       <DashboardPage title="Dashboard">
-        <div className={s.dashboard_charts}>
-        {
-          [...Array(numRows).keys()].map(row => {
+      {
+        charts.length === 0 ?
+          <div className={s.disclaimer}>
+          Pin charts to your dashboard from the market browser for quickly viewing multiple charts at a glance.
+          </div>
+          :
+          <div className={s.dashboard_charts}>
+          {
+            [...Array(numRows).keys()].map(row => {
 
-            const chartSlice = charts.slice(row * 3, row * 3 + 3);
+              const chartSlice = charts.slice(row * 3, row * 3 + 3);
 
-            return (
-              <div key={row} className={s.chart_row}>
-                {
-                  chartSlice.map((el, i) => {
+              return (
+                <div key={row} className={s.chart_row}>
+                  {
+                    chartSlice.map((el, i) => {
 
-                    let flex = "33.333%";
-                    if (chartSlice.length === 1) {
-                      flex = "100%";
-                    } else if (chartSlice.length === 2) {
-                      if (i === 1) {
-                        flex = "66.6666%";
+                      let flex = "33.333%";
+                      if (chartSlice.length === 1) {
+                        flex = "100%";
+                      } else if (chartSlice.length === 2) {
+                        if (i === 1) {
+                          flex = "66.6666%";
+                        }
                       }
-                    }
-                    const item = { id: el, name: this.props.settings.pinned_charts[el] };
-                    subscribeItem(item.id, 0);
-                    return (
-                      <div key={i} className={s.chart_container} style={{ flexBasis: flex}}>
-                        <div className={s.chart_header}>
-                          <div className={s.chart_title}>
-                          {item.name}
+                      const item = { id: el, name: this.props.settings.pinned_charts[el] };
+                      subscribeItem(item.id, 0);
+                      return (
+                        <div key={i} className={s.chart_container} style={{ flexBasis: flex}}>
+                          <div className={s.chart_header}>
+                            <div className={s.chart_title}>
+                            {item.name}
+                            </div>
+                            <IconMenu
+                              iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                              targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                              className={s.chart_menu}
+                            >
+                              <MenuItem type="text" primaryText="Remove" onTouchTap={()=>{store.dispatch(unPinChartFromDashboard(item.id))}} />
+                              <MenuItem type="text" primaryText="View in Browser" onTouchTap={()=>{this.context.router.push(`/dashboard/browser/${item.id}`)}} />
+                            </IconMenu>
                           </div>
-                          <IconMenu
-                            iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                            targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                            className={s.chart_menu}
-                          >
-                            <MenuItem type="text" primaryText="Remove" onTouchTap={()=>{store.dispatch(unPinChartFromDashboard(item.id))}} />
-                            <MenuItem type="text" primaryText="View in Browser" onTouchTap={()=>{this.context.router.push(`/dashboard/browser/${item.id}`)}} />
-                          </IconMenu>
+                          <div className={s.chart}>
+                            <CandleStickChart style={{flex: 1}} item={item} />
+                          </div>
                         </div>
-                        <div className={s.chart}>
-                          <CandleStickChart style={{flex: 1}} item={item} />
-                        </div>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-            )
-          })
-        }
-        </div>
+                      )
+                    })
+                  }
+                </div>
+              )
+            })
+          }
+          </div>
+      }
       </DashboardPage>
     )
   }

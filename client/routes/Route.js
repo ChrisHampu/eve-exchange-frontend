@@ -6,9 +6,12 @@ import OnboardingComponent from '../components/Onboarding/OnboardingComponent';
 import LoginComponent from '../components/Login/LoginComponent';
 import DashboardComponent from '../components/Dashboard/DashboardComponent';
 import ProfileComponent from '../components/Profile/ProfileComponent';
+import ProfileSubscription from '../components/Profile/ProfileSubscription';
+import ProfileSettings from '../components/Profile/ProfileSettings';
 import AdminComponent from '../components/Admin/AdminComponent';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
+import NotificationsComponent from '../components/Notifications/NotificationsComponent';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -19,7 +22,11 @@ export default (
     <Route path='/' component={AppComponent} >
       <IndexRoute component={OnboardingComponent} />
       <Route path="dashboard" component={DashboardComponent} onEnter={requireAccess("standard")}>
-        <Route path="profile" components={{main: ProfileComponent}} />
+        <Route path="profile" components={{main: ProfileComponent}}>
+          <Route path="subscription" component={ProfileSubscription} />
+          <Route path="settings" component={ProfileSettings} />
+        </Route>
+        <Route path="notifications"  components={{main: NotificationsComponent }} />
         <Route path="browser" components={{main: MarketBrowserComponent}}>
           <Route path=":id" component={MarketItemViewComponent} />
         </Route>

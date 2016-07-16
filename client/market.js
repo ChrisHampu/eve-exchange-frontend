@@ -17,26 +17,52 @@ export function subscribeItem(id, region) {
 
 		console.log("Subscribing to " + id);
 
-		subscriptions.push({
-			id: id,
-			region: region,
-			aggregateSubscription: horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(20).watch().subscribe(data => {
+		let aggregateSubscription = null;
+		let orderSubscription = null;
+
+		try {
+			aggregateSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(20).watch().defaultIfEmpty().subscribe(data => {
 
 				// Generate the 'open' data
 				// Also
 				// Data is ordered specifically to retrieve the newest records from the database
 				// But must be reversed into old -> new ordering for displaying on charts
 
+				if (!data) {
+					console.log("Error subscribing to aggregates for " + id);
+					return;
+				}
+
 				const sorted = data.sort((a, b) => a.time - b.time).map((el, i, arr) => {
 					return { ...el, open: i > 0 ? arr[i-1].close : el.close, spread: Math.max(0, el.spread) }
 				});
-				
-				store.dispatch(setAggregateData(id, sorted));
-			}),
-			orderSubscription: horizon('orders').order('price', 'descending').findAll({type: parseInt(id)}).watch().subscribe(data => {
 
-				store.dispatch(setOrderData(id, data));
-			})
+				store.dispatch(setAggregateData(id, sorted));
+			});
+		} catch(e) {
+			console.log(e);
+		}
+
+		try {
+			orderSubscription = horizon('orders').order('price', 'descending').findAll({type: parseInt(id)}).watch().defaultIfEmpty().subscribe(data => {
+
+					if (!data) {
+						console.log("Error subscribing to order data for " + id);
+						return;
+					}
+
+					store.dispatch(setOrderData(id, data));
+				})
+		} catch(e) {
+			
+			console.log(e)
+		}
+
+		subscriptions.push({
+			id,
+			region,
+			aggregateSubscription,
+			orderSubscription
 		});
 	};
 }

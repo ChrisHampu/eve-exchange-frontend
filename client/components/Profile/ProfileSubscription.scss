@@ -1,0 +1,62 @@
+
+.root {
+  hr {
+    margin: 0 !important;
+  }
+}
+
+.subscription_info {
+  margin-bottom: 1.5rem;
+  .info_row {
+    margin-bottom: .8rem;
+    .info_key {
+      display: inline-block;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: .8rem;
+      vertical-align: text-bottom;
+    }
+
+    .info_value {
+      margin-left: .5rem;
+      font-size: 1.1rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+.withdrawal_box {
+  > div {
+
+  }
+}
+
+.subscription_history {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .subscription_history_header {
+    background-color: #1e2327;
+    padding: 1rem;
+
+    .subscription_history_selector {
+      margin-left: 1.5rem;
+      display: inline-block;
+    }
+
+    .subscription_history_title {
+      display: inline-block;
+      //margin-left: 1.5rem;
+      color: #eba91b;
+      font-weight: 300;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+  }
+  .subscription_history_table {
+    table {
+      background-color: rgb(40, 46, 51) !important;
+    }
+  }
+}

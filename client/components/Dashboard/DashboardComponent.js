@@ -37,6 +37,11 @@ const MainMenu = [
     "icon": <ProfileIcon />  
   },
   {
+    "name": "Notifications",
+    "route": "/dashboard/notifications",
+    "icon": <NotificationsIcon />  
+  },
+  {
     "name": "Logout",
     "route": "/logout",
     "icon": <ExitIcon />
@@ -61,14 +66,39 @@ const AdminMenu = [
 
 class Dashboard extends React.Component {
 
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
+
   setRoute(route) {
 
     browserHistory.push(route);
   }
 
+  getPathClass(item) {
+
+    let focus = true;
+
+    const routes = this.props.routes.slice(2);
+    const matches = item.route.slice(1).split("/");
+
+    if (matches.length > routes.length) {
+      focus = false;
+    }
+
+    for (var i = 0; i < Math.min(routes.length, 2); i++) {
+      if (!matches[i] || routes[i].path !== matches[i]) {
+        focus = false;
+        
+        break;
+      }
+    }
+
+    return cx(s.sidebar_menu_item, {[s.focused]: focus});
+  }
+
   componentWillReceiveProps() {
 
-    
   }
 
   render() {
@@ -88,7 +118,7 @@ class Dashboard extends React.Component {
               {
                 MainMenu.map((item, i) => {
                   return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text"
-                   className={this.props.location.pathname===item.route?cx(s.sidebar_menu_item, s.focused):s.sidebar_menu_item}
+                   className={this.getPathClass(item)}
                    primaryText={item.name} leftIcon={item.icon} />;
                 })
               }
@@ -101,7 +131,7 @@ class Dashboard extends React.Component {
               {
                 MarketMenu.map((item, i) => {
                   return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text"
-                   className={this.props.location.pathname===item.route?cx(s.sidebar_menu_item, s.focused):s.sidebar_menu_item}
+                   className={this.getPathClass(item)}
                    primaryText={item.name} leftIcon={item.icon} />;
                 })
               }
@@ -114,7 +144,7 @@ class Dashboard extends React.Component {
               {
                 AdminMenu.map((item, i) => {
                   return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text"
-                   className={this.props.location.pathname===item.route?cx(s.sidebar_menu_item, s.focused):s.sidebar_menu_item}
+                   className={this.getPathClass(item)}
                    primaryText={item.name} leftIcon={item.icon} />;
                 })
               }
@@ -131,10 +161,10 @@ class Dashboard extends React.Component {
             <ToolbarGroup className={cx(s.dashboard_toolbar, s.dashboard_toolbar_right)}>
               <div className={s.dashboard_header_notifications_container}>
                 <Badge
-                  className={s.dashboard_header_notifications}
-                  badgeContent={0}
+                  className={cx(s.dashboard_header_notifications, { [s.dashboard_header_notifications_unread]: this.props.notifications.filter(el => el.read === false).length > 0 })}
+                  badgeContent={this.props.notifications.filter(el => el.read === false).length}
                 >
-                  <IconButton style={{width: "56px", height: "56px"}} tooltip="Notifications">
+                  <IconButton style={{width: "56px", height: "56px"}} tooltip="Notifications" onClick={()=>this.context.router.push("/dashboard/notifications")}>
                     <NotificationsIcon />
                   </IconButton>
                 </Badge>
@@ -165,7 +195,7 @@ class Dashboard extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { auth: store.auth };
+  return { auth: store.auth, notifications: store.notifications };
 }
 
 export default connect(mapStateToProps)(Dashboard);
