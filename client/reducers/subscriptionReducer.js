@@ -38,7 +38,7 @@ export default function subscription(state = initialState, action) {
       return { ...state, premium: false };
 
     case "PERFORM_WITHDRAWAL":
-      if (!action.amount) {
+      if (!action.amount || action.amount < 1 || action.amount > state.balance) {
         return state;
       }
 

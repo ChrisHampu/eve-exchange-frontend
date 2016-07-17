@@ -9,6 +9,15 @@ import Avatar from 'material-ui/Avatar';
 
 class ProfileView extends React.Component {
 
+  subscriptionLevelToName() {
+    switch (this.props.subscription.premium) {
+      case false:
+        return "Free";
+      case true:
+        return <span style={{color: "rgb(235, 169, 27)"}}>Premium</span>;
+    }
+  }
+
   render() {
     return (
       <div>
@@ -36,7 +45,7 @@ class ProfileView extends React.Component {
               Subscription:
               </div>
               <div className={s.info_value}>
-              Basic
+              {this.subscriptionLevelToName()}
               </div>
             </div>
           </div>
@@ -47,7 +56,7 @@ class ProfileView extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { auth: store.auth };
+  return { auth: store.auth, subscription: store.subscription };
 }
 
 export default connect(mapStateToProps)(ProfileView);

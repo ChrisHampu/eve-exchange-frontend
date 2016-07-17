@@ -169,7 +169,7 @@ class Dashboard extends React.Component {
                   </IconButton>
                 </Badge>
               </div>
-              <div className={s.dashboard_user}>
+              <div className={s.dashboard_user} onClick={()=>this.context.router.push("/dashboard/profile")}>
                 <div className={s.dashboard_user_inner}>
                   <div>
                     <div className={s.dashboard_username}>
@@ -179,9 +179,9 @@ class Dashboard extends React.Component {
                     {this.props.auth.corporation}
                     </div>
                   </div>
+                  <Avatar className={s.dashboard_avatar} src={`https://image.eveonline.com/Character/${this.props.auth.id}_64.jpg`} size={48} />
                 </div>
               </div>
-              <Avatar className={s.dashboard_avatar} src={`https://image.eveonline.com/Character/${this.props.auth.id}_64.jpg`} size={48} /> 
             </ToolbarGroup>
           </Toolbar>
           {
