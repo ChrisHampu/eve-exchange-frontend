@@ -126,8 +126,10 @@ class APISettings extends React.Component {
       if (this.state.createStepIndex === 1) {
         state.keyiD = "";
         state.vCode = "";
-        state.apiKeyInfo.info = null
-        state.getAPIKeyInfo.characters = [];
+        state.apiKeyInfo = {
+          info: null,
+          characters: []
+        };
       }
 
       if (this.state.createStepIndex === 2) {
