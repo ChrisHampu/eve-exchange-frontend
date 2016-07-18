@@ -1,0 +1,52 @@
+@import '../variables.scss';
+
+.create_key {
+  margin-top: 2rem; 
+}
+.stepper {
+
+  > div {
+    display: flex;
+
+    > div > span {
+      display: flex;
+      color: $gold-color !important;
+
+      svg {
+        path {
+          fill: $gold-color;
+        }
+      }
+    }
+  }
+}
+
+.char_select {
+  svg {
+    fill: $blue-color !important;
+  }
+}
+
+.key_info {
+  margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
+
+  .info_row {
+    margin-bottom: .8rem;
+
+    .info_key {
+      display: inline-block;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: .8rem;
+      vertical-align: text-bottom;
+    }
+
+    .info_value {
+      margin-left: .5rem;
+      font-size: 1.1rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}

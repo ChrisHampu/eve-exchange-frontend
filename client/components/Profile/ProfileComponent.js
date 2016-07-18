@@ -37,6 +37,12 @@ class Profile extends React.Component {
               Subscription
             </div>
             <div
+              className={cx(s.menu_item, { [s.active]: this.props.location.pathname === "/dashboard/profile/apikey" })} 
+              onClick={()=>{this.setRoute("/dashboard/profile/apikey")}}
+            >
+              API Key
+            </div>
+            <div
               className={cx(s.menu_item, { [s.active]: this.props.location.pathname === "/dashboard/profile/settings" })} 
               onClick={()=>{this.setRoute("/dashboard/profile/settings")}}
             >

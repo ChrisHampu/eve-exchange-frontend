@@ -269,7 +269,7 @@ class Subscription extends React.Component {
           </div>
           <div className={s.info_row}>
             <div className={s.info_key}>
-              Current Balance:
+              Subscription Balance:
             </div>
             <div className={s.info_value}>
               {formatNumber(this.props.subscription.balance)} ISK
@@ -307,13 +307,13 @@ class Subscription extends React.Component {
                 <TableRow selectable={false}>
                   <TableRowColumn>{(new Date()).toString()}</TableRowColumn>
                   <TableRowColumn>Widthrawal</TableRowColumn>
-                  <TableRowColumn style={{color: "red"}}>-{formatNumber(125000000)} ISK</TableRowColumn>
+                  <TableRowColumn style={{color: "#F44336"}}>-{formatNumber(125000000)} ISK</TableRowColumn>
                   <TableRowColumn>Subscription Fee</TableRowColumn>
                 </TableRow>
                 <TableRow selectable={false}>
                   <TableRowColumn>{(new Date()).toString()}</TableRowColumn>
                   <TableRowColumn>Deposit</TableRowColumn>
-                  <TableRowColumn style={{color: "green"}}>+{formatNumber(125000000)} ISK</TableRowColumn>
+                  <TableRowColumn style={{color: "#4CAF50"}}>+{formatNumber(125000000)} ISK</TableRowColumn>
                   <TableRowColumn>Player Deposit</TableRowColumn>
                 </TableRow>
               </TableBody>

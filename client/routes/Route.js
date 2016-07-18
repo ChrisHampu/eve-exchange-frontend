@@ -8,6 +8,7 @@ import DashboardComponent from '../components/Dashboard/DashboardComponent';
 import ProfileComponent from '../components/Profile/ProfileComponent';
 import ProfileSubscription from '../components/Profile/ProfileSubscription';
 import ProfileSettings from '../components/Profile/ProfileSettings';
+import ProfileAPIKey from '../components/Profile/ProfileAPIKey';
 import AdminComponent from '../components/Admin/AdminComponent';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
@@ -25,6 +26,7 @@ export default (
         <Route path="profile" components={{main: ProfileComponent}}>
           <Route path="subscription" component={ProfileSubscription} />
           <Route path="settings" component={ProfileSettings} />
+          <Route path="apikey" component={ProfileAPIKey} />
         </Route>
         <Route path="notifications"  components={{main: NotificationsComponent }} />
         <Route path="browser" components={{main: MarketBrowserComponent}}>

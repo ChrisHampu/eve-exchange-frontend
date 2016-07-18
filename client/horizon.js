@@ -32,7 +32,6 @@ store.subscribe(() => {
 
 export function clearAuthToken() {
 
-  console.log("clearing");
   if (window && window.localStorage !== undefined) {
     window.localStorage.removeItem('horizon-jwt');
   }
@@ -104,6 +103,8 @@ function doHorizonSubscriptions() {
       horizon('user_settings').store({userID: userData.id});
     } else {
 
+      console.log(settings);
+
       store.dispatch(updateUserSettings(userData.id, settings));
     }
   });
@@ -130,7 +131,6 @@ function doHorizonSubscriptions() {
 
     store.dispatch(updateSubscription(userData.id, subscription));
   });
-
 }
 
 export default horizon;

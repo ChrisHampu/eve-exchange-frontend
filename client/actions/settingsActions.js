@@ -9,3 +9,11 @@ export function pinChartToDashboard(item) {
 export function unPinChartFromDashboard(itemID) {
   return { type: "UNPIN_CHART", id: itemID };
 }
+
+export function updateApiKey(keyInfo) {
+  return { type: "UPDATE_API_KEY", keyInfo };
+}
+
+export function removeApiKey() {
+  return { type: "REMOVE_API_KEY" };
+}
