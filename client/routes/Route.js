@@ -13,6 +13,7 @@ import AdminComponent from '../components/Admin/AdminComponent';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
 import NotificationsComponent from '../components/Notifications/NotificationsComponent';
+import ProfitComponent from '../components/Profit/ProfitComponent';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -28,10 +29,11 @@ export default (
           <Route path="settings" component={ProfileSettings} />
           <Route path="apikey" component={ProfileAPIKey} />
         </Route>
-        <Route path="notifications"  components={{main: NotificationsComponent }} />
+        <Route path="notifications" components={{main: NotificationsComponent }} />
         <Route path="browser" components={{main: MarketBrowserComponent}}>
           <Route path=":id" component={MarketItemViewComponent} />
         </Route>
+        <Route path="profit" components={{main: ProfitComponent }} />
         <Route path="admin" components={{main: AdminComponent}} />
       </Route>
     </Route>

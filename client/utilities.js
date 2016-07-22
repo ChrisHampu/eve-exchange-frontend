@@ -29,11 +29,13 @@ export async function getAPIKeyInfo(keyID, vCode) {
   const info = xml.eveapi.result[0].key[0].$;
   const characters = [];
 
+  /*
   if (info.accessMask !== "23072779") {
     return {
       error: "Access mask must be 23072779"
     }
   }
+  */
 
   if (info.type !== "Account" && info.type !== "Character") {
     return {

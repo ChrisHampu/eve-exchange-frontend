@@ -3,16 +3,19 @@ import store from './store';
 import { updateUser } from './actions/authActions';
 import { updateUserSettings } from './actions/settingsActions';
 import { updateNotifications } from './actions/notificationsActions';
-import { updateSubscription } from './actions/SubscriptionActions';
+import { updateSubscription } from './actions/subscriptionActions';
+import { updateToplist, updateHourlyChart } from './actions/profitActions';
 import 'whatwg-fetch';
 import Promise from 'bluebird';
 import { parseString } from 'xml2js';
+import { pullApiData } from './eveapi';
 
 const parseXml = Promise.promisify(parseString);
 
 const horizon = Horizon({ authType: { type: 'token', storeLocally: true }});
 let userData = null;
 let currentSettings = null;
+let eveApiPulled = false;
 
 if (hasAuthToken()) {
   horizon("users").fetch().subscribe(()=>{}, ()=>{}, ()=>{});
@@ -27,6 +30,12 @@ store.subscribe(() => {
     console.log(currentSettings);
 
     horizon('user_settings').replace(currentSettings);
+
+    if (!eveApiPulled && currentSettings.eveApiKey.keyID.length && currentSettings.eveApiKey.vCode.length) {
+      pullApiData(currentSettings.eveApiKey);
+
+      eveApiPulled = true;
+    }
   }
 });
 
@@ -130,6 +139,29 @@ function doHorizonSubscriptions() {
     console.log(subscription);
 
     store.dispatch(updateSubscription(userData.id, subscription));
+  });
+
+  // 24 hour profit chart
+  horizon('profit_chart').order('time', 'descending').findAll({userID: userData.id, frequency: 'hourly'}).limit(24).watch().defaultIfEmpty().subscribe( profit => {
+
+    if (!profit) {
+      return;
+    }
+
+    updateHourlyChart(profit);
+
+    console.log(profit);
+  });
+
+  horizon('profit_top_items').find({userID: userData.id}).watch().defaultIfEmpty().subscribe( profit => {
+
+    if (!profit) {
+      return;
+    }
+
+    updateToplist(profit);
+
+    console.log(profit);
   });
 }
 

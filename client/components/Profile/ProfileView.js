@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import s from './ProfileView.scss';
 import cx from 'classnames';
+import { formatNumber } from '../../utilities';
 
 import Avatar from 'material-ui/Avatar';
 
@@ -48,6 +49,18 @@ class ProfileView extends React.Component {
               {this.subscriptionLevelToName()}
               </div>
             </div>
+            {
+              this.props.eveapi.accountBalance ?
+              <div className={s.info_field}>
+                <div className={s.info_key}>
+                Balance:
+                </div>
+                <div className={s.info_value}>
+                {formatNumber(this.props.eveapi.accountBalance)} ISK
+                </div>
+              </div>
+              : false
+            }
           </div>
         </div>
       </div>
@@ -56,7 +69,7 @@ class ProfileView extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { auth: store.auth, subscription: store.subscription };
+  return { auth: store.auth, subscription: store.subscription, eveapi: store.eveapi };
 }
 
 export default connect(mapStateToProps)(ProfileView);
