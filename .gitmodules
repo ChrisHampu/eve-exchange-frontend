@@ -1,4 +1,4 @@
 [submodule "horizon"]
 	path = horizon
-	url = https://bitbucket.org/chrishampu/horizon.git
+	url = https://chrishampu@bitbucket.org/chrishampu/horizon.git
   branch = "next"
