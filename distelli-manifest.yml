@@ -1,0 +1,12 @@
+champu/EVETradeForecaster:
+
+  Build:
+    - echo "Bundling production release."
+  PkgExclude:
+    - 'node_modules/**'
+    - 'client/**'
+  PostInstall:
+    - npm install --production
+  Exec:
+    - echo "Starting server."
+    - exec babel-node server/index.js

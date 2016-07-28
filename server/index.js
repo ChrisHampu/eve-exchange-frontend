@@ -42,19 +42,22 @@ if (config.env === 'development') {
     auth: {
       token_secret: 'my_super_secret_secret'
     },
-    project_name: "horizon_test",
+    project_name: config.horizon.project_name,
     auto_create_collection: true,
     auto_create_index: true,
-    permissions: true,
+    permissions: config.horizon.permissions,
+    rdb_host: config.horizon.rdb_host,
+    rdb_port: config.horizon.rdb_port
   });
 
   horizon_server.add_auth_provider(eve_sso, {
-    id: '56e9bfbd864f4e7fbc68c64dd71675f4',
+    id: config.eve.key_id,
     path: 'eve_sso',
-    secret: 'zD7gIy7GNmbcLFybtQwZPGpz2boBwtzoMt0WtIxA',
+    secret: config.eve.key_secret,
   });
   
 } else if (config.env === 'production') {
+
   // Launch Relay by creating a normal express server
   const relayServer = new Koa();
   relayServer.use(convert(historyApiFallback()));
@@ -66,15 +69,17 @@ if (config.env === 'development') {
     auth: {
       token_secret: 'my_super_secret_secret'
     },
-    project_name: "horizon_test",
+    project_name: config.horizon.project_name,
     auto_create_collection: true,
     auto_create_index: true,
-    permissions: true,
+    permissions: config.horizon.permissions,
+    rdb_host: config.horizon.rdb_host,
+    rdb_port: config.horizon.rdb_port
   });
 
   horizon_server.add_auth_provider(eve_sso, {
-    id: '56e9bfbd864f4e7fbc68c64dd71675f4',
+    id: config.eve.key_id,
     path: 'eve_sso',
-    secret: 'zD7gIy7GNmbcLFybtQwZPGpz2boBwtzoMt0WtIxA',
+    secret: config.eve.key_secret,
   });
 }

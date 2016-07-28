@@ -23,7 +23,7 @@ if (hasAuthToken()) {
 
 store.subscribe(() => {
 
-  if (store.getState().settings !== currentSettings && store.getState().settings.userID) {
+  if (store.getState().settings !== currentSettings && store.getState().settings && store.getState().settings.userID) {
 
     currentSettings = store.getState().settings;
     console.log("saving settings");
@@ -81,6 +81,12 @@ export function getCurrentUser() {
       const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${user.id}`);
       const body = await res.text();
       const xml = await parseXml(body);
+
+      if (xml.eveapi.error) {
+
+        resolve(user);
+        return;
+      }
 
       const info = xml.eveapi.result[0];
 
