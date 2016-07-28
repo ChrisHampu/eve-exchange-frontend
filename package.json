@@ -92,6 +92,6 @@
     "whatwg-fetch": "^1.0.0",
     "xml2js": "^0.4.16",
     "fuzzy": "",
-    "winston": "^2.1.0",
+    "winston": "^2.1.0"
   }
 }
