@@ -1,4 +1,4 @@
-import Horizon from '@horizon/client';
+import Horizon from '../horizon/client/dist/horizon';
 import store from './store';
 import { updateUser } from './actions/authActions';
 import { updateUserSettings } from './actions/settingsActions';
@@ -12,7 +12,7 @@ import { pullApiData } from './eveapi';
 
 const parseXml = Promise.promisify(parseString);
 
-const horizon = Horizon({ authType: { type: 'token', storeLocally: true }});
+const horizon = Horizon({ authType: { type: 'token', storeLocally: true, token: '' }});
 let userData = null;
 let currentSettings = null;
 let eveApiPulled = false;

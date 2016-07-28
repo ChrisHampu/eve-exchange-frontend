@@ -11,7 +11,7 @@ import WebpackDevServer from 'webpack-dev-server';
 import chalk from 'chalk';
 import webpackConfig from '../webpack.config';
 import config from './config/environment';
-import horizon from '@horizon/server';
+import horizon from '../horizon/server/src/horizon';
 import eve_sso from './core/eve_sso';
 
 if (config.env === 'development') {

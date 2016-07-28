@@ -7,7 +7,7 @@ const config = {
   horizon: {
     port: process.env.HORIZON_PORT || 8000,
     project_name: process.env.HORIZON_NAME || 'horizon_test',
-    permissions: process.env.HORIZON_PERMISSIONS || false,
+    permissions: process.env.HORIZON_PERMISSIONS || true,
     rdb_host: process.env.HORIZON_RDB_HOST || 'localhost',
     rdb_port: process.env.HORIZON_RDB_PORT || '28015'
   },
