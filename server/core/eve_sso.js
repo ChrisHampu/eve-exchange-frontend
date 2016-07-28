@@ -1,4 +1,4 @@
-const auth_utils = require('../../node_modules/@horizon/server/src/auth/utils.js');
+const auth_utils = require('../../horizon/server/src/auth/utils.js');
 
 const https = require('https');
 const Joi = require('joi');
