@@ -3,38 +3,4 @@
 .root {
   color: #fff;
 
-  .page_body {
-
-  }
-
-  .notification {
-    padding: 0.8rem 1.5rem 0.8rem 1.5rem;
-    margin: 0.5rem 0;
-    min-width: 300px;
-
-    .message {
-      font-size: 1.2rem;
-      padding-bottom: 0.5rem;
-      color: $text-grey;
-    }
-
-    .notification_footer {
-      position: relative;
-      .time {
-        font-size: 0.8rem;
-        font-style: italic;
-        color: #59c8e2;
-        display: inline-block;
-      }
-      .read_button {
-        position: absolute !important;
-        right: -1rem;
-        bottom: -1rem;
-      }
-    }
-
-    &.unread {
-      background-color: #3f464c;
-    }
-  }
 }
