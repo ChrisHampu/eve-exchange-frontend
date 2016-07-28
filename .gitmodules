@@ -1,4 +1,4 @@
 [submodule "horizon"]
 	path = horizon
-	url = https://github.com/rethinkdb/horizon.git
+	url = https://bitbucket.org/chrishampu/horizon.git
   branch = "next"
