@@ -2,6 +2,8 @@ champu/EVETradeForecaster:
 
   Build:
     - echo "Bundling production release."
+  PkgInclude:
+    - '*'
   PkgExclude:
     - 'node_modules/**'
     - 'client/**'
