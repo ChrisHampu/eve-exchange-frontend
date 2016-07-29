@@ -5,8 +5,9 @@ champu/EVETradeForecaster:
   PkgExclude:
     - 'node_modules/**'
     - 'client/**'
+    - 'server/**'
   PostInstall:
     - npm install --production
   Exec:
     - echo "Starting server."
-    - exec babel-node server/index.js
+    - exec npm run serve
