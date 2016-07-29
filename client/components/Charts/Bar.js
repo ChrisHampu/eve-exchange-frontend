@@ -26,7 +26,7 @@ export default class Bar extends React.Component {
   update() {
 
     this.setState({
-      cx: this.props.xScale(this.props.xValue) - 0.75 * this.props.barWidth,
+      cx: this.props.xScale(this.props.xValue) - 0.5 * this.props.barWidth,
       cy: this.props.viewportHeight - this.props.yScale(this.props.yValue),
       barHeight: this.props.yScale(this.props.yValue),
       barWidth: this.props.barWidth,
