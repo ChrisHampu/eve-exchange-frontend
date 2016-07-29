@@ -18,10 +18,6 @@ console.log(`Using API key ${config.eve.key_id}:${config.eve.key_secret}`);
 
 if (config.env === 'development') {
 
-  const horizonServer = new Koa();
-
- horizonServer.listen(config.horizon.port, () => console.log(chalk.green(`Horizon is listening on port ${config.horizon.port}`)));
-
   // Launch Relay by using webpack.config.js
   const relayServer = new WebpackDevServer(webpack(webpackConfig), {
     contentBase: '/build/',

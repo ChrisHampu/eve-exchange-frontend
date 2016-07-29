@@ -5,7 +5,6 @@ const config = {
   env: process.env.NODE_ENV || 'development',
   port: process.env.PORT || 3000,
   horizon: {
-    port: process.env.HORIZON_PORT || 8000,
     project_name: process.env.HORIZON_NAME || 'horizon_test',
     permissions: process.env.HORIZON_PERMISSIONS || true,
     rdb_host: process.env.HORIZON_RDB_HOST || 'localhost',
