@@ -63,8 +63,8 @@ class Chart extends React.Component {
 
     const data = this.getAggregateData();
 
-    this.state.height = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom - 10;
-    this.state.width = ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth - this.state.margin.left - this.state.margin.right - 10;
+    this.state.height = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom;
+    this.state.width = ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth - this.state.margin.left - this.state.margin.right;
 
     this.state.ohlcHeight = Math.floor(this.state.height*0.70);
     this.state.ohlcOffset = Math.floor(this.state.height*0.75);
