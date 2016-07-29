@@ -76,7 +76,7 @@ export function getCurrentUser() {
 
     horizon.currentUser().fetch().subscribe( async (user) => {
 
-      user.id = user.info;
+      user.id = user.user_id || user.info;
 
       const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${user.id}`);
       const body = await res.text();

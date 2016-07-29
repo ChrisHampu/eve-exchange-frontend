@@ -16,13 +16,9 @@ export default function notifications(state = [], action) {
     case "UPDATE_NOTIFICATIONS":
       if (!action.notifications) {
         return state;
-      }
+      };
 
-      if (action.notifications.length) {
-        return [ ...action.notifications ];
-      } else {
-        return [ action.notifications ];
-      }
+      return [ ...action.notifications ];
 
     default:
       return state;
