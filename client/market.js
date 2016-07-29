@@ -33,6 +33,8 @@ export function subscribeItem(id, region) {
 					return;
 				}
 
+				console.log(data);
+
 				const sorted = data.sort((a, b) => a.time - b.time).map((el, i, arr) => {
 					return { ...el, open: i > 0 ? arr[i-1].close : el.close, spread: Math.max(0, el.spread) }
 				});
