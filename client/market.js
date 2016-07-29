@@ -21,7 +21,7 @@ export function subscribeItem(id, region) {
 		let orderSubscription = null;
 
 		try {
-			aggregateSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(20).watch().defaultIfEmpty().subscribe(data => {
+			aggregateSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(24).watch().defaultIfEmpty().subscribe(data => {
 
 				// Generate the 'open' data
 				// Also
