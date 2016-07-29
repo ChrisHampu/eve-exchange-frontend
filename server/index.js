@@ -14,6 +14,8 @@ import config from './config/environment';
 import horizon from '../horizon/server/src/horizon';
 import eve_sso from './core/eve_sso';
 
+console.log(`Using API key ${config.eve.key_id}:${config.eve.key_secret}`);
+
 if (config.env === 'development') {
 
   const horizonServer = new Koa();

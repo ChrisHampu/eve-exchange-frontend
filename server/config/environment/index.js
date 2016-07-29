@@ -13,7 +13,7 @@ const config = {
   },
   eve: {
     key_id: process.env.EVE_KEY_ID || '56e9bfbd864f4e7fbc68c64dd71675f4',
-    key_secret: process.env.EVE_SECRET || 'zD7gIy7GNmbcLFybtQwZPGpz2boBwtzoMt0WtIxA'
+    key_secret: process.env.EVE_KEY_SECRET || 'zD7gIy7GNmbcLFybtQwZPGpz2boBwtzoMt0WtIxA'
   }
 };
 
