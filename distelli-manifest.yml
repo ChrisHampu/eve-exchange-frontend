@@ -10,4 +10,4 @@ champu/EVETradeForecaster:
     - npm install --production
   Exec:
     - echo "Starting server."
-    - exec npm run serve
+    - exec node build-server/index.js
