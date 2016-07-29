@@ -154,18 +154,22 @@ class Chart extends React.Component {
           <RadioButton
             value="minutes"
             label="5 Minutes"
+            labelStyle={{width: "auto"}}
           />
           <RadioButton
             value="hours"
             label="1 Hour"
+            labelStyle={{width: "auto"}}
           />
           <RadioButton
             value="days"
             label="1 Day"
+            labelStyle={{width: "auto"}}
           />
           <RadioButton
             value="months"
             label="1 Month"
+            labelStyle={{width: "auto"}}
           />
         </RadioButtonGroup>
         <div ref="chart_anchor" className={s.chart}>
