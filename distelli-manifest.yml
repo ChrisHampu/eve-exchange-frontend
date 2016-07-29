@@ -3,11 +3,13 @@ champu/EVETradeForecaster:
   Build:
     - echo "Bundling production release."
   PkgInclude:
-    - '**'
+    - '*'
+    - 'horizon/server/**'
+    - 'horizon/client/**'
   PkgExclude:
     - 'node_modules/**'
-    - 'client/**'
-    - 'server/**'
+    - './client/**'
+    - './server/**'
   PostInstall:
     - npm install --production
   Exec:
