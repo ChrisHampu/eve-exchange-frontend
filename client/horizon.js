@@ -12,7 +12,14 @@ import { pullApiData } from './eveapi';
 
 const parseXml = Promise.promisify(parseString);
 
-const horizon = Horizon({ authType: { type: 'token', storeLocally: true, token: '' }});
+let horizon = null;
+
+try {
+  horizon = Horizon({ authType: 'token' });
+} catch (err) {
+  horizon = Horizon({ authType: { type: 'token', storeLocally: true, token: '' }});
+}
+
 let userData = null;
 let currentSettings = null;
 let eveApiPulled = false;
