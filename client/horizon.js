@@ -29,7 +29,7 @@ store.subscribe(() => {
     console.log("saving settings");
     console.log(currentSettings);
 
-    horizon('user_settings').replace(currentSettings);
+    horizon('user_settings').update(currentSettings);
 
     if (!eveApiPulled && currentSettings.eveApiKey.keyID.length && currentSettings.eveApiKey.vCode.length) {
       pullApiData(currentSettings.eveApiKey);
@@ -114,11 +114,21 @@ function doHorizonSubscriptions() {
 
     if (settings === null) {
 
-      // Create empty settings if the user has no settings already
-      horizon('user_settings').store({userID: userData.id});
-    } else {
+      horizon('user_settings').store({userID: userData.id})
 
-      console.log(settings);
+      setTimeout(() => {
+      
+        horizon('user_settings').find({userID: userData.id}).fetch().defaultIfEmpty().subscribe( _settings => {
+
+          if (_settings !== null) {
+
+            store.dispatch(updateUserSettings(userData.id, _settings));
+          }
+        });
+
+      }, 1000);
+      
+    } else {
 
       store.dispatch(updateUserSettings(userData.id, settings));
     }
@@ -138,7 +148,7 @@ function doHorizonSubscriptions() {
   horizon('subscription').find({userID: userData.id}).watch().defaultIfEmpty().subscribe( subscription => {
 
     if (!subscription) {
-      horizon('subscription').store({userID: userData.id, balance: 0, deposit_history: [], withdrawal_history: [], level: 0});
+      horizon('subscription').store({userID: userData.id, balance: 0, deposit_history: [], withdrawal_history: [], premium: false});
       return;
     }
 

@@ -16,7 +16,7 @@ export default function settings(state = initialState, action) {
 
     case "UPDATE_USER_SETTINGS":
       if (!action.settings) {
-        return state;
+        return { ...state, userID: action.id };
       }
 
       return { ...state, ...action.settings, userID: action.id };

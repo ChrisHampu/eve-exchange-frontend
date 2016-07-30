@@ -123,7 +123,7 @@ class Dashboard extends React.Component {
             <Menu className={s.sidebar_menu}>
               {
                 MainMenu.map((item, i) => {
-                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text"
+                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
                    className={this.getPathClass(item)}
                    primaryText={item.name} leftIcon={item.icon} />;
                 })
@@ -136,7 +136,7 @@ class Dashboard extends React.Component {
             <Menu className={s.sidebar_menu}>
               {
                 MarketMenu.map((item, i) => {
-                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text"
+                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
                    className={this.getPathClass(item)}
                    primaryText={item.name} leftIcon={item.icon} />;
                 })
@@ -149,7 +149,7 @@ class Dashboard extends React.Component {
             <Menu className={s.sidebar_menu}>
               {
                 AdminMenu.map((item, i) => {
-                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text"
+                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
                    className={this.getPathClass(item)}
                    primaryText={item.name} leftIcon={item.icon} />;
                 })

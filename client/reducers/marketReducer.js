@@ -36,6 +36,13 @@ export default function market(state = { region: {} }, action) {
         return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { orders: [], aggregates: action.data } }}  } };
       }
 
+      /*
+        Deprecated since the open value is no longer needed until OHLC is re-implemented
+        const sorted = data.sort((a, b) => a.time - b.time).map((el, i, arr) => {
+          return { ...el, open: i > 0 ? arr[i-1].close : el.close, spread: Math.max(0, el.spread) }
+        });
+        */
+
       return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], aggregates: action.data } }}  } };
 
     case "SET_ORDER_DATA":
