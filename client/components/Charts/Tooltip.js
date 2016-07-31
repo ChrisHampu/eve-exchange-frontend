@@ -15,6 +15,7 @@ export default class Tooltip extends React.Component {
 
     this.state = {
       tooltipVisible: false,
+      tooltipUninteractive: false,
       tooltipUpdated: false,
       tooltipItem: null,
       tooltipX: 0,
@@ -41,6 +42,7 @@ export default class Tooltip extends React.Component {
 
     this.setState({
       tooltipUpdated: true,
+      tooltipUninteractive: false,
       tooltipVisible: false,
       tooltipItem: item,
       tooltipX: x,
@@ -54,7 +56,17 @@ export default class Tooltip extends React.Component {
     this.setState({
       tooltipVisible: false,
       tooltipUpdated: false,
-    })
+    }, () => {
+
+      setTimeout(() => {
+
+        if (!this.state.tooltipVisible) {
+          this.setState({
+            tooltipUninteractive: true
+          });
+        }
+      }, 350);
+    });
   }
 
   componentDidUpdate() {
@@ -121,7 +133,7 @@ export default class Tooltip extends React.Component {
     return (
       <div 
         ref="tooltip"
-        style={{transition: "opacity 350ms ease-in-out", fontWeight: "bold", padding: "0.35rem", fontSize: "0.8rem", background: "rgb(38, 43, 47)", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}
+        style={{pointerEvents: "none", cursor: "pointer", transition: "opacity 350ms ease-in-out", fontWeight: "bold", padding: "0.35rem", fontSize: "0.8rem", background: "rgb(38, 43, 47)", display: this.state.tooltipUninteractive ? "none" : "block", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}
         >
         {contents}
       </div>

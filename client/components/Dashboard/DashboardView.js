@@ -56,9 +56,6 @@ class DashboardView extends React.Component {
                       return (
                         <div key={i} className={s.chart_container} style={{ flexBasis: flex}}>
                           <div className={s.chart_header}>
-                            <div className={s.chart_title}>
-                            {item.name}
-                            </div>
                             <IconMenu
                               iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
                               anchorOrigin={{horizontal: 'right', vertical: 'top'}}
@@ -70,7 +67,7 @@ class DashboardView extends React.Component {
                             </IconMenu>
                           </div>
                           <div className={s.chart}>
-                            <CandleStickChart style={{flex: 1}} item={item} />
+                            <CandleStickChart style={{flex: 1}} item={item} title={item.name} />
                           </div>
                         </div>
                       )

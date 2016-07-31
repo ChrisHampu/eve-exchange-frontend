@@ -287,9 +287,9 @@ class Subscription extends React.Component {
             </div>
             <div className={s.subscription_history_selector}>
               <SelectField value={this.state.subFilter} onChange={this.setSubFilter}>
-                <MenuItem type="text" value={0} primaryText="Show All" />
-                <MenuItem type="text" value={1} primaryText="Show Deposits" />
-                <MenuItem type="text" value={2} primaryText="Show Withdrawals" />
+                <MenuItem type="text" value={0} primaryText="Show All" style={{cursor: "pointer"}}/>
+                <MenuItem type="text" value={1} primaryText="Show Deposits" style={{cursor: "pointer"}} />
+                <MenuItem type="text" value={2} primaryText="Show Withdrawals" style={{cursor: "pointer"}} />
               </SelectField>
             </div>
           </div>

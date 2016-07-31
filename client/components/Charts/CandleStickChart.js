@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import store from '../../store';
-import { scaleTime, scaleLinear, timeHour, timeMinute } from '../../d3.js';
+import { scaleTime, scaleLinear, timeHour, timeMinute, timeDay } from '../../d3.js';
 import s from './CandleStickChart.scss';
 import CandleStickData from './CandleStickData';
 import VolumeData from './BarChartData';
@@ -14,6 +14,8 @@ import Tooltip from './Tooltip';
 import { subscribeItem, unsubscribeItem } from '../../market';
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 class Chart extends React.Component {
 
@@ -21,7 +23,8 @@ class Chart extends React.Component {
 
     width: React.PropTypes.number,
     height: React.PropTypes.number,
-    item: React.PropTypes.object
+    item: React.PropTypes.object,
+    title: React.PropTypes.string
   };
 
   constructor(props) {
@@ -98,7 +101,7 @@ class Chart extends React.Component {
     this.state.volScale.clamp(true);
     this.state.percentScale.clamp(true);
 
-    this.state.xScale.nice(timeMinute);
+    this.state.xScale.nice(this.state.frequency === "minutes" ? timeMinute : (this.state.frequency === "hours" ? timeHour : timeDay));
     this.state.yScale.nice([5]);
     //this.state.volScale.nice([25]);;
     //this.state.percentScale.nice([5]);
@@ -130,7 +133,7 @@ class Chart extends React.Component {
   getAggregateData() {
 
     if (typeof this.props.market.region[0] !== 'undefined' && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined') {
-      return this.props.market.region[0].item[this.props.item.id].aggregates;
+      return this.props.market.region[0].item[this.props.item.id].aggregates.filter(doc => doc.frequency === this.state.frequency);
     }
 
     return [];
@@ -146,32 +149,36 @@ class Chart extends React.Component {
     this.refs.tooltip.hideTooltip();
   }
 
+  setFrequency = (event, index, value) => {
+
+    this.setState({
+      frequency: value === 0 ? "minutes" : (value === 1 ? "hours" : "days")
+    }, () => {
+
+      this.updateScales();
+    });
+  };
+
   render() {
 
     return (
       <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%" }}>
-        <RadioButtonGroup name="timespan" defaultSelected="minutes" className={s.radios}>
-          <RadioButton
-            value="minutes"
-            label="5 Minutes"
-            labelStyle={{width: "auto"}}
-          />
-          <RadioButton
-            value="hours"
-            label="1 Hour"
-            labelStyle={{width: "auto"}}
-          />
-          <RadioButton
-            value="days"
-            label="1 Day"
-            labelStyle={{width: "auto"}}
-          />
-          <RadioButton
-            value="months"
-            label="1 Month"
-            labelStyle={{width: "auto"}}
-          />
-        </RadioButtonGroup>
+        <div>
+          {
+            this.props.title ? 
+              <div style={{display: "inline-block", color: "#59c8e2", marginRight: "1rem"}}>
+              {this.props.title}
+              </div>
+              : false
+          }
+          <div style={{display: "inline-block"}}>
+            <SelectField style={{width: "150px"}} value={this.state.frequency==="minutes"?0:(this.state.frequency==="hours"?1:2)} onChange={this.setFrequency}>
+              <MenuItem type="text" value={0} primaryText="5 Minutes" style={{cursor: "pointer"}}/>
+              <MenuItem type="text" value={1} primaryText="1 Hour" style={{cursor: "pointer"}} />
+              <MenuItem type="text" value={2} primaryText="1 Day" style={{cursor: "pointer"}} />
+            </SelectField>
+          </div>
+        </div>
         <div style={{display: "flex", width: "100%", height: "100%"}}>
           <div ref="chart_anchor" className={s.chart}>
             <svg width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>

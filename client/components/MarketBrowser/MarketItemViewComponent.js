@@ -109,7 +109,7 @@ class MarketItemViewComponent extends React.Component {
               <CandleStickChart style={{flex: 1}} item={this.state.item} />
             </div>
           </Tab>
-          <Tab label="Orders" style={{backgroundColor: "rgb(38, 43, 47)"}}>
+          <Tab label="Price Ladder" style={{backgroundColor: "rgb(38, 43, 47)"}}>
               <MarketBrowserOrderTable item={this.state.item}/>
           </Tab>
         </Tabs>

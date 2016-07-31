@@ -1,32 +1,6 @@
 @import '../variables.scss';
 
-.radios {
 
-  position: relative;
-  box-sizing: border-box;
-  padding-top: 0.8rem;
-
-  > div {
-    width: auto !important;
-    display: inline-block !important;
-  }
-
-  svg {
-    fill: $blue-color !important;
-  }
-
-  svg:not(:first-child) {
-    fill: $gold-color;
-  }
-
-  > div {
-    margin-right: 10px;
-
-    > div > div {
-      margin-right: 4px !important;
-    }
-  }
-}
 
 .chart {
   position: relative;

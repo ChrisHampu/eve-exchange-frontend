@@ -33,8 +33,6 @@ store.subscribe(() => {
   if (store.getState().settings !== currentSettings && store.getState().settings && store.getState().settings.userID) {
 
     currentSettings = store.getState().settings;
-    console.log("saving settings");
-    console.log(currentSettings);
 
     horizon('user_settings').update(currentSettings);
 

@@ -36,7 +36,10 @@
       flex-direction: column;
 
       .chart_header {
-        position: relative;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 100;
         box-sizing: border-box;
 
         .chart_menu {
@@ -51,14 +54,6 @@
             width: 0 !important;
             height: 0 !important;
           }
-        }
-
-        .chart_title {
-          display: inline-block;
-          position: relative;
-          box-sizing: border-box;
-          
-          color: $blue-color;
         }
       }
 

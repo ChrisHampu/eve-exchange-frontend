@@ -75,6 +75,8 @@ export default class Axis extends React.Component {
             suffix = "K";
           }
 
+          num = num.toPrecision(4);
+
           children[i].children[1].innerHTML = num.toString() + suffix;
         }
         
