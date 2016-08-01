@@ -10,11 +10,20 @@
   overflow-y: scroll;
   overflow-x: hidden;
   box-sizing: border-box;
+  color: #BDBDBD;
   
   .page_title {
     color: $base-color-lightest;
     font-size: 1.6rem;
     font-weight: 300;
     padding-bottom: 0.5rem;
+  }
+}
+
+.full {
+  padding: 0.5rem 0rem 0 !important;
+
+  .page_title {
+    padding-left: 1rem;
   }
 }

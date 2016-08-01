@@ -1,0 +1,30 @@
+@import '../variables.scss';
+
+.menu_container {
+  width: 100%;
+  border-bottom: 2px solid #25292d;
+  padding-left: 1.5rem;
+
+  .menu {
+   
+  }
+
+  .menu_item {
+    display: inline-block;
+    margin: 0 1rem 0 1rem;
+    padding: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: background-color 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
+    &.active {
+      border-bottom: 3px solid #eba91b;
+    }
+
+    &:hover {
+      background-color: rgba(255,255,255,0.09080392);
+    }
+  }
+}

@@ -1,6 +1,11 @@
-export function setAggregateData(item, data) {
+export function setAggregateMinuteData(item, data) {
 
-  return {type: "SET_AGGREGATE_DATA", id: item, data };
+  return {type: "SET_AGGREGATE_MINUTE_DATA", id: item, data };
+}
+
+export function setAggregateHourlyData(item, data) {
+
+  return {type: "SET_AGGREGATE_HOURLY_DATA", id: item, data };
 }
 
 export function setOrderData(item, data) {

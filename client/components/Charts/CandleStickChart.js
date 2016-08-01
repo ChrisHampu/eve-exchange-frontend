@@ -46,7 +46,8 @@ class Chart extends React.Component {
       },
       height: 0,
       width: 0,
-      frequency: "minutes"
+      frequency: "minutes",
+      scalesUpdated: false
     }
   }
 
@@ -115,7 +116,8 @@ class Chart extends React.Component {
       ohlcOffset: this.state.ohlcOffset,
       volHeight: this.state.volHeight,
       width: this.state.width,
-      height: this.state.height
+      height: this.state.height,
+      scalesUpdated: true
     });
   }
 
@@ -133,7 +135,13 @@ class Chart extends React.Component {
   getAggregateData() {
 
     if (typeof this.props.market.region[0] !== 'undefined' && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined') {
-      return this.props.market.region[0].item[this.props.item.id].aggregates.filter(doc => doc.frequency === this.state.frequency);
+
+      switch(this.state.frequency) {
+        case "minutes":
+          return this.props.market.region[0].item[this.props.item.id].minutes || [];
+        case "hours":
+          return this.props.market.region[0].item[this.props.item.id].hours || [];
+      }
     }
 
     return [];
@@ -152,7 +160,8 @@ class Chart extends React.Component {
   setFrequency = (event, index, value) => {
 
     this.setState({
-      frequency: value === 0 ? "minutes" : (value === 1 ? "hours" : "days")
+      frequency: value === 0 ? "minutes" : (value === 1 ? "hours" : "days"),
+      scalesUpdated: false
     }, () => {
 
       this.updateScales();
@@ -187,12 +196,15 @@ class Chart extends React.Component {
                 <Axis anchor="left" scale={this.state.yScale} ticks={5} formatISK={true} />
                 <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} formatISK={true} />
                 <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${this.state.width}px)`}} format="%" />
-
-                <Area mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={this.state.ohlcHeight} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return el.buyFifthPercentile;}} />
-                <VolumeData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} viewportWidth={this.state.width} viewportHeight={this.state.height} xScale={this.state.xScale} yScale={this.state.volScale} />
-
-                <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return el.spread/100;}} />
-              </g>
+                {
+                  this.getAggregateData().length > 0 && this.state.scalesUpdated ? 
+                  <g>
+                    <Area mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={this.state.ohlcHeight} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyFifthPercentile} />
+                    <VolumeData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} viewportWidth={this.state.width} viewportHeight={this.state.height} xScale={this.state.xScale} yScale={this.state.volScale} />
+                    <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />
+                  </g> : false
+                }
+             </g>
             </svg>
             <Tooltip margin={this.state.margin} ref="tooltip" />
           </div>

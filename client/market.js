@@ -1,5 +1,5 @@
 import store from './store';
-import { setAggregateData, setOrderData } from './actions/marketActions';
+import { setAggregateMinuteData, setAggregateHourlyData, setOrderData } from './actions/marketActions';
 import horizon from './horizon';
 import fuzzy from 'fuzzy';
 import marketGroups from './sde/market_groups'
@@ -17,11 +17,12 @@ export function subscribeItem(id, region) {
 
 		console.log("Subscribing to " + id);
 
-		let aggregateSubscription = null;
+		let minuteSubscription = null;
+    let hourSubscription = null;
 		let orderSubscription = null;
 
 		try {
-			aggregateSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(24).watch().defaultIfEmpty().subscribe(data => {
+			minuteSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(24).watch().defaultIfEmpty().subscribe(data => {
 
 				// Generate the 'open' data
 				// Also
@@ -33,8 +34,23 @@ export function subscribeItem(id, region) {
 					return;
 				}
 
-				store.dispatch(setAggregateData(id, data));
+				store.dispatch(setAggregateMinuteData(id, data));
 			});
+
+      hourSubscription = horizon('aggregates_hourly').order('time', 'descending').findAll({type: parseInt(id)}).limit(24).watch().defaultIfEmpty().subscribe(data => {
+
+        // Generate the 'open' data
+        // Also
+        // Data is ordered specifically to retrieve the newest records from the database
+        // But must be reversed into old -> new ordering for displaying on charts
+
+        if (!data) {
+          console.log("Error subscribing to aggregates for " + id);
+          return;
+        }
+
+        store.dispatch(setAggregateHourlyData(id, data));
+      });
 		} catch(e) {
 			console.log(e);
 		}
@@ -57,7 +73,8 @@ export function subscribeItem(id, region) {
 		subscriptions.push({
 			id,
 			region,
-			aggregateSubscription,
+			minuteSubscription,
+      hourSubscription,
 			orderSubscription
 		});
 	};
@@ -72,7 +89,8 @@ export function unsubscribeItem(id, region) {
 
 	if (idx !== -1) {
 
-		subscriptions[idx].aggregateSubscription.unsubscribe();
+		subscriptions[idx].minuteSubscription.unsubscribe();
+    subscriptions[idx].hourSubscription.unsubscribe();
 		subscriptions[idx].orderSubscription.unsubscribe();
 		subscriptions.splice(idx, 1);
 	}
