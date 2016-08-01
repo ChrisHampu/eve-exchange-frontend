@@ -34,7 +34,7 @@ store.subscribe(() => {
 
     currentSettings = store.getState().settings;
 
-    horizon('user_settings').update(currentSettings);
+    horizon('user_settings').replace(currentSettings);
 
     if (!eveApiPulled && currentSettings.eveApiKey.keyID.length && currentSettings.eveApiKey.vCode.length) {
       pullApiData(currentSettings.eveApiKey);
