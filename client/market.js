@@ -22,7 +22,7 @@ export function subscribeItem(id, region) {
 		let orderSubscription = null;
 
 		try {
-			minuteSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(24).watch().defaultIfEmpty().subscribe(data => {
+			minuteSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(2016).watch().defaultIfEmpty().subscribe(data => {
 
 				// Generate the 'open' data
 				// Also
@@ -37,7 +37,7 @@ export function subscribeItem(id, region) {
 				store.dispatch(setAggregateMinuteData(id, data));
 			});
 
-      hourSubscription = horizon('aggregates_hourly').order('time', 'descending').findAll({type: parseInt(id)}).limit(24).watch().defaultIfEmpty().subscribe(data => {
+      hourSubscription = horizon('aggregates_hourly').order('time', 'descending').findAll({type: parseInt(id)}).limit(168).watch().defaultIfEmpty().subscribe(data => {
 
         // Generate the 'open' data
         // Also

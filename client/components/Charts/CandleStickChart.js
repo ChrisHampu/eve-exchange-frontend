@@ -11,6 +11,7 @@ import Axis from './Axis';
 import Indicator from './Indicator';
 import Area from './Area';
 import Tooltip from './Tooltip';
+import Scrollbar from './Scrollbar';
 import { subscribeItem, unsubscribeItem } from '../../market';
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
@@ -41,13 +42,16 @@ class Chart extends React.Component {
       margin: {
         top: 10,
         right: 35,
-        bottom: 30,
+        bottom: 50,
         left: 50
       },
       height: 0,
       width: 0,
       frequency: "minutes",
-      scalesUpdated: false
+      scalesUpdated: false,
+      scrollPercent: 1,
+      pageSize: 30,
+      dataSize: 0
     }
   }
 
@@ -117,7 +121,8 @@ class Chart extends React.Component {
       volHeight: this.state.volHeight,
       width: this.state.width,
       height: this.state.height,
-      scalesUpdated: true
+      scalesUpdated: true,
+      dataSize: this.getDataSize()
     });
   }
 
@@ -138,13 +143,38 @@ class Chart extends React.Component {
 
       switch(this.state.frequency) {
         case "minutes":
-          return this.props.market.region[0].item[this.props.item.id].minutes || [];
+          var arr = this.props.market.region[0].item[this.props.item.id].minutes || [];
+          var slice = Math.floor(arr.length * this.state.scrollPercent);
+          if (arr.length > 0 && arr.length < this.state.pageSize) {
+            return arr;
+          }
+          return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.state.pageSize, 0), arr.length));
         case "hours":
-          return this.props.market.region[0].item[this.props.item.id].hours || [];
+          var arr = this.props.market.region[0].item[this.props.item.id].hours || [];
+          var slice = Math.floor(arr.length * this.state.scrollPercent);
+          if (arr.length > 0 && arr.length < this.state.pageSize) {
+            return arr;
+          }
+          return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.state.pageSize, 0), arr.length));
       }
     }
 
     return [];
+  }
+
+  getDataSize() {
+
+    if (typeof this.props.market.region[0] !== 'undefined' && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined') {
+
+      switch(this.state.frequency) {
+        case "minutes":
+          return this.props.market.region[0].item[this.props.item.id].minutes ? this.props.market.region[0].item[this.props.item.id].minutes.length : 0;
+        case "hours":
+          return this.props.market.region[0].item[this.props.item.id].hours ? this.props.market.region[0].item[this.props.item.id].hours.length : 0;
+      }
+    }
+
+    return 0;
   }
 
   handleMouseOver(ev, item, presentation) {
@@ -161,12 +191,22 @@ class Chart extends React.Component {
 
     this.setState({
       frequency: value === 0 ? "minutes" : (value === 1 ? "hours" : "days"),
-      scalesUpdated: false
+      scalesUpdated: false,
     }, () => {
 
       this.updateScales();
     });
   };
+
+  handleScrollChange(scroll) {
+
+    this.setState({
+      scrollPercent: scroll
+    }, () => {
+
+      this.updateScales();
+    });
+  }
 
   render() {
 
@@ -202,6 +242,7 @@ class Chart extends React.Component {
                     <Area mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={this.state.ohlcHeight} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyFifthPercentile} />
                     <VolumeData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} heightOffset={this.state.volHeight} viewportWidth={this.state.width} viewportHeight={this.state.height} xScale={this.state.xScale} yScale={this.state.volScale} />
                     <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={this.getAggregateData()} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />
+                    <Scrollbar pageSize={this.state.pageSize} dataSize={this.state.dataSize} onScrollChange={scroll=>this.handleScrollChange(scroll)} chartWidth={this.state.width} chartHeight={this.state.height} />
                   </g> : false
                 }
              </g>
