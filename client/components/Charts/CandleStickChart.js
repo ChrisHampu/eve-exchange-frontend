@@ -57,11 +57,12 @@ class Chart extends React.Component {
 
   updateScales() {
 
-    let timePadding = 300000;
+    let timePadding = 60000;
 
     switch( this.state.frequency) {
 
       case "hours":
+      //timePadding = 300000;
       break;
       case "days":
       break;
@@ -208,6 +209,43 @@ class Chart extends React.Component {
     });
   }
 
+  formatDate(date) {
+
+    let minutes = date.getUTCMinutes() < 10 ? `0${date.getUTCMinutes()}` : date.getUTCMinutes();
+
+    return `${date.getUTCDate()} ${this.getMonthText(date.getUTCMonth())} ${date.getUTCHours()}:${minutes}`;
+  }
+
+  getMonthText(month) {
+
+    switch (month) {
+      case 0:
+        return "January";
+      case 1:
+        return "Februray";
+      case 2:
+        return "March";
+      case 3:
+        return "April";
+      case 4:
+        return "May";
+      case 5:
+        return "June";
+      case 6:
+        return "July";
+      case 7:
+        return "August";
+      case 8:
+        return "September";
+      case 9:
+        return "October";
+      case 10:
+        return "November";
+      case 11:
+        return "December";
+    }
+  }
+
   render() {
 
     return (
@@ -227,6 +265,12 @@ class Chart extends React.Component {
               <MenuItem type="text" value={2} primaryText="1 Day" style={{cursor: "pointer"}} />
             </SelectField>
           </div>
+          {
+            this.getAggregateData().length > 0 && this.state.scalesUpdated ? 
+              <div style={{display: "inline-block", position: "absolute", right: 50, top: 25}}>
+                Showing <i>{this.formatDate(this.getAggregateData()[this.getAggregateData().length - 1].time)}</i> to <i>{this.formatDate(this.getAggregateData()[0].time)}</i>
+              </div> : false
+          }
         </div>
         <div style={{display: "flex", width: "100%", height: "100%"}}>
           <div ref="chart_anchor" className={s.chart}>
