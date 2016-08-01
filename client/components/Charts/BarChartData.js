@@ -12,7 +12,8 @@ export default class BarChartData extends React.Component {
       React.PropTypes.object
     ]),
     viewportWidth: React.PropTypes.number,
-    viewportHeight: React.PropTypes.number
+    viewportHeight: React.PropTypes.number,
+    heightOffset: React.PropTypes.number
   };
 
   constructor(props) {
@@ -34,7 +35,7 @@ export default class BarChartData extends React.Component {
           this.props.data.map((el, i) => {
 
             return (
-              <Bar mouseOver={this.props.mouseOver} mouseOut={this.props.mouseOut} key={i} xValue={el.time} yValue={el.buyVolume} xScale={this.props.xScale} yScale={this.props.yScale} barWidth={barWidth} viewportHeight={this.props.viewportHeight}/>
+              <Bar heightOffset={this.props.heightOffset} mouseOver={this.props.mouseOver} mouseOut={this.props.mouseOut} key={i} xValue={el.time} yValue={el.buyVolume} xScale={this.props.xScale} yScale={this.props.yScale} barWidth={barWidth} viewportHeight={this.props.viewportHeight}/>
             )
           })
         }

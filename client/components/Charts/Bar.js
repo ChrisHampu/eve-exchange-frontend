@@ -11,7 +11,8 @@ export default class Bar extends React.Component {
     xScale: React.PropTypes.func,
     yScale: React.PropTypes.func,
     barWidth: React.PropTypes.number,
-    viewportHeight: React.PropTypes.number
+    viewportHeight: React.PropTypes.number,
+    heightOffset: React.PropTypes.number
   };
 
   constructor(props) {
@@ -27,8 +28,8 @@ export default class Bar extends React.Component {
 
     this.setState({
       cx: this.props.xScale(this.props.xValue) - 0.5 * this.props.barWidth,
-      cy: this.props.viewportHeight - this.props.yScale(this.props.yValue),
-      barHeight: this.props.yScale(this.props.yValue),
+      cy: this.props.viewportHeight - this.props.heightOffset + this.props.yScale(this.props.yValue),
+      barHeight: this.props.heightOffset - this.props.yScale(this.props.yValue),
       barWidth: this.props.barWidth,
     });
   }
