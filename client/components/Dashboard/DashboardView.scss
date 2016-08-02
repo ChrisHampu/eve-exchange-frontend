@@ -5,7 +5,6 @@
 }
 
 .dashboard_charts {
-  padding-top: 0.6rem;
   position: relative;
   box-sizing: border-box;
   max-width: 100%;
@@ -16,8 +15,6 @@
 
   .chart_row {
     display: flex;
-    max-height: 33%;
-    height: 33%;
     flex-direction: row;
     //flex-wrap: wrap;
     margin-right: -.5rem;

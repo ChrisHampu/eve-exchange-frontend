@@ -6,7 +6,9 @@ import cx from 'classnames';
 export default class DashboardPageComponent extends React.Component {
 
   static propTypes = {
-    fullWidth: React.PropTypes.bool.isRequired
+    fullWidth: React.PropTypes.bool.isRequired,
+    style: React.PropTypes.object,
+    titleStyle: React.PropTypes.object
   };
 
   static defaultProps = {
@@ -14,9 +16,10 @@ export default class DashboardPageComponent extends React.Component {
   };
 
   render() {
+
     return (
       <div className={cx(s.root, { [s.full]: this.props.fullWidth }, this.props.className)} style={this.props.style}>
-        <div className={s.page_title}>
+        <div className={s.page_title} style={this.props.titleStyle}>
           {this.props.title}
         </div>
         {this.props.children}

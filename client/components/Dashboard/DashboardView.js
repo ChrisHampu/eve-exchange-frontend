@@ -25,7 +25,7 @@ class DashboardView extends React.Component {
     const numRows = Math.ceil(charts.length / 3);
 
     return (
-      <DashboardPage title="Dashboard">
+      <DashboardPage title="Dashboard" titleStyle={{paddingBottom: "0px"}}>
       {
         charts.length === 0 ?
           <div className={s.disclaimer}>
@@ -38,8 +38,20 @@ class DashboardView extends React.Component {
 
               const chartSlice = charts.slice(row * 3, row * 3 + 3);
 
+              let height = "100%";
+
+              if (numRows >= 3) {
+                height = "33%";
+              } else if(numRows >= 2) {
+                if (row === 0) {
+                  height = "66%";
+                } else {
+                  height = "33%";
+                }
+              }
+
               return (
-                <div key={row} className={s.chart_row}>
+                <div key={row} className={s.chart_row} style={{height: height, maxHeight: height}}>
                   {
                     chartSlice.map((el, i) => {
 

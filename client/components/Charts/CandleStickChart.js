@@ -292,7 +292,6 @@ class Chart extends React.Component {
 
     return (
       <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%" }}>
-
         <div>
           {
             this.props.title ? 
@@ -310,7 +309,7 @@ class Chart extends React.Component {
           </div>
           <div style={{display: "inline-block"}}>
             {
-              this.getAggregateData().length > 0 && this.state.scalesUpdated ?
+              this.getAggregateData().length > 0 ?
               <div style={{verticalAlign: "middle", display: "inline-block"}}>
                 Showing <i>{this.formatDate(this.getAggregateData()[this.getAggregateData().length - 1].time)}</i> to <i>{this.formatDate(this.getAggregateData()[0].time)}</i>
               </div> : false
