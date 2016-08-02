@@ -133,12 +133,15 @@ export default class MarketBrowserComponent extends React.Component {
 
     return (
       <div className={s.market_browser}>
-        <TextField
-          className={s.market_browser_search}
-          hintText="Search"
-          floatingLabelText="Search market"
-          onChange={(ev)=>{this.handleSearchText(ev)}}
-        />
+        <div className={s.search}>
+          <TextField
+            className={s.market_browser_search}
+            hintText="Search"
+            floatingLabelText="Search market"
+            onChange={(ev)=>{this.handleSearchText(ev)}}
+            fullWidth={true}
+          />
+        </div>
         { 
           getMarketGroupTree(this.state.searchText).map((el, i) => {
             return(<MarketBrowserListItem selector={(item)=>{this.selectItem(item);}} element={el} key={i} depth={0} />);

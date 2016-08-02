@@ -29,25 +29,28 @@
   flex: 1;
   box-sizing: border-box;
 
-  .market_browser_search {
-    font-weight: 300;
-    padding-left: 1rem;
+  .search {
+    padding: 0 1rem;
 
-    label {
-      color: $blue-color !important;
-      line-height: 0px !important;
-    }
+    .market_browser_search {
+      font-weight: 300;  
 
-    input {
-      margin-top: 0 !important;
-    }
+      label {
+        color: $blue-color !important;
+        line-height: 0px !important;
+      }
 
-    hr:first-child {
-      border-color: rgba(255,255,255,0.5) !important;
-    }
+      input {
+        margin-top: 0 !important;
+      }
 
-    hr:not(:first-child) {
-      border-color: $blue-color !important;
+      hr:first-child {
+        border-color: rgba(255,255,255,0.5) !important;
+      }
+
+      hr:not(:first-child) {
+        border-color: $blue-color !important;
+      }
     }
   }
 
