@@ -224,8 +224,9 @@ class Chart extends React.Component {
   formatDate(date) {
 
     let minutes = date.getUTCMinutes() < 10 ? `0${date.getUTCMinutes()}` : date.getUTCMinutes();
+    let hours = date.getUTCHours() < 10 ? `0${date.getUTCHours()}` : date.getUTCHours();   
 
-    return `${date.getUTCDate()} ${this.getMonthText(date.getUTCMonth())} ${date.getUTCHours()}:${minutes}`;
+    return `${date.getUTCDate()} ${this.getMonthText(date.getUTCMonth())} ${hours}:${minutes}`;
   }
 
   getMonthText(month) {
