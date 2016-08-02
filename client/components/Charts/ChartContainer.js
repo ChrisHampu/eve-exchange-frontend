@@ -9,6 +9,7 @@ import Tooltip from './Tooltip';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import PlusIcon from 'material-ui/svg-icons/content/add';
 import MinusIcon from 'material-ui/svg-icons/content/remove';
@@ -70,6 +71,10 @@ class ChartContainer extends React.Component {
   }
 
   update() {
+
+    if (!this.refs.chart_anchor) {
+      return;
+    }
 
     this.state.height = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom - 5;
     this.state.width = ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth - this.state.margin.left - this.state.margin.right;
@@ -227,12 +232,19 @@ class ChartContainer extends React.Component {
         </div>
         <div style={{display: "flex", width: "100%", height: "100%"}}>
           <div ref="chart_anchor" className={s.chart}>
-            <svg width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
-              <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
-                {this.props.children}
-             </g>
-            </svg>
-            <Tooltip margin={this.state.margin} ref="tooltip" />
+          {
+            !data || data.length === 0 ?
+              <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
+                <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
+              </div>
+              :
+              <svg width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
+                <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
+                  {this.props.children}
+                </g>
+              </svg>
+          }
+          <Tooltip margin={this.state.margin} ref="tooltip" />
           </div>
         </div>
       </div>
