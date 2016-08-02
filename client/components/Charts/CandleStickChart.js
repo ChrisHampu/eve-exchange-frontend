@@ -17,6 +17,10 @@ import { subscribeItem, unsubscribeItem } from '../../market';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+
+import PlusIcon from 'material-ui/svg-icons/content/add';
+import MinusIcon from 'material-ui/svg-icons/content/remove';
 
 class Chart extends React.Component {
 
@@ -51,7 +55,15 @@ class Chart extends React.Component {
       scalesUpdated: false,
       scrollPercent: 1,
       pageSize: 30,
-      dataSize: 0
+      dataSize: 0,
+      zoomLevels: [
+        15,
+        30,
+        50,
+        80,
+        100
+      ],
+      zoom: 1
     }
   }
 
@@ -246,10 +258,41 @@ class Chart extends React.Component {
     }
   }
 
+  increaseZoom() {
+
+    if (this.state.zoom >= this.state.zoomLevels.length-1) {
+      return;
+    }
+
+    this.setState({
+      zoom: this.state.zoom+1,
+      pageSize: this.state.zoomLevels[this.state.zoom+1]
+    }, () => {
+
+      this.updateScales();
+    });
+  }
+
+  decreaseZoom() {
+
+    if (this.state.zoom <= 0) {
+      return;
+    }
+
+    this.setState({
+      zoom: this.state.zoom-1,
+      pageSize: this.state.zoomLevels[this.state.zoom-1]
+    }, () => {
+
+      this.updateScales();
+    });
+  }
+
   render() {
 
     return (
       <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%" }}>
+
         <div>
           {
             this.props.title ? 
@@ -258,19 +301,29 @@ class Chart extends React.Component {
               </div>
               : false
           }
-          <div style={{display: "inline-block"}}>
+          <div style={{display: "inline-block", marginRight: "1rem"}}>
             <SelectField style={{width: "150px"}} value={this.state.frequency==="minutes"?0:(this.state.frequency==="hours"?1:2)} onChange={this.setFrequency}>
               <MenuItem type="text" value={0} primaryText="5 Minutes" style={{cursor: "pointer"}}/>
               <MenuItem type="text" value={1} primaryText="1 Hour" style={{cursor: "pointer"}} />
               <MenuItem type="text" value={2} primaryText="1 Day" style={{cursor: "pointer"}} />
             </SelectField>
           </div>
-          {
-            this.getAggregateData().length > 0 && this.state.scalesUpdated ? 
-              <div style={{display: "inline-block", position: "absolute", right: 50, top: 25}}>
+          <div style={{display: "inline-block"}}>
+            {
+              this.getAggregateData().length > 0 && this.state.scalesUpdated ?
+              <div style={{verticalAlign: "middle", display: "inline-block"}}>
                 Showing <i>{this.formatDate(this.getAggregateData()[this.getAggregateData().length - 1].time)}</i> to <i>{this.formatDate(this.getAggregateData()[0].time)}</i>
               </div> : false
-          }
+            }
+            <div style={{display: "inline-block", marginLeft: "1rem", verticalAlign: "middle"}}>
+              <IconButton tooltip="Zoom In" tooltipPosition="top-center" onClick={()=>this.increaseZoom()}>
+                <PlusIcon />
+              </IconButton>
+              <IconButton tooltip="Zoom Out" tooltipPosition="top-center" onClick={()=>this.decreaseZoom()}>
+                <MinusIcon />
+              </IconButton>
+            </div>
+          </div>
         </div>
         <div style={{display: "flex", width: "100%", height: "100%"}}>
           <div ref="chart_anchor" className={s.chart}>
