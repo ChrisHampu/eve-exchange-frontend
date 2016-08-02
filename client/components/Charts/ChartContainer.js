@@ -22,7 +22,8 @@ class ChartContainer extends React.Component {
     data: React.PropTypes.array.isRequired,
     title: React.PropTypes.string,
     onChartChanged: React.PropTypes.func.isRequired,
-    marginRight: React.PropTypes.number
+    marginRight: React.PropTypes.number,
+    marginLeft: React.PropTypes.number
   };
 
   static childContextTypes = {
@@ -42,7 +43,7 @@ class ChartContainer extends React.Component {
         top: 10,
         right: this.props.marginRight || 35,
         bottom: 45,
-        left: 50
+        left: this.props.marginLeft || 50
       },
       height: 0,
       width: 0,

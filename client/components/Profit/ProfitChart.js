@@ -118,7 +118,7 @@ class ProfitChart extends React.Component {
     const height = this.refs.container ? this.refs.container.getHeight() : 0;
 
     return (
-      <ChartContainer frequencyLevels={{hours: "1 Hour"}} marginRight={50} ref="container" data={data} title={this.props.title} onChartChanged={()=>this.chartChanged()}>
+      <ChartContainer frequencyLevels={{hours: "1 Hour"}} marginLeft={65} marginRight={65} ref="container" data={data} title={this.props.title} onChartChanged={()=>this.chartChanged()}>
         <Axis anchor="left" scale={this.state.profitScale} ticks={5} formatISK={true} />
         <Axis anchor="right" scale={this.state.taxScale} ticks={5} style={{transform: `translateX(${width}px)`}} formatISK={true} />
         <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
@@ -128,8 +128,10 @@ class ProfitChart extends React.Component {
             <Line fill="#F44336" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return Math.abs(el.taxes);}} />
             <Line fill="#4CAF50" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return el.profit;}} />
             <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
-          </g> : false
+         </g> : false
         }
+        <text transform={`translate(-55,-60)rotate(270 0 ${Math.round(height/2)})`} fill="#4CAF50" fontSize="20" x="0" y={Math.round(height/2)} textAnchor="end" alignmentBaseline="middle">Profit</text>
+        <text transform={`translate(+55,-40)rotate(90 ${width} ${Math.round(height/2)})`} fill="#F44336" fontSize="20" x={width} y={Math.round(height/2)} textAnchor="end" alignmentBaseline="middle">Taxes</text>
      </ChartContainer>
     );
   }
