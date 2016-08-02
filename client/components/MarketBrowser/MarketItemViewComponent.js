@@ -7,7 +7,7 @@ import { subscribeItem, unsubscribeItem, itemIDToName } from '../../market';
 import { pinChartToDashboard, unPinChartFromDashboard } from '../../actions/settingsActions';
 
 import MarketBrowserOrderTable from './MarketBrowserOrderTable';
-import CandleStickChart from '../Charts/CandleStickChart';
+import MarketItemChart from '../Charts/MarketItemChart';
 
 import { Tabs, Tab } from 'material-ui/Tabs';
 import IconMenu from 'material-ui/IconMenu';
@@ -106,7 +106,7 @@ class MarketItemViewComponent extends React.Component {
         <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
           <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
             <div ref="market_container" className={s.market_item_chart_container}>
-              <CandleStickChart style={{flex: 1}} item={this.state.item} />
+              <MarketItemChart style={{flex: 1}} item={this.state.item} />
             </div>
           </Tab>
           <Tab label="Price Ladder" style={{backgroundColor: "rgb(38, 43, 47)"}}>

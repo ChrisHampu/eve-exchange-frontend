@@ -5,7 +5,7 @@ import s from './DashboardView.scss';
 import { subscribeItem, unsubscribeItem } from '../../market';
 import { unPinChartFromDashboard } from '../../actions/settingsActions';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
-import CandleStickChart from '../Charts/CandleStickChart';
+import MarketItemChart from '../Charts/MarketItemChart';
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -86,7 +86,7 @@ class DashboardView extends React.Component {
                               </IconMenu>
                             </div>
                             <div className={s.chart}>
-                              <CandleStickChart style={{flex: 1}} item={item} title={item.name} />
+                              <MarketItemChart style={{flex: 1}} item={item} title={item.name} />
                             </div>
                           </div>
                         )

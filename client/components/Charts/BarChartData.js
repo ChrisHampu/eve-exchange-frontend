@@ -1,7 +1,6 @@
 /* eslint-disable global-require */
 import React from 'react';
 import Bar from './Bar';
-import s from './CandleStickData.scss';
 
 export default class BarChartData extends React.Component {
 

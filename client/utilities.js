@@ -12,6 +12,44 @@ export function formatNumber(number) {
     return parts.join(".");
 }
 
+export function formatDate(date) {
+
+  let minutes = date.getUTCMinutes() < 10 ? `0${date.getUTCMinutes()}` : date.getUTCMinutes();
+  let hours = date.getUTCHours() < 10 ? `0${date.getUTCHours()}` : date.getUTCHours();   
+
+  return `${date.getUTCDate()} ${getMonthNumberToText(date.getUTCMonth())} ${hours}:${minutes}`;
+}
+
+export function getMonthNumberToText(month) {
+
+  switch (month) {
+    case 0:
+      return "January";
+    case 1:
+      return "Februray";
+    case 2:
+      return "March";
+    case 3:
+      return "April";
+    case 4:
+      return "May";
+    case 5:
+      return "June";
+    case 6:
+      return "July";
+    case 7:
+      return "August";
+    case 8:
+      return "September";
+    case 9:
+      return "October";
+    case 10:
+      return "November";
+    case 11:
+      return "December";
+  }
+}
+
 export async function getAPIKeyInfo(keyID, vCode) {
 
   let destUrl = `https://api.eveonline.com/account/APIKeyInfo.xml.aspx?keyID=${keyID}&vCode=${vCode}`;

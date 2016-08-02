@@ -6,27 +6,25 @@ export default class Scrollbar extends React.Component {
 
   static propTypes = {
 
-    chartWidth: React.PropTypes.number,
-    chartHeight: React.PropTypes.number,
-    dataSize: React.PropTypes.number,
-    pageSize: React.PropTypes.number,
     onScrollChange: React.PropTypes.func
+  };
+
+  static contextTypes = {
+
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+    pageSize: React.PropTypes.number.isRequired,
+    dataSize: React.PropTypes.number.isRequired
   };
 
   constructor(props) {
     super(props);
 
-    let barWidth = 0;
-
-    if (this.props.dataSize >= this.props.pageSize ) {
-      barWidth = this.props.dataSize ? Math.max(Math.round(this.props.chartWidth / this.props.dataSize), 25) : 100;
-    }
-
     this.state = {
       dragging: false,
-      handleX: this.props.chartWidth - barWidth,
+      handleX: 0,
       startX: 0,
-      barWidth: barWidth,
+      barWidth: 0,
       resistance: 3
     }; 
   }
@@ -37,6 +35,17 @@ export default class Scrollbar extends React.Component {
 
     document.addEventListener('mousemove', this.handleMouseMove.bind(this));
     document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+
+    let barWidth = 0;
+
+    if (this.context.dataSize >= this.context.pageSize ) {
+      barWidth = this.context.dataSize ? Math.max(Math.round(this.context.width / this.context.dataSize), 25) : 100;
+    }
+
+    this.setState({
+      handleX: this.context.width - barWidth,
+      barWidth: barWidth,
+    });
   }
 
   componentWillUnmount() {
@@ -56,7 +65,7 @@ export default class Scrollbar extends React.Component {
     if (this.state.dragging) {
 
       let delta = ev.clientX - this.state.startX;
-      let x = Math.min(Math.max(delta + this.state.handleX, 0), this.props.chartWidth - this.state.barWidth);
+      let x = Math.min(Math.max(delta + this.state.handleX, 0), this.context.width - this.state.barWidth);
 
       if (delta < this.state.resistance || delta > this.state.resistance) {
         this.setState({
@@ -64,7 +73,7 @@ export default class Scrollbar extends React.Component {
           startX: ev.clientX
         });
 
-        this.props.onScrollChange((x + this.state.barWidth) / this.props.chartWidth );
+        this.props.onScrollChange((x + this.state.barWidth) / this.context.width);
       }
     }
   }
@@ -99,8 +108,8 @@ export default class Scrollbar extends React.Component {
 
     return (
       <g className={s.root}>
-        <rect className={s.bar} x={0} y={this.props.chartHeight+25} width={this.props.chartWidth} height={12} />
-        <rect className={s.handle} onMouseDown={ev=>this.handleMouseDown(ev)}  x={this.state.handleX} y={this.props.chartHeight+25} width={this.state.barWidth} height={12} />
+        <rect className={s.bar} x={0} y={this.context.height+25} width={this.context.width} height={12} />
+        <rect className={s.handle} onMouseDown={ev=>this.handleMouseDown(ev)}  x={this.state.handleX} y={this.context.height+25} width={this.state.barWidth} height={12} />
       </g>
     )
   }

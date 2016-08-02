@@ -6,7 +6,6 @@ import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import DashboardPageMenu from '../DashboardPage/DashboardPageMenu';
 import DashboardPageBody from '../DashboardPage/DashboardPageBody';
 import ProfileView from './ProfileView';
-import s from './ProfileComponent.scss';
 import cx from 'classnames';
 
 class Profile extends React.Component {
@@ -14,7 +13,7 @@ class Profile extends React.Component {
   render() {
 
     return (
-      <DashboardPage title={this.props.auth.name} className={s.root} fullWidth={true}>
+      <DashboardPage title={this.props.auth.name} fullWidth={true}>
         <DashboardPageMenu menu={{
           'Profile': "/dashboard/profile",
           'Subscription': "/dashboard/profile/subscription",

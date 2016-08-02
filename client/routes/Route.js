@@ -14,6 +14,7 @@ import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserCom
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
 import NotificationsComponent from '../components/Notifications/NotificationsComponent';
 import ProfitComponent from '../components/Profit/ProfitComponent';
+import ProfitTopItems from '../components/Profit/ProfitTopItems';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -33,7 +34,9 @@ export default (
         <Route path="browser" components={{main: MarketBrowserComponent}}>
           <Route path=":id" component={MarketItemViewComponent} />
         </Route>
-        <Route path="profit" components={{main: ProfitComponent }} />
+        <Route path="profit" components={{main: ProfitComponent }}>
+          <Route path="topitems" component={ProfitTopItems} />
+        </Route>
         <Route path="admin" components={{main: AdminComponent}} />
       </Route>
     </Route>

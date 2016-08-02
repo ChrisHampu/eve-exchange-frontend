@@ -3,14 +3,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import store from '../../store';
+import s from './ProfitChart.scss';
 import { scaleTime, scaleLinear, timeHour, timeMinute } from '../../d3.js';
-import s from './CandleStickChart.scss';
-import CandleStickData from './CandleStickData';
-import VolumeData from './BarChartData';
-import Axis from './Axis';
-import Indicator from './Indicator';
-import Area from './Area';
-import Tooltip from './Tooltip';
+
+import CandleStickData from '../Charts/CandleStickData';
+import VolumeData from '../Charts/BarChartData';
+import Axis from '../Charts/Axis';
+import Indicator from '../Charts/Indicator';
+import Area from '../Charts/Area';
+import Tooltip from '../Charts/Tooltip';
 
 class ProfitChart extends React.Component {
 
