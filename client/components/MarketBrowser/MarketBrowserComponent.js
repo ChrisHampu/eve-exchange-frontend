@@ -126,7 +126,7 @@ export default class MarketBrowserComponent extends React.Component {
 
     this.setState({
       searchText: ev.currentTarget.value
-    })
+    });
   }
 
   renderMarketBrowser() {

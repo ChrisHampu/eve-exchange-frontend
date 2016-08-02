@@ -46,7 +46,7 @@ class Chart extends React.Component {
       margin: {
         top: 10,
         right: 35,
-        bottom: 50,
+        bottom: 45,
         left: 50
       },
       height: 0,
@@ -84,7 +84,7 @@ class Chart extends React.Component {
 
     const data = this.getAggregateData();
 
-    this.state.height = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom;
+    this.state.height = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom - 5;
     this.state.width = ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth - this.state.margin.left - this.state.margin.right;
 
     this.state.ohlcHeight = Math.floor(this.state.height*0.70);

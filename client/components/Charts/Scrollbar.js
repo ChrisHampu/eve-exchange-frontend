@@ -99,8 +99,8 @@ export default class Scrollbar extends React.Component {
 
     return (
       <g className={s.root}>
-        <rect className={s.bar} x={0} y={this.props.chartHeight+32} width={this.props.chartWidth} height={12} />
-        <rect className={s.handle} onMouseDown={ev=>this.handleMouseDown(ev)}  x={this.state.handleX} y={this.props.chartHeight+32} width={this.state.barWidth} height={12} />
+        <rect className={s.bar} x={0} y={this.props.chartHeight+25} width={this.props.chartWidth} height={12} />
+        <rect className={s.handle} onMouseDown={ev=>this.handleMouseDown(ev)}  x={this.state.handleX} y={this.props.chartHeight+25} width={this.state.barWidth} height={12} />
       </g>
     )
   }

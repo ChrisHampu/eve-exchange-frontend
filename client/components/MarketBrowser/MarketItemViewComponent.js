@@ -97,8 +97,8 @@ class MarketItemViewComponent extends React.Component {
             >
               {
                 this.isChartPinned() ? 
-                  <MenuItem type="text" primaryText="Unpin From Dashboard" onTouchTap={()=>{this.unPinChart()}}/>
-                  : <MenuItem type="text" primaryText="Pin To Dashboard" onTouchTap={()=>{this.pinChart()}}/>
+                  <MenuItem type="text" primaryText="Unpin From Dashboard" onTouchTap={()=>{this.unPinChart()}} style={{cursor: "pointer"}}/>
+                  : <MenuItem type="text" primaryText="Pin To Dashboard" onTouchTap={()=>{this.pinChart()}} style={{cursor: "pointer"}}/>
               }
             </IconMenu>
           </div>
