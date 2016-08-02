@@ -100,6 +100,11 @@ class MarketItemChart extends React.Component {
 
   getAggregateData() {
 
+    // Check if still loading components
+    if (!this.refs.container) {
+      return [];
+    }
+
     if (typeof this.props.market.region[0] !== 'undefined' && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined') {
 
       switch(this.refs.container.getFrequency()) {
@@ -170,7 +175,7 @@ class MarketItemChart extends React.Component {
     const height = this.refs.container ? this.refs.container.getHeight() : 0;
 
     return (
-      <ChartContainer ref="container" data={data} title={this.props.title} onChartChanged={()=>this.chartChanged()}>
+      <ChartContainer frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour"}} ref="container" data={data} title={this.props.title} onChartChanged={()=>this.chartChanged()}>
         <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
         <Axis anchor="left" scale={this.state.yScale} ticks={5} formatISK={true} />
         <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} formatISK={true} />

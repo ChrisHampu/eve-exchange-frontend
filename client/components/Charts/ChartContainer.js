@@ -17,9 +17,11 @@ class ChartContainer extends React.Component {
 
   static propTypes = {
 
+    frequencyLevels: React.PropTypes.object.isRequired,
     data: React.PropTypes.array.isRequired,
     title: React.PropTypes.string,
-    onChartChanged: React.PropTypes.func.isRequired
+    onChartChanged: React.PropTypes.func.isRequired,
+    marginRight: React.PropTypes.number
   };
 
   static childContextTypes = {
@@ -37,13 +39,13 @@ class ChartContainer extends React.Component {
     this.state = {
       margin: {
         top: 10,
-        right: 35,
+        right: this.props.marginRight || 35,
         bottom: 45,
         left: 50
       },
       height: 0,
       width: 0,
-      frequency: "minutes",
+      frequency: this.props.frequencyLevels ? Object.keys(this.props.frequencyLevels)[0] : "minutes",
       scrollPercent: 1,
       pageSize: 30,
       dataSize: 0,
@@ -123,7 +125,7 @@ class ChartContainer extends React.Component {
   setFrequency = (event, index, value) => {
 
     this.setState({
-      frequency: value === 0 ? "minutes" : (value === 1 ? "hours" : "days")
+      frequency: Object.keys(this.props.frequencyLevels)[value]
     }, () => {
 
       this.update();
@@ -193,11 +195,18 @@ class ChartContainer extends React.Component {
               : false
           }
           <div style={{display: "inline-block", marginRight: "1rem"}}>
-            <SelectField style={{width: "150px"}} value={this.state.frequency==="minutes"?0:(this.state.frequency==="hours"?1:2)} onChange={this.setFrequency}>
-              <MenuItem type="text" value={0} primaryText="5 Minutes" style={{cursor: "pointer"}}/>
-              <MenuItem type="text" value={1} primaryText="1 Hour" style={{cursor: "pointer"}} />
-              <MenuItem type="text" value={2} primaryText="1 Day" style={{cursor: "pointer"}} />
-            </SelectField>
+          {
+            this.props.frequencyLevels ? 
+            <SelectField style={{width: "150px"}} value={Object.keys(this.props.frequencyLevels).findIndex(el=>el===this.state.frequency)} onChange={this.setFrequency}>
+              {
+                Object.keys(this.props.frequencyLevels).map((el, i) => {
+                  return (
+                    <MenuItem key={i} type="text" value={i} primaryText={this.props.frequencyLevels[el]} style={{cursor: "pointer"}} />
+                  )
+                })
+              }
+            </SelectField> : false
+          }
           </div>
           <div style={{display: "inline-block"}}>
             {

@@ -163,13 +163,15 @@ function doHorizonSubscriptions() {
   });
 
   // 24 hour profit chart
-  horizon('profit_chart').order('time', 'descending').findAll({userID: userData.id, frequency: 'hourly'}).limit(24).watch().defaultIfEmpty().subscribe( profit => {
+  horizon('profit_chart').order('time', 'descending').findAll({userID: userData.id}).limit(24).watch().defaultIfEmpty().subscribe( profit => {
+
+    console.log("profit", profit);
 
     if (!profit) {
       return;
     }
 
-    updateHourlyChart(profit);
+    store.dispatch(updateHourlyChart(profit));
 
     console.log(profit);
   });
@@ -180,7 +182,7 @@ function doHorizonSubscriptions() {
       return;
     }
 
-    updateToplist(profit);
+    store.dispatch(updateToplist(profit));
 
     console.log(profit);
   });

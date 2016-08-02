@@ -32,7 +32,7 @@ export default class Tooltip extends React.Component {
     if (presentation === "spread") {
       x = ev.currentTarget.cx.baseVal.value + this.props.margin.left + ev.currentTarget.r.baseVal.value / 2;
       y = ev.currentTarget.cy.baseVal.value - 15;
-    } else if (presentation === "area") {
+    } else if (presentation === "market_area" || presentation === "profit") {
       x = item.x + this.props.margin.left ;
       y = item.y - 35;
     } else {
@@ -110,13 +110,23 @@ export default class Tooltip extends React.Component {
         );
         break;
 
-      case "area":
+      case "market_area":
         contents = (
           <div>
             High: {formatNumber(this.state.tooltipItem.high)}<br />
             Low: {formatNumber(this.state.tooltipItem.low)}<br />
             Buy: {formatNumber(this.state.tooltipItem.buyFifthPercentile)}<br />
             Sell: {formatNumber(this.state.tooltipItem.sellFifthPercentile)}<br />
+          </div>
+        );
+        break;
+
+      case "profit":
+        contents = (
+          <div>
+            Profit: {formatNumber(this.state.tooltipItem.profit)}<br />
+            Taxes: {formatNumber(this.state.tooltipItem.taxes)}<br />
+            Broker: {formatNumber(this.state.tooltipItem.broker)}<br />
           </div>
         );
         break;

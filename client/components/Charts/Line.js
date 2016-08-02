@@ -1,9 +1,9 @@
 /* eslint-disable global-require */
 import React from 'react';
-import { area, curveCatmullRom, line } from '../../d3.js';
+import { curveCatmullRom, line } from '../../d3.js';
 import Circle from './Circle';
 
-export default class Area extends React.Component {
+export default class Line extends React.Component {
 
   static propTypes = {
 
@@ -15,7 +15,8 @@ export default class Area extends React.Component {
     yScale: React.PropTypes.func,
     xAccessor: React.PropTypes.func,
     yAccessor: React.PropTypes.func,
-    viewportHeight: React.PropTypes.number
+    viewportHeight: React.PropTypes.number,
+    fill: React.PropTypes.string
   };
 
   constructor(props) {
@@ -66,14 +67,6 @@ export default class Area extends React.Component {
       return <g />;
     }
 
-    const _area = area()
-      .x(d => this.props.xScale(this.props.xAccessor(d)))
-      .y0(d => this.props.viewportHeight)
-      .y1(d => this.props.yScale(this.props.yAccessor(d)))
-      .curve(curveCatmullRom.alpha(0.5));
-
-    const path = _area(this.props.data);
-
     const _line = line()
       .x(d => this.props.xScale(this.props.xAccessor(d)))
       .y(d => this.props.yScale(this.props.yAccessor(d)))
@@ -81,32 +74,21 @@ export default class Area extends React.Component {
 
     const linepath = _line(this.props.data);
 
+    const fill = this.props.fill || "rgb(89, 200, 226)";
+
     return (
       <g>
-       <defs>
-          <linearGradient id="linear" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%"   stopColor="rgba(89, 200, 226, 0.3)"/>
-            <stop offset="40%"   stopColor="rgba(89, 200, 226, 0.3)"/>
-            <stop offset="100%" stopColor="rgba(89, 200, 226, 0.1)"/>
-          </linearGradient>
-        </defs>
-        <path
-          d={path}
-          fill="url(#linear)"
-          onMouseMove={(ev)=>{this.handleMouseOver(ev);}}
-          onMouseOut={(ev)=>{this.handleMouseOut();}}
-        />
         <path
           d={linepath}
           fill="none"
-          stroke="rgb(89, 200, 226)"
+          stroke={fill}
           strokeWidth={3}
         />
         {
         this.props.data.map((el, i) => {
           return (
             <Circle
-              fill="rgb(89, 200, 226)"
+              fill={fill}
               data={el}
               key={i}
               cx={this.props.xScale(this.props.xAccessor(el))}
