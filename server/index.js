@@ -132,7 +132,7 @@ api.use(async ctx => {
 
   try {
     ctx.body = {
-      jwt: jwt.verify(ctx.request.body.jwt, config.horizon.secret_key, { algorithms: [ 'HS512' ] })
+      jwt: jwt.verify(ctx.request.body.jwt, new Buffer(config.horizon.secret_key, 'base64'), { algorithms: [ 'HS512' ] })
     };
   } catch(err) {
     ctx.body = {

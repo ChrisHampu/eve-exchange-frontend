@@ -171,8 +171,7 @@ class Subscription extends React.Component {
 
   doWithdrawal() {
 
-
-    fetch(`http://api.evetradeforecaster.com/subscription/withdraw/${this.state.withdrawal}`, {
+    fetch(`http://localhost:4000/subscription/withdraw/${this.state.withdrawal}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -184,10 +183,8 @@ class Subscription extends React.Component {
       return res.json();
     })
     .then(res => {
-      console.log(res);
+      // Check success status & notify user
     });
-
-    //store.dispatch(performWithdrawal(this.state.withdrawal));
 
     this.closeWithdrawalDialog();
   }
@@ -248,7 +245,7 @@ class Subscription extends React.Component {
 
       history = this.props.subscription.deposit_history
       .concat(this.props.subscription.withdrawal_history)
-      .sort((el1, el2) => el1.time - el2.time);
+      .sort((el1, el2) => el2.time - el1.time);
     }
 
     return (
