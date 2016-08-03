@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+import 'whatwg-fetch';
 import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
@@ -6,6 +7,7 @@ import s from './ProfileSubscription.scss';
 import cx from 'classnames';
 import { performPremiumUpgrade, performPremiumDowngrade, performWithdrawal } from '../../actions/subscriptionActions';
 import { formatNumber } from '../../utilities';
+import { getAuthToken } from '../../horizon';
 
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -161,13 +163,31 @@ class Subscription extends React.Component {
   };
 
   doPremiumDowngrade() {
+    
     store.dispatch(performPremiumDowngrade());
 
     this.closeSubDowngrade();
   }
 
   doWithdrawal() {
-    store.dispatch(performWithdrawal(this.state.withdrawal));
+
+
+    fetch(`http://api.evetradeforecaster.com/subscription/withdraw/${this.state.withdrawal}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({jwt: getAuthToken()})
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      console.log(res);
+    });
+
+    //store.dispatch(performWithdrawal(this.state.withdrawal));
 
     this.closeWithdrawalDialog();
   }

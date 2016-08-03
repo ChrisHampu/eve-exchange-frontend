@@ -27,7 +27,7 @@ export default function subscription(state = initialState, action) {
         return state;
       }
 
-      return { ...state, ...action.subscription, userID: action.id, balance: 500000000 };
+      return { ...state, ...action.subscription, userID: action.id };
 
     case "UPGRADE_PREMIUM":
 

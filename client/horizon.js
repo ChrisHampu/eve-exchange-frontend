@@ -59,6 +59,11 @@ export function hasAuthToken() {
 	return horizon.hasAuthToken();
 }
 
+export function getAuthToken() {
+
+  return authToken;
+}
+
 export function getAuthEndpoint() {
 	return new Promise((resolve, reject) => {
 		horizon.authEndpoint('eve_sso').subscribe((endpoint) => {
