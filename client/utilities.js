@@ -31,7 +31,7 @@ export function formatNumberUnit(num) {
     suffix = "K";
   }
 
-  num = num.toPrecision(4);
+  num = num.toFixed(2);
 
   return num.toString() + suffix;
 }
