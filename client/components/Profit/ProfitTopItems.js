@@ -36,7 +36,7 @@ class ProfitTopItems extends React.Component {
                   <TableRowColumn>No records available</TableRowColumn>
                 </TableRow>
                 :
-                this.props.profit.toplist.items.sort((el1, el2) => el1.totalProfit-el2.totalProfit).map((el, i) => {
+                this.props.profit.toplist.items.sort((el1, el2) => el2.totalProfit-el1.totalProfit).map((el, i) => {
                   return (
                     <TableRow key={i} selectable={false}>
                       <TableRowColumn>{el.name}</TableRowColumn>
