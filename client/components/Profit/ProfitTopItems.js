@@ -2,17 +2,55 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
-import DashboardPage from '../DashboardPage/DashboardPageComponent';
-
 import cx from 'classnames';
+import { formatNumberUnit } from '../../utilities';
 
-class ProfitComponent extends React.Component {
+import CircularProgress from 'material-ui/CircularProgress';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+
+class ProfitTopItems extends React.Component {
 
   render() {
-    return (
-      <DashboardPage title="Profit Report">
 
-      </DashboardPage>
+    return (
+      <div>
+      {
+        !this.props.profit.toplist.items ?
+          <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
+            <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
+          </div>
+          :
+          <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
+            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+              <TableRow selectable={false}>
+                <TableHeaderColumn style={{textAlign: "center"}}>Name</TableHeaderColumn>
+                <TableHeaderColumn style={{textAlign: "center"}}>Total Profit</TableHeaderColumn>
+                <TableHeaderColumn style={{textAlign: "center"}}>Avg/item</TableHeaderColumn>
+                <TableHeaderColumn style={{textAlign: "center"}}>Volume Sold</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={false}>
+            {
+              this.props.profit.toplist.items.length === 0 ?
+                <TableRow selectable={false}>
+                  <TableRowColumn>No records available</TableRowColumn>
+                </TableRow>
+                :
+                this.props.profit.toplist.items.sort((el1, el2) => el1.totalProfit-el2.totalProfit).map((el, i) => {
+                  return (
+                    <TableRow key={i} selectable={false}>
+                      <TableRowColumn>{el.name}</TableRowColumn>
+                      <TableRowColumn style={el.totalProfit > 0 ? {color: "#4CAF50", textAlign: "center"} : {color: "#F44336", textAlign: "center"}}>{formatNumberUnit(el.totalProfit)}</TableRowColumn>
+                      <TableRowColumn style={el.avgPerUnit > 0 ? {color: "#4CAF50", textAlign: "center"} : {color: "#F44336", textAlign: "center"}}>{formatNumberUnit(el.avgPerUnit)}</TableRowColumn>
+                      <TableRowColumn style={{textAlign: "center"}}>{el.quantity}</TableRowColumn>
+                    </TableRow>
+                  )
+                })
+            }
+            </TableBody>
+          </Table>
+      }
+      </div>
     );
   }
 }
@@ -21,4 +59,4 @@ const mapStateToProps = function(store) {
   return { profit: store.profit };
 }
 
-export default connect(mapStateToProps)(ProfitComponent);
+export default connect(mapStateToProps)(ProfitTopItems);

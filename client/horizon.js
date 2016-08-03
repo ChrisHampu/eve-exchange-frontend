@@ -179,6 +179,7 @@ function doHorizonSubscriptions() {
   horizon('profit_top_items').find({userID: userData.id}).watch().defaultIfEmpty().subscribe( profit => {
 
     if (!profit) {
+      store.dispatch(updateToplist({items: []}));
       return;
     }
 

@@ -154,23 +154,6 @@ class ChartContainer extends React.Component {
 
   increaseZoom() {
 
-    if (this.state.zoom >= this.state.zoomLevels.length-1) {
-      return;
-    }
-
-    this.setState({
-      zoom: this.state.zoom+1,
-      pageSize: this.state.zoomLevels[this.state.zoom+1]
-    }, () => {
-
-      this.update();
-
-      this.props.onChartChanged();
-    });
-  }
-
-  decreaseZoom() {
-
     if (this.state.zoom <= 0) {
       return;
     }
@@ -186,9 +169,26 @@ class ChartContainer extends React.Component {
     });
   }
 
+  decreaseZoom() {
+
+    if (this.state.zoom >= this.state.zoomLevels.length-1) {
+      return;
+    }
+
+    this.setState({
+      zoom: this.state.zoom+1,
+      pageSize: this.state.zoomLevels[this.state.zoom+1]
+    }, () => {
+
+      this.update();
+
+      this.props.onChartChanged();
+    });
+  }
+
   render() {
 
-    const data = this.props.data;
+    const data = this.props.data || [];
 
     return (
       <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%", width: "100%" }}>

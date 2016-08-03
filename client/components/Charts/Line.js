@@ -42,7 +42,7 @@ export default class Line extends React.Component {
     const el = this.props.data[hits.indexOf(hitX)];
 
     if (this.props.mouseOver) {
-      this.props.mouseOver(ev, { ...el, x: left, y: top }, el.profit ? "profit" : "market_area");
+      this.props.mouseOver(ev, { ...el, x: left, y: top }, el.profit !== undefined ? "profit" : "market_area");
     }
 
     this.setState({

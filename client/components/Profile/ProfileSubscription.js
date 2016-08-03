@@ -222,6 +222,15 @@ class Subscription extends React.Component {
       />,
     ];
 
+    let history = [];
+
+    if (this.props.subscription.deposit_history && this.props.subscription.withdrawal_history) {
+
+      history = this.props.subscription.deposit_history
+      .concat(this.props.subscription.withdrawal_history)
+      .sort((el1, el2) => el1.time - el2.time);
+    }
+
     return (
       <div className={s.root}>
         <Dialog
@@ -301,21 +310,23 @@ class Subscription extends React.Component {
                   <TableHeaderColumn>Type</TableHeaderColumn>
                   <TableHeaderColumn>Amount</TableHeaderColumn>
                   <TableHeaderColumn>Description</TableHeaderColumn>
+                  <TableHeaderColumn>Status</TableHeaderColumn>
                 </TableRow>
               </TableHeader>
               <TableBody displayRowCheckbox={false}>
-                <TableRow selectable={false}>
-                  <TableRowColumn>{(new Date()).toString()}</TableRowColumn>
-                  <TableRowColumn>Widthrawal</TableRowColumn>
-                  <TableRowColumn style={{color: "#F44336"}}>-{formatNumber(125000000)} ISK</TableRowColumn>
-                  <TableRowColumn>Subscription Fee</TableRowColumn>
-                </TableRow>
-                <TableRow selectable={false}>
-                  <TableRowColumn>{(new Date()).toString()}</TableRowColumn>
-                  <TableRowColumn>Deposit</TableRowColumn>
-                  <TableRowColumn style={{color: "#4CAF50"}}>+{formatNumber(125000000)} ISK</TableRowColumn>
-                  <TableRowColumn>Player Deposit</TableRowColumn>
-                </TableRow>
+              {
+                history.map(el => {
+                  return (
+                    <TableRow selectable={false}>
+                      <TableRowColumn>{el.time.toString()}</TableRowColumn>
+                      <TableRowColumn>{el.type===0?"Deposit":"Withdrawal"}</TableRowColumn>
+                      <TableRowColumn style={el.type===0?{color: "#4CAF50"}:{color: "#F44336"}}>{formatNumber(el.amount)} ISK</TableRowColumn>
+                      <TableRowColumn>{el.description}</TableRowColumn>
+                      <TableRowColumn>{el.process ? "Complete" : "In Progress"}</TableRowColumn>
+                    </TableRow>
+                  )
+                })
+              }
               </TableBody>
             </Table>
           </div>

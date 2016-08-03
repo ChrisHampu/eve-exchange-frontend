@@ -174,18 +174,6 @@ class MarketBrowserOrderTable extends React.Component {
   }
 }
 
-/*
-            this.getMarketOrders().filter(el => el.buy === true).sort((el1, el2) => el2.price - el1.price).slice(0, 20).map((el, i) => {
-              return (
-                <TableRow key={i} selectable={false} style={{height: "30px"}}>
-                  <TableRowColumn style={{height: "30px"}}>{stationIDToName[el.stationID] || "Citadel"}</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>{formatNumber(el.price)} ISK</TableRowColumn>
-                  <TableRowColumn style={{height: "30px"}}>{el.volume}</TableRowColumn>
-                </TableRow>
-              )
-            })
-            */
-
 const mapStateToProps = function(store) {
   return { market: store.market };
 }

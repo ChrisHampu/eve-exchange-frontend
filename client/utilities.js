@@ -6,10 +6,34 @@ const parseXml = Promise.promisify(parseString);
 
 // Formats a raw number with appropriate comma and decimal placement
 export function formatNumber(number) {
-    var _number = Math.round(number*Math.pow(10,2))/Math.pow(10,2);
-    var parts = _number.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
+
+  var _number = Math.round(number*Math.pow(10,2))/Math.pow(10,2);
+  var parts = _number.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return parts.join(".");
+}
+
+export function formatNumberUnit(num) {
+
+  let suffix = "";
+
+  if (num < 1000000000000 || num > 1000000000000) {
+    num /= 1000000000000;
+    suffix = "T";
+  } else if (num < 1000000000 || num > 1000000000) {
+    num /= 1000000000;
+    suffix = "B";
+  } else if (num < 1000000 || num > 1000000) {
+    num /= 1000000;
+    suffix = "M";
+  } else if (num < 1000 || num > 1000) {
+    num /= 1000;
+    suffix = "K";
+  }
+
+  num = num.toPrecision(4);
+
+  return num.toString() + suffix;
 }
 
 export function formatDate(date) {

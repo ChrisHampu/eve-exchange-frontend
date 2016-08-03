@@ -1,9 +1,7 @@
 
 const initialState = {
   toplist: [],
-  chart: {
-    hourly: []
-  }
+  chart: {}
 };
 
 export default function profit(state = initialState, action) {
