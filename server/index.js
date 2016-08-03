@@ -141,4 +141,4 @@ api.use(async ctx => {
   }
 });
 
-api.listen(config.api_port, () => console.log(chalk.green(`API server is listening on port ${config.api_port}`)));
+api.listen(config.verify_port, () => console.log(chalk.green(`API server is listening on port ${config.verify_port}`)));
