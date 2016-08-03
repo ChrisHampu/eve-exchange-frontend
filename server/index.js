@@ -1,4 +1,5 @@
 /* eslint-disable no-console, no-shadow */
+import "babel-polyfill";
 import path from 'path';
 import webpack from 'webpack';
 import Koa from 'koa';
