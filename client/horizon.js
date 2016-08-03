@@ -23,6 +23,7 @@ try {
 let userData = null;
 let currentSettings = null;
 let eveApiPulled = false;
+let authToken = null;
 
 if (hasAuthToken()) {
   horizon("users").fetch().subscribe(()=>{}, ()=>{}, ()=>{});
@@ -80,6 +81,8 @@ export function getCurrentUser() {
     }
 
     horizon.currentUser().fetch().subscribe( async (user) => {
+
+      authToken = horizon.utensils.handshake.value.token;
 
       user.id = user.user_id || user.info;
 
