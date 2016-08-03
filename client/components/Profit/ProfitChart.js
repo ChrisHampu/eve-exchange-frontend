@@ -12,6 +12,8 @@ import Line from '../Charts/Line';
 import Tooltip from '../Charts/Tooltip';
 import Scrollbar from '../Charts/Scrollbar';
 
+import CircularProgress from 'material-ui/CircularProgress';
+
 class ProfitChart extends React.Component {
 
   static propTypes = {
@@ -121,11 +123,17 @@ class ProfitChart extends React.Component {
     const width = this.refs.container ? this.refs.container.getWidth() : 0;
     const height = this.refs.container ? this.refs.container.getHeight() : 0;
 
+    if (!data) {
+
+      return (
+        <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
+          <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
+        </div>
+      )
+    }
+
     return (
       <div>
-      {
-        !data ? <div>Profit chart is currently unavailable</div>
-        :
         <ChartContainer frequencyLevels={{hours: "1 Hour"}} marginLeft={65} marginRight={65} ref="container" data={data} title={this.props.title} onChartChanged={()=>this.chartChanged()}>
           <Axis anchor="left" scale={this.state.profitScale} ticks={5} formatISK={true} />
           <Axis anchor="right" scale={this.state.taxScale} ticks={5} style={{transform: `translateX(${width}px)`}} formatISK={true} />
@@ -141,7 +149,6 @@ class ProfitChart extends React.Component {
           <text transform={`translate(-55,-60)rotate(270 0 ${Math.round(height/2)})`} fill="#4CAF50" fontSize="20" x="0" y={Math.round(height/2)} textAnchor="end" alignmentBaseline="middle">Profit</text>
           <text transform={`translate(+55,-40)rotate(90 ${width} ${Math.round(height/2)})`} fill="#F44336" fontSize="20" x={width} y={Math.round(height/2)} textAnchor="end" alignmentBaseline="middle">Taxes</text>
         </ChartContainer>
-      }
      </div>
     );
   }

@@ -1,7 +1,9 @@
 
 const initialState = {
   toplist: [],
-  chart: {}
+  chart:{
+    hourly: null
+  }
 };
 
 export default function profit(state = initialState, action) {

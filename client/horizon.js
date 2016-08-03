@@ -165,8 +165,6 @@ function doHorizonSubscriptions() {
   // 24 hour profit chart
   horizon('profit_chart').order('time', 'descending').findAll({userID: userData.id}).limit(24).watch().defaultIfEmpty().subscribe( profit => {
 
-    console.log("profit", profit);
-
     if (!profit) {
       return;
     }
