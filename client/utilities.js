@@ -17,8 +17,6 @@ export function formatNumberUnit(num) {
 
   let suffix = "";
 
-  console.log(num, num < -1000000000000, num > 1000000000000);
-
   if (num < -1000000000000 || num > 1000000000000) {
     num /= 1000000000000;
     suffix = "T";
