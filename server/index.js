@@ -4,6 +4,7 @@ import webpack from 'webpack';
 import Koa from 'koa';
 import mount from 'koa-mount';
 import convert from 'koa-convert';
+import body from 'koa-body';
 import serve from 'koa-static';
 import historyApiFallback from 'koa-history-api-fallback';
 import express from 'express';
@@ -13,6 +14,7 @@ import webpackConfig from '../webpack.config';
 import config from './config/environment';
 import horizon from '../horizon/server/src/horizon';
 import eve_sso from './core/eve_sso';
+import jwt from 'jsonwebtoken';
 
 console.log(`Using API key ${config.eve.key_id}:${config.eve.key_secret}`);
 
@@ -38,7 +40,7 @@ if (config.env === 'development') {
 
     const horizon_server = horizon(http_server, {
     auth: {
-      token_secret: 'my_super_secret_secret'
+      token_secret: config.horizon.secret_key
     },
     project_name: config.horizon.project_name,
     auto_create_collection: true,
@@ -65,7 +67,7 @@ if (config.env === 'development') {
 
   const horizon_server = horizon(http_server, {
     auth: {
-      token_secret: 'my_super_secret_secret'
+      token_secret: config.horizon.secret_key
     },
     project_name: config.horizon.project_name,
     auto_create_collection: true,
@@ -81,3 +83,61 @@ if (config.env === 'development') {
     secret: config.eve.key_secret,
   });
 }
+
+const api = new Koa();
+
+api.use(body());
+
+api.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    ctx.body = { message: err.message };
+    ctx.status = err.status || 500;
+  }
+});
+
+api.use(async ctx => {
+  
+  if (!ctx.is('application/json')) {
+    console.log("is");
+    ctx.throw(404);
+    return;
+  }
+
+  if (ctx.request.path !== "/verify") {
+    console.log("path");
+    ctx.throw(404);
+    return;
+  }
+
+  if (ctx.request.method !== "POST") {
+    console.log("method");
+    ctx.throw(404);
+    return;
+  }
+
+  if (!ctx.request.body) {
+    console.log("body");
+    ctx.throw(404);
+    return;
+  }
+
+  if (!ctx.request.body.jwt) {
+    console.log("jwt");
+    ctx.throw(404);
+    return;
+  }
+
+  try {
+    ctx.body = {
+      jwt: jwt.verify(ctx.request.body.jwt, config.horizon.secret_key, { algorithms: [ 'HS512' ] })
+    };
+  } catch(err) {
+    ctx.body = {
+      error: err
+    };
+  }
+});
+
+api.listen(config.api_port, () => console.log(chalk.green(`API server is listening on port ${config.api_port}`)));

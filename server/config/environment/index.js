@@ -3,12 +3,14 @@ import _ from 'lodash';
 
 const config = {
   env: process.env.NODE_ENV || 'development',
+  api_port: process.env.API_PORT || 3001,
   port: process.env.PORT || 3000,
   horizon: {
     project_name: process.env.HORIZON_NAME || 'horizon_test',
     permissions: process.env.HORIZON_PERMISSIONS || true,
     rdb_host: process.env.HORIZON_RDB_HOST || 'localhost',
-    rdb_port: process.env.HORIZON_RDB_PORT || '28015'
+    rdb_port: process.env.HORIZON_RDB_PORT || '28015',
+    secret_key: process.env.HORIZON_SECRET || 'my_super_secret_key_key'
   },
   eve: {
     key_id: process.env.EVE_KEY_ID || '56e9bfbd864f4e7fbc68c64dd71675f4',
