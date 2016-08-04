@@ -17,6 +17,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const PremiumPrice = 125000000;
 
@@ -239,13 +240,24 @@ class Subscription extends React.Component {
       />,
     ];
 
-    let history = [];
+    let history = null;
 
     if (this.props.subscription.deposit_history && this.props.subscription.withdrawal_history) {
 
       history = this.props.subscription.deposit_history
       .concat(this.props.subscription.withdrawal_history)
       .sort((el1, el2) => el2.time - el1.time);
+
+      switch(this.state.subFilter) {
+        case 0:
+        break;
+        case 1:
+        history = history.filter(el => el.type === 0);
+        break;
+        case 2:
+        history = history.filter(el => el.type === 1);
+        break;
+      }
     }
 
     return (
@@ -320,32 +332,44 @@ class Subscription extends React.Component {
             </div>
           </div>
           <div className={s.subscription_history_table}>
-            <Table selectable={false}>
-              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow selectable={false}>
-                  <TableHeaderColumn>Date</TableHeaderColumn>
-                  <TableHeaderColumn>Type</TableHeaderColumn>
-                  <TableHeaderColumn>Amount</TableHeaderColumn>
-                  <TableHeaderColumn>Description</TableHeaderColumn>
-                  <TableHeaderColumn>Status</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-              {
-                history.map(el => {
-                  return (
+          {
+            !history ? 
+              <div style={{display: "flex", alignItems: "center", width: "100%", height: "100px"}}>
+                <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
+              </div>
+              :
+              <Table selectable={false}>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                  <TableRow selectable={false}>
+                    <TableHeaderColumn>Date</TableHeaderColumn>
+                    <TableHeaderColumn>Type</TableHeaderColumn>
+                    <TableHeaderColumn>Amount</TableHeaderColumn>
+                    <TableHeaderColumn>Description</TableHeaderColumn>
+                    <TableHeaderColumn>Status</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                {
+                  history.length === 0 ? 
                     <TableRow selectable={false}>
-                      <TableRowColumn>{el.time.toString()}</TableRowColumn>
-                      <TableRowColumn>{el.type===0?"Deposit":"Withdrawal"}</TableRowColumn>
-                      <TableRowColumn style={el.type===0?{color: "#4CAF50"}:{color: "#F44336"}}>{formatNumber(el.amount)} ISK</TableRowColumn>
-                      <TableRowColumn>{el.description}</TableRowColumn>
-                      <TableRowColumn>{el.process ? "Complete" : "In Progress"}</TableRowColumn>
+                      <TableRowColumn>No records available</TableRowColumn>
                     </TableRow>
-                  )
-                })
-              }
-              </TableBody>
-            </Table>
+                    :
+                    history.map((el, i) => {
+                      return (
+                        <TableRow key={i} selectable={false}>
+                          <TableRowColumn>{el.time.toString()}</TableRowColumn>
+                          <TableRowColumn>{el.type===0?"Deposit":"Withdrawal"}</TableRowColumn>
+                          <TableRowColumn style={el.type===0?{color: "#4CAF50"}:{color: "#F44336"}}>{formatNumber(el.amount)} ISK</TableRowColumn>
+                          <TableRowColumn>{el.description}</TableRowColumn>
+                          <TableRowColumn>{el.process ? "Complete" : "In Progress"}</TableRowColumn>
+                        </TableRow>
+                      )
+                    })
+                }
+                </TableBody>
+              </Table>
+          }
           </div>
         </div>
       </div>
