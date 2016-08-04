@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { select, axisLeft, axisBottom, axisRight } from '../../d3.js';
 import s from './Axis.scss';
 import cx from 'classnames';
+import { formatNumberUnit } from '../../utilities';
 
 export default class Axis extends React.Component {
 
@@ -62,22 +63,8 @@ export default class Axis extends React.Component {
           const text = children[i].children[1].innerHTML;
 
           let num = parseInt(text.replace(/,/g, ""));
-          let suffix = "";
 
-          if (num > 1000000000) {
-            num /= 1000000000;
-            suffix = "B";
-          } else if (num > 1000000) {
-            num /= 1000000;
-            suffix = "M";
-          } else if (num > 1000) {
-            num /= 1000;
-            suffix = "K";
-          }
-
-          num = num.toPrecision(4);
-
-          children[i].children[1].innerHTML = num.toString() + suffix;
+          children[i].children[1].innerHTML = formatNumberUnit(num);
         }
         
       }

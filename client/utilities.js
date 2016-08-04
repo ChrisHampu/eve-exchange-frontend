@@ -33,7 +33,7 @@ export function formatNumberUnit(num) {
 
   num = num.toFixed(2);
 
-  return num.toString() + suffix;
+  return num.toString().replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1') + suffix;
 }
 
 export function formatDate(date) {
