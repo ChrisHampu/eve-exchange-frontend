@@ -7,6 +7,7 @@ import LoginComponent from '../components/Login/LoginComponent';
 import DashboardComponent from '../components/Dashboard/DashboardComponent';
 import ProfileComponent from '../components/Profile/ProfileComponent';
 import ProfileSubscription from '../components/Profile/ProfileSubscription';
+import ProfileSubscriptionHistory from '../components/Profile/ProfileSubscriptionHistory';
 import ProfileSettings from '../components/Profile/ProfileSettings';
 import ProfileAPIKey from '../components/Profile/ProfileAPIKey';
 import AdminComponent from '../components/Admin/AdminComponent';
@@ -27,6 +28,7 @@ export default (
       <Route path="dashboard" component={DashboardComponent} onEnter={requireAccess("standard")}>
         <Route path="profile" components={{main: ProfileComponent}}>
           <Route path="subscription" component={ProfileSubscription} />
+          <Route path="history" component={ProfileSubscriptionHistory} />
           <Route path="settings" component={ProfileSettings} />
           <Route path="apikey" component={ProfileAPIKey} />
         </Route>

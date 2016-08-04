@@ -1,0 +1,34 @@
+
+.root {
+  hr {
+    margin: 0 !important;
+  }
+}
+
+.subscription_history {
+  margin-bottom: 1.5rem;
+
+  .subscription_history_header {
+    background-color: #1e2327;
+    padding: 1rem;
+
+    .subscription_history_selector {
+      margin-left: 1.5rem;
+      display: inline-block;
+    }
+
+    .subscription_history_title {
+      display: inline-block;
+      //margin-left: 1.5rem;
+      color: #eba91b;
+      font-weight: 300;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+  }
+  .subscription_history_table {
+    table {
+      background-color: rgb(40, 46, 51) !important;
+    }
+  }
+}
