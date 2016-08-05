@@ -23,7 +23,9 @@ class ChartContainer extends React.Component {
     title: React.PropTypes.string,
     onChartChanged: React.PropTypes.func.isRequired,
     marginRight: React.PropTypes.number,
-    marginLeft: React.PropTypes.number
+    marginLeft: React.PropTypes.number,
+    getHitTestableData: React.PropTypes.func.isRequired,
+    getTooltipPresentation: React.PropTypes.func.isRequired
   };
 
   static childContextTypes = {
@@ -118,11 +120,6 @@ class ChartContainer extends React.Component {
     return this.state.pageSize;
   }
 
-  handleMouseOver(ev, item, presentation) {
-
-    this.refs.tooltip.showTooltip(ev, item, presentation);
-  }
-
   handleMouseOut(ev) {
 
     this.refs.tooltip.hideTooltip();
@@ -139,6 +136,37 @@ class ChartContainer extends React.Component {
       this.props.onChartChanged();
     });
   };
+
+  handleMouseMove(ev) {
+
+    const top = ev.clientY - ev.currentTarget.getScreenCTM().f;
+    const left = ev.clientX - ev.currentTarget.getScreenCTM().e;
+
+    if (left < this.state.margin.left || left > this.state.width + this.state.margin.left 
+      || top < this.state.margin.top || top > this.state.height + this.state.margin.top) {
+      this.refs.tooltip.hideTooltip();
+      return;
+    }
+
+    const adjustedLeft = left - this.state.margin.left;
+
+    const testable = this.props.getHitTestableData();
+    const hits = testable;
+
+    if (hits.length === 0) {
+      return;
+    }
+
+    const hitX = hits
+      .reduce((prev,cur) => {
+        return (Math.abs(cur - adjustedLeft) < Math.abs(prev -adjustedLeft) ? cur : prev);
+    });
+      
+    const el = this.props.data[hits.indexOf(hitX)];
+    const presentation = this.props.getTooltipPresentation(el);
+
+    this.refs.tooltip.showTooltip(left, top-presentation.offset, presentation.view);
+  }
 
   handleScrollChange(scroll) {
 
@@ -239,7 +267,7 @@ class ChartContainer extends React.Component {
                 <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
               </div>
               :
-              <svg width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
+              <svg onMouseMove={(ev) => this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()} width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
                 <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
                   {this.props.children}
                 </g>

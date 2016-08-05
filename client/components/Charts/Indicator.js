@@ -42,7 +42,7 @@ export default class Indicator extends React.Component {
       {
         this.props.data.map((el, i) => {
           return (
-            <Circle data={el} mouseOver={this.props.mouseOver} mouseOut={this.props.mouseOut} key={i} cx={this.props.xScale(this.props.xAccessor(el))} cy={this.props.yScale(this.props.yAccessor(el))} r={5} />
+            <Circle data={el} key={i} cx={this.props.xScale(this.props.xAccessor(el))} cy={this.props.yScale(this.props.yAccessor(el))} r={5} />
           );
         })
       }

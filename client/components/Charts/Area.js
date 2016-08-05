@@ -26,40 +26,6 @@ export default class Area extends React.Component {
     };
   }
 
-  handleMouseOver(ev) {
-
-    const top = ev.clientY - ev.currentTarget.getScreenCTM().f;
-    const left = ev.clientX - ev.currentTarget.getScreenCTM().e;
-
-    const hits = this.props.data.map(el => this.props.xScale(this.props.xAccessor(el)));
-
-    const hitX = hits
-      .reduce((prev,cur) => {
-        return (Math.abs(cur - left) < Math.abs(prev - left) ? cur : prev);
-    });
-      
-    const el = this.props.data[hits.indexOf(hitX)];
-
-    if (this.props.mouseOver) {
-      this.props.mouseOver(ev, { ...el, x: left, y: top }, el.profit !== undefined ? "profit" : "market_area");
-    }
-
-    this.setState({
-      closestPoint: el
-    });
-  }
-
-  handleMouseOut() {
-
-    if (this.props.mouseOut) {
-      this.props.mouseOut();
-    }
-
-    this.setState({
-      closestPoint: null
-    });
-  }
-
   render() {
 
     if (!this.props.viewportHeight) {
@@ -93,8 +59,6 @@ export default class Area extends React.Component {
         <path
           d={path}
           fill="url(#linear)"
-          onMouseMove={(ev)=>{this.handleMouseOver(ev);}}
-          onMouseOut={(ev)=>{this.handleMouseOut();}}
         />
         <path
           d={linepath}
@@ -113,8 +77,6 @@ export default class Area extends React.Component {
               cy={this.props.yScale(this.props.yAccessor(el))}
               r={this.state.closestPoint === el ? 8 : 5}
               style={{transition: "r 350ms ease-in-out"}}
-              mouseOver={(ev)=>{this.handleMouseOver(ev);}}
-              mouseOut={(ev)=>{this.handleMouseOut();}}
             />
           );
         })

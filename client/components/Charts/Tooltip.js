@@ -20,12 +20,13 @@ export default class Tooltip extends React.Component {
       tooltipItem: null,
       tooltipX: 0,
       tooltipY: 0,
-      tooltipPresentation: ""
+      tooltipPresentation: null
     }
   }
 
-  showTooltip(ev, item, presentation) {
+  showTooltip(x, y, presentation) {
 
+    /*
     let x = 0;
     let y = 0;
 
@@ -39,12 +40,12 @@ export default class Tooltip extends React.Component {
       x = (ev.currentTarget.x ? ev.currentTarget.x.baseVal.value : ev.currentTarget.x1.baseVal.value) + this.props.margin.left + (ev.currentTarget.width ? ev.currentTarget.width.baseVal.value / 2 : 0);
       y = (ev.currentTarget.y ? ev.currentTarget.y.baseVal.value : ev.currentTarget.y1.baseVal.value) - (presentation === "volume" ? 15 : 35);
     }
-
+    */
     this.setState({
       tooltipUpdated: true,
       tooltipUninteractive: false,
       tooltipVisible: false,
-      tooltipItem: item,
+      tooltipItem: null,
       tooltipX: x,
       tooltipY: y,
       tooltipPresentation: presentation
@@ -83,12 +84,13 @@ export default class Tooltip extends React.Component {
 
   render() {
 
-    if (!this.state.tooltipItem) {
+    if (!this.state.tooltipPresentation) {
       return <div />;
     }
 
-    let contents = null;
+    let contents = this.state.tooltipPresentation || "Loading";
 
+    /*
     switch(this.state.tooltipPresentation) {
 
       case "volume":
@@ -139,6 +141,7 @@ export default class Tooltip extends React.Component {
         );
         break;
     }
+    */
 
     return (
       <div 

@@ -13,7 +13,7 @@ class ProfitTopItems extends React.Component {
   render() {
 
     return (
-      <div>
+      <div style={{marginBottom: "2rem"}}>
       {
         !this.props.profit.toplist.items ?
           <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>

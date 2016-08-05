@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { scaleTime, scaleLinear, timeHour, timeMinute, timeDay } from '../../d3.js';
+import { formatNumber } from '../../utilities';
 
 import ChartContainer from '../Charts/ChartContainer';
 import BarChartData from '../Charts/BarChartData';
@@ -80,6 +81,11 @@ class ProfitChart extends React.Component {
     return this.props.profit.chart.hourly;
   }
 
+  getHitTestableData() {
+
+    return this.props.profit.chart.hourly.map(el => this.state.xScale(el.time));
+  }
+
   componentDidMount() {
 
     this.updateScales();
@@ -97,16 +103,6 @@ class ProfitChart extends React.Component {
     this.updateScales();
   }
 
-  handleMouseOver(ev, item, presentation) {
-
-    this.refs.container.handleMouseOver(ev, item, presentation);
-  }
-
-  handleMouseOut(ev) {
-
-    this.refs.container.handleMouseOut(ev);
-  }
-
   setFrequency = (event, index, value) => {
 
     this.refs.container.setFrequency(event, index, value);
@@ -115,6 +111,18 @@ class ProfitChart extends React.Component {
   handleScrollChange(scroll) {
 
     this.refs.container.handleScrollChange(scroll);
+  }
+
+  getTooltipPresentation(el) {
+    return { 
+      view: 
+        <div>
+          Profit: {formatNumber(el.profit)}<br />
+          Taxes: {formatNumber(el.taxes)}<br />
+          Broker: {formatNumber(el.broker)}<br />
+        </div>,
+      offset: 30
+    }
   }
 
   render() {
@@ -134,7 +142,17 @@ class ProfitChart extends React.Component {
 
     return (
       <div>
-        <ChartContainer frequencyLevels={{hours: "1 Hour"}} marginLeft={65} marginRight={65} ref="container" data={data} title={this.props.title} onChartChanged={()=>this.chartChanged()}>
+        <ChartContainer
+          frequencyLevels={{hours: "1 Hour"}}
+          marginLeft={65}
+          marginRight={65}
+          ref="container"
+          data={data}
+          title={this.props.title}
+          onChartChanged={()=>this.chartChanged()}
+          getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
+          getHitTestableData={()=>this.getHitTestableData()} 
+        >
           <Axis anchor="left" scale={this.state.profitScale} ticks={5} formatISK={true} />
           <Axis anchor="right" scale={this.state.taxScale} ticks={5} style={{transform: `translateX(${width}px)`}} formatISK={true} />
           <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />

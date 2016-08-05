@@ -45,31 +45,11 @@ export default class Bar extends React.Component {
     this.update();
   }
 
-  handleMouseOver(ev) {
-
-    this.props.mouseOver(ev, { volume: this.props.yValue }, "volume");
-
-    this.setState({
-      mouseOver: true,
-      fill: "rgb(145, 234, 255)"
-    });
-  }
-
-  handleMouseOut() {
-
-    this.props.mouseOut();
-
-    this.setState({
-      mouseOver: false,
-      fill: "#59c8e2"
-    });
-  }
-
   render() {
 
     return (
       <g>
-        <rect onMouseOver={(ev)=>{ this.handleMouseOver(ev); }} onMouseOut={()=>{ this.handleMouseOut(); }} x={this.state.cx} y={this.state.cy} width={this.state.barWidth} height={this.state.barHeight} fill={this.state.fill} />
+        <rect x={this.state.cx} y={this.state.cy} width={this.state.barWidth} height={this.state.barHeight} fill={this.state.fill} />
       </g>
     )
   }

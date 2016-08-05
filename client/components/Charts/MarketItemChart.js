@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { scaleTime, scaleLinear, timeHour, timeMinute, timeDay } from '../../d3.js';
+import { formatNumber } from '../../utilities';
 
 import ChartContainer from './ChartContainer';
 import BarChartData from './BarChartData';
@@ -58,7 +59,7 @@ class MarketItemChart extends React.Component {
 
     this.state.yScale.domain([Math.min(...data.map((el) => { return el.buyFifthPercentile})), Math.max(...data.map((el) => { return el.buyFifthPercentile}))]);
 
-    this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.buyVolume}))*0.95), Math.ceil(Math.max(...data.map((el) => { return el.buyVolume}))*1.05)]);
+    this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0}))), Math.ceil(Math.max(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0})))]);
 
     this.state.percentScale.domain([0, 1]);
 
@@ -143,19 +144,14 @@ class MarketItemChart extends React.Component {
     return 0;
   }
 
+  getHitTestableData() {
+
+    return this.getAggregateData().map(el => this.state.xScale(el.time));
+  }
+
   chartChanged() {
 
     this.updateScales();
-  }
-
-  handleMouseOver(ev, item, presentation) {
-
-    this.refs.container.handleMouseOver(ev, item, presentation);
-  }
-
-  handleMouseOut(ev) {
-
-    this.refs.container.handleMouseOut(ev);
   }
 
   setFrequency = (event, index, value) => {
@@ -168,6 +164,19 @@ class MarketItemChart extends React.Component {
     this.refs.container.handleScrollChange(scroll);
   }
 
+  getTooltipPresentation(el) {
+    return { 
+      view: 
+        <div>
+          Buy: {formatNumber(el.buyFifthPercentile)}<br />
+          Sell: {formatNumber(el.sellFifthPercentile)}<br />
+          Spread: {Math.round(el.spread*Math.pow(10,2))/Math.pow(10,2)}%<br />
+          Volume: {formatNumber(el.tradeVolume || 0)}
+        </div>,
+      offset: 30
+    }
+  }
+
   render() {
 
     const data = this.getAggregateData();
@@ -175,7 +184,14 @@ class MarketItemChart extends React.Component {
     const height = this.refs.container ? this.refs.container.getHeight() : 0;
 
     return (
-      <ChartContainer frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour"}} ref="container" data={data} title={this.props.title} onChartChanged={()=>this.chartChanged()}>
+      <ChartContainer 
+        getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
+        getHitTestableData={()=>this.getHitTestableData()} 
+        frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour"}} 
+        ref="container" data={data} 
+        title={this.props.title} 
+        onChartChanged={()=>this.chartChanged()}
+      >
         <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
         <Axis anchor="left" scale={this.state.yScale} ticks={5} formatISK={true} />
         <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} formatISK={true} />
@@ -183,9 +199,9 @@ class MarketItemChart extends React.Component {
         {
           data.length > 0 ?
           <g>
-            <Area mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={this.state.ohlcHeight} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyFifthPercentile} />
-            <BarChartData mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={data} heightOffset={this.state.volHeight} viewportWidth={width} viewportHeight={height} xScale={this.state.xScale} yScale={this.state.volScale} />
-            <Indicator mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />
+            <Area viewportHeight={this.state.ohlcHeight} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyFifthPercentile} />
+            <BarChartData data={data} heightOffset={this.state.volHeight} viewportWidth={width} viewportHeight={height} xScale={this.state.xScale} yScale={this.state.volScale} />
+            <Indicator data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />
             <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
           </g> : false
         }
