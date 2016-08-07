@@ -1,5 +1,5 @@
 import store from './store';
-import { setAggregateMinuteData, setAggregateHourlyData, setOrderData } from './actions/marketActions';
+import { setAggregateMinuteData, setAggregateHourlyData, setAggregateDailyData, setOrderData } from './actions/marketActions';
 import horizon from './horizon';
 import fuzzy from 'fuzzy';
 import marketGroups from './sde/market_groups'
@@ -18,8 +18,9 @@ export function subscribeItem(id, region) {
 		console.log("Subscribing to " + id);
 
 		let minuteSubscription = null;
-    let hourSubscription = null;
+        let hourSubscription = null;
 		let orderSubscription = null;
+		let dailySubscription = null;
 
 		try {
 			minuteSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(2016).watch().defaultIfEmpty().subscribe(data => {
@@ -37,20 +38,35 @@ export function subscribeItem(id, region) {
 				store.dispatch(setAggregateMinuteData(id, data));
 			});
 
-      hourSubscription = horizon('aggregates_hourly').order('time', 'descending').findAll({type: parseInt(id)}).limit(168).watch().defaultIfEmpty().subscribe(data => {
+      		hourSubscription = horizon('aggregates_hourly').order('time', 'descending').findAll({type: parseInt(id)}).limit(168).watch().defaultIfEmpty().subscribe(data => {
 
-        // Generate the 'open' data
-        // Also
-        // Data is ordered specifically to retrieve the newest records from the database
-        // But must be reversed into old -> new ordering for displaying on charts
+	        // Generate the 'open' data
+	        // Also
+	        // Data is ordered specifically to retrieve the newest records from the database
+	        // But must be reversed into old -> new ordering for displaying on charts
 
-        if (!data) {
-          console.log("Error subscribing to aggregates for " + id);
-          return;
-        }
+	        if (!data) {
+	          console.log("Error subscribing to aggregates for " + id);
+	          return;
+	        }
 
-        store.dispatch(setAggregateHourlyData(id, data));
-      });
+	        store.dispatch(setAggregateHourlyData(id, data));
+	      });
+
+      		dailySubscription = horizon('aggregates_daily').order('time', 'descending').findAll({type: parseInt(id)}).watch().defaultIfEmpty().subscribe(data => {
+
+	        // Generate the 'open' data
+	        // Also
+	        // Data is ordered specifically to retrieve the newest records from the database
+	        // But must be reversed into old -> new ordering for displaying on charts
+
+	        if (!data) {
+	          console.log("Error subscribing to aggregates for " + id);
+	          return;
+	        }
+
+	        store.dispatch(setAggregateDailyData(id, data));
+	      });
 		} catch(e) {
 			console.log(e);
 		}
@@ -74,7 +90,8 @@ export function subscribeItem(id, region) {
 			id,
 			region,
 			minuteSubscription,
-      hourSubscription,
+      		hourSubscription,
+      		dailySubscription,
 			orderSubscription
 		});
 	};
@@ -90,7 +107,8 @@ export function unsubscribeItem(id, region) {
 	if (idx !== -1) {
 
 		subscriptions[idx].minuteSubscription.unsubscribe();
-    subscriptions[idx].hourSubscription.unsubscribe();
+    	subscriptions[idx].hourSubscription.unsubscribe();
+    	subscriptions[idx].dailySubscription.unsubscribe();
 		subscriptions[idx].orderSubscription.unsubscribe();
 		subscriptions.splice(idx, 1);
 	}

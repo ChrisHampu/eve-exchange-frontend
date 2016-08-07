@@ -123,6 +123,13 @@ class MarketItemChart extends React.Component {
             return arr;
           }
           return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
+        case "daily":
+          var arr = this.props.market.region[0].item[this.props.item.id].daily || [];
+          var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
+          if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
+            return arr;
+          }
+          return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
       }
     }
 
@@ -138,6 +145,8 @@ class MarketItemChart extends React.Component {
           return this.props.market.region[0].item[this.props.item.id].minutes ? this.props.market.region[0].item[this.props.item.id].minutes.length : 0;
         case "hours":
           return this.props.market.region[0].item[this.props.item.id].hours ? this.props.market.region[0].item[this.props.item.id].hours.length : 0;
+        case "daily":
+          return this.props.market.region[0].item[this.props.item.id].daily ? this.props.market.region[0].item[this.props.item.id].daily.length : 0;
       }
     }
 
@@ -187,7 +196,7 @@ class MarketItemChart extends React.Component {
       <ChartContainer 
         getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
         getHitTestableData={()=>this.getHitTestableData()} 
-        frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour"}} 
+        frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour", daily: "1 Day"}} 
         ref="container" data={data} 
         title={this.props.title} 
         onChartChanged={()=>this.chartChanged()}

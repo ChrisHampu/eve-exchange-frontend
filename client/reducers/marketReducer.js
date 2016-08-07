@@ -55,6 +55,23 @@ export default function market(state = { region: {} }, action) {
 
       return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], hours: action.data } }}  } };
 
+    case "SET_AGGREGATE_DAILY_DATA":
+      if (!action.data || !action.id) {
+        return state;
+      }
+
+      if ( typeof state.region[0] === 'undefined' || state.region[0].item.length === 0) {
+
+        return { ...state, region: { ...state.region, 0: { item: { [action.id]: { daily: action.data } } } } };
+      }
+
+      if ( typeof state.region[0].item[action.id] === 'undefined') {
+
+        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { orders: [], daily: action.data } }}  } };
+      }
+
+      return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], daily: action.data } }}  } };
+
     case "SET_ORDER_DATA":
       if (!action.data || !action.id) {
         return state;
