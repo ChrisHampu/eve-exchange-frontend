@@ -42,6 +42,10 @@ class MarketItemChart extends React.Component {
 
     const data = this.getAggregateData();
 
+    if (!data) {
+      return;
+    }
+
     this.state.ohlcHeight = Math.floor(this.refs.container.getHeight()*0.70);
     this.state.ohlcOffset = Math.floor(this.refs.container.getHeight()*0.75);
     this.state.volHeight = Math.floor(this.refs.container.getHeight()*0.25);
@@ -103,28 +107,37 @@ class MarketItemChart extends React.Component {
 
     // Check if still loading components
     if (!this.refs.container) {
-      return [];
+      return null;
     }
 
     if (typeof this.props.market.region[0] !== 'undefined' && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined') {
 
       switch(this.refs.container.getFrequency()) {
         case "minutes":
-          var arr = this.props.market.region[0].item[this.props.item.id].minutes || [];
+          var arr = this.props.market.region[0].item[this.props.item.id].minutes;
+          if (!arr) {
+            return null;
+          }
           var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
           if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
             return arr;
           }
           return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
         case "hours":
-          var arr = this.props.market.region[0].item[this.props.item.id].hours || [];
+          var arr = this.props.market.region[0].item[this.props.item.id].hours;
+          if (!arr) {
+            return null;
+          }
           var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
           if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
             return arr;
           }
           return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
         case "daily":
-          var arr = this.props.market.region[0].item[this.props.item.id].daily || [];
+          var arr = this.props.market.region[0].item[this.props.item.id].daily;
+          if (!arr) {
+            return null;
+          }
           var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
           if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
             return arr;
@@ -133,7 +146,7 @@ class MarketItemChart extends React.Component {
       }
     }
 
-    return [];
+    return null;
   }
 
   getDataSize() {
@@ -155,7 +168,13 @@ class MarketItemChart extends React.Component {
 
   getHitTestableData() {
 
-    return this.getAggregateData().map(el => this.state.xScale(el.time));
+    const data = this.getAggregateData();
+
+    if (!data) { 
+      return [];
+    }
+
+    return data.map(el => this.state.xScale(el.time));
   }
 
   chartChanged() {
@@ -197,7 +216,8 @@ class MarketItemChart extends React.Component {
         getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
         getHitTestableData={()=>this.getHitTestableData()} 
         frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour", daily: "1 Day"}} 
-        ref="container" data={data} 
+        ref="container"
+        data={data} 
         title={this.props.title} 
         onChartChanged={()=>this.chartChanged()}
       >
@@ -206,7 +226,7 @@ class MarketItemChart extends React.Component {
         <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} formatISK={true} />
         <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${width}px)`}} format="%" />
         {
-          data.length > 0 ?
+          data && data.length > 0 ?
           <g>
             <Area viewportHeight={this.state.ohlcHeight} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyFifthPercentile} />
             <BarChartData data={data} heightOffset={this.state.volHeight} viewportWidth={width} viewportHeight={height} xScale={this.state.xScale} yScale={this.state.volScale} />

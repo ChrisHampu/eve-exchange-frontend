@@ -174,6 +174,9 @@ function doHorizonSubscriptions() {
   horizon('profit_chart').order('time', 'descending').findAll({userID: userData.id}).limit(175).watch().defaultIfEmpty().subscribe( profit => {
 
     if (!profit) {
+
+      store.dispatch(updateHourlyChart([]));
+      store.dispatch(updateDailyChart([]));
       return;
     }
 

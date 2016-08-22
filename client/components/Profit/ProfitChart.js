@@ -19,7 +19,6 @@ class ProfitChart extends React.Component {
 
   static propTypes = {
 
-    item: React.PropTypes.object,
     title: React.PropTypes.string
   };
 
@@ -41,7 +40,11 @@ class ProfitChart extends React.Component {
 
     let timePadding = 60000;
 
-    const data = this.getChartData() || [];
+    const data = this.getChartData();
+
+    if (!data) {
+      return;
+    }
 
     const minDate = new Date(Math.min(...data.map((el) => { return el.time; })));
     const maxDate = new Date(Math.max(...data.map((el) => { return el.time; })));
@@ -75,29 +78,30 @@ class ProfitChart extends React.Component {
       taxScale: this.state.taxScale
     });
   }
-  /*
-  getChartData() {
 
-    return this.props.profit.chart.hourly;
-  }
-  */
   getChartData() {
 
     // Check if still loading components
     if (!this.refs.container) {
-      return [];
+      return null;
     }
 
     switch(this.refs.container.getFrequency()) {
       case "hours":
-        var arr = this.props.profit.chart.hourly || [];
+        var arr = this.props.chart.hourly;
+        if (!arr) {
+          return null;
+        }
         var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
         if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
           return arr;
         }
         return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
       case "days":
-        var arr = this.props.profit.chart.daily || [];
+        var arr = this.props.chart.daily;
+        if (!arr) {
+          return null;
+        }
         var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
         if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
           return arr;
@@ -105,7 +109,7 @@ class ProfitChart extends React.Component {
         return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
     }
 
-    return [];
+    return null;
   }
 
   getHitTestableData() {
@@ -158,15 +162,6 @@ class ProfitChart extends React.Component {
     const width = this.refs.container ? this.refs.container.getWidth() : 0;
     const height = this.refs.container ? this.refs.container.getHeight() : 0;
 
-    if (!data) {
-
-      return (
-        <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
-          <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
-        </div>
-      )
-    }
-
     return (
       <div style={{width: "100%", height: "100%"}}>
         <ChartContainer
@@ -184,7 +179,7 @@ class ProfitChart extends React.Component {
           <Axis anchor="right" scale={this.state.taxScale} ticks={5} style={{transform: `translateX(${width}px)`}} formatISK={true} />
           <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
           {
-            data.length > 0 ?
+            data && data.length > 0 ?
             <g>
               <Line fill="#F44336" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return Math.abs(el.taxes);}} />
               <Line fill="#4CAF50" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return el.profit;}} />
@@ -200,7 +195,7 @@ class ProfitChart extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { profit: store.profit };
+  return { chart: store.profit.chart };
 }
 
 export default connect(mapStateToProps)(ProfitChart);

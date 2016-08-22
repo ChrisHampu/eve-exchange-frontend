@@ -19,7 +19,10 @@ class ChartContainer extends React.Component {
   static propTypes = {
 
     frequencyLevels: React.PropTypes.object.isRequired,
-    data: React.PropTypes.array.isRequired,
+    data: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.array
+    ]),
     title: React.PropTypes.string,
     onChartChanged: React.PropTypes.func.isRequired,
     marginRight: React.PropTypes.number,
@@ -69,26 +72,40 @@ class ChartContainer extends React.Component {
       width: this.state.width,
       height: this.state.height,
       pageSize: this.state.pageSize,
-      dataSize: this.props.data.length
+      dataSize: this.props.data ? this.props.data.length : 0
     }
   }
 
   update() {
 
-    if (!this.refs.chart_anchor) {
+    if (!this.refs.chart_anchor || !this.props.data) {
       return;
     }
 
-    this.state.height = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom - 5;
-    this.state.width = ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth - this.state.margin.left - this.state.margin.right;
+    const newHeight = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom - 5;
+    const newWidth = ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth - this.state.margin.left - this.state.margin.right;
 
-    this.setState({
-      width: this.state.width,
-      height: this.state.height
-    });
+    if (newHeight !== this.state.height || newWidth !== this.state.width) {
+
+      this.state.height = newHeight;
+      this.state.width = newWidth;
+
+      this.setState({
+        width: this.state.width,
+        height: this.state.height
+      }, () => {
+
+        this.props.onChartChanged();
+      });
+    }
   }
 
   componentDidMount() {
+
+    this.update();
+  }
+
+  componentDidUpdate() {
 
     this.update();
   }
@@ -216,7 +233,17 @@ class ChartContainer extends React.Component {
 
   render() {
 
-    const data = this.props.data || [];
+    if (!this.props.data) {
+      return (
+        <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%", width: "100%" }}>
+          <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
+            <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
+          </div>
+        </div>
+      )
+    }
+
+    const data = this.props.data;
 
     return (
       <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%", width: "100%" }}>
@@ -261,18 +288,11 @@ class ChartContainer extends React.Component {
         </div>
         <div style={{display: "flex", width: "100%", height: "100%"}}>
           <div ref="chart_anchor" className={s.chart}>
-          {
-            !data || data.length === 0 ?
-              <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
-                <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
-              </div>
-              :
-              <svg onMouseMove={(ev) => this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()} width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
-                <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
-                  {this.props.children}
-                </g>
-              </svg>
-          }
+            <svg onMouseMove={(ev) => this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()} width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
+              <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
+                {this.props.children}
+              </g>
+            </svg>
           <Tooltip margin={this.state.margin} ref="tooltip" />
           </div>
         </div>
