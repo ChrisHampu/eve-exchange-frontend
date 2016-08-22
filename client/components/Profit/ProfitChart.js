@@ -75,15 +75,42 @@ class ProfitChart extends React.Component {
       taxScale: this.state.taxScale
     });
   }
-
+  /*
   getChartData() {
 
     return this.props.profit.chart.hourly;
   }
+  */
+  getChartData() {
+
+    // Check if still loading components
+    if (!this.refs.container) {
+      return [];
+    }
+
+    switch(this.refs.container.getFrequency()) {
+      case "hours":
+        var arr = this.props.profit.chart.hourly || [];
+        var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
+        if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
+          return arr;
+        }
+        return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
+      case "days":
+        var arr = this.props.profit.chart.daily || [];
+        var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
+        if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
+          return arr;
+        }
+        return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
+    }
+
+    return [];
+  }
 
   getHitTestableData() {
 
-    return this.props.profit.chart.hourly.map(el => this.state.xScale(el.time));
+    return this.getChartData().map(el => this.state.xScale(el.time));
   }
 
   componentDidMount() {
@@ -141,9 +168,9 @@ class ProfitChart extends React.Component {
     }
 
     return (
-      <div>
+      <div style={{width: "100%", height: "100%"}}>
         <ChartContainer
-          frequencyLevels={{hours: "1 Hour"}}
+          frequencyLevels={{hours: "1 Hour", days: "1 Day"}}
           marginLeft={65}
           marginRight={65}
           ref="container"

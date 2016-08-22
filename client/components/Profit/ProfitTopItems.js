@@ -15,7 +15,7 @@ class ProfitTopItems extends React.Component {
     return (
       <div style={{marginBottom: "2rem"}}>
       {
-        !this.props.profit.toplist.items ?
+        !this.props.toplist.items ?
           <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
             <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
           </div>
@@ -31,12 +31,12 @@ class ProfitTopItems extends React.Component {
             </TableHeader>
             <TableBody displayRowCheckbox={false}>
             {
-              this.props.profit.toplist.items.length === 0 ?
+              this.props.toplist.items.length === 0 ?
                 <TableRow selectable={false}>
                   <TableRowColumn>No records available</TableRowColumn>
                 </TableRow>
                 :
-                this.props.profit.toplist.items.sort((el1, el2) => el2.totalProfit-el1.totalProfit).map((el, i) => {
+                this.props.toplist.items.sort((el1, el2) => el2.totalProfit-el1.totalProfit).map((el, i) => {
                   return (
                     <TableRow key={i} selectable={false}>
                       <TableRowColumn>{el.name}</TableRowColumn>
@@ -56,7 +56,7 @@ class ProfitTopItems extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { profit: store.profit };
+  return { toplist: store.profit.toplist };
 }
 
 export default connect(mapStateToProps)(ProfitTopItems);

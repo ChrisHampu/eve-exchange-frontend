@@ -6,6 +6,15 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+a {
+  text-decoration: none;
+  color: $blue-color;
+
+  &:hover {
+    color: color($blue-color lightness(+15%));
+  }
+}
+
 .root {
   //display: flex;
   //flex-direction: column;

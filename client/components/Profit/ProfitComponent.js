@@ -16,7 +16,9 @@ class ProfitComponent extends React.Component {
       <DashboardPage title="Profit Report" fullWidth={true}>
         <DashboardPageMenu menu={{
           'Profit Chart': "/dashboard/profit",
-          'Top Items': "/dashboard/profit/topitems"}}
+          'Transactions': "/dashboard/profit/transactions",
+          'Top Items': "/dashboard/profit/topitems",
+          'Statistics': "/dashboard/profit/stats"}}
           location={this.props.location}
         />
         <DashboardPageBody children={this.props.children} defaultComponent={<ProfitChart style={{flex: 1, width: "100%"}}/>} />

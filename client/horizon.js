@@ -4,7 +4,7 @@ import { updateUser } from './actions/authActions';
 import { updateUserSettings } from './actions/settingsActions';
 import { updateNotifications } from './actions/notificationsActions';
 import { updateSubscription } from './actions/subscriptionActions';
-import { updateToplist, updateHourlyChart } from './actions/profitActions';
+import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
 import Promise from 'bluebird';
 import { parseString } from 'xml2js';
@@ -170,16 +170,22 @@ function doHorizonSubscriptions() {
     store.dispatch(updateSubscription(userData.id, subscription));
   });
 
-  // 24 hour profit chart
-  horizon('profit_chart').order('time', 'descending').findAll({userID: userData.id}).limit(24).watch().defaultIfEmpty().subscribe( profit => {
+  // profit chart - limit of 175 is 7 days worth of daily documents + 7 days worth of 24 hour documents
+  horizon('profit_chart').order('time', 'descending').findAll({userID: userData.id}).limit(175).watch().defaultIfEmpty().subscribe( profit => {
 
     if (!profit) {
       return;
     }
 
-    store.dispatch(updateHourlyChart(profit));
+    const _profit = profit.sort((doc1, doc2) => doc2.time - doc1.time);
 
-    console.log(profit);
+    const hourly = _profit.filter(doc => doc.frequency === "hourly");
+    const daily = _profit.filter(doc => doc.frequency === "daily");
+
+    store.dispatch(updateHourlyChart(hourly));
+    store.dispatch(updateDailyChart(daily));
+
+    console.log(hourly, daily);
   });
 
   horizon('profit_top_items').find({userID: userData.id}).watch().defaultIfEmpty().subscribe( profit => {
@@ -193,6 +199,32 @@ function doHorizonSubscriptions() {
 
     console.log(profit);
   });
+
+  /*
+  horizon('profit_alltime').find({userID: userData.id}).watch().defaultIfEmpty().subscribe( stats => {
+
+    if (!stats) {
+      return;
+    }
+
+    store.dispatch(updateAlltimeStats(stats));
+
+    console.log(stats);
+  });
+  */
+
+  /*
+  horizon('profit_transactions').order('time', 'descending').findAll({userID: userData.id}).limit(100).watch().defaultIfEmpty().subscribe( transactions => {
+
+    if (!transactions) {
+      return;
+    }
+
+    store.dispatch(updateTransactions(transactions));
+
+    console.log(transactions);
+  });
+  */
 }
 
 export default horizon;
