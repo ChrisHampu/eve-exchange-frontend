@@ -37,7 +37,7 @@ if (config.env === 'development') {
   // Serve static resources
   relayServer.use('/', express.static(path.join(__dirname, '../build')));
 
-  const http_server =  relayServer.listen(config.port, () => console.log(chalk.green(`Relay is listening on port ${config.port}`)));
+  const http_server =  relayServer.listen(config.port, () => console.log(chalk.green(`HTTP server is listening on port ${config.port}`)));
 
     const horizon_server = horizon(http_server, {
     auth: {
@@ -64,7 +64,7 @@ if (config.env === 'development') {
   relayServer.use(convert(historyApiFallback()));
   relayServer.use(mount('/', serve(path.join(__dirname, '../build'))));
   
-  const http_server =  relayServer.listen(config.port, () => console.log(chalk.green(`Relay is listening on port ${config.port}`)));
+  const http_server =  relayServer.listen(config.port, () => console.log(chalk.green(`HTTP server is listening on port ${config.port}`)));
 
   const horizon_server = horizon(http_server, {
     auth: {
