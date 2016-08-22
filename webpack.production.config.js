@@ -11,7 +11,7 @@ module.exports = {
     app: [
       path.join(__dirname, 'client/index.js')
     ],
-    vendor: ['react', 'react-dom', 'react-relay', 'react-router', 'react-router-relay']
+    vendor: ['react', 'react-dom', 'react-router']
   },
   output: {
     path: path.join(__dirname, 'build'),
