@@ -203,7 +203,6 @@ function doHorizonSubscriptions() {
     console.log(profit);
   });
 
-  /*
   horizon('profit_alltime').find({userID: userData.id}).watch().defaultIfEmpty().subscribe( stats => {
 
     if (!stats) {
@@ -214,9 +213,7 @@ function doHorizonSubscriptions() {
 
     console.log(stats);
   });
-  */
 
-  /*
   horizon('profit_transactions').order('time', 'descending').findAll({userID: userData.id}).limit(100).watch().defaultIfEmpty().subscribe( transactions => {
 
     if (!transactions) {
@@ -227,7 +224,6 @@ function doHorizonSubscriptions() {
 
     console.log(transactions);
   });
-  */
 }
 
 export default horizon;
