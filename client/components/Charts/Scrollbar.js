@@ -25,16 +25,16 @@ export default class Scrollbar extends React.Component {
       handleX: 0,
       startX: 0,
       barWidth: 0,
+      contextWidth: 0,
       resistance: 3
     }; 
   }
 
-  componentDidMount() {
+  update() {
 
-    this.listen = true;
-
-    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    if (this.context.width === this.state.contextWidth) {
+      return;
+    }
 
     let barWidth = 0;
 
@@ -45,7 +45,23 @@ export default class Scrollbar extends React.Component {
     this.setState({
       handleX: this.context.width - barWidth,
       barWidth: barWidth,
+      contextWidth: this.context.width
     });
+  }
+
+  componentDidMount() {
+
+    this.listen = true;
+
+    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+
+    this.update();
+  }
+
+  componentWillReceiveProps() {
+
+    this.update();
   }
 
   componentWillUnmount() {

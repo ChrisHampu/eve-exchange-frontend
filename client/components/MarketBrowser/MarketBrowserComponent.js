@@ -63,7 +63,7 @@ class MarketBrowserListItem extends React.Component {
     );
   }
 
-  handleClick(ev) {
+  handleClickBranch(ev) {
 
     ev.stopPropagation();
     ev.nativeEvent.stopImmediatePropagation();
@@ -84,7 +84,7 @@ class MarketBrowserListItem extends React.Component {
   render() {
 
     return (
-      <div  className={s.market_browser_row} onClick={(ev)=>{this.handleClick(ev);}}>
+      <div  className={s.market_browser_row} onClick={(ev)=>{this.handleClickBranch(ev);}}>
         <div style={{paddingLeft: `${this.props.depth}rem`}} className={s.market_browser_row_meta}  >
           { this.state.childrenVisible ? <ArrowDownIcon /> : <ArrowRightIcon /> }
           <div className={s.market_browser_row_name}>
@@ -112,7 +112,6 @@ export default class MarketBrowserComponent extends React.Component {
     super(props);
 
     this.state = {
-      selectedItem: null,
       searchText: ""
     };
   }
@@ -156,8 +155,14 @@ export default class MarketBrowserComponent extends React.Component {
     return (
       <DashboardPage title="Market Browser" className={s.root}>
         <div className={s.market_browser_container}>
-          {this.renderMarketBrowser()}
-          {this.props.children}
+          <div className={cx(s.tab_stack, s.root)}>
+            {this.renderMarketBrowser()}
+            <div onClick={()=>this.context.router.push('/dashboard/browser')} className={cx(s.tab_stack_overlay, { [s.open]: this.props.children !== null} )}>
+            </div>
+          </div>
+          <div className={cx(s.tab_stack, s.fadeout, { [s.open]: this.props.children !== null, [s.hidden]: this.props.children === null })}>
+            {this.props.children}
+          </div>
         </div>
       </DashboardPage>
     );
