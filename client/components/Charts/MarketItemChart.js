@@ -65,7 +65,7 @@ class MarketItemChart extends React.Component {
 
     this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0}))), Math.ceil(Math.max(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0})))]);
 
-    this.state.percentScale.domain([0, 1]);
+    this.state.percentScale.domain([Math.min(...data.map((el) => { return Math.max(0, el.spread) / 100 })), Math.max(...data.map((el) => { return Math.max(0, el.spread) / 100 }))]);
 
     this.state.xScale.range([0, this.refs.container.getWidth()]);
     this.state.yScale.range([this.state.ohlcHeight, 0]);
@@ -79,6 +79,8 @@ class MarketItemChart extends React.Component {
 
     this.state.xScale.nice(this.refs.container.getFrequency() === "minutes" ? timeMinute : (this.refs.container.getFrequency() === "hours" ? timeHour : timeDay));
     this.state.yScale.nice([5]);
+
+    this.state.percentScale.nice([1]);
 
     this.setState({
       xScale: this.state.xScale,
