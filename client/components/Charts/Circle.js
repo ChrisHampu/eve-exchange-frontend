@@ -12,17 +12,9 @@ export default class Circle extends React.Component {
     style: React.PropTypes.object
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      fill: this.props.fill || "#eba91b"
-    };
-  }
-
   render() {
     return (
-      <circle style={this.props.style} cx={this.props.cx} cy={this.props.cy} fill={this.state.fill} r={this.props.r} />
+      <circle style={this.props.style} cx={this.props.cx} cy={this.props.cy} fill={this.props.fill || "#eba91b"} r={this.props.r} />
     )
   }
 }

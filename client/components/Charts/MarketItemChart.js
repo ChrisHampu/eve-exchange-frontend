@@ -199,10 +199,62 @@ class MarketItemChart extends React.Component {
           Buy: {formatNumber(el.buyFifthPercentile)}<br />
           Sell: {formatNumber(el.sellFifthPercentile)}<br />
           Spread: {Math.round(el.spread*Math.pow(10,2))/Math.pow(10,2)}%<br />
-          Volume: {formatNumber(el.tradeVolume || 0)}
+          {
+            this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ?
+               <span>Spread SMA: {Math.round((el.spreadSMA || 0)*Math.pow(10,2))/Math.pow(10,2)}%<br /></span>
+               : false
+          }
+          Volume: {formatNumber(el.tradeVolume || 0)}<br />
+          {
+            this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma ?
+               <span>Volume SMA: {formatNumber(el.tradeVolumeSMA || 0)}<br /></span>
+               : false
+          }
         </div>,
-      offset: 30
+      offset: 30 + (this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma ? 10 : 0) + (this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ? 10 : 0)
     }
+  }
+
+  renderLegend() {
+
+    const legend = [];
+    let offset = 15;
+
+    if (this.props.chart_visuals.price) {
+
+      legend.push(<text fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Buy Price</text>);
+      offset += 74;
+    }
+
+    if (this.props.chart_visuals.spread) {
+
+      legend.push(<text fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Spread</text>);
+      offset += 58;
+    }
+
+    if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma) {
+
+      legend.push(<text fill="#F8654F" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Spread SMA</text>);
+      offset += 140;
+    }
+
+    if (this.props.chart_visuals.volume) {
+
+      legend.push(<text fill="#4090A2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Volume</text>);
+      offset += 60;
+    }
+
+    if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma) {
+
+      legend.push(<text fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Volume SMA</text>);
+      offset += 140;
+    }
+
+    return (
+      <g>
+      {legend}
+      </g>
+    );
   }
 
   render() {
@@ -221,6 +273,10 @@ class MarketItemChart extends React.Component {
         title={this.props.title} 
         onChartChanged={()=>this.chartChanged()}
       >
+        <g>
+        {this.renderLegend()}
+        </g>
+
         <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
         <Axis anchor="left" scale={this.state.yScale} ticks={5} formatISK={true} />
         <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} formatISK={true} />
@@ -228,9 +284,30 @@ class MarketItemChart extends React.Component {
         {
           data && data.length > 0 ?
           <g>
-            <Area viewportHeight={this.state.ohlcHeight} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyFifthPercentile} />
-            <BarChartData data={data} heightOffset={this.state.volHeight} viewportWidth={width} viewportHeight={height} xScale={this.state.xScale} yScale={this.state.volScale} />
-            <Indicator data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />
+            {
+              this.props.chart_visuals.price ?
+                <Area viewportHeight={this.state.ohlcHeight} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyFifthPercentile} />
+                : false
+            }
+            {
+              this.props.chart_visuals.volume ?
+                <BarChartData data={data} heightOffset={this.state.volHeight} viewportWidth={width} viewportHeight={height} xScale={this.state.xScale} yScale={this.state.volScale} />
+                : false
+            }
+            {
+              this.props.chart_visuals.spread ?
+                <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />
+                : false
+            }
+            { this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ? 
+                <Indicator thickLine={true} lineColour="#F8654F" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => (el.spreadSMA || 0)/100 } />
+                : false
+            }
+
+            { this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma ? 
+                <Indicator thickLine={true} lineColour="#eba91b" data={data} heightOffset={height-this.state.volHeight} xScale={this.state.xScale} yScale={this.state.volScale} xAccessor={el => el.time} yAccessor={el => el.tradeVolumeSMA || 0} />
+                : false
+            }
             <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
           </g> : false
         }
@@ -239,8 +316,12 @@ class MarketItemChart extends React.Component {
   }
 }
 
+
+// purp 7355C4
+// green "#5CEF70"
+
 const mapStateToProps = function(store) {
-  return { market: store.market };
+  return { market: store.market, chart_visuals: store.settings.chart_visuals };
 }
 
 export default connect(mapStateToProps)(MarketItemChart);

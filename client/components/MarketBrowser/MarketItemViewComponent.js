@@ -100,6 +100,7 @@ class MarketItemViewComponent extends React.Component {
                   <MenuItem type="text" primaryText="Unpin From Dashboard" onTouchTap={()=>{this.unPinChart()}} style={{cursor: "pointer"}}/>
                   : <MenuItem type="text" primaryText="Pin To Dashboard" onTouchTap={()=>{this.pinChart()}} style={{cursor: "pointer"}}/>
               }
+              <MenuItem type="text" primaryText="Settings" onTouchTap={()=>this.context.router.push('/dashboard/profile/settings')} style={{cursor: "pointer"}}/>
             </IconMenu>
           </div>
         </div>

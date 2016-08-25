@@ -1,0 +1,71 @@
+@import '../variables.scss'; 
+
+.radios { 
+ 
+  padding-top: 0.8rem; 
+ 
+  > div { 
+    width: auto !important; 
+    display: inline-block !important; 
+  } 
+ 
+  svg { 
+    fill: $blue-color !important; 
+  } 
+ 
+  svg:not(:first-child) { 
+    fill: $gold-color; 
+  } 
+ 
+  > div { 
+    margin-right: 10px; 
+ 
+    > div > div { 
+      margin-right: 4px !important; 
+    } 
+  } 
+}
+
+.root {
+
+  .settings_area {
+
+    background-color: $base-color-darker;
+    margin-bottom: 2rem;
+
+    .settings_area_header {
+      background-color: $base-color-darkest;
+      font-size: 1.2rem;
+      padding: 1rem 0.5rem;
+      color: $gold-color;
+    }
+
+    .settings_body {
+      padding: 1rem;
+
+      .settings_header {
+        font-size: 1.05rem;
+      }
+
+      .checkbox {
+        margin: 0.5rem 0;
+
+        > div > div {
+          margin-right: 4px !important;
+        }
+
+        svg { 
+          fill: #b8b8b8 !important; 
+        } 
+       
+        svg:not(:first-child) { 
+          fill: $gold-color !important; 
+        }
+      }
+
+      &:not(:last-child) {
+        padding-bottom: 0;
+      }
+    }
+  }
+}

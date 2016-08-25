@@ -7,6 +7,13 @@ const initialState = {
     characterID: "",
     characterName: "",
     expires: null
+  },
+  chart_visuals: {
+    price: true,
+    spread: true,
+    spread_sma: false,
+    volume: true,
+    volume_sma: false
   }
 };
 
@@ -57,6 +64,18 @@ export default function settings(state = initialState, action) {
     case "REMOVE_API_KEY":
 
       return { ...state, eveApiKey: { keyID: "", vCode: "", characterID: "", characterName: "", expires: null } };
+
+    case "UPDATE_CHART_SETTING":
+
+      if (!action.setting) {
+        return state;
+      }
+
+      if (action.value === 'undefined' || action.value === null) {
+        return state;
+      }
+
+      return { ...state, chart_visuals: { ...state.chart_visuals, [action.setting]: action.value } };
 
     default:
       return state;

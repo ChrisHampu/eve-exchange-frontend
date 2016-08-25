@@ -83,7 +83,8 @@ class DashboardView extends React.Component {
                               >
                                 <MenuItem type="text" primaryText="Remove" onTouchTap={()=>{store.dispatch(unPinChartFromDashboard(item.id))}} style={{cursor: "pointer"}} />
                                 <MenuItem type="text" primaryText="View in Browser" onTouchTap={()=>{this.context.router.push(`/dashboard/browser/${item.id}`)}} style={{cursor: "pointer"}} />
-                              </IconMenu>
+                                <MenuItem type="text" primaryText="Settings" onTouchTap={()=>{this.context.router.push('dashboard/profile/settings')}} style={{cursor: "pointer"}} />
+                               </IconMenu>
                             </div>
                             <div className={s.chart}>
                               <MarketItemChart style={{flex: 1}} item={item} title={item.name} />

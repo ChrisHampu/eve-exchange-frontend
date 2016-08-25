@@ -20,7 +20,7 @@ export default class Bar extends React.Component {
 
     this.state = {
       mouseOver: false,
-      fill: "#59c8e2"
+      fill: "#4090A2"
     };
   }
 
