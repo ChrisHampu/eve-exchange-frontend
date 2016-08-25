@@ -11,9 +11,9 @@ const initialState = {
   chart_visuals: {
     price: true,
     spread: true,
-    spread_sma: false,
+    spread_sma: true,
     volume: true,
-    volume_sma: false
+    volume_sma: true
   }
 };
 
