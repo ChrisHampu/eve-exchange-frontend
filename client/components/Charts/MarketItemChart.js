@@ -222,31 +222,31 @@ class MarketItemChart extends React.Component {
 
     if (this.props.chart_visuals.price) {
 
-      legend.push(<text fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Buy Price</text>);
+      legend.push(<text key={legend.length} fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Buy Price</text>);
       offset += 74;
     }
 
     if (this.props.chart_visuals.spread) {
 
-      legend.push(<text fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Spread</text>);
+      legend.push(<text key={legend.length} fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Spread</text>);
       offset += 58;
     }
 
     if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma) {
 
-      legend.push(<text fill="#F8654F" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Spread SMA</text>);
+      legend.push(<text key={legend.length} fill="#F8654F" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Spread SMA</text>);
       offset += 140;
     }
 
     if (this.props.chart_visuals.volume) {
 
-      legend.push(<text fill="#4090A2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Volume</text>);
+      legend.push(<text key={legend.length} fill="#4090A2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Volume</text>);
       offset += 60;
     }
 
     if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma) {
 
-      legend.push(<text fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Volume SMA</text>);
+      legend.push(<text key={legend.length} fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Volume SMA</text>);
       offset += 140;
     }
 
