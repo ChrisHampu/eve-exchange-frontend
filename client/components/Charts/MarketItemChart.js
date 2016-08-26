@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import { scaleTime, scaleLinear, timeHour, timeMinute, timeDay } from '../../d3.js';
 import { formatNumber } from '../../utilities';
+import { userHasPremium } from '../../auth';
 
 import ChartContainer from './ChartContainer';
 import BarChartData from './BarChartData';
@@ -269,7 +270,7 @@ class MarketItemChart extends React.Component {
       <ChartContainer 
         getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
         getHitTestableData={()=>this.getHitTestableData()} 
-        frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour", daily: "1 Day"}} 
+        frequencyLevels={userHasPremium() ? {minutes: "5 Minutes", hours: "1 Hour", daily: "1 Day"} : {hours: "1 Hour", daily: "1 Day"}} 
         ref="container"
         data={data} 
         title={this.props.title} 
