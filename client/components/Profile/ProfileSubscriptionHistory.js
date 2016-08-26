@@ -27,10 +27,9 @@ class SubscriptionHistory extends React.Component {
 
     let history = null;
 
-    if (this.props.subscription.deposit_history && this.props.subscription.withdrawal_history) {
+    if (this.props.subscription.history) {
 
-      history = this.props.subscription.deposit_history
-      .concat(this.props.subscription.withdrawal_history)
+      history = this.props.subscription.history
       .sort((el1, el2) => el2.time - el1.time);
 
       switch(this.state.subFilter) {
