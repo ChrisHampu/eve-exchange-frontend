@@ -119,8 +119,8 @@ class Dashboard extends React.Component {
       <div className={s.root}>
         <Paper zDepth={2} className={s.sidebar_container}>
           <div className={s.sidebar_inner}>
-            <div  className={s.sidebar_title}>
-              Trade Forecaster
+            <div className={s.sidebar_title}>
+              <span className={s.name} onClick={()=>this.setRoute('/')}>Trade Forecaster</span>
             </div>
             <Divider className={s.divider_line} />
             <div className={s.sidebar_menu_divider}>
