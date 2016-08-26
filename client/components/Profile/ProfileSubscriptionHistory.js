@@ -90,7 +90,7 @@ class SubscriptionHistory extends React.Component {
                           <TableRowColumn>{el.type===0?"Deposit":"Withdrawal"}</TableRowColumn>
                           <TableRowColumn style={el.type===0?{color: "#4CAF50"}:{color: "#F44336"}}>{formatNumber(el.amount)} ISK</TableRowColumn>
                           <TableRowColumn>{el.description}</TableRowColumn>
-                          <TableRowColumn>{el.process ? "Complete" : "In Progress"}</TableRowColumn>
+                          <TableRowColumn>{el.processed ? "Complete" : "In Progress"}</TableRowColumn>
                         </TableRow>
                       )
                     })
