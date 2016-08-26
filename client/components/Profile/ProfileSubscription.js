@@ -15,7 +15,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
-const PremiumPrice = 125000000;
+const PremiumPrice = 150000000;
 
 class Subscription extends React.Component {
 
@@ -152,21 +152,47 @@ class Subscription extends React.Component {
 
   doPremiumUpgrade() {
 
-    store.dispatch(performPremiumUpgrade());
+    fetch(`http://api.evetradeforecaster.com/subscription/subscribe`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({jwt: getAuthToken()})
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      // Check success status & notify user
+    });
 
     this.closeSubUpgrade();
   };
 
   doPremiumDowngrade() {
     
-    store.dispatch(performPremiumDowngrade());
+    fetch(`http://api.evetradeforecaster.com/subscription/unsubscribe`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({jwt: getAuthToken()})
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      // Check success status & notify user
+    });
 
     this.closeSubDowngrade();
   }
 
   doWithdrawal() {
 
-    fetch(`http://localhost:4000/subscription/withdraw/${this.state.withdrawal}`, {
+    fetch(`http://api.evetradeforecaster.com/subscription/withdraw/${this.state.withdrawal}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

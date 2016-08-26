@@ -3,7 +3,7 @@ const initialState = {
   balance: 0,
   history: [],
   premium: false,
-  expires: null
+  subscription_date: null
 };
 
 /* history structure
