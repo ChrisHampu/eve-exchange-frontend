@@ -36,6 +36,11 @@ export function formatNumberUnit(num) {
   return num.toString().replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1') + suffix;
 }
 
+export function formatPercent(num) {
+
+  return Math.round((num || 0) * Math.pow(10,2)) / Math.pow(10,2);
+}
+
 export function formatDate(date) {
 
   let minutes = date.getUTCMinutes() < 10 ? `0${date.getUTCMinutes()}` : date.getUTCMinutes();

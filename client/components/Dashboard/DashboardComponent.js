@@ -25,6 +25,7 @@ import ShoppingIcon from 'material-ui/svg-icons/action/shopping-cart';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import LeftArrowIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import ProfitIcon from 'material-ui/svg-icons/editor/show-chart';
+import ForecastIcon from 'material-ui/svg-icons/action/search';
 
 const MainMenu = [
   {
@@ -59,6 +60,11 @@ const MarketMenu = [
     "name": "Profit",
     "route": "/dashboard/profit",
     "icon": <ProfitIcon />
+  },
+  {
+    "name": "Forecast",
+    "route": "/dashboard/forecast",
+    "icon": <ForecastIcon />
   }
 ];
 
