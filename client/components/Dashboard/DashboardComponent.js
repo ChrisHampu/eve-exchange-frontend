@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { browserHistory } from 'react-router'
-import { userHasGroup } from '../../auth';
+import { userHasGroup, userHasPremium } from '../../auth';
 import cx from 'classnames';
 import DashboardView from './DashboardView';
 import s from './DashboardComponent.scss';
@@ -125,7 +125,7 @@ class Dashboard extends React.Component {
   renderMenu(items) {
 
     return items.map((item, i) => {
-      return userHasGroup(item.perm) ? <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
+      return (item.perm === "premium" ? userHasPremium() : userHasGroup(item.perm) )? <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
        className={this.getPathClass(item)}
        primaryText={item.name} leftIcon={item.icon} /> : null;
     });
@@ -224,7 +224,7 @@ class Dashboard extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { auth: store.auth, notifications: store.notifications };
+  return { auth: store.auth, notifications: store.notifications, subscription: store.subscription };
 }
 
 export default connect(mapStateToProps)(Dashboard);

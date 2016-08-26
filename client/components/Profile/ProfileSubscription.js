@@ -302,7 +302,7 @@ class Subscription extends React.Component {
               Subscription Expires:
             </div>
             <div className={s.info_value}>
-              {this.props.subscription.expires ? "Soon" : "Never"}
+              {this.props.subscription.subscription_date ? (new Date(this.props.subscription.subscription_date.getTime() + 2592000000)).toString() : "Never"}
             </div>
           </div>
           <div className={s.info_row}>
