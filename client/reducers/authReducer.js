@@ -16,9 +16,15 @@ export default function auth(state = { groups: ["guest"], id: null, name: "", co
       if (action.user.groups) {
 
         groups = ["guest"];
+
         if (action.user.groups.indexOf("authenticated") !== -1) {
           groups.push("standard");
         }
+
+        if (action.user.groups.indexOf("premium") !== -1) {
+          groups.push("premium");
+        }
+
         if (action.user.groups.indexOf("admin") !== -1) {
           groups.push("admin");
         }
