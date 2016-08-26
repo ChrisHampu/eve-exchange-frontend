@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 const config = {
   env: process.env.NODE_ENV || 'development',
-  verify_port: process.env.VERIFY_PORT || 3001,
+  verify_port: process.env.VERIFY_PORT || 4501,
   port: process.env.PORT || 3000,
   horizon: {
     project_name: process.env.HORIZON_NAME || 'horizon_test',
