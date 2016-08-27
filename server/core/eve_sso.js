@@ -20,18 +20,12 @@ function eve_sso(horizon, raw_options) {
   const response_type = 'code';
   const auth_code = new Buffer(`${client_id}:${client_secret}`).toString('base64');
 
-  console.log(client_id);
-  console.log(client_secret);
-  console.log(auth_code);
-
   const oauth_options = {
     horizon,
     provider,
   };
 
   oauth_options.make_acquire_url = (state, redirect_uri) => {
-
-    console.log("Redirecting");
     
   	redirect_uri = redirect_uri.replace("https://", "http://");
 
@@ -55,7 +49,6 @@ function eve_sso(horizon, raw_options) {
                                 path: '/oauth/token',
                                 headers: { 'Authorization': `Basic ${auth_code}`, "Content-Type": 'application/x-www-form-urlencoded' } });
     
-    console.log("token req");
     req.write(querystring.stringify({
       code,
       grant_type: 'authorization_code' }));
@@ -65,9 +58,6 @@ function eve_sso(horizon, raw_options) {
 
   oauth_options.make_inspect_request = (access_token) => {
 
-  	console.log("inspecting");
-  	console.log(access_token);
-
     const req = https.request({ method: 'GET',
                                 host: 'login.eveonline.com',
                                 path: '/oauth/verify',
@@ -76,7 +66,7 @@ function eve_sso(horizon, raw_options) {
     return req;
   }
 
-  oauth_options.extract_id = (user_info) => user_info && user_info.CharacterID.toString();
+  oauth_options.extract_id = (user_info) => { return { user_name: user_info.CharacterName, user_id: user_info.CharacterID.toString() } };
 
   auth_utils.oauth2(oauth_options);
 };
