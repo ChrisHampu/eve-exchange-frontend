@@ -89,32 +89,32 @@ export function getCurrentUser() {
 
     horizon.currentUser().fetch().subscribe( async (user) => {
 
-      userData = { id: user.user_id };
+      // Primary data comes from horizon
+      userData = { id: user.user_id, name: user.user_name, groups: user.groups };
       authToken = horizon.utensils.handshake.value.token;
 
       doHorizonSubscriptions();
 
-      user.id = user.user_id;
+      store.dispatch(updateUser(userData));
 
-      const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${user.id}`);
+      resolve(user);
+
+
+      // Load extra data from EVE API
+      const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${userData.id}`);
       const body = await res.text();
       const xml = await parseXml(body);
 
       if (xml.eveapi.error) {
 
-        resolve(user);
         return;
       }
 
       const info = xml.eveapi.result[0];
 
-      user.corporation = info.corporation[0];
-      user.name = info.characterName[0];
+      userData.corporation = info.corporation[0];
 
-      userData = user;
-      store.dispatch(updateUser(user));
-
-      resolve(user);
+      store.dispatch(updateUser(userData));
     }, 
     err => { console.log(err); reject(err) },
     () => {}
