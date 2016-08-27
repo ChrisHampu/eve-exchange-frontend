@@ -19,6 +19,7 @@ import ProfitTopItems from '../components/Profit/ProfitTopItems';
 import ProfitAlltime from '../components/Profit/ProfitAlltime';
 import ProfitTransactions from '../components/Profit/ProfitTransactions';
 import ForecastComponent from '../components/Forecast/ForecastComponent';
+import OrdersComponent from '../components/Orders/OrdersComponent';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -39,6 +40,7 @@ export default (
         <Route path="browser" components={{main: MarketBrowserComponent}}>
           <Route path=":id" component={MarketItemViewComponent} />
         </Route>
+        <Route path="orders" components={{main: OrdersComponent}} />
         <Route path="forecast" components={{main: ForecastComponent}} />
         <Route path="profit" components={{main: ProfitComponent }}>
           <Route path="topitems" component={ProfitTopItems} />

@@ -1,0 +1,10 @@
+@import '../variables.scss';
+
+.browser_route {
+  color: $blue-color;
+  cursor: pointer;
+
+  &:hover {
+    color: color($blue-color lightness(+15%));
+  }
+}

@@ -24,7 +24,8 @@ import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
 import ShoppingIcon from 'material-ui/svg-icons/action/shopping-cart';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import LeftArrowIcon from 'material-ui/svg-icons/navigation/arrow-back';
-import ProfitIcon from 'material-ui/svg-icons/editor/show-chart';
+import ProfitIcon from 'material-ui/svg-icons/action/timeline';
+import OrderIcon from 'material-ui/svg-icons/content/content-paste';
 import ForecastIcon from 'material-ui/svg-icons/action/search';
 
 const MainMenu = [
@@ -55,6 +56,11 @@ const MarketMenu = [
     "name": "Browser",
     "route": "/dashboard/browser",
     "icon": <ShoppingIcon />
+  },
+  {
+    "name": "Orders",
+    "route": "/dashboard/orders",
+    "icon": <OrderIcon />
   },
   {
     "name": "Profit",
