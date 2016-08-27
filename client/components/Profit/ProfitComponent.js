@@ -15,7 +15,7 @@ class ProfitComponent extends React.Component {
     return (
       <DashboardPage title="Profit Report" fullWidth={true}>
         <DashboardPageMenu menu={{
-          'Profit Chart': "/dashboard/profit",
+          'Chart': "/dashboard/profit",
           'Transactions': "/dashboard/profit/transactions",
           'Top Items': "/dashboard/profit/topitems",
           'Statistics': "/dashboard/profit/stats"}}
