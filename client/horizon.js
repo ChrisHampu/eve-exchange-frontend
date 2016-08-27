@@ -74,6 +74,7 @@ export function getAuthEndpoint() {
 }
 
 export function getCurrentUser() {
+
 	return new Promise((resolve, reject) => {
 
 		if (!hasAuthToken()) {
@@ -88,9 +89,12 @@ export function getCurrentUser() {
 
     horizon.currentUser().fetch().subscribe( async (user) => {
 
+      userData = { id: user.user_id };
       authToken = horizon.utensils.handshake.value.token;
 
-      user.id = user.user_id || user.info;
+      doHorizonSubscriptions();
+
+      user.id = user.user_id;
 
       const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${user.id}`);
       const body = await res.text();
@@ -109,8 +113,6 @@ export function getCurrentUser() {
 
       userData = user;
       store.dispatch(updateUser(user));
-
-      doHorizonSubscriptions();
 
       resolve(user);
     }, 
