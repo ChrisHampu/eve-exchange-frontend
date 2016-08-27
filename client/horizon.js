@@ -5,6 +5,7 @@ import { updateUserSettings } from './actions/settingsActions';
 import { updateNotifications } from './actions/notificationsActions';
 import { updateSubscription } from './actions/subscriptionActions';
 import { setUserOrders } from './actions/marketActions';
+import { updateAllSubscriptions } from './actions/adminActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
 import Promise from 'bluebird';
@@ -95,10 +96,13 @@ export function getCurrentUser() {
 
       doHorizonSubscriptions();
 
+      if (user.groups.indexOf("admin")) {
+        doHorizonAdminSubscriptions();
+      }
+
       store.dispatch(updateUser(userData));
 
       resolve(user);
-
 
       // Load extra data from EVE API
       const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${userData.id}`);
@@ -235,6 +239,18 @@ function doHorizonSubscriptions() {
     }
 
     store.dispatch(setUserOrders(orders));
+  });
+}
+
+function doHorizonAdminSubscriptions() {
+
+  horizon('subscription').watch().defaultIfEmpty().subscribe( subs => {
+
+    if (!subs) {
+      return;
+    }
+
+    store.dispatch(updateAllSubscriptions(subs));
   });
 }
 

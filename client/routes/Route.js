@@ -20,6 +20,7 @@ import ProfitAlltime from '../components/Profit/ProfitAlltime';
 import ProfitTransactions from '../components/Profit/ProfitTransactions';
 import ForecastComponent from '../components/Forecast/ForecastComponent';
 import OrdersComponent from '../components/Orders/OrdersComponent';
+import UsersComponent from '../components/Users/UsersComponent';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -48,6 +49,7 @@ export default (
           <Route path="transactions" component={ProfitTransactions} />
         </Route>
         <Route path="admin" components={{main: AdminComponent}} />
+        <Route path="users" component={{main: UsersComponent}} />
       </Route>
     </Route>
     <Redirect from='*' to='/' />

@@ -1,0 +1,42 @@
+@import '../variables.scss';
+
+.browser_route {
+  color: $blue-color;
+  cursor: pointer;
+
+  &:hover {
+    color: color($blue-color lightness(+15%));
+  }
+}
+
+.premium {
+  color: $gold-color;
+}
+
+.header {
+  background-color: #1e2327;
+  padding: 1rem;
+
+  .search {
+    display: inline-block;
+  }
+
+  .selector {
+    margin-left: 1.5rem;
+    display: inline-block;
+  }
+
+  .title {
+    display: inline-block;
+    color: $gold-color;
+    font-weight: 300;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+
+  .counter {
+    display: inline-block;
+    margin-left: 1rem;
+    font-size: 0.9rem;
+  }
+}

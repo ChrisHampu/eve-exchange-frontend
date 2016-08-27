@@ -27,6 +27,7 @@ import LeftArrowIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import ProfitIcon from 'material-ui/svg-icons/action/timeline';
 import OrderIcon from 'material-ui/svg-icons/content/content-paste';
 import ForecastIcon from 'material-ui/svg-icons/action/search';
+import UsersIcon from 'material-ui/svg-icons/action/supervisor-account';
 
 const MainMenu = [
   {
@@ -79,6 +80,11 @@ const AdminMenu = [
     "name": "Dashboard",
     "route": "/dashboard/admin",
     "icon": <DashboardIcon />
+  },
+  {
+    "name": "Users",
+    "route": "/dashboard/users",
+    "icon": <UsersIcon />
   }
 ];
 
