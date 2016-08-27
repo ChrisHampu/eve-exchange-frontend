@@ -4,6 +4,7 @@ import { updateUser } from './actions/authActions';
 import { updateUserSettings } from './actions/settingsActions';
 import { updateNotifications } from './actions/notificationsActions';
 import { updateSubscription } from './actions/subscriptionActions';
+import { setUserOrders } from './actions/marketActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
 import Promise from 'bluebird';
@@ -223,6 +224,15 @@ function doHorizonSubscriptions() {
     store.dispatch(updateTransactions(transactions));
 
     console.log(transactions);
+  });
+
+  horizon('user_orders').findAll({userID: userData.id}).watch().defaultIfEmpty().subscribe( orders => {
+
+    if (!orders) {
+      return;
+    }
+
+    store.dispatch(setUserOrders(orders));
   });
 }
 

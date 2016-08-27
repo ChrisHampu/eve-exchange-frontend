@@ -1,7 +1,8 @@
 /*
 {
   market: {
-    region: [
+    user_orders: [],
+    region: {
       {
         id: 0,
         item: [
@@ -17,7 +18,7 @@
 }
 */
 
-export default function market(state = { region: {} }, action) {
+export default function market(state = { user_orders: [], region: {} }, action) {
 
   switch(action.type) {
 
@@ -90,6 +91,13 @@ export default function market(state = { region: {} }, action) {
       }
 
       return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], orders: action.data } }}  } };
+
+    case "SET_USER_ORDERS":
+      if (!action.orders) {
+        return state;
+      }
+
+      return { ...state, user_orders: action.orders };
 
     default:
       return state;

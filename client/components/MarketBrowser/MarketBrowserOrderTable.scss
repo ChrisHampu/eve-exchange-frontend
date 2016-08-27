@@ -7,6 +7,17 @@
   display: flex;
   flex-direction: column;
 
+  .user_order {
+    background-color: rgb(235, 169, 27) !important;
+    color: #262b2f !important;
+    
+    font-weight: bold;
+
+    > td {
+      font-size: 14px;
+    }
+  }
+
   > div {
     flex: 1;
     overflow-y: auto;

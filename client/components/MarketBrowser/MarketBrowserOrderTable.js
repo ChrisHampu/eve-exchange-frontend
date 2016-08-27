@@ -4,6 +4,7 @@ import s from './MarketBrowserOrderTable.scss';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { formatNumber } from '../../utilities';
+import cx from 'classnames';
 
 // station data
 import { stationIDToName } from '../../sde/stationIDToName';
@@ -47,6 +48,17 @@ class MarketBrowserOrderTable extends React.Component {
     return [];
   }
 
+  isUserOrder(orderID) {
+
+    const _id = orderID.toString();
+
+    if (this.props.market.user_orders.find(el => el.orderID === _id)) {
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
 
     let sellOrders = this.getMarketOrders().filter(el => el.buy === false).sort((el1, el2) => el1.price - el2.price);
@@ -83,7 +95,7 @@ class MarketBrowserOrderTable extends React.Component {
               {
                 topSell.length ? topSell.map((el, i) => {
                   return (
-                    <tr key={i}>
+                    <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
                       <td>{stationIDToName[el.stationID] || "Citadel"}</td>
                       <td>{el.volume}</td>
                       <td>{formatNumber(el.price)}</td>
@@ -104,7 +116,7 @@ class MarketBrowserOrderTable extends React.Component {
               {
                 sellOrders.slice(0, 15).map((el, i) => {
                   return (
-                    <tr key={i}>
+                    <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
                       <td>{stationIDToName[el.stationID] || "Citadel"}</td>
                       <td>{el.volume}</td>
                       <td>{formatNumber(el.price)}</td>
@@ -137,7 +149,7 @@ class MarketBrowserOrderTable extends React.Component {
               {
                 topBuy.length ? topBuy.map((el, i) => {
                   return (
-                    <tr key={i}>
+                    <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
                       <td>{formatNumber(el.price)}</td>
                       <td>{el.volume}</td>
                       <td>{stationIDToName[el.stationID] || "Citadel"}</td>
@@ -158,7 +170,7 @@ class MarketBrowserOrderTable extends React.Component {
               {
                 buyOrders.slice(0, 15).map((el, i) => {
                   return (
-                    <tr key={i}>
+                    <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
                       <td>{formatNumber(el.price)}</td>
                       <td>{el.volume}</td>
                       <td>{stationIDToName[el.stationID] || "Citadel"}</td>
