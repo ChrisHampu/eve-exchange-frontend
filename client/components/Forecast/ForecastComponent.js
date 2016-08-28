@@ -236,7 +236,7 @@ export default class ForecastComponent extends React.Component {
   render() {
 
     return (
-      <DashboardPage title="Forecast" className={s.root}>
+      <DashboardPage title="Forecast" className={s.root} fullWidth={true}>
         <div className={s.container}>
           <div className={s.pane}>
             <TextField
