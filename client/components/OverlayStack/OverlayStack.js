@@ -16,12 +16,12 @@ export default class OverlayStack extends React.Component {
       topOpen: false
     };
   }
-
+  
   componentDidMount() {
 
     this.transitionIn();
   }
-
+  
   transitionIn() {
 
     setTimeout(() => {
@@ -35,13 +35,24 @@ export default class OverlayStack extends React.Component {
 
   componentWillReceiveProps(newProps) {
 
-    this.setState({
-      topOpen: false
+    const newChildren = this.getTopChildren(newProps);
+    const oldChildren = this.getTopChildren(this.props);
 
-    }, async () => {
+    // This check ensures there's no unecessary re-rendering or transitions
+    if (newChildren[1] && newChildren[1] !== oldChildren[1]) {
 
-      this.transitionIn();
-    });
+      this.setState({
+        topOpen: false
+
+      }, async () => {
+
+        setTimeout(() => {
+
+          this.transitionIn();
+
+        }, 100);
+      });
+    }
   }
 
   transitionOut() {
@@ -59,6 +70,11 @@ export default class OverlayStack extends React.Component {
     });
   }
 
+  getTopChildren(props) {
+
+    return props.children.slice(Math.max(0, this.props.children.length - 2), Math.max(2, this.props.children.length));
+  }
+
   render() {
 
     if (!Array.isArray(this.props.children)) {
@@ -67,7 +83,7 @@ export default class OverlayStack extends React.Component {
       )
     }
 
-    let topChildren = this.props.children.slice(Math.max(0, this.props.children.length - 2), Math.max(2, this.props.children.length));
+    const topChildren = this.getTopChildren(this.props);
 
     return (
       <div className={s.root}>
