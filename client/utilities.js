@@ -31,7 +31,7 @@ export function formatNumberUnit(num) {
     suffix = "K";
   }
 
-  num = num.toFixed(2);
+  num = num.toFixed(3);
 
   return num.toString().replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1') + suffix;
 }
