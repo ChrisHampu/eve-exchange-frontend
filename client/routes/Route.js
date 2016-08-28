@@ -44,14 +44,14 @@ export default (
           <Route path=":id" component={MarketItemViewComponent} />
         </Route>
         <Route path="orders" components={{main: OrdersComponent}} />
-        <Route path="forecast" components={{main: ForecastComponent}} />
+        <Route path="forecast" components={{main: ForecastComponent}} onEnter={requireAccess("premium")}/>
         <Route path="profit" components={{main: ProfitComponent }}>
           <Route path="topitems" component={ProfitTopItems} />
           <Route path="stats" component={ProfitAlltime} />
           <Route path="transactions" component={ProfitTransactions} />
         </Route>
-        <Route path="admin" components={{main: AdminComponent}} />
-        <Route path="users" components={{main: UsersComponent}}>
+        <Route path="admin" components={{main: AdminComponent}} onEnter={requireAccess("admin")}/>
+        <Route path="users" components={{main: UsersComponent}} onEnter={requireAccess("admin")}>
           <Route path="view" component={UsersView}>
             <Route path=":id" component={UsersViewSingle} />
           </Route>

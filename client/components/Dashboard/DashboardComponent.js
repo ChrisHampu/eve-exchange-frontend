@@ -67,7 +67,8 @@ const MarketMenu = [
   {
     "name": "Orders",
     "route": "/dashboard/orders",
-    "icon": <OrderIcon />
+    "icon": <OrderIcon />,
+    "perm": "guest"
   },
   {
     "name": "Profit",

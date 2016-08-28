@@ -96,7 +96,7 @@ export function getCurrentUser() {
 
       doHorizonSubscriptions();
 
-      if (user.groups.indexOf("admin")) {
+      if (user.groups.indexOf("admin") !== -1) {
         doHorizonAdminSubscriptions();
       }
 

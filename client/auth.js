@@ -68,24 +68,24 @@ export function requireAccess(requiredAccessLevel) {
 
   const _requiredAccessLevel = requiredAccessLevel;
 
-  return async (nextState, transition) => {
-
-    //redirectToLogin(transition);
+  return (nextState, transition, callback) => {
 
     if (!hasAuthToken()) {
-      console.log("no token");
+      console.log("Auth token missing");
       redirectToLogin(transition);
-      return;
+      
+      callback();
     }
 
-    await getCurrentUser().then(() => {
+    getCurrentUser().then(() => {
 
       if (!userHasGroup(_requiredAccessLevel)) {
 
-        console.log("No required access level");
+        console.log("Permission denied");
         redirectToLogin(transition);
-        return;
       }
+
+      callback();
     });
   }
 }
