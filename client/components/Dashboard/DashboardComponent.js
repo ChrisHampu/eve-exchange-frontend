@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { browserHistory } from 'react-router'
+import { userHasGroup, userHasPremium } from '../../auth';
 import cx from 'classnames';
 import DashboardView from './DashboardView';
 import s from './DashboardComponent.scss';
@@ -33,22 +34,26 @@ const MainMenu = [
   {
     "name": "Dashboard",
     "route": "/dashboard",
-    "icon": <DashboardIcon />
+    "icon": <DashboardIcon />,
+    "perm": "guest"
   },
   {
     "name": "Profile",
     "route": "/dashboard/profile",
-    "icon": <ProfileIcon />  
+    "icon": <ProfileIcon />,
+    "perm": "guest"
   },
   {
     "name": "Notifications",
     "route": "/dashboard/notifications",
-    "icon": <NotificationsIcon />  
+    "icon": <NotificationsIcon />,
+    "perm": "guest"
   },
   {
     "name": "Logout",
     "route": "/logout",
-    "icon": <ExitIcon />
+    "icon": <ExitIcon />,
+    "perm": "guest"
   }
 ];
 
@@ -56,7 +61,8 @@ const MarketMenu = [
   {
     "name": "Browser",
     "route": "/dashboard/browser",
-    "icon": <ShoppingIcon />
+    "icon": <ShoppingIcon />,
+    "perm": "guest"
   },
   {
     "name": "Orders",
@@ -66,12 +72,14 @@ const MarketMenu = [
   {
     "name": "Profit",
     "route": "/dashboard/profit",
-    "icon": <ProfitIcon />
+    "icon": <ProfitIcon />,
+    "perm": "guest"
   },
   {
     "name": "Forecast",
     "route": "/dashboard/forecast",
-    "icon": <ForecastIcon />
+    "icon": <ForecastIcon />,
+    "perm": "premium"
   }
 ];
 
@@ -79,12 +87,14 @@ const AdminMenu = [
   {
     "name": "Dashboard",
     "route": "/dashboard/admin",
-    "icon": <DashboardIcon />
+    "icon": <DashboardIcon />,
+    "perm": "admin"
   },
   {
     "name": "Users",
     "route": "/dashboard/users",
-    "icon": <UsersIcon />
+    "icon": <UsersIcon />,
+    "perm": "admin"
   }
 ];
 
@@ -125,6 +135,36 @@ class Dashboard extends React.Component {
 
   }
 
+  renderMenu(items) {
+
+    return items.map((item, i) => {
+      return (item.perm === "premium" ? userHasPremium() : userHasGroup(item.perm) )? <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
+       className={this.getPathClass(item)}
+       primaryText={item.name} leftIcon={item.icon} /> : null;
+    });
+  }
+
+  renderAdminMenu() {
+
+    return (
+      <div>
+        <Divider className={s.divider_line} />
+        <div className={s.sidebar_menu_divider}>
+        Admin
+        </div>
+        <Menu className={s.sidebar_menu}>
+          {
+            AdminMenu.map((item, i) => {
+              return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
+               className={this.getPathClass(item)}
+               primaryText={item.name} leftIcon={item.icon} />;
+            })
+          }
+        </Menu>
+      </div>
+    )
+  }
+
   render() {
 
     return (
@@ -139,40 +179,18 @@ class Dashboard extends React.Component {
             Main
             </div>
             <Menu className={s.sidebar_menu}>
-              {
-                MainMenu.map((item, i) => {
-                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
-                   className={this.getPathClass(item)}
-                   primaryText={item.name} leftIcon={item.icon} />;
-                })
-              }
+            { this.renderMenu(MainMenu) }
             </Menu>
             <Divider className={s.divider_line} />
             <div className={s.sidebar_menu_divider}>
             Market
             </div>
             <Menu className={s.sidebar_menu}>
-              {
-                MarketMenu.map((item, i) => {
-                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
-                   className={this.getPathClass(item)}
-                   primaryText={item.name} leftIcon={item.icon} />;
-                })
-              }
+            { this.renderMenu(MarketMenu) }
             </Menu>
-            <Divider className={s.divider_line} />
-            <div className={s.sidebar_menu_divider}>
-            Admin
-            </div>
-            <Menu className={s.sidebar_menu}>
-              {
-                AdminMenu.map((item, i) => {
-                  return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
-                   className={this.getPathClass(item)}
-                   primaryText={item.name} leftIcon={item.icon} />;
-                })
-              }
-            </Menu>
+            {
+              userHasGroup("admin") ? this.renderAdminMenu() : false
+            }
           </div>
         </Paper>
         <div className={s.body_container}>
@@ -219,7 +237,7 @@ class Dashboard extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { auth: store.auth, notifications: store.notifications };
+  return { auth: store.auth, notifications: store.notifications, subscription: store.subscription };
 }
 
 export default connect(mapStateToProps)(Dashboard);

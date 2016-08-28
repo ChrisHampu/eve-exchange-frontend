@@ -34,6 +34,11 @@ export function userHasGroup(group) {
   return store.getState().auth.groups.indexOf(group) !== -1;
 }
 
+export function userHasPremium() {
+
+  return store.getState().subscription.premium === true;
+}
+
 // Routing functions
 function redirectToLogin(transition) {
   transition({

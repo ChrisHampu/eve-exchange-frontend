@@ -167,11 +167,6 @@ function doHorizonSubscriptions() {
 
   horizon('subscription').find({userID: userData.id}).watch().defaultIfEmpty().subscribe( subscription => {
 
-    if (!subscription) {
-      horizon('subscription').store({userID: userData.id, balance: 0, deposit_history: [], withdrawal_history: [], premium: false});
-      return;
-    }
-
     console.log(subscription);
 
     store.dispatch(updateSubscription(userData.id, subscription));
