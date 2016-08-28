@@ -20,6 +20,12 @@ class DashboardPageMenu extends React.Component {
 
   render() {
 
+    let pathName = this.props.location.pathname;
+
+    if (pathName[pathName.length-1] === "/") {
+      pathName = pathName.slice(0, pathName.length-1);
+    }
+
     return (
       <div className={s.menu_container}>
         <div className={s.menu}>
@@ -28,7 +34,7 @@ class DashboardPageMenu extends React.Component {
             return (
               <div
                 key={key}
-                className={cx(s.menu_item, { [s.active]: this.props.location.pathname === this.props.menu[key] })} 
+                className={cx(s.menu_item, { [s.active]: pathName === this.props.menu[key] })} 
                 onClick={()=>{this.setRoute(this.props.menu[key])}}
               >
                 {key}
