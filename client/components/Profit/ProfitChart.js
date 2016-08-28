@@ -165,7 +165,7 @@ class ProfitChart extends React.Component {
     return (
       <div style={{width: "100%", height: "100%"}}>
         <ChartContainer
-          frequencyLevels={{hours: "1 Hour", days: "1 Day"}}
+          frequencyLevels={{hours: "Hourly", days: "Daily"}}
           marginLeft={65}
           marginRight={65}
           ref="container"
