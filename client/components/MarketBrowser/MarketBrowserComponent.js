@@ -9,6 +9,7 @@ import { getMarketGroupTree } from '../../market';
 // Components
 import MarketItemViewComponent from './MarketItemViewComponent';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
+import OverlayStack from '../OverlayStack/OverlayStack';
 
 // Material UI
 import TextField from 'material-ui/TextField';
@@ -141,7 +142,7 @@ export default class MarketBrowserComponent extends React.Component {
             fullWidth={true}
           />
         </div>
-        { 
+        {
           getMarketGroupTree(this.state.searchText).map((el, i) => {
             return(<MarketBrowserListItem selector={(item)=>{this.selectItem(item);}} element={el} key={i} depth={0} />);
           })
@@ -154,16 +155,10 @@ export default class MarketBrowserComponent extends React.Component {
 
     return (
       <DashboardPage title="Market Browser" className={s.root}>
-        <div className={s.market_browser_container}>
-          <div className={cx(s.tab_stack, s.root)}>
-            {this.renderMarketBrowser()}
-            <div onClick={()=>this.context.router.push('/dashboard/browser')} className={cx(s.tab_stack_overlay, { [s.open]: this.props.children !== null} )}>
-            </div>
-          </div>
-          <div className={cx(s.tab_stack, s.fadeout, { [s.open]: this.props.children !== null, [s.hidden]: this.props.children === null })}>
-            {this.props.children}
-          </div>
-        </div>
+        <OverlayStack popStack={()=>this.context.router.push('/dashboard/browser')}>
+          {this.renderMarketBrowser()}
+          {this.props.children}
+        </OverlayStack>
       </DashboardPage>
     );
   }
