@@ -97,7 +97,7 @@ class UsersView extends React.Component {
                     return (
                      <TableRow key={i} selectable={false}>
                         <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/users/view/${el.userID}`)}}>{el.userName}</span></TableRowColumn>
-                        <TableRowColumn style={{textAlign: "center"}}>{el.premium ? <span className={s.premium}>"Premium"</span> : "Free"}</TableRowColumn>
+                        <TableRowColumn style={{textAlign: "center"}}>{el.premium ? <span className={s.premium}>Premium</span> : "Free"}</TableRowColumn>
                         <TableRowColumn style={{textAlign: "center"}}>{formatNumberUnit(el.balance)}</TableRowColumn>
                       </TableRow>
                     )
