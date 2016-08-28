@@ -74,7 +74,7 @@ export default class OverlayStack extends React.Component {
       {
         this.props.children.map((el, i) => {
 
-          if (el === null) {
+          if (!el) {
             return null;
           }
 
