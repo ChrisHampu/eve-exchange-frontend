@@ -9,7 +9,6 @@
 
   .sidebar_container {
     background-color: $base-color-darker !important;
-    flex: 0 0 13%;
     align-items: center;
 
     .sidebar_inner {
@@ -82,7 +81,7 @@
   }
 
   .body_container {
-    flex: 0 0 87%;
+    flex: 1;
     display: flex;
     flex-direction: column;
 
