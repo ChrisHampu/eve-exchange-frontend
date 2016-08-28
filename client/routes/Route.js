@@ -21,6 +21,8 @@ import ProfitTransactions from '../components/Profit/ProfitTransactions';
 import ForecastComponent from '../components/Forecast/ForecastComponent';
 import OrdersComponent from '../components/Orders/OrdersComponent';
 import UsersComponent from '../components/Users/UsersComponent';
+import UsersView from '../components/Users/UsersView';
+import UsersViewSingle from '../components/Users/UsersViewSingle';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -49,7 +51,11 @@ export default (
           <Route path="transactions" component={ProfitTransactions} />
         </Route>
         <Route path="admin" components={{main: AdminComponent}} />
-        <Route path="users" component={{main: UsersComponent}} />
+        <Route path="users" components={{main: UsersComponent}}>
+          <Route path="view" component={UsersView}>
+            <Route path=":id" component={UsersViewSingle} />
+          </Route>
+        </Route>
       </Route>
     </Route>
     <Redirect from='*' to='/' />

@@ -1,0 +1,30 @@
+@import '../variables.scss';
+
+.root {
+  height: 100%;
+  background-color: $dashboard-page-color;
+
+  .content {
+    padding: 2rem;
+
+    .title {
+
+    }
+
+    .status {
+
+    }
+
+    .balance {
+
+    }
+
+    .actions {
+
+    }
+
+    .history {
+      
+    }
+  }
+}
