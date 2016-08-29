@@ -6,6 +6,8 @@ import { formatNumberUnit } from '../../utilities';
 import horizon from '../../horizon';
 import s from './UsersViewSingle.scss';
 
+import SubscriptionHistory from '../Profile/SubscriptionHistory';
+
 import TextField from 'material-ui/TextField';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import FlatButton from 'material-ui/FlatButton';
@@ -144,9 +146,7 @@ class UsersViewSingle extends React.Component {
               <FlatButton icon={<RemoveIcon />} label="Remove Balance" secondary={true} onTouchTap={()=>{this.doRemoveBalance()}} />
             </div>
           </div>
-          <div className={s.history}>
-          History
-          </div>
+          <SubscriptionHistory subscription={sub} />
         </div>
       </div>
     );
