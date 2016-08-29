@@ -7,12 +7,24 @@
   .content {
     padding: 2rem;
 
+    > div {
+      padding-bottom: 0.5rem;
+    }
+
     .title {
+      font-weight: lighter;
+      font-size: 1.45rem;
+    }
+
+    .name {
 
     }
 
     .status {
 
+      .premium {
+        color: $gold-color;
+      }
     }
 
     .balance {
@@ -24,7 +36,7 @@
     }
 
     .history {
-      
+
     }
   }
 }

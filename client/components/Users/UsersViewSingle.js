@@ -3,12 +3,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { formatNumberUnit } from '../../utilities';
+import horizon from '../../horizon';
 import s from './UsersViewSingle.scss';
 
-
+import TextField from 'material-ui/TextField';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-
+import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
+
+import AddIcon from 'material-ui/svg-icons/content/add';
+import RemoveIcon from 'material-ui/svg-icons/content/remove';
 
 class UsersViewSingle extends React.Component {
 
@@ -24,7 +28,8 @@ class UsersViewSingle extends React.Component {
     super(props);
 
     this.state = {
-
+      addBalance: null,
+      removeBalance: null
     };
   }
 
@@ -33,9 +38,63 @@ class UsersViewSingle extends React.Component {
     this.context.router.push(path);
   }
 
+  setAddBalance = (event) => this.setState({addBalance: event.target.value || null});
+  setRemoveBalance = (event) => this.setState({removeBalance: event.target.value || null});
+
+  doAddBalance() {
+
+    const sub = this.getSubscription();
+
+    const newBal = parseInt(this.state.addBalance);
+
+    if (!newBal) {
+      return;
+    }
+
+    const history = sub.history;
+
+    history.push({
+      "amount": newBal ,
+      "description":  "Deposit by " + this.props.auth.name,
+      "processed": true,
+      "time": new Date(),
+      "type": 0
+    });
+
+    horizon('subscription').update({id: sub.id, balance: sub.balance + newBal, history});
+  }
+
+  doRemoveBalance() {
+
+    const sub = this.getSubscription();
+
+    const newBal = parseInt(this.state.removeBalance);
+
+    if (!newBal) {
+      return;
+    }
+
+    const history = sub.history;
+
+    history.push({
+      "amount": newBal,
+      "description":  "Manual adjustment by " + this.props.auth.name,
+      "processed": true,
+      "time": new Date(),
+      "type": 1
+    });
+
+    horizon('subscription').update({id: sub.id, balance: Math.max(0, sub.balance - newBal), history});
+  }
+
+  getSubscription() {
+
+    return this.props.subs.find(el => el.userID === this.props.params.id);
+  }
+
   render() {
 
-    const sub = this.props.subs.find(el => el.userID === this.props.params.id);
+    const sub = this.getSubscription();
 
     if (!sub) {
       return (
@@ -49,16 +108,41 @@ class UsersViewSingle extends React.Component {
       <div className={s.root}>
         <div className={s.content}>
           <div className={s.title}>
-          Viewing {sub.userName}
+          Viewing <span className={s.name}>{sub.userName}</span>
           </div>
           <div className={s.status}>
-          {sub.premium ? "Premium" : "Free"} User
+          {sub.premium ? <span><span className={s.premium}>Premium</span> expires {(new Date(sub.subscription_date.getTime() + 2592000000)).toString()}</span> : "Free"}
           </div>
           <div className={s.balance}>
-          Current Balance: {formatNumberUnit(sub.balance)}
+          {formatNumberUnit(sub.balance)} Balance
           </div>
           <div className={s.actions}>
-          Actions
+            <div>
+              <TextField
+                type="number"
+                floatingLabelText="Add Balance"
+                floatingLabelStyle={{color: "#BDBDBD"}}
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                inputStyle={{color: "#FFF"}}
+                style={{display: "inline-block"}}
+                onChange={this.setAddBalance}
+              />
+              <FlatButton icon={<AddIcon />} label="Add Balance" secondary={true} onTouchTap={()=>{this.doAddBalance()}} />
+            </div>
+            <div>
+              <TextField
+                type="number"
+                floatingLabelText="Remove Balance"
+                floatingLabelStyle={{color: "#BDBDBD"}}
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                inputStyle={{color: "#FFF"}}
+                style={{display: "inline-block"}}
+                onChange={this.setRemoveBalance}
+              />
+              <FlatButton icon={<RemoveIcon />} label="Remove Balance" secondary={true} onTouchTap={()=>{this.doRemoveBalance()}} />
+            </div>
           </div>
           <div className={s.history}>
           History
@@ -70,7 +154,7 @@ class UsersViewSingle extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { subs: store.admin.subscriptions };
+  return { subs: store.admin.subscriptions, auth: store.auth };
 }
 
 export default connect(mapStateToProps)(UsersViewSingle);
