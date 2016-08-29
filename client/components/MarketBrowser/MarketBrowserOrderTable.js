@@ -78,10 +78,10 @@ class MarketBrowserOrderTable extends React.Component {
                 <th>
                   Location
                 </th>
-                <th>
+                <th style={{textAlign: "right"}}>
                   Volume
                 </th>
-                <th>
+                <th style={{textAlign: "right"}}>
                   Price
                 </th>
               </tr>
@@ -97,8 +97,8 @@ class MarketBrowserOrderTable extends React.Component {
                   return (
                     <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
                       <td>{stationIDToName[el.stationID] || "Citadel"}</td>
-                      <td>{el.volume}</td>
-                      <td>{formatNumber(el.price)}</td>
+                      <td style={{textAlign: "right"}}>{el.volume}</td>
+                      <td style={{textAlign: "right"}}>{formatNumber(el.price)}</td>
                     </tr>
                   )
                 })
@@ -118,8 +118,8 @@ class MarketBrowserOrderTable extends React.Component {
                   return (
                     <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
                       <td>{stationIDToName[el.stationID] || "Citadel"}</td>
-                      <td>{el.volume}</td>
-                      <td>{formatNumber(el.price)}</td>
+                      <td style={{textAlign: "right"}}>{el.volume}</td>
+                      <td style={{textAlign: "right"}}>{formatNumber(el.price)}</td>
                     </tr>
                   )
                 })
