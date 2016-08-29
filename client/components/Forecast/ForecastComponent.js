@@ -164,11 +164,11 @@ export default class ForecastComponent extends React.Component {
         }
         else if (this.state.sort === 2) {
 
-          results = results.sort((el1, el2) => this.state.direction ? el1.spread - el2.spread : el2.spread - el1.spread);
+          results = results.sort((el1, el2) => this.state.direction ? el1.spreadSMA - el2.spreadSMA : el2.spreadSMA - el1.spreadSMA);
         }
         else if (this.state.sort === 3) {
 
-          results = results.sort((el1, el2) => this.state.direction ? el1.tradeVolume - el2.tradeVolume : el2.tradeVolume - el1.tradeVolume);
+          results = results.sort((el1, el2) => this.state.direction ? el1.tradeVolumeSMA - el2.tradeVolumeSMA : el2.tradeVolumeSMA - el1.tradeVolumeSMA);
         }
       }
 
@@ -221,8 +221,8 @@ export default class ForecastComponent extends React.Component {
                     <tr key={i} className={s.row}>
                       <td className={s.column}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{itemIDToName(el.type)}</span></td>
                       <td className={s.column}>{formatNumberUnit(el.buyFifthPercentile)}</td>
-                      <td className={s.column}>{formatPercent(el.spread)}%</td>
-                      <td className={s.column}>{el.tradeVolume}</td>
+                      <td className={s.column}>{formatPercent(el.spreadSMA)}%</td>
+                      <td className={s.column}>{el.tradeVolumeSMA.toFixed(0)}</td>
                     </tr>
                   )
                 })
