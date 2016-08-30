@@ -6,6 +6,7 @@ import { updateNotifications } from './actions/notificationsActions';
 import { updateSubscription } from './actions/subscriptionActions';
 import { setUserOrders } from './actions/marketActions';
 import { updateAllSubscriptions } from './actions/adminActions';
+import { updatePortfolios } from './actions/portfoliosActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
 import Promise from 'bluebird';
@@ -234,6 +235,15 @@ function doHorizonSubscriptions() {
     }
 
     store.dispatch(setUserOrders(orders));
+  });
+
+  horizon('portfolios').findAll({userID: userData.id}).watch().defaultIfEmpty().subscribe( portfolios => {
+
+    if (!portfolios) {
+      return;
+    }
+
+    store.dispatch(updatePortfolios(portfolios));
   });
 }
 

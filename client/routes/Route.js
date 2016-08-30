@@ -23,6 +23,8 @@ import OrdersComponent from '../components/Orders/OrdersComponent';
 import UsersComponent from '../components/Users/UsersComponent';
 import UsersView from '../components/Users/UsersView';
 import UsersViewSingle from '../components/Users/UsersViewSingle';
+import PortfoliosComponent from '../components/Portfolios/PortfoliosComponent';
+import PortfoliosCreate from '../components/Portfolios/PortfoliosCreate';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -49,6 +51,9 @@ export default (
           <Route path="topitems" component={ProfitTopItems} />
           <Route path="stats" component={ProfitAlltime} />
           <Route path="transactions" component={ProfitTransactions} />
+        </Route>
+        <Route path="portfolios" components={{main: PortfoliosComponent}} onEnter={requireAccess("premium")}>
+          <Route path="create" component={PortfoliosCreate} />
         </Route>
         <Route path="admin" components={{main: AdminComponent}} onEnter={requireAccess("admin")}/>
         <Route path="users" components={{main: UsersComponent}} onEnter={requireAccess("admin")}>

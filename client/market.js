@@ -156,7 +156,6 @@ export function getMarketGroupTree(searchText) {
   return groups;
 }
 
-
 export function itemIDToName(id) {
 
   let searchID = typeof id === "string" ? id : id.toString();
@@ -187,4 +186,64 @@ export function itemIDToName(id) {
   }
 
   return name;
+}
+
+export function itemNameToID(name) {
+
+  let searchName = name;
+  let foundID = 0;
+
+  const _itemNameToID = (group, name, functor) => {
+
+    if (group.items && group.items.length) {
+
+      for (const item of group.items) {
+
+        if (item.name === name) {
+          foundID = item.id;
+          return;
+        }
+      }
+    }
+
+    for (const child of group.childGroups) {
+
+      functor(child, name, functor);
+    }
+  }
+
+  for (const group of marketGroups) {
+
+    _itemNameToID(group, searchName, _itemNameToID);
+  }
+
+  return foundID;
+}
+
+export function getMarketItemNames() {
+
+  const names = [];
+
+  const _getItemName = (group, names, functor) => {
+
+    if (group.items && group.items.length) {
+
+      for (var i in group.items) {
+
+        names.push(group.items[i].name);
+      }
+    }
+
+    for (const child of group.childGroups) {
+
+      functor(child, names, functor);
+    }
+  }
+
+  for (const group of marketGroups) {
+
+    _getItemName(group, names, _getItemName);
+  }
+
+  return names;
 }

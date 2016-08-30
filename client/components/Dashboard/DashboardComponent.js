@@ -22,13 +22,14 @@ import IconButton from 'material-ui/IconButton';
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import ProfileIcon from 'material-ui/svg-icons/action/account-box';
 import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
-import ShoppingIcon from 'material-ui/svg-icons/action/shopping-cart';
+import BrowserIcon from 'material-ui/svg-icons/action/shopping-cart';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import LeftArrowIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import ProfitIcon from 'material-ui/svg-icons/action/timeline';
 import OrderIcon from 'material-ui/svg-icons/content/content-paste';
 import ForecastIcon from 'material-ui/svg-icons/action/search';
 import UsersIcon from 'material-ui/svg-icons/action/supervisor-account';
+import PortfoliosIcon from 'material-ui/svg-icons/notification/folder-special';
 
 const MainMenu = [
   {
@@ -61,7 +62,7 @@ const MarketMenu = [
   {
     "name": "Browser",
     "route": "/dashboard/browser",
-    "icon": <ShoppingIcon />,
+    "icon": <BrowserIcon />,
     "perm": "guest"
   },
   {
@@ -80,6 +81,12 @@ const MarketMenu = [
     "name": "Forecast",
     "route": "/dashboard/forecast",
     "icon": <ForecastIcon />,
+    "perm": "premium"
+  },
+  {
+    "name": "Portfolios",
+    "route": "/dashboard/portfolios",
+    "icon": <PortfoliosIcon />,
     "perm": "premium"
   }
 ];

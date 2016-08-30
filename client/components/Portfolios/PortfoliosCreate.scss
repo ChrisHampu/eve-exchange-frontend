@@ -1,0 +1,32 @@
+@import '../variables.scss';
+
+.root {
+   .stepper {
+
+    > div {
+      display: flex;
+
+      > div > span {
+        display: flex;
+        color: $gold-color !important;
+
+        svg {
+          path {
+            fill: $gold-color;
+          }
+        }
+      }
+    }
+  }
+
+  .select {
+    svg {
+      fill: $blue-color !important;
+    }
+  }
+
+  .error_text {
+    color: $red-color;
+    margin: .5rem 0;
+  }
+}
