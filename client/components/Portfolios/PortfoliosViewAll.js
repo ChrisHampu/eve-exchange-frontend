@@ -20,6 +20,16 @@ class PortfoliosViewAll extends React.Component {
   }
 
   render() {
+
+    if (this.props.children) {
+      
+      return (
+        <div>
+          {this.props.children}
+        </div>
+      )
+    }
+
     return (
       <div>
         <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>

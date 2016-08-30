@@ -8,15 +8,35 @@ import DashboardPageBody from '../DashboardPage/DashboardPageBody';
 import PortfoliosViewAll from './PortfoliosViewAll';
 import cx from 'classnames';
 
-export default class Portfolios extends React.Component {
+class Portfolios extends React.Component {
 
   render() {
 
+    let defaultPath = "/dashboard/portfolios";
+
+    if (this.props.location.pathname === "/dashboard/portfolios/view") {
+      defaultPath = this.props.location.pathname;
+    }
+
+    const menu = {
+      'View All': defaultPath,
+      'Create New': "/dashboard/portfolios/create"
+    };
+
+    const match = this.props.location.pathname.match(/dashboard\/portfolios\/view\/([0-9]+)/);
+
+    if (match && match[1]) {
+      
+      const portfolio = this.props.portfolios.find(el => el.portfolioID === parseInt(match[1]));
+
+      if (portfolio) {
+        menu[portfolio.name] = `/dashboard/portfolios/view/${portfolio.portfolioID}`;
+      }
+    }
+
     return (
       <DashboardPage title="Portfolios" fullWidth={true}>
-        <DashboardPageMenu menu={{
-          'View All': "/dashboard/portfolios",
-          'Create New': "/dashboard/portfolios/create",}}
+        <DashboardPageMenu menu={menu}
           location={this.props.location}
         />
         <DashboardPageBody children={this.props.children} defaultComponent={<PortfoliosViewAll />} />
@@ -24,3 +44,9 @@ export default class Portfolios extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function(store) {
+  return { portfolios: store.portfolios };
+}
+
+export default connect(mapStateToProps)(Portfolios);

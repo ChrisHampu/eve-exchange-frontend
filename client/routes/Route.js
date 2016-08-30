@@ -25,6 +25,8 @@ import UsersView from '../components/Users/UsersView';
 import UsersViewSingle from '../components/Users/UsersViewSingle';
 import PortfoliosComponent from '../components/Portfolios/PortfoliosComponent';
 import PortfoliosCreate from '../components/Portfolios/PortfoliosCreate';
+import PortfoliosViewAll from '../components/Portfolios/PortfoliosViewAll';
+import PortfoliosViewSingle from '../components/Portfolios/PortfoliosViewSingle';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -54,6 +56,10 @@ export default (
         </Route>
         <Route path="portfolios" components={{main: PortfoliosComponent}} onEnter={requireAccess("premium")}>
           <Route path="create" component={PortfoliosCreate} />
+
+          <Route path="view" component={PortfoliosViewAll}>
+            <Route path=":id" component={PortfoliosViewSingle} />
+          </Route>
         </Route>
         <Route path="admin" components={{main: AdminComponent}} onEnter={requireAccess("admin")}/>
         <Route path="users" components={{main: UsersComponent}} onEnter={requireAccess("admin")}>
