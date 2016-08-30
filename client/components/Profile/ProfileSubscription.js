@@ -156,9 +156,9 @@ class Subscription extends React.Component {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({jwt: getAuthToken()})
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${getAuthToken()}`
+      }
     })
     .then(res => {
       return res.json();
@@ -176,9 +176,9 @@ class Subscription extends React.Component {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({jwt: getAuthToken()})
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${getAuthToken()}`
+      }
     })
     .then(res => {
       return res.json();
@@ -196,9 +196,9 @@ class Subscription extends React.Component {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({jwt: getAuthToken()})
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${getAuthToken()}`
+      }
     })
     .then(res => {
       return res.json();
