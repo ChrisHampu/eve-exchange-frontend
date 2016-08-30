@@ -31,12 +31,16 @@
       }
 
       .sidebar_title {
-        padding: 1rem 0;
         text-align: center;
         color: $blue-color;
         font-weight: 300;
         font-size: 1.4rem;
         background-color: $base-color-darkest;
+        padding: 0.5rem 0;
+
+        > span > img {
+          max-height: 39px;
+        }
       }
 
       .sidebar_menu_divider {

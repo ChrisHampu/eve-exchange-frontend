@@ -8,6 +8,8 @@ import cx from 'classnames';
 import DashboardView from './DashboardView';
 import s from './DashboardComponent.scss';
 
+import logo_image from '../../assets/img/ETF-LogoNoBG.png';
+
 // Material UI
 import Paper from 'material-ui/Paper';
 import Menu from 'material-ui/Menu';
@@ -180,7 +182,7 @@ class Dashboard extends React.Component {
         <Paper zDepth={2} className={s.sidebar_container}>
           <div className={s.sidebar_inner}>
             <div className={s.sidebar_title}>
-              <span className={s.name} onClick={()=>this.setRoute('/')}>Trade Forecaster</span>
+              <span className={s.name} onClick={()=>this.setRoute('/')}><img src={`/${logo_image}`} /></span>
             </div>
             <Divider className={s.divider_line} />
             <div className={s.sidebar_menu_divider}>
