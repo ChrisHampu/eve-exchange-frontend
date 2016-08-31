@@ -35,10 +35,10 @@ class PortfoliosViewAll extends React.Component {
         <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow selectable={false}>
-              <TableHeaderColumn style={{textAlign: "center"}}>Name</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Description</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Value</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Type</TableHeaderColumn>
+              <TableHeaderColumn>Name</TableHeaderColumn>
+              <TableHeaderColumn>Description</TableHeaderColumn>
+              <TableHeaderColumn>Value</TableHeaderColumn>
+              <TableHeaderColumn>Type</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
@@ -53,7 +53,7 @@ class PortfoliosViewAll extends React.Component {
                     <TableRow key={i} className={s.row}>
                       <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/portfolios/view/${el.portfolioID}`)}}>{el.name}</span></TableRowColumn>
                       <TableRowColumn>{el.description}</TableRowColumn>
-                      <TableRowColumn>{formatNumberUnit(0)}</TableRowColumn>
+                      <TableRowColumn>{formatNumberUnit(el.currentValue)}</TableRowColumn>
                       <TableRowColumn>{el.type === 0 ? "Trading" : "Industry"}</TableRowColumn>
                     </TableRow>
                   )

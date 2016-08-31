@@ -51,7 +51,7 @@ export default class PortfoliosCreate extends React.Component {
       portfolioIndustryEfficiency: 0,
       portfolioIndustryItem: null,
       showProgressCircle: false,
-      portfolioIndustryQuantity: 0
+      portfolioIndustryQuantity: 1
     };
 
     this.blueprints = [];

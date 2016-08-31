@@ -123,11 +123,11 @@ class PortfoliosComponentTable extends React.Component {
         <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow selectable={false}>
-              <TableHeaderColumn style={{textAlign: "center"}}>Name</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Unit Price</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Total Price</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Spread</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Quantity</TableHeaderColumn>
+              <TableHeaderColumn>Name</TableHeaderColumn>
+              <TableHeaderColumn>Unit Price</TableHeaderColumn>
+              <TableHeaderColumn>Total Price</TableHeaderColumn>
+              <TableHeaderColumn>Spread</TableHeaderColumn>
+              <TableHeaderColumn>Quantity</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
