@@ -40,48 +40,6 @@ class PortfoliosComponentTable extends React.Component {
     this.context.router.push(path);
   }
 
-  componentWillMount() {
-
-    this.updateComponents();
-  }
-
-  async updateComponents() {
-
-    for (const component of this.props.portfolio.components) {
-
-       fetch(`${rootUrl}${component.typeID}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${getAuthToken()}`
-        }
-      })
-      .then(res => res.json())
-      .then(result => {
-
-        store.dispatch(updateComponentDataSingle(result.type, result));
-      });
-    }
-  }
-
-  getComponentData(component) {
-
-    const data = this.props.componentData[component.typeID];
-
-    let unitPrice = 0, totalPrice = 0, spread = 0, volume = 0;
-
-    if (data) {
-
-      unitPrice = data.buyFifthPercentile;
-      totalPrice = unitPrice * component.quantity;
-      spread = data.spread;
-      volume = data.tradeVolume;
-    }
-
-    return { unitPrice, totalPrice, spread, volume, quantity: component.quantity }
-  }
-
   setComponentFilter = (event, index, value) => this.setState({componentFilter: value});
 
   render() {
@@ -134,14 +92,12 @@ class PortfoliosComponentTable extends React.Component {
             {
               components.map((el, i) => {
 
-                const data = this.getComponentData(el);
-
                 return (
                   <TableRow key={i}>
                     <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
-                    <TableRowColumn>{formatNumberUnit(data.unitPrice)}</TableRowColumn>
-                    <TableRowColumn>{formatNumberUnit(data.totalPrice)}</TableRowColumn>
-                    <TableRowColumn>{formatPercent(data.spread)}%</TableRowColumn>
+                    <TableRowColumn>{formatNumberUnit(el.unitPrice || 0)}</TableRowColumn>
+                    <TableRowColumn>{formatNumberUnit(el.totalPrice || 0)}</TableRowColumn>
+                    <TableRowColumn>{formatPercent(el.spread || 0)}%</TableRowColumn>
                     <TableRowColumn>{el.quantity}</TableRowColumn>
                   </TableRow>
                 )
