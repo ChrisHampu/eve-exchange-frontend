@@ -358,8 +358,13 @@ export default class PortfoliosCreate extends React.Component {
                   {this.renderPortfolioItemsArray()}
                 </div>
                 :
-                <div style={{marginBottom: "1rem"}}>
-                Industry Item: <span style={{color: "#fff"}}>{this.state.portfolioIndustryItem}</span>
+                <div>
+                  <div style={{marginBottom: "1rem"}}>
+                  Manufactured Item: <span style={{color: "#fff"}}>{this.state.portfolioIndustryItem}</span>
+                  </div>
+                  <div style={{marginBottom: "1rem"}}>
+                  Manufactured Quantity: <span style={{color: "#fff"}}>{this.state.portfolioIndustryQuantity}</span>
+                  </div>
                 </div>
             }
             <div style={{color: "#fff", margin: "1.25rem 0"}}>
