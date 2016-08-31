@@ -499,7 +499,7 @@ export default class PortfoliosCreate extends React.Component {
         />
         <TextField
           type="number"
-          floatingLabelText="Amount to track"
+          floatingLabelText="Number of runs"
           inputStyle={{color: "#FFF"}}
           style={{display: "block", marginBottom: ".8rem"}}
           onChange={(event) => this.setState({portfolioIndustryQuantity: event.target.value})}
