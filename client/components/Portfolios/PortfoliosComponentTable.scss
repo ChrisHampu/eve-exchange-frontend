@@ -1,0 +1,30 @@
+@import '../variables.scss';
+
+.browser_route {
+  color: $blue-color;
+  cursor: pointer;
+
+  &:hover {
+    color: color($blue-color lightness(+15%));
+  }
+}
+
+.table_header {
+    
+  background-color: $base-color-darkest;
+  padding: 1rem;
+
+  .table_header_title {
+    display: inline-block;
+    //margin-left: 1.5rem;
+    color: #eba91b;
+    font-weight: 300;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+
+  .table_header_selector {
+    margin-left: 1.5rem;
+    display: inline-block;
+  }
+}

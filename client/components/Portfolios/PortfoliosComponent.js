@@ -46,7 +46,7 @@ class Portfolios extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { portfolios: store.portfolios };
+  return { portfolios: store.portfolios.all };
 }
 
 export default connect(mapStateToProps)(Portfolios);

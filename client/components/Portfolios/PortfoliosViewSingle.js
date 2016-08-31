@@ -5,8 +5,18 @@ import store from '../../store';
 import s from './PortfoliosViewSingle.scss';
 import cx from 'classnames';
 import { formatNumberUnit } from '../../utilities';
+import { itemIDToName } from '../../market';
+
+import PortfoliosComponentTable from './PortfoliosComponentTable';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton/IconButton';
+import Paper from 'material-ui/Paper';
+import SelectField from 'material-ui/SelectField';
+
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 class PortfoliosViewSingle extends React.Component {
 
@@ -17,6 +27,14 @@ class PortfoliosViewSingle extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      
+    };
+  }
 
   setRoute(path) {
 
@@ -40,15 +58,39 @@ class PortfoliosViewSingle extends React.Component {
     }
 
     return (
-      <div>
-      {portfolio ? portfolio.name : `Cannot find portfolio with id ${this.props.params.id}`}
+      <div className={s.root}>
+        <Paper zDepth={2}>
+          <div className={s.metadata}>
+            <div className={s.values}>
+            Total Value of {portfolio.type === 0 ? "Trading" : "Industrial"} Portfolio: <span className={s.value}>{portfolio.currentValue} ISK</span>Average Spread: <span className={s.value}>0%</span>
+            </div>
+            <div className={s.corner_menu}>
+              <IconMenu
+                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                className={s.icon_menu}
+              >
+                <MenuItem type="text" primaryText="Delete" onTouchTap={()=>{}} style={{cursor: "pointer"}} />
+               </IconMenu>
+            </div>
+          </div>
+        </Paper>
+        <div className={s.content}>
+          <div className={s.left}>
+            <PortfoliosComponentTable portfolio={portfolio} />
+          </div>
+          <div className={s.right}>
+          
+          </div>
+        </div>
       </div>
     )
   }
 }
 
 const mapStateToProps = function(store) {
-  return { portfolios: store.portfolios };
+  return { portfolios: store.portfolios.all };
 }
 
 export default connect(mapStateToProps)(PortfoliosViewSingle);
