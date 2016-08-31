@@ -49,16 +49,16 @@ class PortfoliosComponentTable extends React.Component {
     if (this.state.componentFilter) {
       if (this.state.componentFilter === 1) {
 
-        components = components.sort((el1, el2) => this.getComponentData(el2).unitPrice - this.getComponentData(el1).unitPrice);
+        components = components.sort((el1, el2) => (el2.unitPrice || 0) - (el1.unitPrice || 0));
       } else if (this.state.componentFilter === 2) {
 
-        components = components.sort((el1, el2) => this.getComponentData(el2).totalPrice - this.getComponentData(el1).totalPrice);
+        components = components.sort((el1, el2) => (el2.totalPrice || 0) - (el1.totalPrice || 0));
       } else if (this.state.componentFilter === 3) {
 
-        components = components.sort((el1, el2) => this.getComponentData(el2).spread - this.getComponentData(el1).spread);
+        components = components.sort((el1, el2) => (el2.spread || 0) - (el1.spread || 0));
       } else if (this.state.componentFilter === 4) {
 
-        components = components.sort((el1, el2) => this.getComponentData(el2).quantity - this.getComponentData(el1).quantity);
+        components = components.sort((el1, el2) => (el2.quantity || 0) - (el1.quantity || 0));
       }
     }
 

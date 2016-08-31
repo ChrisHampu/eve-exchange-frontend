@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import s from './PortfoliosViewSingle.scss';
 import cx from 'classnames';
-import { formatNumberUnit } from '../../utilities';
+import { formatNumber, formatPercent } from '../../utilities';
 import { itemIDToName } from '../../market';
 
 import PortfoliosComponentTable from './PortfoliosComponentTable';
@@ -62,7 +62,7 @@ class PortfoliosViewSingle extends React.Component {
         <Paper zDepth={2}>
           <div className={s.metadata}>
             <div className={s.values}>
-            Total Value of {portfolio.type === 0 ? "Trading" : "Industrial"} Portfolio: <span className={s.value}>{portfolio.currentValue} ISK</span>Average Spread: <span className={s.value}>0%</span>
+            Total Value of {portfolio.type === 0 ? "Trading" : "Industrial"} Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>
             </div>
             <div className={s.corner_menu}>
               <IconMenu
