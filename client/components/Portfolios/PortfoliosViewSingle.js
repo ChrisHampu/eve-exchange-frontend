@@ -61,9 +61,15 @@ class PortfoliosViewSingle extends React.Component {
       <div className={s.root}>
         <Paper zDepth={2}>
           <div className={s.metadata}>
-            <div className={s.values}>
-            Total Value of {portfolio.type === 0 ? "Trading" : "Industrial"} Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>
-            </div>
+            {
+              portfolio.type === 0 ?
+                <div className={s.values}>
+                Total Value of Trading Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>
+                </div> :
+                <div className={s.values}>
+                Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber(portfolio.industryValue || 0)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
+                </div>
+            }
             <div className={s.corner_menu}>
               <IconMenu
                 iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
