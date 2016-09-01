@@ -292,8 +292,8 @@ export default class PortfoliosCreate extends React.Component {
             <div>
               Trading: Optimized for tracking profitable trades and long term investments
             </div>
-            <div>
-              Industry: Optimized for tracking material prices, manufacturing profit, and features specialized charts
+            <div style={{marginTop: "0.5rem"}}>
+              Industry: Exclusive to manufacturable items. Optimized for tracking material prices, manufacturing profit, and features specialized charts
             </div>
           </div>
         );

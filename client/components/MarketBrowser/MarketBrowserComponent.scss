@@ -46,38 +46,6 @@
       }
     }
   }
-
-  .market_browser_row {
-    cursor: pointer;
-    width: 100%;
-    //margin-left: 10px;
-
-    .market_browser_row_meta {
-      padding: 0.5rem;
-
-      &:hover {
-        background-color: $base-color;
-      }
-
-      svg {
-        vertical-align: middle;
-        fill: #eba91b !important;
-      }
-
-      .market_browser_row_name {
-        display: inline-block;
-        vertical-align: middle;
-      }
-    }
-
-    .market_browser_item {
-      padding: 0.35rem 0 0.35rem 1rem;
-
-      &:hover {
-        background-color: $base-color;
-      }
-    }
-  }
 }
 
 ::-webkit-scrollbar {
