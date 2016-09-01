@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
@@ -7,6 +8,7 @@ import s from './PortfoliosViewSingle.scss';
 import cx from 'classnames';
 import { formatNumber, formatPercent } from '../../utilities';
 import { itemIDToName } from '../../market';
+import { getAuthToken } from '../../horizon';
 
 import PortfoliosComponentTable from './PortfoliosComponentTable';
 import PortfoliosPerformanceChart from './PortfoliosPerformanceChart';
@@ -18,6 +20,7 @@ import IconButton from 'material-ui/IconButton/IconButton';
 import Paper from 'material-ui/Paper';
 import SelectField from 'material-ui/SelectField';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
@@ -36,7 +39,8 @@ class PortfoliosViewSingle extends React.Component {
 
     this.state = {
       width: 0,
-      height: 0
+      height: 0,
+      deleteRequested: false
     };
   }
 
@@ -47,7 +51,7 @@ class PortfoliosViewSingle extends React.Component {
 
   updateContainer() {
 
-    if (!this.getPortfolio()) {
+    if (!this.getPortfolio() || !this.refs.content) {
       return;
     }
 
@@ -76,14 +80,58 @@ class PortfoliosViewSingle extends React.Component {
     return this.props.portfolios.find(el => el.portfolioID === parseInt(this.props.params.id));
   }
 
+  deletePortfolio() {
+
+    this.setState({
+      deleteRequested: true
+    }, async () => {
+
+      try {
+        const portfolio = this.getPortfolio();
+
+        const res = await fetch(`http://api.evetradeforecaster.com/portfolio/delete/${portfolio.portfolioID}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${getAuthToken()}`
+          }
+        });
+
+        const result = await res.json();
+
+        console.log(result);
+
+        if (result.error) {
+          throw (result.error);
+        }
+
+        this.setRoute('/dashboard/portfolios/view');
+
+      } catch (e) {
+
+        console.log(e);
+        this.setRoute('/dashboard/portfolios/view');
+      }
+    })
+  }
+
   render() {
 
     const portfolio = this.getPortfolio();
 
     if (!portfolio) {
       return (
-        <div>
+        <div className={s.root}>
         {`Cannot find portfolio with id ${this.props.params.id}`}
+        </div>
+      )
+    }
+
+    if (this.state.deleteRequested) {
+      return (
+        <div style={{display: "flex", alignItems: "center", width: "100%", minHeight: "150px"}}>
+          <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
         </div>
       )
     }
@@ -108,7 +156,7 @@ class PortfoliosViewSingle extends React.Component {
                 targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 className={s.icon_menu}
               >
-                <MenuItem type="text" primaryText="Delete" onTouchTap={()=>{}} style={{cursor: "pointer"}} />
+                <MenuItem type="text" primaryText="Delete" onTouchTap={()=>this.deletePortfolio()} style={{cursor: "pointer"}} />
                </IconMenu>
             </div>
           </div>
