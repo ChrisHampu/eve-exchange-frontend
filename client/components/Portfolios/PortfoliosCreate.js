@@ -25,8 +25,10 @@ import Dialog from 'material-ui/Dialog';
 import AutoComplete from 'material-ui/AutoComplete';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import CircularProgress from 'material-ui/CircularProgress';
+import IconButton from 'material-ui/IconButton';
 
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
+import RemoveIcon from 'material-ui/svg-icons/content/remove';
 
 export default class PortfoliosCreate extends React.Component {
 
@@ -408,6 +410,15 @@ export default class PortfoliosCreate extends React.Component {
     }
   }
 
+  removeTradingItem(index) {
+
+    this.state.portfolioSelectedItems.splice(index, 1);
+
+    this.setState({
+      portfolioSelectedItems: this.state.portfolioSelectedItems
+    });
+  }
+
   renderTradingSelect() {
     return (
       <div>
@@ -465,7 +476,16 @@ export default class PortfoliosCreate extends React.Component {
             this.state.portfolioSelectedItems.map((el, i) => {
               return (
                 <TableRow key={i} selectable={false}>
-                  <TableRowColumn>{el.name}</TableRowColumn>
+                  <TableRowColumn>
+                    <div className={s.remove_button}>
+                      <IconButton onTouchTap={()=>this.removeTradingItem(i)} tooltip={null} tooltipPosition="top-center" style={{cursor: "pointer"}}>
+                        <RemoveIcon />
+                      </IconButton>
+                    </div>
+                    <div className={s.item_name}>
+                    {el.name}
+                    </div>
+                  </TableRowColumn>
                   <TableRowColumn>{el.quantity}</TableRowColumn>
                 </TableRow>
               )

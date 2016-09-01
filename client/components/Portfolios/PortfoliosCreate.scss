@@ -19,6 +19,17 @@
     }
   }
 
+  .remove_button {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .item_name {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+  }
+
   .select {
     svg {
       fill: $blue-color !important;
