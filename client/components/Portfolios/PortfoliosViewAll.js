@@ -24,7 +24,7 @@ class PortfoliosViewAll extends React.Component {
     if (this.props.children) {
       
       return (
-        <div>
+        <div style={{height: "100%"}}>
           {this.props.children}
         </div>
       )

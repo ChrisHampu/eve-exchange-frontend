@@ -3,6 +3,10 @@
 
 
 .root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
   .corner_menu {
     display: inline-block;
     vertical-align: middle;
@@ -42,16 +46,24 @@
   }
 
   .content {
-
-    margin-top: 2rem;
+    flex: 1;
+    margin-top: 1rem;
     display: flex;
 
-    .left {
-
+    .tab_container {
+      display: flex !important;
     }
 
-    .right {
+    .tab_content {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      > div {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 

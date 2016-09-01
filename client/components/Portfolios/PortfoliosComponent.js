@@ -39,7 +39,7 @@ class Portfolios extends React.Component {
         <DashboardPageMenu menu={menu}
           location={this.props.location}
         />
-        <DashboardPageBody children={this.props.children} defaultComponent={<PortfoliosViewAll />} />
+        <DashboardPageBody children={this.props.children} defaultComponent={<PortfoliosViewAll />} padding={false}/>
       </DashboardPage>
     );
   }

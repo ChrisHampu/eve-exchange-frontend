@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import store from '../../store';
 import s from './PortfoliosViewSingle.scss';
@@ -8,6 +9,7 @@ import { formatNumber, formatPercent } from '../../utilities';
 import { itemIDToName } from '../../market';
 
 import PortfoliosComponentTable from './PortfoliosComponentTable';
+import PortfoliosPerformanceChart from './PortfoliosPerformanceChart';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import IconMenu from 'material-ui/IconMenu';
@@ -15,6 +17,7 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import Paper from 'material-ui/Paper';
 import SelectField from 'material-ui/SelectField';
+import { Tabs, Tab } from 'material-ui/Tabs';
 
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
@@ -32,13 +35,41 @@ class PortfoliosViewSingle extends React.Component {
     super(props);
 
     this.state = {
-      
+      width: 0,
+      height: 0
     };
   }
 
   setRoute(path) {
 
     this.context.router.push(path);
+  }
+
+  updateContainer() {
+
+    if (!this.getPortfolio()) {
+      return;
+    }
+
+    const newHeight = ReactDOM.findDOMNode(this.refs.content).clientHeight - 50; // -50 for the tab header
+    const newWidth = ReactDOM.findDOMNode(this.refs.content).clientWidth;
+
+    if (newHeight != this.state.height || newWidth != this.state.width) {
+      this.setState({
+        width: newWidth,
+        height: newHeight
+      });
+    }
+  }
+
+  componentDidMount() {
+
+    this.updateContainer();
+  }
+
+  componentDidUpdate() {
+
+    this.updateContainer();
   }
 
   getPortfolio() {
@@ -82,13 +113,15 @@ class PortfoliosViewSingle extends React.Component {
             </div>
           </div>
         </Paper>
-        <div className={s.content}>
-          <div className={s.left}>
-            <PortfoliosComponentTable portfolio={portfolio} />
-          </div>
-          <div className={s.right}>
-          
-          </div>
+        <div className={s.content} ref="content">
+          <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content} onChange={()=>this.refs.chart.updateContainer()}>
+            <Tab label="Components" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+              <PortfoliosComponentTable portfolio={portfolio} />
+            </Tab>
+            <Tab label="Performance Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+              <PortfoliosPerformanceChart ref="chart" width={this.state.width} height={this.state.height} style={{flex: 1}} portfolio={portfolio} />
+            </Tab>
+          </Tabs>
         </div>
       </div>
     )

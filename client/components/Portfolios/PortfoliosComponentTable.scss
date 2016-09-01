@@ -1,5 +1,9 @@
 @import '../variables.scss';
 
+.root {
+  margin-bottom: 1rem;
+}
+
 .browser_route {
   color: $blue-color;
   cursor: pointer;
@@ -11,7 +15,8 @@
 
 .table_header {
     
-  background-color: $base-color-darkest;
+  background-color: $base-color-darker;
+  border-bottom: 2px solid $base-color-darkest;
   padding: 1rem;
 
   .table_header_title {

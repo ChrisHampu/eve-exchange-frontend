@@ -28,7 +28,9 @@ class ChartContainer extends React.Component {
     marginRight: React.PropTypes.number,
     marginLeft: React.PropTypes.number,
     getHitTestableData: React.PropTypes.func.isRequired,
-    getTooltipPresentation: React.PropTypes.func.isRequired
+    getTooltipPresentation: React.PropTypes.func.isRequired,
+    overrideWidth: React.PropTypes.number,
+    overrideHeight: React.PropTypes.number
   };
 
   static childContextTypes = {
@@ -52,6 +54,8 @@ class ChartContainer extends React.Component {
       },
       height: 0,
       width: 0,
+      containerHeight: 0,
+      containerWidth: 0,
       frequency: this.props.frequencyLevels ? Object.keys(this.props.frequencyLevels)[0] : "minutes",
       scrollPercent: 1,
       pageSize: 30,
@@ -82,21 +86,25 @@ class ChartContainer extends React.Component {
       return;
     }
 
-    const newHeight = ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight - this.state.margin.top - this.state.margin.bottom - 5;
-    const newWidth = ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth - this.state.margin.left - this.state.margin.right;
+    let newHeight = this.props.overrideHeight || ReactDOM.findDOMNode(this.refs.chart_anchor).clientHeight;
+    const newWidth = this.props.overrideWidth || ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth;
 
-    if (newHeight !== this.state.height || newWidth !== this.state.width) {
+    if (this.props.overrideHeight) {
+      newHeight -= ReactDOM.findDOMNode(this.refs.header).clientHeight + 5;
+    }
 
-      this.state.height = newHeight;
-      this.state.width = newWidth;
-
+    if (newHeight !== this.state.containerHeight || newWidth !== this.state.containerWidth) {
+       
       this.setState({
-        width: this.state.width,
-        height: this.state.height
+        width: newWidth - this.state.margin.left - this.state.margin.right,
+        height: Math.max(0, newHeight- this.state.margin.top - this.state.margin.bottom),
+        containerWidth: newWidth,
+        containerHeight: newHeight
       }, () => {
 
         this.props.onChartChanged();
       });
+      
     }
   }
 
@@ -247,7 +255,7 @@ class ChartContainer extends React.Component {
 
     return (
       <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%", width: "100%" }}>
-        <div>
+        <div ref="header">
           {
             this.props.title ? 
               <div style={{display: "inline-block", color: "#59c8e2", marginRight: "1rem"}}>

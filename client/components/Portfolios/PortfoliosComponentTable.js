@@ -63,49 +63,48 @@ class PortfoliosComponentTable extends React.Component {
     }
 
     return (
-      <Paper zDepth={2}>
-        <div className={s.table_header}>
-          <div className={s.table_header_title}>
-          Components
+      <div className={s.root}>
+        <Paper zDepth={2}>
+          <div className={s.table_header}>
+            <div className={s.table_header_selector}>
+              <SelectField value={this.state.componentFilter} onChange={this.setComponentFilter}>
+                <MenuItem type="text" value={0} primaryText="Unsorted" style={{cursor: "pointer"}}/>
+                <MenuItem type="text" value={1} primaryText="Sort by Unit Price" style={{cursor: "pointer"}} />
+                <MenuItem type="text" value={2} primaryText="Sort by Total Price" style={{cursor: "pointer"}} />
+                <MenuItem type="text" value={3} primaryText="Sort by Spread" style={{cursor: "pointer"}} />
+                <MenuItem type="text" value={4} primaryText="Sort by Quantity" style={{cursor: "pointer"}} />
+              </SelectField>
+            </div>
           </div>
-          <div className={s.table_header_selector}>
-            <SelectField value={this.state.componentFilter} onChange={this.setComponentFilter}>
-              <MenuItem type="text" value={0} primaryText="Unsorted" style={{cursor: "pointer"}}/>
-              <MenuItem type="text" value={1} primaryText="Sort by Unit Price" style={{cursor: "pointer"}} />
-              <MenuItem type="text" value={2} primaryText="Sort by Total Price" style={{cursor: "pointer"}} />
-              <MenuItem type="text" value={3} primaryText="Sort by Spread" style={{cursor: "pointer"}} />
-              <MenuItem type="text" value={4} primaryText="Sort by Quantity" style={{cursor: "pointer"}} />
-            </SelectField>
-          </div>
-        </div>
-        <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
-          <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-            <TableRow selectable={false}>
-              <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Unit Price</TableHeaderColumn>
-              <TableHeaderColumn>Total Price</TableHeaderColumn>
-              <TableHeaderColumn>Spread</TableHeaderColumn>
-              <TableHeaderColumn>Quantity</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
-            {
-              components.map((el, i) => {
+          <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
+            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+              <TableRow selectable={false}>
+                <TableHeaderColumn>Name</TableHeaderColumn>
+                <TableHeaderColumn>Unit Price</TableHeaderColumn>
+                <TableHeaderColumn>Total Price</TableHeaderColumn>
+                <TableHeaderColumn>Spread</TableHeaderColumn>
+                <TableHeaderColumn>Quantity</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={false}>
+              {
+                components.map((el, i) => {
 
-                return (
-                  <TableRow key={i}>
-                    <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
-                    <TableRowColumn>{formatNumberUnit(el.unitPrice || 0)}</TableRowColumn>
-                    <TableRowColumn>{formatNumberUnit(el.totalPrice || 0)}</TableRowColumn>
-                    <TableRowColumn>{formatPercent(el.spread || 0)}%</TableRowColumn>
-                    <TableRowColumn>{el.quantity}</TableRowColumn>
-                  </TableRow>
-                )
-              })
-            }
-          </TableBody>
-        </Table>
-      </Paper>
+                  return (
+                    <TableRow key={i}>
+                      <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
+                      <TableRowColumn>{formatNumberUnit(el.unitPrice || 0)}</TableRowColumn>
+                      <TableRowColumn>{formatNumberUnit(el.totalPrice || 0)}</TableRowColumn>
+                      <TableRowColumn>{formatPercent(el.spread || 0)}%</TableRowColumn>
+                      <TableRowColumn>{el.quantity}</TableRowColumn>
+                    </TableRow>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
+        </Paper>
+      </div>
     );
   }
 }

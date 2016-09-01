@@ -106,7 +106,7 @@ class MarketItemViewComponent extends React.Component {
         </div>
         <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
           <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
-            <div ref="market_container" className={s.market_item_chart_container}>
+            <div className={s.market_item_chart_container}>
               <MarketItemChart style={{flex: 1}} item={this.state.item} />
             </div>
           </Tab>

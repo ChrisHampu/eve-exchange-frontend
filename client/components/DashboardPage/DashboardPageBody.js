@@ -6,14 +6,21 @@ import cx from 'classnames';
 class DashboardPageBody extends React.Component {
 
   static propTypes = {
-    defaultComponent: React.PropTypes.object.isRequired
+    defaultComponent: React.PropTypes.object.isRequired,
+    padding: React.PropTypes.bool
   };
 
   render() {
 
+    let ignorePadding = false;
+
+    if (this.props.padding === false) {
+      ignorePadding = true;
+    }
+
     return (
-      <div className={s.body_container}>
-        <div className={s.body}>
+      <div className={cx(s.body_container, { [s.nopadding]: ignorePadding })}>
+        <div className={cx(s.body, { [s.nopadding]: ignorePadding })}>
           {this.props.children ? this.props.children : this.props.defaultComponent}
         </div>
       </div>
