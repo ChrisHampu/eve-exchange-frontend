@@ -1,6 +1,17 @@
 @import '../variables.scss';
 
+.fullheight {
+  height: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+}
+
 .root {
+
+  display: flex;
+
    .stepper {
 
     > div {
@@ -15,6 +26,22 @@
             fill: $gold-color;
           }
         }
+      }
+    }
+  }
+
+  .stepper_content {
+    flex: 1;
+
+    > div {
+      height: 100% !important;
+
+      > div {
+        height: 100%;
+        overflow: hidden;
+        flex-direction: column;
+        display: flex;
+        flex: 1;
       }
     }
   }
@@ -39,5 +66,21 @@
   .error_text {
     color: $red-color;
     margin: .5rem 0;
+  }
+
+  .select_columns {
+
+    display: flex;
+    height: 100%;
+
+    .select_pane {
+      flex: 1;
+      overflow-x: hidden;
+    }
+
+     .market_browser {
+        padding-left: 1.5rem;
+        //background-color: #262b2f;
+     }
   }
 }

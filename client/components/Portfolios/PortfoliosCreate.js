@@ -7,6 +7,9 @@ import s from './PortfoliosCreate.scss';
 import cx from 'classnames';
 import { getMarketItemNames, itemNameToID, itemIDToName } from '../../market';
 import { getAuthToken } from '../../horizon';
+import { getMarketGroupTree } from '../../market';
+
+import MarketBrowserListItem from '../MarketBrowser/MarketBrowserListItem';
 
 import blueprints from '../../sde/blueprints';
 import marketGroups from '../../sde/market_groups';
@@ -388,9 +391,9 @@ export default class PortfoliosCreate extends React.Component {
     });
   };
 
-  addTradingItem() {
+  addTradingItem(item) {
 
-    if (!this.state.portfolioSearchTradingQuantity || !this.state.portfolioSearchTradingItem) {
+    if (!item && (!this.state.portfolioSearchTradingQuantity || !this.state.portfolioSearchTradingItem)) {
       this.setState({
         error: "Select an item and enter a valid quantity"
       });
@@ -398,10 +401,21 @@ export default class PortfoliosCreate extends React.Component {
 
       const items = this.state.portfolioSelectedItems;
 
-      items.push({
-        quantity: this.state.portfolioSearchTradingQuantity,
-        name: this.state.portfolioSearchTradingItem
-      });
+      const newItem = item ? item.name : this.state.portfolioSearchTradingItem;
+      const newQuantity = this.state.portfolioSearchTradingQuantity || 1;
+
+      const existingIndex = items.findIndex(el => el.name == newItem);
+
+      if (existingIndex !== -1) {
+
+        items[existingIndex].quantity += newQuantity;
+
+      } else {
+        items.push({
+          quantity: newQuantity,
+          name: newItem
+        });
+      }
 
       this.setState({
         error: null,
@@ -421,33 +435,44 @@ export default class PortfoliosCreate extends React.Component {
 
   renderTradingSelect() {
     return (
-      <div>
+      <div className={cx({[s.fullheight]: this.state.createStepIndex === 2 && this.state.portfolioType === 0})}>
         <div style={{marginBottom: "0.5rem"}}>
-          Select the items for this portfolio
+          Search for portfolio items or select them from the market browser.
         </div>
-        <AutoComplete
-          hintText="Type item name"
-          dataSource={getMarketItemNames()}
-          filter={AutoComplete.caseInsensitiveFilter}
-          maxSearchResults={6}
-          menuStyle={{cursor: "pointer"}}
-          onNewRequest={this.updateTradingSearch}
-        />
-        <TextField
-          type="number"
-          floatingLabelText="Type quantity"
-          inputStyle={{color: "#FFF"}}
-          style={{display: "block", marginBottom: ".8rem"}}
-          onChange={(event) => this.setState({portfolioSearchTradingQuantity: event.target.value})}
-        />
-        <FlatButton
-          label="Add Item"
-          labelStyle={{color: "rgb(235, 169, 27)"}}
-          primary={true}
-          onTouchTap={()=>{this.addTradingItem()}}
-        />
-        <div style={{marginTop: "1.5rem"}}>
-          {this.renderPortfolioItemsArray()}
+        <div className={s.select_columns}>
+          <div className={s.select_pane} style={{display: "flex", flexDirection: "column"}}>
+            <AutoComplete
+              hintText="Type item name"
+              dataSource={getMarketItemNames()}
+              filter={AutoComplete.caseInsensitiveFilter}
+              maxSearchResults={6}
+              menuStyle={{cursor: "pointer"}}
+              onNewRequest={this.updateTradingSearch}
+            />
+            <TextField
+              type="number"
+              floatingLabelText="Type quantity"
+              inputStyle={{color: "#FFF"}}
+              style={{display: "block", marginBottom: ".8rem"}}
+              onChange={(event) => this.setState({portfolioSearchTradingQuantity: event.target.value})}
+            />
+            <FlatButton
+              label="Add Item"
+              labelStyle={{color: "rgb(235, 169, 27)"}}
+              primary={true}
+              onTouchTap={()=>{this.addTradingItem()}}
+            />
+            <div style={{marginTop: "1.5rem", flex: "1", overflowY: "scroll", overflowX: "hidden", paddingRight: "1rem"}}>
+              {this.renderPortfolioItemsArray()}
+            </div>
+          </div>
+          <div className={cx(s.select_pane, s.market_browser)}>
+            {
+              getMarketGroupTree().map((el, i) => {
+                return(<MarketBrowserListItem selector={(item)=>{this.addTradingItem(item)}} element={el} key={i} depth={0} />);
+              })
+            }
+          </div>
         </div>
         {
           this.state.error ?
@@ -543,8 +568,8 @@ export default class PortfoliosCreate extends React.Component {
     }
 
     return (
-      <div>
-        <div>
+      <div className={cx({[s.fullheight]: this.state.createStepIndex === 2 && this.state.portfolioType === 0})}>
+        <div className={cx({[s.fullheight]: this.state.createStepIndex === 2 && this.state.portfolioType === 0})}>
         {this.renderStepperContent()}
         </div>
         <div style={{marginTop: 24, marginBottom: 12}}>
@@ -572,8 +597,8 @@ export default class PortfoliosCreate extends React.Component {
 
   render() {
     return (
-      <div className={s.root}>
-        <div style={{backgroundColor: "#1e2327", padding: "0 1rem 1rem 1rem"}}>
+      <div className={cx(s.root, { [s.fullheight]: this.state.createStepIndex === 2 && this.state.portfolioType === 0})}>
+        <div style={{backgroundColor: "#1e2327", padding: "0 1rem 1rem 1rem", height: "100%", width: "100%", display: "flex", flexDirection: "column", boxSizing: "border-box"}}>
           <div className={s.stepper}>
             <Stepper activeStep={this.state.createStepIndex}>
               <Step>
@@ -594,7 +619,7 @@ export default class PortfoliosCreate extends React.Component {
               </Step>
             </Stepper>
           </div>
-          <ExpandTransition loading={this.state.createStepLoading} open={true}>
+          <ExpandTransition loading={this.state.createStepLoading} open={true} className={cx({[s.stepper_content]: this.state.createStepIndex === 2 && this.state.portfolioType === 0})}>
             {this.renderCreatePortfolio()}
           </ExpandTransition>
         </div>
