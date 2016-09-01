@@ -201,7 +201,7 @@ export default class PortfoliosCreate extends React.Component {
             }, 500);
 
             try {
-              const res = await fetch(`http://localhost:5000/portfolio/create`, {
+              const res = await fetch(`http://api.evetradeforecaster.com/portfolio/create`, {
                 method: 'POST',
                 headers: {
                   'Accept': 'application/json',
