@@ -130,7 +130,7 @@ class UsersViewSingle extends React.Component {
                 style={{display: "inline-block"}}
                 onChange={this.setAddBalance}
               />
-              <FlatButton icon={<AddIcon />} label="Add Balance" secondary={true} onTouchTap={()=>{this.doAddBalance()}} />
+              <FlatButton className={s.button} icon={<AddIcon />} label="Add Balance" secondary={true} onTouchTap={()=>{this.doAddBalance()}} />
             </div>
             <div>
               <TextField
@@ -143,7 +143,7 @@ class UsersViewSingle extends React.Component {
                 style={{display: "inline-block"}}
                 onChange={this.setRemoveBalance}
               />
-              <FlatButton icon={<RemoveIcon />} label="Remove Balance" secondary={true} onTouchTap={()=>{this.doRemoveBalance()}} />
+              <FlatButton className={s.button} icon={<RemoveIcon />} label="Remove Balance" secondary={true} onTouchTap={()=>{this.doRemoveBalance()}} />
             </div>
           </div>
           <SubscriptionHistory subscription={sub} />
