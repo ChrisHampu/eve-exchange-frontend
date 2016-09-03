@@ -244,6 +244,3 @@ export default class PortfoliosSpiderChart extends React.Component {
     );
   }
 }
-
-// onMouseMove={(ev)=>this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()}
-//<Tooltip margin={this.state.margin} ref="tooltip" />

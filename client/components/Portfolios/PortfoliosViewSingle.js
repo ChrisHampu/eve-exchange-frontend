@@ -53,7 +53,7 @@ class PortfoliosViewSingle extends React.Component {
 
   updateContainer() {
 
-    if (!this.getPortfolio() || !this.refs.content) {
+    if (!this.props.portfolios || !this.getPortfolio() || !this.refs.content) {
       return;
     }
 
@@ -120,6 +120,15 @@ class PortfoliosViewSingle extends React.Component {
 
   render() {
 
+    if (!this.props.portfolios) {
+
+      return (
+        <div style={{display: "flex", alignItems: "center", width: "100%", minHeight: "150px"}}>
+          <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
+        </div>
+      );
+    }
+
     const portfolio = this.getPortfolio();
 
     if (!portfolio) {
@@ -145,10 +154,10 @@ class PortfoliosViewSingle extends React.Component {
             {
               portfolio.type === 0 ?
                 <div className={s.values}>
-                Total Value of Trading Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>
+                {portfolio.name}: Total Value of Trading Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>
                 </div> :
                 <div className={s.values}>
-                Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber((portfolio.industryValue || 0) * portfolio.industryQuantity)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
+                {portfolio.name}: Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber((portfolio.industryValue || 0) * portfolio.industryQuantity)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
                 </div>
             }
             <div className={s.corner_menu}>

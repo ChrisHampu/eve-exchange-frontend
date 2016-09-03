@@ -1,7 +1,7 @@
 
 const initialState = {
 
-  all: [],
+  all: null,
   componentData: {}
 }
 

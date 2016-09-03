@@ -6,6 +6,11 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  padding: 1rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  color: #BDBDBD;
 
   .corner_menu {
     display: inline-block;

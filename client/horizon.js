@@ -240,6 +240,7 @@ function doHorizonSubscriptions() {
   horizon('portfolios').findAll({userID: userData.id}).watch().defaultIfEmpty().subscribe( portfolios => {
 
     if (!portfolios) {
+      store.dispatch(updatePortfolios([]));
       return;
     }
 
