@@ -301,7 +301,7 @@ class ChartContainer extends React.Component {
                 {this.props.children}
               </g>
             </svg>
-          <Tooltip margin={this.state.margin} ref="tooltip" />
+          <Tooltip ref="tooltip" />
           </div>
         </div>
       </div>

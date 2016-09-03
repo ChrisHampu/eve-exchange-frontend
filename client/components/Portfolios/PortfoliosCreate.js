@@ -56,7 +56,7 @@ export default class PortfoliosCreate extends React.Component {
       portfolioIndustryEfficiency: 0,
       portfolioIndustryItem: null,
       showProgressCircle: false,
-      portfolioIndustryQuantity: 1
+      portfolioIndustryQuantity: 1,
     };
 
     this.blueprints = [];
@@ -190,7 +190,8 @@ export default class PortfoliosCreate extends React.Component {
               name: this.state.portfolioName,
               description: this.state.portfolioDesc,
               components,
-              type: this.state.portfolioType
+              type: this.state.portfolioType,
+              efficiency: Math.max(0, Math.min(10, this.state.portfolioIndustryEfficiency))
             };
 
           this.setState({
@@ -532,10 +533,11 @@ export default class PortfoliosCreate extends React.Component {
     return (
       <div>
         <div style={{marginBottom: "0.5rem"}}>
-          Select which manufactured item to track
+          Select which manufactured item to track<br />
+          The material modifier should be a number from 0 - 10 as the percentage to reduce input materials
         </div>
         <AutoComplete
-          hintText="Type item name"
+          hintText="Type item to manufacture"
           dataSource={this.blueprints}
           filter={AutoComplete.caseInsensitiveFilter}
           maxSearchResults={6}
@@ -548,6 +550,13 @@ export default class PortfoliosCreate extends React.Component {
           inputStyle={{color: "#FFF"}}
           style={{display: "block", marginBottom: ".8rem"}}
           onChange={(event) => this.setState({portfolioIndustryQuantity: event.target.value})}
+        />
+        <TextField
+          type="number"
+          floatingLabelText="Material modifier percentage"
+          inputStyle={{color: "#FFF"}}
+          style={{display: "block", marginBottom: ".8rem"}}
+          onChange={(event) => this.setState({portfolioIndustryEfficiency: event.target.value})}
         />
         {
           this.state.error ?

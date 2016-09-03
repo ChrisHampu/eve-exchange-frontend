@@ -9,12 +9,22 @@ export default class Circle extends React.Component {
     data: React.PropTypes.object,
     r: React.PropTypes.number,
     fill: React.PropTypes.string,
-    style: React.PropTypes.object
+    style: React.PropTypes.object,
+    onMouseOver: React.PropTypes.func,
+    onMouseOut: React.PropTypes.func
   };
 
   render() {
     return (
-      <circle style={this.props.style} cx={this.props.cx} cy={this.props.cy} fill={this.props.fill || "#eba91b"} r={this.props.r} />
+      <circle
+        onMouseOver={(ev)=>this.props.onMouseOver?this.props.onMouseOver(ev):false}
+        onMouseOut={(ev)=>this.props.onMouseOver?this.props.onMouseOut(ev):false}
+        style={this.props.style}
+        cx={this.props.cx}
+        cy={this.props.cy}
+        fill={this.props.fill || "#eba91b"}
+        r={this.props.r}
+      />
     )
   }
 }

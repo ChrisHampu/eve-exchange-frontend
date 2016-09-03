@@ -44,7 +44,7 @@ class PortfoliosComponentTable extends React.Component {
 
   render() {
 
-    let components = this.props.portfolio.components;
+    let components = this.props.portfolio.components || [];
 
     if (this.state.componentFilter) {
       if (this.state.componentFilter === 1) {
@@ -55,12 +55,18 @@ class PortfoliosComponentTable extends React.Component {
         components = components.sort((el1, el2) => (el2.totalPrice || 0) - (el1.totalPrice || 0));
       } else if (this.state.componentFilter === 3) {
 
-        components = components.sort((el1, el2) => (el2.spread || 0) - (el1.spread || 0));
+        if (this.props.portfolio.type === 0) {
+          components = components.sort((el1, el2) => (el2.spread || 0) - (el1.spread || 0));
+        } else {
+          components = components.sort((el1, el2) => (el2.buildSpread || 0) - (el1.buildSpread || 0));
+        }
       } else if (this.state.componentFilter === 4) {
 
         components = components.sort((el1, el2) => (el2.quantity || 0) - (el1.quantity || 0));
       }
     }
+
+
 
     return (
       <div className={s.root}>
@@ -71,35 +77,62 @@ class PortfoliosComponentTable extends React.Component {
                 <MenuItem type="text" value={0} primaryText="Unsorted" style={{cursor: "pointer"}}/>
                 <MenuItem type="text" value={1} primaryText="Sort by Unit Price" style={{cursor: "pointer"}} />
                 <MenuItem type="text" value={2} primaryText="Sort by Total Price" style={{cursor: "pointer"}} />
-                <MenuItem type="text" value={3} primaryText="Sort by Spread" style={{cursor: "pointer"}} />
+                <MenuItem type="text" value={3} primaryText={this.props.portfolio.type===0?"Sort by Spread":"Sort by Build Margin"} style={{cursor: "pointer"}} />
                 <MenuItem type="text" value={4} primaryText="Sort by Quantity" style={{cursor: "pointer"}} />
               </SelectField>
             </div>
           </div>
           <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-              <TableRow selectable={false}>
-                <TableHeaderColumn>Name</TableHeaderColumn>
-                <TableHeaderColumn>Unit Price</TableHeaderColumn>
-                <TableHeaderColumn>Total Price</TableHeaderColumn>
-                <TableHeaderColumn>Spread</TableHeaderColumn>
-                <TableHeaderColumn>Quantity</TableHeaderColumn>
-              </TableRow>
+              {
+                this.props.portfolio.type === 0 ?
+                  <TableRow selectable={false}>
+                    <TableHeaderColumn>Name</TableHeaderColumn>
+                    <TableHeaderColumn>Unit Price</TableHeaderColumn>
+                    <TableHeaderColumn>Total Price</TableHeaderColumn>
+                    <TableHeaderColumn>Spread</TableHeaderColumn>
+                    <TableHeaderColumn>Quantity</TableHeaderColumn>
+                  </TableRow>
+                  :
+                  <TableRow selectable={false}>
+                    <TableHeaderColumn>Name</TableHeaderColumn>
+                    <TableHeaderColumn>Unit Price</TableHeaderColumn>
+                    <TableHeaderColumn>Total Price</TableHeaderColumn>
+                    <TableHeaderColumn>Build Price</TableHeaderColumn>
+                    <TableHeaderColumn>Build Margin</TableHeaderColumn>
+                    <TableHeaderColumn>Quantity</TableHeaderColumn>
+                  </TableRow>
+              }
             </TableHeader>
             <TableBody displayRowCheckbox={false}>
               {
-                components.map((el, i) => {
+                this.props.portfolio.type === 0 ?
+                  components.map((el, i) => {
 
-                  return (
-                    <TableRow key={i}>
-                      <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
-                      <TableRowColumn>{formatNumberUnit(el.unitPrice || 0)}</TableRowColumn>
-                      <TableRowColumn>{formatNumberUnit(el.totalPrice || 0)}</TableRowColumn>
-                      <TableRowColumn>{formatPercent(el.spread || 0)}%</TableRowColumn>
-                      <TableRowColumn>{el.quantity}</TableRowColumn>
-                    </TableRow>
-                  )
-                })
+                    return (
+                      <TableRow key={i}>
+                        <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
+                        <TableRowColumn>{formatNumberUnit(el.unitPrice || 0)}</TableRowColumn>
+                        <TableRowColumn>{formatNumberUnit(el.totalPrice || 0)}</TableRowColumn>
+                        <TableRowColumn>{formatPercent(el.spread || 0)}%</TableRowColumn>
+                        <TableRowColumn>{el.quantity}</TableRowColumn>
+                      </TableRow>
+                    )
+                  })
+                  :
+                  components.map((el, i) => {
+
+                    return (
+                      <TableRow key={i}>
+                        <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
+                        <TableRowColumn>{formatNumberUnit(el.unitPrice || 0)}</TableRowColumn>
+                        <TableRowColumn>{formatNumberUnit(el.totalPrice || 0)}</TableRowColumn>
+                        <TableRowColumn>{formatNumberUnit((this.props.portfolio.materials && this.props.portfolio.materials.length===0?0:el.materialCost) || 0)}</TableRowColumn>
+                        <TableRowColumn>{formatPercent(el.buildSpread || 0)}%</TableRowColumn>
+                        <TableRowColumn>{el.quantity}</TableRowColumn>
+                      </TableRow>
+                    )
+                  })
               }
             </TableBody>
           </Table>

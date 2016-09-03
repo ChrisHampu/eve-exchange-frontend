@@ -11,7 +11,9 @@ import { itemIDToName } from '../../market';
 import { getAuthToken } from '../../horizon';
 
 import PortfoliosComponentTable from './PortfoliosComponentTable';
+import PortfoliosMaterialTable from './PortfoliosMaterialTable';
 import PortfoliosPerformanceChart from './PortfoliosPerformanceChart';
+import PortfoliosSpiderChart from './PortfoliosSpiderChart';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import IconMenu from 'material-ui/IconMenu';
@@ -146,7 +148,7 @@ class PortfoliosViewSingle extends React.Component {
                 Total Value of Trading Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>
                 </div> :
                 <div className={s.values}>
-                Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber(portfolio.industryValue || 0)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
+                Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber((portfolio.industryValue || 0) * portfolio.industryQuantity)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
                 </div>
             }
             <div className={s.corner_menu}>
@@ -157,7 +159,7 @@ class PortfoliosViewSingle extends React.Component {
                 className={s.icon_menu}
               >
                 <MenuItem type="text" primaryText="Delete" onTouchTap={()=>this.deletePortfolio()} style={{cursor: "pointer"}} />
-               </IconMenu>
+              </IconMenu>
             </div>
           </div>
         </Paper>
@@ -166,9 +168,21 @@ class PortfoliosViewSingle extends React.Component {
             <Tab label="Components" style={{backgroundColor: "rgb(29, 33, 37)"}}>
               <PortfoliosComponentTable portfolio={portfolio} />
             </Tab>
+            {
+              portfolio.type === 1 && portfolio.materials && portfolio.materials.length > 0 ?
+                <Tab label="Materials" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+                  <PortfoliosMaterialTable portfolio={portfolio} /> 
+                </Tab> : false
+            }
             <Tab label="Performance Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
               <PortfoliosPerformanceChart ref="chart" width={this.state.width} height={this.state.height} style={{flex: 1}} portfolio={portfolio} />
             </Tab>
+            {
+              portfolio.type === 1 ?
+                <Tab label="Component Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+                  <PortfoliosSpiderChart width={this.state.width} height={this.state.height} portfolio={portfolio} />
+                </Tab> : false
+            }
           </Tabs>
         </div>
       </div>
