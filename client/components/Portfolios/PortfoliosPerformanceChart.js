@@ -62,9 +62,13 @@ export default class PortfoliosPerformanceChart extends React.Component {
       new Date(maxDate.getTime())
     ]);
 
-    this.state.yScale.domain([Math.min(...data.map((el) => { return el.portfolioValue})), Math.max(...data.map((el) => { return el.portfolioValue}))]);
-
-    this.state.percentScale.domain([Math.min(...data.map((el) => { return Math.max(0, el.avgSpread) / 100 })), Math.max(...data.map((el) => { return Math.max(0, el.avgSpread) / 100 }))]);
+    if (this.props.portfolio.type === 1) {
+      this.state.yScale.domain([Math.min(...data.map((el) => { return Math.min(el.portfolioValue, el.materialValue)})), Math.max(...data.map((el) => { return Math.max(el.portfolioValue, el.materialValue)}))]);
+      this.state.percentScale.domain([Math.min(...data.map((el) => { return Math.max(0, el.industrySpread) / 100 })), Math.max(...data.map((el) => { return Math.max(0, el.industrySpread) / 100 }))]);
+    } else {
+      this.state.yScale.domain([Math.min(...data.map((el) => { return el.portfolioValue})), Math.max(...data.map((el) => { return el.portfolioValue}))]);
+      this.state.percentScale.domain([Math.min(...data.map((el) => { return Math.max(0, Math.min(el.avgSpread, el.growth)) / 100 })), Math.max(...data.map((el) => { return Math.max(0, Math.max(el.avgSpread, el.growth)) / 100 }))]);
+    }
 
     this.state.xScale.range([0, this.refs.container.getWidth()]);
     this.state.yScale.range([this.state.height, 0]);
@@ -172,12 +176,19 @@ export default class PortfoliosPerformanceChart extends React.Component {
   getTooltipPresentation(el) {
     
     return { 
-      view: 
+      view:
+        this.props.portfolio.type === 0 ?
         <div>
           Value: {formatNumber(el.portfolioValue)}<br />
           Avg Spread: {Math.round(el.avgSpread*Math.pow(10,2))/Math.pow(10,2)}%<br />
+          Growth: {Math.round(el.growth*Math.pow(10,2))/Math.pow(10,2)}%<br />
+        </div>:
+        <div>
+          Component Value: {formatNumber(el.portfolioValue)}<br />
+          Material Value: {formatNumber(el.materialValue)}<br />
+          Potential Profit: {Math.round(el.industrySpread*Math.pow(10,2))/Math.pow(10,2)}%<br />
         </div>,
-      offset: 25
+      offset: this.props.portfolio.type === 1 ? 35 : 35
     }
   }
 
@@ -186,32 +197,28 @@ export default class PortfoliosPerformanceChart extends React.Component {
     const legend = [];
     let offset = 15;
 
+    if (this.props.portfolio.type === 0) {
 
-    legend.push(<text key={legend.length} fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Portfolio Value</text>);
-    offset += 112;
+      legend.push(<text key={legend.length} fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Portfolio Value</text>);
+      offset += 112;
 
-    legend.push(<text key={legend.length} fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Average Spread</text>);
-    offset += 58;
+      legend.push(<text key={legend.length} fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Average Spread</text>);
+      offset += 118;
 
-    /*
-    if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma) {
+      legend.push(<text key={legend.length} fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Growth</text>);
+      offset += 58;
 
-      legend.push(<text key={legend.length} fill="#F8654F" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Spread SMA</text>);
-      offset += 140;
+    } else {
+
+      legend.push(<text key={legend.length} fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Component Value</text>);
+      offset += 136;
+
+      legend.push(<text key={legend.length} fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Material Value</text>);
+      offset += 112;
+
+      legend.push(<text key={legend.length} fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Potential Profit</text>);
+      offset += 58;
     }
-
-    if (this.props.chart_visuals.volume) {
-
-      legend.push(<text key={legend.length} fill="#4090A2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Volume</text>);
-      offset += 60;
-    }
-
-    if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma) {
-
-      legend.push(<text key={legend.length} fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Volume SMA</text>);
-      offset += 140;
-    }
-    */
 
     return (
       <g>
@@ -230,18 +237,22 @@ export default class PortfoliosPerformanceChart extends React.Component {
       return (
         <g>
           <Area viewportHeight={this.state.height} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
-          <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.avgSpread/100} />
+          <Indicator thickLine={true} circleColour="#eba91b" lineColour="#eba91b" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.avgSpread/100} />
+          <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.growth/100} />
         </g>
       )
     } else {
       return (
         <g>
-          <Area viewportHeight={this.state.height} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
-          <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.avgSpread/100} />
+          <Indicator thickLine={true} circleColour="#59c8e2" lineColour="#59c8e2" data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
+          <Indicator thickLine={true} circleColour="#eba91b" lineColour="#eba91b" data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.materialValue} />
+          <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.industrySpread/100} />
         </g>
       )
     }
   }
+
+//<Area viewportHeight={this.state.height} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
 
   render() {
 
