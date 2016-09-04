@@ -72,6 +72,24 @@ export default class PortfoliosSpiderChart extends React.Component {
     return Math.max(...this.props.portfolio.components.map(el => el.totalPrice || 1), ...this.props.portfolio.components.map(el => el.materialCost || 1));
   }
 
+  renderLegend() {
+
+    const legend = [];
+    let offset = 15;
+
+    legend.push(<text key={legend.length} fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Component Value</text>);
+    offset += 136;
+
+    legend.push(<text key={legend.length} fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Material Value</text>);
+    offset += 112;
+
+    return (
+      <g>
+      {legend}
+      </g>
+    );
+  }
+
   renderComponentCircles() {
 
     const size = this.getSize();
@@ -213,6 +231,9 @@ export default class PortfoliosSpiderChart extends React.Component {
             this.renderMaterialCircles()
           }
           </g>
+      }
+      {
+        this.renderLegend()
       }
       </g>
     );

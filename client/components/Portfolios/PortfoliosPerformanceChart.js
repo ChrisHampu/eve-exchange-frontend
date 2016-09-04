@@ -64,10 +64,10 @@ export default class PortfoliosPerformanceChart extends React.Component {
 
     if (this.props.portfolio.type === 1) {
       this.state.yScale.domain([Math.min(...data.map((el) => { return Math.min(el.portfolioValue, el.materialValue)})), Math.max(...data.map((el) => { return Math.max(el.portfolioValue, el.materialValue)}))]);
-      this.state.percentScale.domain([Math.min(...data.map((el) => { return Math.max(0, el.industrySpread) / 100 })), Math.max(...data.map((el) => { return Math.max(0, el.industrySpread) / 100 }))]);
+      this.state.percentScale.domain([Math.min(...data.map((el) => { return el.industrySpread / 100 })), Math.max(...data.map((el) => { return Math.max(0, el.industrySpread) / 100 }))]);
     } else {
       this.state.yScale.domain([Math.min(...data.map((el) => { return el.portfolioValue})), Math.max(...data.map((el) => { return el.portfolioValue}))]);
-      this.state.percentScale.domain([Math.min(...data.map((el) => { return Math.max(0, Math.min(el.avgSpread, el.growth)) / 100 })), Math.max(...data.map((el) => { return Math.max(0, Math.max(el.avgSpread, el.growth)) / 100 }))]);
+      this.state.percentScale.domain([Math.min(...data.map((el) => { return Math.min(el.avgSpread, el.growth) / 100 })), Math.max(...data.map((el) => { return Math.max(0, Math.max(el.avgSpread, el.growth)) / 100 }))]);
     }
 
     this.state.xScale.range([0, this.refs.container.getWidth()]);

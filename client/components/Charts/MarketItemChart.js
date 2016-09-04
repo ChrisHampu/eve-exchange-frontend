@@ -20,7 +20,9 @@ class MarketItemChart extends React.Component {
   static propTypes = {
 
     item: React.PropTypes.object,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    width: React.PropTypes.number,
+    height: React.PropTypes.number
   };
 
   constructor(props) {
@@ -275,6 +277,8 @@ class MarketItemChart extends React.Component {
         data={data} 
         title={this.props.title} 
         onChartChanged={()=>this.chartChanged()}
+        overrideHeight={this.props.height}
+        overrideWidth={this.props.width}
       >
         <g>
         {this.renderLegend()}
