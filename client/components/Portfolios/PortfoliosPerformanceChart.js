@@ -252,8 +252,6 @@ export default class PortfoliosPerformanceChart extends React.Component {
     }
   }
 
-//<Area viewportHeight={this.state.height} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
-
   render() {
 
     const data = this.getAggregateData();

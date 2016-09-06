@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
-import { formatNumberUnit } from '../../utilities';
+import { formatNumberUnit, formatDate } from '../../utilities';
 import horizon from '../../horizon';
 import s from './UsersViewSingle.scss';
 
@@ -113,7 +113,7 @@ class UsersViewSingle extends React.Component {
           Viewing <span className={s.name}>{sub.userName}</span>
           </div>
           <div className={s.status}>
-          {sub.premium ? <span><span className={s.premium}>Premium</span> expires {(new Date(sub.subscription_date.getTime() + 2592000000)).toString()}</span> : "Free"}
+          {sub.premium ? <span><span className={s.premium}>Premium</span> expires {formatDate(new Date(sub.subscription_date.getTime() + 2592000000))}</span> : "Free"}
           </div>
           <div className={s.balance}>
           {formatNumberUnit(sub.balance)} Balance
