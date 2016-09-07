@@ -41,7 +41,10 @@ if (config.env === 'development') {
 
     const horizon_server = horizon(http_server, {
     auth: {
-      token_secret: config.horizon.secret_key
+      token_secret: config.horizon.secret_key,
+      create_new_users: true,
+      allow_anonymous: false,
+      allow_unauthenticated: false
     },
     project_name: config.horizon.project_name,
     auto_create_collection: true,
@@ -68,7 +71,10 @@ if (config.env === 'development') {
 
   const horizon_server = horizon(http_server, {
     auth: {
-      token_secret: config.horizon.secret_key
+      token_secret: config.horizon.secret_key,
+      create_new_users: true,
+      allow_anonymous: false,
+      allow_unauthenticated: false
     },
     project_name: config.horizon.project_name,
     auto_create_collection: true,
