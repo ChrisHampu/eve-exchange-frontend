@@ -47,7 +47,7 @@ class OrdersComponent extends React.Component {
                   return (
                    <TableRow key={i} selectable={false}>
                       <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(parseInt(el.typeID))}</span></TableRowColumn>
-                      <TableRowColumn style={{textAlign: "center"}}>{formatNumberUnit(el.price)}</TableRowColumn>
+                      <TableRowColumn style={{textAlign: "center"}}>{formatNumberUnit(parseInt(el.price))}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{el.volRemaining}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{el.bid === "0" ? "Sell" : "Buy"}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{parseInt(el.stationID) > 1000000000000 ? "Citadel" : stationIDToName[parseInt(el.stationID)]}</TableRowColumn>

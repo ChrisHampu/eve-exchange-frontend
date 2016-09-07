@@ -69,7 +69,9 @@ class DashboardView extends React.Component {
                         }
 
                         const item = { id: el, name: this.props.settings.pinned_charts[el] };
+                        
                         subscribeItem(item.id, 0);
+
                         return (
                           <div key={i} className={s.chart_container} style={{ flexBasis: flex}}>
                             <div className={s.chart_header}>
