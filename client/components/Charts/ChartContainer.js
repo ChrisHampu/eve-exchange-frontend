@@ -258,12 +258,12 @@ class ChartContainer extends React.Component {
         <div ref="header">
           {
             this.props.title ? 
-              <div style={{display: "inline-block", color: "#59c8e2", marginRight: "1rem"}}>
+              <div style={{display: "inline-block", color: "#59c8e2", marginRight: "1rem", verticalAlign: "middle"}}>
               {this.props.title}
               </div>
               : false
           }
-          <div style={{display: "inline-block", marginRight: "1rem"}}>
+          <div style={{display: "inline-block", marginRight: "1rem", verticalAlign: "middle"}}>
           {
             this.props.frequencyLevels ? 
             <SelectField style={{width: "150px"}} value={Object.keys(this.props.frequencyLevels).findIndex(el=>el===this.state.frequency)} onChange={this.setFrequency}>

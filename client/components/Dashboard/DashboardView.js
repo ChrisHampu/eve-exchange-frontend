@@ -22,7 +22,7 @@ class DashboardView extends React.Component {
   render() {
 
     const charts = Object.keys(this.props.settings.pinned_charts);
-    const numRows = Math.ceil(charts.length / 3);
+    const numRows = Math.ceil(charts.length / 2);
 
     return (
       <div className={s.root}>
@@ -43,17 +43,17 @@ class DashboardView extends React.Component {
             {
               [...Array(numRows).keys()].map(row => {
 
-                const chartSlice = charts.slice(row * 3, row * 3 + 3);
+                const chartSlice = charts.slice(row * 2, row * 2 + 2);
 
                 let height = "100%";
 
-                if (numRows >= 3) {
-                  height = "33%";
-                } else if(numRows >= 2) {
-                  if (row === 0) {
-                    height = "66%";
-                  } else {
-                    height = "33%";
+                if (numRows >= 2) { 
+                  height = "50%"; 
+                } else { 
+                  if (row === 0) { 
+                    height = "100%"; 
+                  } else { 
+                    height = "50%"; 
                   }
                 }
 
@@ -62,14 +62,12 @@ class DashboardView extends React.Component {
                     {
                       chartSlice.map((el, i) => {
 
-                        let flex = "33.333%";
+                        let flex = "50%";
+
                         if (chartSlice.length === 1) {
                           flex = "100%";
-                        } else if (chartSlice.length === 2) {
-                          if (i === 1) {
-                            flex = "66.6666%";
-                          }
                         }
+
                         const item = { id: el, name: this.props.settings.pinned_charts[el] };
                         subscribeItem(item.id, 0);
                         return (
