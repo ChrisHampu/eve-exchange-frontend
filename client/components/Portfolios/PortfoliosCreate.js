@@ -154,7 +154,7 @@ export default class PortfoliosCreate extends React.Component {
           } else {
             this.setState({
               createStepLoading: false,
-              error: "Type into the input box to select an item"
+              error: "Search for your item using the input box and use the dropdown to select an item, or type in a case-sensitive name if your item doesn't appear in the dropdown"
             });
           }
         } else {
@@ -392,6 +392,13 @@ export default class PortfoliosCreate extends React.Component {
     });
   };
 
+  updateTradingSearchText = (text) => {
+
+    this.setState({
+      portfolioSearchTradingItem: text
+    });
+  };
+
   addTradingItem(item) {
 
     if (!item && (!this.state.portfolioSearchTradingQuantity || !this.state.portfolioSearchTradingItem)) {
@@ -445,10 +452,11 @@ export default class PortfoliosCreate extends React.Component {
             <AutoComplete
               hintText="Type item name"
               dataSource={getMarketItemNames()}
-              filter={AutoComplete.caseInsensitiveFilter}
+              filter={AutoComplete.fuzzyFilter}
               maxSearchResults={6}
               menuStyle={{cursor: "pointer"}}
               onNewRequest={this.updateTradingSearch}
+              onUpdateInput={this.updateTradingSearchText}
             />
             <TextField
               type="number"
@@ -529,6 +537,13 @@ export default class PortfoliosCreate extends React.Component {
     });
   };
 
+  updateIndustrySearchText = (text) => {
+
+    this.setState({
+      portfolioIndustryItem: text
+    });
+  };
+
   renderIndustrySelect() {
     return (
       <div>
@@ -539,10 +554,11 @@ export default class PortfoliosCreate extends React.Component {
         <AutoComplete
           hintText="Type item to manufacture"
           dataSource={this.blueprints}
-          filter={AutoComplete.caseInsensitiveFilter}
+          filter={AutoComplete.fuzzyFilter}
           maxSearchResults={6}
           menuStyle={{cursor: "pointer"}}
           onNewRequest={this.updateIndustrySearch}
+          onUpdateInput={this.updateIndustrySearchText}
         />
         <TextField
           type="number"
