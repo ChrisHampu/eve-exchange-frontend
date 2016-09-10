@@ -1,6 +1,12 @@
+stages:
+- build
+- cleanup
+- deploy
+
 build:
   script:
-    - git submodule init
+    - git submodule update --init
+    - git submodule update --remote
     - git submodule update --recursive
     - cd horizon/client
     - npm install
@@ -27,3 +33,10 @@ deploy:
   tags:
     - nodejs
   allow_failure: false
+
+cleanup_build:
+  stage: cleanup
+  script:
+  - git clean -f
+  - rm -rf horizon
+  when: on_failure
