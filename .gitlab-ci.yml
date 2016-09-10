@@ -27,7 +27,7 @@ build:
     - rm output
     - rm build/vendor.js.map
     - rm build/app.js.map
-    - npm run build-server
+    - babel server -d build-server
   stage: build
   only:
     - master
