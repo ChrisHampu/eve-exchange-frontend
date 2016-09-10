@@ -22,7 +22,9 @@ build:
     - cd ../..
     - npm install
     - NODE_ENV=production "node_modules/.bin/webpack" --config webpack.production.config.js >> output
+    - cat output
     - if grep 'ERROR in' output; then exit 1; else echo Build success; fi
+    - rm output
     - rm build/vendor.js.map
     - rm build/app.js.map
     - npm run build-server
