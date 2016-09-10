@@ -18,7 +18,7 @@ build:
     - npm install
     - cd ../..
     - npm install
-    - NODE_ENV=production webpack --config webpack.production.config.js
+    - NODE_ENV=production "node_modules/.bin/webpack" --config webpack.production.config.js
     - rm build/vendor.js.map
     - rm build/app.js.map
     - npm run build-server
