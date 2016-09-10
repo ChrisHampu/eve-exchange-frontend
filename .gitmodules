@@ -1,4 +1,4 @@
 [submodule "horizon"]
 	path = horizon
-	url = http://gitlab.evetradeforecaster.com/evetradeforecaster/frontend.git
+	url = git@bitbucket.org:chrishampu/horizon.git
   branch = "next"
