@@ -1,0 +1,27 @@
+build:
+  script:
+    - cd horizon/client
+    - npm install
+    - cd ../..
+    - npm install
+    - NODE_ENV=production webpack --config webpack.production.config.js
+    - rm build/vendor.js.map
+    - rm build/app.js.map
+    - npm run build-server
+  stage: build
+  only:
+    - master
+  tags:
+    - nodejs
+  allow_failure: false
+
+deploy:
+  script:
+    - distelli deploy -q -y -m "Deployment from Jenkins" --env EVEForecasterProduction
+  stage: deploy
+  environment: production
+  only:
+    - master
+  tags:
+    - nodejs
+  allow_failure: false
