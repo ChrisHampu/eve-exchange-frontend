@@ -5,10 +5,8 @@ stages:
 
 build:
   script:
-    - git submodule update --init
     - git submodule sync
-    - git submodule update --remote
-    - git submodule update --recursive
+    - git submodule update --init --remote --recursive
     - cd horizon/client
     - npm install
     - cd ../..
