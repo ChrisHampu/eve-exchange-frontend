@@ -1,5 +1,6 @@
 build:
   script:
+    - git submodule update --recursive
     - cd horizon/client
     - npm install
     - cd ../..
