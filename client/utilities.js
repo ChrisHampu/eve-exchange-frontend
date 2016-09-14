@@ -1,8 +1,5 @@
-import Promise from 'bluebird';
 import 'whatwg-fetch';
-import { parseString } from 'xml2js';
-
-const parseXml = Promise.promisify(parseString);
+import xml2js from 'xml-json-parser';
 
 // Formats a raw number with appropriate comma and decimal placement
 export function formatNumber(number) {
@@ -81,11 +78,12 @@ export function getMonthNumberToText(month) {
 
 export async function getAPIKeyInfo(keyID, vCode) {
 
+  
   let destUrl = `https://api.eveonline.com/account/APIKeyInfo.xml.aspx?keyID=${keyID}&vCode=${vCode}`;
 
   const response = await fetch(destUrl);
   const body = await response.text();
-  const xml = await parseXml(body);
+  const xml = new xml2js().xml_str2json(body);
 
   if (xml.eveapi.error) {
     return {
@@ -93,7 +91,9 @@ export async function getAPIKeyInfo(keyID, vCode) {
     }
   }
 
-  const info = xml.eveapi.result[0].key[0].$;
+  console.log(xml);
+
+  const info = xml.eveapi.result.key;
   const characters = [];
 
   /*
@@ -104,16 +104,19 @@ export async function getAPIKeyInfo(keyID, vCode) {
   }
   */
 
-  if (info.type !== "Account" && info.type !== "Character") {
+  if (info._type !== "Account" && info._type !== "Character") {
     return {
       error: "Must be account or character key"
     }
   }
 
-  for (const char of xml.eveapi.result[0].key[0].rowset[0].row) {
+  console.log(xml.eveapi.result.key.rowset.row);
+  
+  for (const char of xml.eveapi.result.key.rowset.row) {
     
-    characters.push(char.$);
+    characters.push({characterID: char._characterID, characterName: char._characterName});
   }
+  console.log(characters);
 
-  return { info, characters };
+  return { info: { type: info._type, expires: info._expires, accessMask: info._accessMask }, characters };
 }

@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import store from './store';
 import { hasAuthToken, getCurrentUser, clearAuthToken } from './horizon';
 

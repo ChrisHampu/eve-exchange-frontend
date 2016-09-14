@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { select, axisLeft, axisBottom, axisRight } from '../../d3.js';
+import { select, axisLeft, axisBottom, axisRight } from '../../vendor/d3';
 import s from './Axis.scss';
 import cx from 'classnames';
 import { formatNumberUnit } from '../../utilities';

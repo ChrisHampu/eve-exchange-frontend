@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 import React from 'react';
-import { scaleTime, scaleLinear, timeHour, timeDay } from '../../d3.js';
+import d3 from '../../vendor/d3';
 import { formatNumber } from '../../utilities';
 
 import ChartContainer from '../Charts/ChartContainer';
@@ -24,10 +24,10 @@ export default class PortfoliosPerformanceChart extends React.Component {
     super(props);
 
     this.state = {
-      xScale: scaleTime(),
-      yScale: scaleLinear(),
-      volScale: scaleLinear(),
-      percentScale: scaleLinear(),
+      xScale: d3.scaleTime(),
+      yScale: d3.scaleLinear(),
+      volScale: d3.scaleLinear(),
+      percentScale: d3.scaleLinear(),
       ohlcHeight: 0,
       ohlcOffset: 0,
       volHeight: 0,
@@ -78,7 +78,7 @@ export default class PortfoliosPerformanceChart extends React.Component {
     this.state.yScale.clamp(true);
     this.state.percentScale.clamp(true);
 
-    this.state.xScale.nice(this.refs.container.getFrequency() === "hours" ? timeHour : timeDay);
+    this.state.xScale.nice(this.refs.container.getFrequency() === "hours" ? d3.timeHour : d3.timeDay);
     this.state.yScale.nice([5]);
     this.state.percentScale.nice([1]);
 

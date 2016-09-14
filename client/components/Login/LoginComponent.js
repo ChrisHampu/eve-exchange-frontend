@@ -1,7 +1,6 @@
-import 'babel-polyfill';
 import React from 'react';
-//import { Grid, Cell, Textfield, Button, Checkbox } from 'react-mdl';
 import s from './LoginComponent.scss';
+import horizon from '../../horizon';
 import { getAuthEndpoint } from '../../horizon';
 import sso_image from '../../assets/img/EVESSO_Button.png';
 
@@ -30,7 +29,7 @@ export default class Login extends React.Component {
           <div className={s.text}>
           Sign in to begin using EVE Trade Forecaster
           </div>
-          <a href={this.state.endpoint} style={{backgroundImage: `url(${sso_image})`}}></a>
+          <a href={this.state.endpoint} style={{backgroundImage: `url(${sso_image.src})`}}></a>
         </div>
       </div>
     );

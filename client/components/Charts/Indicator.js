@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import React from 'react';
 import Circle from './Circle';
-import { curveCatmullRom, line } from '../../d3.js';
+import { curveCatmullRom, line } from '../../vendor/d3';
 
 export default class Indicator extends React.Component {
 

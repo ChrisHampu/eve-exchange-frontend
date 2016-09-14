@@ -1,17 +1,13 @@
 /* eslint-disable no-console, no-shadow */
 import "babel-polyfill";
 import path from 'path';
-import webpack from 'webpack';
 import Koa from 'koa';
 import mount from 'koa-mount';
 import convert from 'koa-convert';
 import body from 'koa-body';
 import serve from 'koa-static';
 import historyApiFallback from 'koa-history-api-fallback';
-import express from 'express';
-import WebpackDevServer from 'webpack-dev-server';
 import chalk from 'chalk';
-import webpackConfig from '../webpack.config';
 import config from './config/environment';
 import horizon from '../horizon/server/src/horizon';
 import eve_sso from './core/eve_sso';
@@ -21,25 +17,14 @@ console.log(`Using API key ${config.eve.key_id}:${config.eve.key_secret}`);
 
 if (config.env === 'development') {
 
-  // Launch Relay by using webpack.config.js
-  const relayServer = new WebpackDevServer(webpack(webpackConfig), {
-    contentBase: '/build/',
-    proxy: {
-      //'/horizon*': `http://localhost:${config.horizon.port}`
-    },
-    stats: {
-      colors: true
-    },
-    hot: true,
-    historyApiFallback: true
-  });
+  const httpServer = new Koa();
 
-  // Serve static resources
-  relayServer.use('/', express.static(path.join(__dirname, '../build')));
+  httpServer.use(convert(historyApiFallback()));
+  httpServer.use(mount('/', serve(path.join(__dirname, '../build'))));
 
-  const http_server =  relayServer.listen(config.port, () => console.log(chalk.green(`HTTP server is listening on port ${config.port}`)));
+  const listener =  httpServer.listen(config.port, () => console.log(chalk.green(`HTTP server is listening on port ${config.port}`)));
 
-    const horizon_server = horizon(http_server, {
+    const horizon_server = horizon(listener, {
     auth: {
       token_secret: config.horizon.secret_key,
       create_new_users: true,
@@ -62,14 +47,13 @@ if (config.env === 'development') {
   
 } else if (config.env === 'production') {
 
-  // Launch Relay by creating a normal express server
-  const relayServer = new Koa();
-  relayServer.use(convert(historyApiFallback()));
-  relayServer.use(mount('/', serve(path.join(__dirname, '../build'))));
+  const httpServer = new Koa();
+  httpServer.use(convert(historyApiFallback()));
+  httpServer.use(mount('/', serve(path.join(__dirname, '../build'))));
   
-  const http_server =  relayServer.listen(config.port, () => console.log(chalk.green(`HTTP server is listening on port ${config.port}`)));
+  const listener =  httpServer.listen(config.port, () => console.log(chalk.green(`HTTP server is listening on port ${config.port}`)));
 
-  const horizon_server = horizon(http_server, {
+  const horizon_server = horizon(listener, {
     auth: {
       token_secret: config.horizon.secret_key,
       create_new_users: true,
