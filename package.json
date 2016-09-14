@@ -61,7 +61,7 @@
     "rollup-plugin-async": "^1.1.0",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-cleanup": "^0.1.4",
-    "rollup-plugin-commonjs": "git+https://github.com/rollup/rollup-plugin-commonjs.git",
+    "rollup-plugin-commonjs": "^4.1.0",
     "rollup-plugin-image": "^1.0.2",
     "rollup-plugin-node-builtins": "^1.0.8",
     "rollup-plugin-node-globals": "^1.0.7",
