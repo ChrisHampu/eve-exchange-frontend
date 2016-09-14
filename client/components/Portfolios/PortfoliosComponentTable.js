@@ -66,8 +66,6 @@ class PortfoliosComponentTable extends React.Component {
       }
     }
 
-
-
     return (
       <div className={s.root}>
         <Paper zDepth={2}>
@@ -111,7 +109,7 @@ class PortfoliosComponentTable extends React.Component {
 
                     return (
                       <TableRow key={i}>
-                        <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
+                        <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(this.props.market_items, el.typeID)}</span></TableRowColumn>
                         <TableRowColumn>{formatNumberUnit(el.unitPrice || 0)}</TableRowColumn>
                         <TableRowColumn>{formatNumberUnit(el.totalPrice || 0)}</TableRowColumn>
                         <TableRowColumn>{formatPercent(el.spread || 0)}%</TableRowColumn>
@@ -124,7 +122,7 @@ class PortfoliosComponentTable extends React.Component {
 
                     return (
                       <TableRow key={i}>
-                        <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
+                        <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(this.props.market_items, el.typeID)}</span></TableRowColumn>
                         <TableRowColumn>{formatNumberUnit(el.unitPrice || 0)}</TableRowColumn>
                         <TableRowColumn>{formatNumberUnit(el.totalPrice || 0)}</TableRowColumn>
                         <TableRowColumn>{formatNumberUnit((this.props.portfolio.materials && this.props.portfolio.materials.length===0?0:el.materialCost) || 0)}</TableRowColumn>
@@ -143,7 +141,7 @@ class PortfoliosComponentTable extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { componentData: store.portfolios.componentData };
+  return { componentData: store.portfolios.componentData, market_items: store.sde.market_items };
 }
 
 export default connect(mapStateToProps)(PortfoliosComponentTable);

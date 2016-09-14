@@ -7,12 +7,10 @@ import s from './PortfoliosCreate.scss';
 import cx from 'classnames';
 import { getMarketItemNames, itemNameToID, itemIDToName } from '../../market';
 import { getAuthToken } from '../../horizon';
+import { fetchBlueprints } from '../../sde';
 import { getMarketGroupTree } from '../../market';
 
 import MarketBrowserListItem from '../MarketBrowser/MarketBrowserListItem';
-
-import blueprints from '../../sde/blueprints';
-import marketGroups from '../../sde/market_groups';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
@@ -33,7 +31,10 @@ import IconButton from 'material-ui/IconButton';
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
 import RemoveIcon from 'material-ui/svg-icons/content/remove';
 
-export default class PortfoliosCreate extends React.Component {
+// TODO: Move to a centralized location or let it stay lazy loaded here?
+fetchBlueprints();
+
+class PortfoliosCreate extends React.Component {
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired
@@ -65,6 +66,22 @@ export default class PortfoliosCreate extends React.Component {
 
       this.blueprints.push(blueprints[bp].name);
     }
+  }
+
+  getBlueprints() {
+
+    const blueprints = [];
+
+    if (!this.props.sde.blueprints) {
+      return blueprints;
+    }
+
+    for (var bp in this.props.sde.blueprints) {
+
+      blueprints.push(this.props.sde.blueprints[bp].name);
+    }
+
+    return blueprints;
   }
 
   setRoute(path) {
@@ -477,7 +494,7 @@ export default class PortfoliosCreate extends React.Component {
           </div>
           <div className={cx(s.select_pane, s.market_browser)}>
             {
-              getMarketGroupTree().map((el, i) => {
+              getMarketGroupTree(this.props.sde.market_groups).map((el, i) => {
                 return(<MarketBrowserListItem selector={(item)=>{this.addTradingItem(item)}} element={el} key={i} depth={0} />);
               })
             }
@@ -652,3 +669,9 @@ export default class PortfoliosCreate extends React.Component {
     )
   }
 }
+
+const mapStateToProps = function(store) {
+  return { sde: store.sde };
+}
+
+export default connect(mapStateToProps)(PortfoliosCreate);

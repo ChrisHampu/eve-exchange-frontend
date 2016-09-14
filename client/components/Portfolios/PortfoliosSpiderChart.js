@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 import s from './PortfoliosSpiderChart.scss';
 import Circle from '../Charts/Circle';
 import Tooltip from '../Charts/Tooltip';
@@ -9,7 +10,7 @@ import { itemIDToName } from '../../market';
 
 import CircularProgress from 'material-ui/CircularProgress';
 
-export default class PortfoliosSpiderChart extends React.Component {
+class PortfoliosSpiderChart extends React.Component {
 
   static propTypes = {
 
@@ -176,7 +177,7 @@ export default class PortfoliosSpiderChart extends React.Component {
                   )
                 })
               }
-              <text fontSize="0.95em" fill="#95a1ac" x={radius*(1-Math.sin(i*radians/componentCount))-30*Math.sin(i*radians/componentCount)} y={radius*(1-Math.cos(i*radians/componentCount))-20*Math.cos(i*radians/componentCount)} textAnchor="middle" dy="1em" style={{transform: `translate(0, -10px)`}}>{itemIDToName(el.typeID)}</text>
+              <text fontSize="0.95em" fill="#95a1ac" x={radius*(1-Math.sin(i*radians/componentCount))-30*Math.sin(i*radians/componentCount)} y={radius*(1-Math.cos(i*radians/componentCount))-20*Math.cos(i*radians/componentCount)} textAnchor="middle" dy="1em" style={{transform: `translate(0, -10px)`}}>{itemIDToName(this.props.market_items, el.typeID)}</text>
            </g>
           )
         })
@@ -265,3 +266,9 @@ export default class PortfoliosSpiderChart extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function(store) {
+  return { market_items: store.sde.market_items };
+}
+
+export default connect(mapStateToProps)(PortfoliosSpiderChart);

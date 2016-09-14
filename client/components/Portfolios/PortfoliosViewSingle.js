@@ -7,7 +7,6 @@ import store from '../../store';
 import s from './PortfoliosViewSingle.scss';
 import cx from 'classnames';
 import { formatNumber, formatPercent } from '../../utilities';
-import { itemIDToName } from '../../market';
 import { getAuthToken } from '../../horizon';
 
 import PortfoliosComponentTable from './PortfoliosComponentTable';

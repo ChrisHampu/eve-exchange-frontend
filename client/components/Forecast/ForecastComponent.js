@@ -2,6 +2,7 @@
 import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 import s from './ForecastComponent.scss';
 import cx from 'classnames';
 import horizon, { getAuthToken } from '../../horizon';
@@ -19,7 +20,7 @@ import MenuItem from 'material-ui/MenuItem';
 
 const rootUrl = "http://api.evetradeforecaster.com/market/forecast/";
 
-export default class ForecastComponent extends React.Component {
+class ForecastComponent extends React.Component {
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired
@@ -219,7 +220,7 @@ export default class ForecastComponent extends React.Component {
                 results.map((el, i) => {
                   return (
                     <tr key={i} className={s.row}>
-                      <td className={s.column}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{itemIDToName(el.type)}</span></td>
+                      <td className={s.column}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{itemIDToName(this.props.market_items, el.type)}</span></td>
                       <td className={s.column}>{formatNumberUnit(el.buyFifthPercentile)}</td>
                       <td className={s.column}>{formatPercent(el.spreadSMA)}%</td>
                       <td className={s.column}>{el.tradeVolumeSMA.toFixed(0)}</td>
@@ -320,3 +321,9 @@ export default class ForecastComponent extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function(store) {
+  return { market_items: store.sde.market_items };
+}
+
+export default connect(mapStateToProps)(ForecastComponent);

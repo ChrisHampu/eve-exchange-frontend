@@ -2,9 +2,11 @@ import store from './store';
 import { setAggregateMinuteData, setAggregateHourlyData, setAggregateDailyData, setOrderData } from './actions/marketActions';
 import horizon from './horizon';
 import fuzzy from 'fuzzy';
-import marketGroups from './sde/market_groups'
+import { fetchGroups } from './sde';
 
 const subscriptions = [];
+
+fetchGroups();
 
 export function subscribeItem(id, region) {
 
@@ -104,10 +106,14 @@ export function unsubscribeItem(id, region) {
   }
 }
 
-export function getMarketGroupTree(searchText) {
+export function getMarketGroupTree(market_groups, searchText) {
+
+  if (!market_groups) {
+    return [];
+  }
 
   if (!searchText || searchText.length === 0) {
-    return marketGroups;
+    return market_groups;
   }
 
   const _getGroups = (group, searchText, accumulator, functor) => {
@@ -142,7 +148,7 @@ export function getMarketGroupTree(searchText) {
 
   const groups = [];
 
-  for (const group of marketGroups) {
+  for (const group of market_groups) {
 
     const add = [];
 
@@ -156,39 +162,27 @@ export function getMarketGroupTree(searchText) {
   return groups;
 }
 
-export function itemIDToName(id) {
+export function itemIDToName(market_items, id) {
 
-  let searchID = typeof id === "string" ? id : id.toString();
-  let name = "";
-
-  const _itemIDToName = (group, id, functor) => {
-
-    if (group.items && group.items.length) {
-
-      for (const item of group.items) {
-
-        if (item.id === id) {
-          name = item.name;
-          return;
-        }
-      }
-    }
-
-    for (const child of group.childGroups) {
-
-      functor(child, id, functor);
-    }
+  if (!market_items) {
+    return "Loading";
   }
 
-  for (const group of marketGroups) {
+  let searchID = typeof id === "string" ? parseInt(id) : id;
+  let name = "Unknown";
 
-    _itemIDToName(group, searchID, _itemIDToName);
+  if (searchID in market_items) {
+    return market_items[searchID];
   }
 
   return name;
 }
 
-export function itemNameToID(name) {
+export function itemNameToID(market_items, name) {
+
+  if (!market_items) {
+    return 0;
+  }
 
   let searchName = name;
   let foundID = 0;
@@ -220,30 +214,11 @@ export function itemNameToID(name) {
   return foundID;
 }
 
-export function getMarketItemNames() {
+export function getMarketItemNames(market_items) {
 
-  const names = [];
-
-  const _getItemName = (group, names, functor) => {
-
-    if (group.items && group.items.length) {
-
-      for (var i in group.items) {
-
-        names.push(group.items[i].name);
-      }
-    }
-
-    for (const child of group.childGroups) {
-
-      functor(child, names, functor);
-    }
+  if (!market_items) {
+    return [];
   }
 
-  for (const group of marketGroups) {
-
-    _getItemName(group, names, _getItemName);
-  }
-
-  return names;
+  return [...market_items.map(el=>market_items[el])];
 }

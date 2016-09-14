@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import cx from 'classnames';
-import { stationIDToName } from '../../sde/stationIDToName';
 import { itemIDToName } from '../../market';
 import { formatNumberUnit } from '../../utilities';
 import s from './OrdersComponent.scss';
@@ -46,11 +45,11 @@ class OrdersComponent extends React.Component {
                 this.props.orders.map((el, i) => {
                   return (
                    <TableRow key={i} selectable={false}>
-                      <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(parseInt(el.typeID))}</span></TableRowColumn>
+                      <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(this.props.sde.market_items, el.typeID)}</span></TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{formatNumberUnit(parseInt(el.price))}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{el.volRemaining}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{el.bid === "0" ? "Sell" : "Buy"}</TableRowColumn>
-                      <TableRowColumn style={{textAlign: "center"}}>{parseInt(el.stationID) > 1000000000000 ? "Citadel" : stationIDToName[parseInt(el.stationID)]}</TableRowColumn>
+                      <TableRowColumn style={{textAlign: "center"}}>{parseInt(el.stationID) > 1000000000000 ? "Citadel" : (this.props.sde.stationid2name[parseInt(el.stationID)] || "Station")}</TableRowColumn>
                     </TableRow>
                   )
                 })
@@ -63,7 +62,7 @@ class OrdersComponent extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { orders: store.market.user_orders };
+  return { orders: store.market.user_orders, sde:store.sde };
 }
 
 export default connect(mapStateToProps)(OrdersComponent);

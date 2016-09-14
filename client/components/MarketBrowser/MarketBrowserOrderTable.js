@@ -1,13 +1,9 @@
-
 import React from 'react';
 import s from './MarketBrowserOrderTable.scss';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { formatNumber } from '../../utilities';
 import cx from 'classnames';
-
-// station data
-import { stationIDToName } from '../../sde/stationIDToName';
 
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
@@ -96,7 +92,7 @@ class MarketBrowserOrderTable extends React.Component {
                 topSell.length ? topSell.map((el, i) => {
                   return (
                     <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
-                      <td>{stationIDToName[el.stationID] || "Citadel"}</td>
+                      <td>{parseInt(el.stationID) > 1000000000000 ? "Citadel" : (this.props.sde.stationid2name[parseInt(el.stationID)] || "Station")}</td>
                       <td style={{textAlign: "right"}}>{el.volume}</td>
                       <td style={{textAlign: "right"}}>{formatNumber(el.price)}</td>
                     </tr>
@@ -117,7 +113,7 @@ class MarketBrowserOrderTable extends React.Component {
                 sellOrders.slice(0, 15).map((el, i) => {
                   return (
                     <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
-                      <td>{stationIDToName[el.stationID] || "Citadel"}</td>
+                      <td>{parseInt(el.stationID) > 1000000000000 ? "Citadel" : (this.props.sde.stationid2name[parseInt(el.stationID)] || "Station")}</td>
                       <td style={{textAlign: "right"}}>{el.volume}</td>
                       <td style={{textAlign: "right"}}>{formatNumber(el.price)}</td>
                     </tr>
@@ -152,7 +148,7 @@ class MarketBrowserOrderTable extends React.Component {
                     <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
                       <td>{formatNumber(el.price)}</td>
                       <td>{el.volume}</td>
-                      <td>{stationIDToName[el.stationID] || "Citadel"}</td>
+                      <td>{parseInt(el.stationID) > 1000000000000 ? "Citadel" : (this.props.sde.stationid2name[parseInt(el.stationID)] || "Station")}</td>
                     </tr>
                   )
                 })
@@ -173,7 +169,7 @@ class MarketBrowserOrderTable extends React.Component {
                     <tr key={i} className={cx({[s.user_order]: this.isUserOrder(el.id)})}>
                       <td>{formatNumber(el.price)}</td>
                       <td>{el.volume}</td>
-                      <td>{stationIDToName[el.stationID] || "Citadel"}</td>
+                      <td>{parseInt(el.stationID) > 1000000000000 ? "Citadel" : (this.props.sde.stationid2name[parseInt(el.stationID)] || "Station")}</td>
                     </tr>
                   )
                 })
@@ -187,7 +183,7 @@ class MarketBrowserOrderTable extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { market: store.market };
+  return { market: store.market, sde: store.sde };
 }
 
 export default connect(mapStateToProps)(MarketBrowserOrderTable);

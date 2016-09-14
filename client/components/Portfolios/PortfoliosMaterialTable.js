@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
-import 'whatwg-fetch';
 import React from 'react';
+import { connect } from 'react-redux';
 import s from './PortfoliosMaterialTable.scss';
 import cx from 'classnames';
 import { formatNumberUnit, formatPercent } from '../../utilities';
@@ -11,7 +11,7 @@ import Paper from 'material-ui/Paper';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-export default class PortfoliosMaterialTable extends React.Component {
+class PortfoliosMaterialTable extends React.Component {
 
   static propTypes = {
     portfolio: React.PropTypes.object.isRequired
@@ -73,7 +73,7 @@ export default class PortfoliosMaterialTable extends React.Component {
 
                   return (
                     <TableRow key={i}>
-                      <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
+                      <TableRowColumn><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(this.props.market_items, el.typeID)}</span></TableRowColumn>
                       <TableRowColumn>{el.quantity}</TableRowColumn>
                     </TableRow>
                   )
@@ -86,3 +86,9 @@ export default class PortfoliosMaterialTable extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function(store) {
+  return { market_items: store.sde.market_items };
+}
+
+export default connect(mapStateToProps)(PortfoliosMaterialTable);

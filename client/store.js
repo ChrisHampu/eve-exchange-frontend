@@ -9,6 +9,7 @@ import eveapi from './reducers/eveapiReducer';
 import profit from './reducers/profitReducer';
 import admin from './reducers/adminReducer';
 import portfolios from './reducers/portfoliosReducer';
+import sde from './reducers/sdeReducer';
 
 const store = createStore(combineReducers({
   auth,
@@ -20,6 +21,7 @@ const store = createStore(combineReducers({
   profit,
   admin,
   portfolios,
+  sde,
   routing
 }), {}, window.devToolsExtension && window.devToolsExtension());
 

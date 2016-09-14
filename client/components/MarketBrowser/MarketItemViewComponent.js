@@ -34,7 +34,7 @@ class MarketItemViewComponent extends React.Component {
     this.state = {
       item: {
         id: this.props.params.id,
-        name: itemIDToName(this.props.params.id),
+        name: itemIDToName(this.props.sde.market_items, this.props.params.id),
         width: 0,
         height: 0
       }
@@ -81,7 +81,7 @@ class MarketItemViewComponent extends React.Component {
     this.setState({
       item: {
         id: nextProps.params.id,
-        name: itemIDToName(nextProps.params.id)
+        name: itemIDToName(this.props.sde.market_items, nextProps.params.id)
       }
     })
   }
@@ -151,7 +151,7 @@ class MarketItemViewComponent extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { settings: store.settings };
+  return { settings: store.settings, sde: store.sde };
 }
 
 export default connect(mapStateToProps)(MarketItemViewComponent);
