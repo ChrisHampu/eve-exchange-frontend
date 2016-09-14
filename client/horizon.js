@@ -9,11 +9,8 @@ import { updateAllSubscriptions } from './actions/adminActions';
 import { updatePortfolios } from './actions/portfoliosActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
-import Promise from 'bluebird';
-import { parseString } from 'xml2js';
+import xml2js from 'xml-json-parser';
 import { pullApiData } from './eveapi';
-
-const parseXml = Promise.promisify(parseString);
 
 let horizon = null;
 
@@ -106,18 +103,19 @@ export function getCurrentUser() {
       resolve(user);
 
       // Load extra data from EVE API
+      
       const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${userData.id}`);
       const body = await res.text();
-      const xml = await parseXml(body);
+      const xml = new xml2js().xml_str2json(body);
 
       if (xml.eveapi.error) {
 
         return;
       }
 
-      const info = xml.eveapi.result[0];
+      const info = xml.eveapi.result;
 
-      userData.corporation = info.corporation[0];
+      userData.corporation = info.corporation;
 
       store.dispatch(updateUser(userData));
     }, 

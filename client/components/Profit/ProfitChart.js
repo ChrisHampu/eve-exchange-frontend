@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
-import { scaleTime, scaleLinear, timeHour, timeMinute, timeDay } from '../../d3.js';
+import { scaleTime, scaleLinear, timeHour, timeMinute, timeDay } from '../../vendor/d3';
 import { formatNumber } from '../../utilities';
 
 import ChartContainer from '../Charts/ChartContainer';

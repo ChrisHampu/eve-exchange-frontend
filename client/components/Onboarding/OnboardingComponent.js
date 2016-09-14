@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';

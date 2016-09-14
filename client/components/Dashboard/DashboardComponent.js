@@ -182,7 +182,7 @@ class Dashboard extends React.Component {
         <Paper zDepth={2} className={s.sidebar_container}>
           <div className={s.sidebar_inner}>
             <div className={s.sidebar_title}>
-              <span className={s.name} onClick={()=>this.setRoute('/')}><img src={`/${logo_image}`} /></span>
+              <span className={s.name} onClick={()=>this.setRoute('/')}><img src={`${logo_image.src}`} /></span>
             </div>
             <Divider className={s.divider_line} />
             <div className={s.sidebar_menu_divider}>

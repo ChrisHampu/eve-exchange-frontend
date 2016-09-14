@@ -3,6 +3,9 @@ stages:
 - cleanup
 - deploy
 
+before_script:
+  - 'which distelli || (wget -qO- https://www.distelli.com/download/client | sh)'
+
 build:
   script:
     # SSH agent/key
@@ -21,12 +24,10 @@ build:
     # Build ETF
     - cd ../..
     - npm install
-    - NODE_ENV=production "node_modules/.bin/webpack" --config webpack.production.config.js >> output
+    - NODE_ENV=production "node_modules/.bin/rollup" -c rollup.prod.config.js >> output
     - cat output
-    - if grep 'ERROR in' output; then exit 1; else echo Build success; fi
-    - rm output
-    - rm build/vendor.js.map
-    - rm build/app.js.map
+    - if grep 'Error:' output; then exit 1; else echo Build success; fi
+    - rm output && rm build/bundle.js.map
     - babel server -d build-server
   stage: build
   only:
@@ -37,8 +38,7 @@ build:
 
 deploy:
   script:
-    - wget -qO- https://www.distelli.com/download/client | sh
-    - distelli deploy -q -y -m "Deployment from Jenkins" --env EVEForecasterProduction
+    - distelli deploy -q -y -m "Deployment from Gitlab" --env EVEForecasterProduction
   stage: deploy
   environment: production
   only:

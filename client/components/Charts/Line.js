@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 import React from 'react';
-import { curveCatmullRom, line } from '../../d3.js';
+import { curveCatmullRom, line } from '../../vendor/d3';
 import Circle from './Circle';
 
 export default class Line extends React.Component {
