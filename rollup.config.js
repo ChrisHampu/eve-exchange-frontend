@@ -77,10 +77,12 @@ export default {
 
       const values = {
         'var index = Object': 'var _reduxMap = Object',
-        "( index && index['default'] ) || index": "( _reduxMap && _reduxMap['default'] ) || _reduxMap",
-        'var _RadioButton = index$61': 'var _RadioButton = RadioButton$1'
+        "\\( index && index\\['default'\\] \\) \\|\\| index": "( _reduxMap && _reduxMap['default'] ) || _reduxMap",
+        'var _RadioButton = index\\$\\d\\d': 'var _RadioButton = RadioButton$1'
       };
-      const pattern = new RegExp(/(var index = Object|\( index && index\['default'\] \) \|\| index|var _RadioButton = index\$61)/g);
+
+      const keys = Object.keys(values);
+      const pattern = new RegExp(`(${keys.join('|')})`, 'g');
 
       return {
         name: 'replace',
@@ -95,10 +97,19 @@ export default {
           while ( match = pattern.exec( code ) ) {
 
             hasReplacements = true;
+            let replacement = String();
 
             start = match.index;
             end = start + match[0].length;
-            replacement = String( values[ match[1] ] );
+
+            for (const key of keys) {
+
+              if (new RegExp(key).exec(match[0]) != null) {
+
+                replacement = values[key];
+                break;
+              }
+            }
 
             magicString.overwrite( start, end, replacement );
 
