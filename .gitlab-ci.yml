@@ -37,6 +37,7 @@ build:
     # Copy assets
     - mkdir build/assets
     - cp -r client/assets/** build/assets
+    - cp client/index.html build/index.html
   stage: build
   tags:
     - nodejs
