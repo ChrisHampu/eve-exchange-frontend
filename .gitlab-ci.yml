@@ -11,21 +11,27 @@ build:
     - ssh-add <(echo "$SSH_DEPLOY_KEY")
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    # Get submodule
+    # Pull submodule
     - git submodule sync
     - git submodule update --init --remote --recursive
+    # Base npm install + configure binaries
+    - npm install
+    - ln -s $(pwd)/node_modules/.bin/babel /usr/bin/babel
+    - ln -s $(pwd)/node_modules/.bin/rollup /usr/bin/rollup
     # Build horizon client
     - cd horizon/client
     - npm install
     - npm run compile && npm run build
-    # Build ETF
+    # Build client
     - cd ../..
-    - npm install
-    - NODE_ENV=production "node_modules/.bin/rollup" -c rollup.prod.config.js >> output
+    - rollup -c rollup.prod.config.js >> output
+    # Show full build output to console and check for errors
     - cat output
     - if grep 'Error:' output; then exit 1; else echo Build success; fi
     - rm output
-    - NODE_ENV=production "node_modules/.bin/babel" server -d build-server
+    # Build server
+    - NODE_ENV=production babel server -d build-server
+    # Copy assets
     - mkdir build/assets
     - cp -r client/assets/** build/assets
   stage: build
