@@ -44,6 +44,8 @@ build:
     paths:
     - build/
     - build-server/
+    - horizon/client/dist/
+    - horizon/server/src/
     - package.json
     - .babelrc
     when: on_success
