@@ -10,7 +10,7 @@ before_script:
   - "echo DistelliSecretKey: '$DISTELLI_SECRET_KEY' >> /root/distelli.yml"
   - echo "Environments:" >> /root/distelli.yml
   - echo "  - EVEForecasterProduction" >> /root/distelli.yml
-  - "/usr/local/bin/distelli" login -conf /root/distelli.yml
+  - '"/usr/local/bin/distelli" login -conf /root/distelli.yml'
 
 build:
   script:
