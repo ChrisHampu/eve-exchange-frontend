@@ -52,8 +52,7 @@ build:
 
 deploy:
   script:
-  - git checkout master
-  - git symbolic-ref HEAD
+  - git checkout $CI_BUILD_REF_NAME
   - 'which distelli || (wget -qO- https://www.distelli.com/download/client | sh)'
   - "echo \"DistelliAccessToken: '$DISTELLI_ACCESS_TOKEN'\" > /etc/distelli.yml"
   - "echo \"DistelliSecretKey: '$DISTELLI_SECRET_KEY'\" >> /etc/distelli.yml"
