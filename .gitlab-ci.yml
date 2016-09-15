@@ -6,11 +6,11 @@ stages:
 before_script:
   # Download & configure Distelli CLI
   - 'which distelli || (wget -qO- https://www.distelli.com/download/client | sh)'
-  - "echo DistelliAccessToken: '$DISTELLI_ACCESS_TOKEN' > /etc/distelli.yml"
-  - "echo DistelliSecretKey: '$DISTELLI_SECRET_KEY' >> /etc/distelli.yml"
-  - echo "Environments:" >> /etc/distelli.yml
-  - echo "  - EVEForecasterProduction" >> /etc/distelli.yml
-  - /usr/local/bin/distelli login -conf /etc/distelli.yml
+  - "echo DistelliAccessToken: '$DISTELLI_ACCESS_TOKEN' > /root/distelli.yml"
+  - "echo DistelliSecretKey: '$DISTELLI_SECRET_KEY' >> /root/distelli.yml"
+  - echo "Environments:" >> /root/distelli.yml
+  - echo "  - EVEForecasterProduction" >> /root/distelli.yml
+  - "/usr/local/bin/distelli" login -conf /root/distelli.yml
 
 build:
   script:
