@@ -26,7 +26,8 @@ build:
     - if grep 'Error:' output; then exit 1; else echo Build success; fi
     - rm output
     - NODE_ENV=production "node_modules/.bin/babel" server -d build-server
-    - mkdir build/assets && cp client/assets/** build/assets/**
+    - mkdir build/assets
+    - cp client/assets/** build/assets/**
   stage: build
   tags:
     - nodejs
