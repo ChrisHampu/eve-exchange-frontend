@@ -27,7 +27,7 @@ build:
     - rm output
     - NODE_ENV=production "node_modules/.bin/babel" server -d build-server
     - mkdir build/assets
-    - cp client/assets/** build/assets/**
+    - cp -r client/assets/** build/assets
   stage: build
   tags:
     - nodejs
