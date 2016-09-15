@@ -28,10 +28,8 @@ build:
     - cat output
     - if grep 'Error:' output; then exit 1; else echo Build success; fi
     - rm output && rm build/bundle.js.map
-    - babel server -d build-server
+    - NODE_ENV=production "node_modules/.bin/babel" server -d build-server
   stage: build
-  only:
-    - master
   tags:
     - nodejs
   allow_failure: false
