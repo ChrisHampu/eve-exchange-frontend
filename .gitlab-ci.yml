@@ -1,3 +1,6 @@
+variables:
+  GIT_STRATEGY: clone
+
 stages:
 - build
 - cleanup
@@ -54,7 +57,6 @@ deploy:
   - "echo \"DistelliSecretKey: '$DISTELLI_SECRET_KEY'\" >> /etc/distelli.yml"
   - echo "Environments:" >> /etc/distelli.yml
   - echo "  - EVEForecasterProduction" >> /etc/distelli.yml
-  - cat /etc/distelli.yml
   - '"/usr/local/bin/distelli" login -conf /etc/distelli.yml'
   - '"/usr/local/bin/distelli" deploy -q -y -m "Deployment from Gitlab" --env EVEForecasterProduction'
   stage: deploy
