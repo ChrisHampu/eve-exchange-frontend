@@ -33,7 +33,7 @@ build:
     - NODE_ENV=production "node_modules/.bin/rollup" -c rollup.prod.config.js >> output
     - cat output
     - if grep 'Error:' output; then exit 1; else echo Build success; fi
-    - rm output && rm build/bundle.js.map
+    - rm output
     - NODE_ENV=production "node_modules/.bin/babel" server -d build-server
   stage: build
   tags:
