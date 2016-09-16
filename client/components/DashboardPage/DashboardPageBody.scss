@@ -9,7 +9,7 @@
   box-sizing: border-box;
   position: relative;
   display: flex;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   &.nopadding {
     padding: 0;

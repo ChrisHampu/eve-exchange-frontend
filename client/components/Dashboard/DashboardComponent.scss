@@ -10,6 +10,8 @@
   .sidebar_container {
     background-color: $base-color-darker !important;
     align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .sidebar_inner {
 
@@ -22,10 +24,6 @@
         }
       }
 
-      > div {
-        width: 100% !important;
-      }
-      
       .divider_line {
         background-color: $base-color-light !important;
       }
