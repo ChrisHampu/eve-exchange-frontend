@@ -111,7 +111,7 @@ export default class PortfoliosPerformanceChart extends React.Component {
 
     switch(this.refs.container.getFrequency()) {
       case "hours":
-        var arr = this.props.portfolio.hourlyChart;
+        var arr = this.props.portfolio.hourlyChart.sort((el1, el2) => el2.time - el1.time);
         if (!arr) {
           return null;
         }
@@ -121,7 +121,7 @@ export default class PortfoliosPerformanceChart extends React.Component {
         }
         return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
       case "daily":
-        var arr = this.props.portfolio.dailyChart;
+        var arr = this.props.portfolio.dailyChart.sort((el1, el2) => el2.time - el1.time);
         if (!arr) {
           return null;
         }
@@ -276,6 +276,7 @@ export default class PortfoliosPerformanceChart extends React.Component {
         <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
         <Axis anchor="left" scale={this.state.yScale} ticks={5} formatISK={true} />
         <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${width}px)`}} format="%" />
+        <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
         {
           this.renderCharts(data)
         }
