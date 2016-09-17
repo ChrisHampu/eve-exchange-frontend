@@ -222,37 +222,49 @@ class MarketItemChart extends React.Component {
 
   renderLegend() {
 
+    if (!this.refs.container) {
+      return;
+    }
+
     const legend = [];
     let offset = 15;
+    let yOffset = 0;
+
+    const addLegend = (fill, text, _offset) => {
+
+      if ((offset + _offset) > this.refs.container.getWidth()) {
+
+        yOffset += 22;
+        offset = 15;
+      }
+
+      legend.push(<text key={legend.length} fill={fill} fontSize="16" x={offset} y={yOffset} textAnchor="start" alignmentBaseline="middle">{text}</text>);
+      offset += _offset;
+    };
 
     if (this.props.chart_visuals.price) {
 
-      legend.push(<text key={legend.length} fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Buy Price</text>);
-      offset += 74;
+      addLegend("#59c8e2", "Buy Price", 74);
     }
 
     if (this.props.chart_visuals.spread) {
 
-      legend.push(<text key={legend.length} fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Spread</text>);
-      offset += 58;
+      addLegend("#5CEF70", "Spread", 58);
     }
 
     if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma) {
 
-      legend.push(<text key={legend.length} fill="#F8654F" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Spread SMA</text>);
-      offset += 140;
+      addLegend("#F8654F", "7 Day Spread SMA", 140);
     }
 
     if (this.props.chart_visuals.volume) {
 
-      legend.push(<text key={legend.length} fill="#4090A2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Volume</text>);
-      offset += 60;
+      addLegend("#4090A2", "Volume", 60);
     }
 
     if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma) {
 
-      legend.push(<text key={legend.length} fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">7 Day Volume SMA</text>);
-      offset += 140;
+      addLegend("#eba91b", "7 Day Volume SMA", 140);
     }
 
     return (
