@@ -8,15 +8,15 @@
   align-items: flex-start;
   position: relative;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: auto;
   box-sizing: border-box;
   color: #BDBDBD;
 
   .container {
     display: flex;
     flex: 1;
-    max-width: 100%;
     width: 100%;
+    min-width: 768px;
   }
 }
 
@@ -50,6 +50,13 @@
     position: relative;
     box-sizing: border-box;
 
+    @media (--small-screen) {
+
+      height: 200% !important;
+      max-height: 200% !important;
+      flex-direction: column !important;
+    }
+
     .chart_container {
       flex: 0 0 auto;
       flex-basis: 33.333333%;
@@ -59,6 +66,11 @@
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
+
+      @media (--small-screen) {
+
+        flex-basis: 50% !important;
+      }
 
       .chart_header {
         position: absolute;
