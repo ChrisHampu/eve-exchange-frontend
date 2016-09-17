@@ -9,7 +9,8 @@
   box-sizing: border-box;
   position: relative;
   display: flex;
-  overflow-y: auto;
+  overflow: auto;
+  box-sizing: border-box;
 
   &.nopadding {
     padding: 0;

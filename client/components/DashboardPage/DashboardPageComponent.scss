@@ -7,10 +7,19 @@
   flex-direction: inherit;
   align-items: flex-start;
   position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: auto;
   box-sizing: border-box;
   color: #BDBDBD;
+
+  .container {
+    min-width: 768px;
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: inherit;
+    box-sizing: border-box;
+  }
   
   .page_title {
     color: $base-color-lightest;

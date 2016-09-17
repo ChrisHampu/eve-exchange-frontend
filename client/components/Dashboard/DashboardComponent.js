@@ -155,7 +155,7 @@ class Dashboard extends React.Component {
 
   }
 
-  slideoutMenuRequestChange = (open, reason) => { this.setState({showMenu: open}); console.log(open, reason); };
+  slideoutMenuRequestChange = (open, reason) => this.setState({showMenu: open});
   slideoutMenuClickItem = (route) => this.setState({showMenu: false}, () => this.setRoute(route));
 
   renderMenu(items) {
