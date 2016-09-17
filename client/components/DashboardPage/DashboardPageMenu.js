@@ -3,6 +3,12 @@ import React from 'react';
 import s from './DashboardPageMenu.scss';
 import cx from 'classnames';
 
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton/IconButton';
+
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+
 class DashboardPageMenu extends React.Component {
 
   static propTypes = {
@@ -43,6 +49,20 @@ class DashboardPageMenu extends React.Component {
           })
         }
         </div>
+        <IconMenu
+          iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+          anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          className={s.icon_menu}
+        >
+        {
+          Object.keys(this.props.menu).map(key => {
+            return (
+              <MenuItem type="text" primaryText={key} onTouchTap={()=>this.setRoute(this.props.menu[key])} style={{cursor: "pointer"}} />
+            )
+          })
+        }
+        </IconMenu>
       </div>
     );
   }
