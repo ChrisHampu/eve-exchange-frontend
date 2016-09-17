@@ -178,7 +178,7 @@ class ForecastComponent extends React.Component {
     }
 
     return (
-      <div>
+      <div style={{"paddingLeft": "1rem"}}>
         <div className={s.header}>
           <div className={s.title}>
           Forecast Results

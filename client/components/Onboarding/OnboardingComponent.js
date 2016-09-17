@@ -33,11 +33,11 @@ export default class OnboardingComponent extends React.Component {
     return (
         <div>
           <Paper>
-            <AppBar className={cx(s.header)} title="EVE Trade Forecaster" showMenuIconButton={false} iconElementRight={
+            <AppBar className={s.header} title="EVE Trade Forecaster" showMenuIconButton={false} iconElementRight={
               <Tabs inkBarStyle={{display:"none"}}>
                 {
                   this.state.loggedIn ?
-                    <Tab onActive={()=>{ this.setRoute("/dashboard"); }} label="Go To Dashboard" style={{padding: "0.5rem 1.5rem", fontSize: "1.2rem"}} />
+                    <Tab onActive={()=>{ this.setRoute("/dashboard"); }} label="Dashboard" style={{padding: "0.5rem 1.5rem", fontSize: "1.2rem"}} />
                     : <Tab onActive={()=>{ this.setRoute("/login"); }} label="Login" style={{padding: "0.5rem 1.5rem", fontSize: "1.2rem"}} />
                 }
                 {

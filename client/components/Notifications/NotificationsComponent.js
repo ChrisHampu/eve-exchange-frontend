@@ -7,12 +7,13 @@ import s from './NotificationsComponent.scss';
 import cx from 'classnames';
 import horizon from '../../horizon';
 
-import { Tabs, Tab } from 'material-ui/Tabs';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 // Icons
 import CheckIcon from 'material-ui/svg-icons/navigation/check';
+import XIcon from 'material-ui/svg-icons/navigation/close';
 
 class Notifications extends React.Component {
 
@@ -29,31 +30,38 @@ class Notifications extends React.Component {
   render() {
     return (
       <DashboardPage title="Notifications" className={s.root}>
-        <RaisedButton label="MARK ALL AS READ" backgroundColor="#262b2f" labelColor="rgb(217, 217, 217)" onMouseDown={()=>{this.markAllRead()}} />
-      {
-        this.props.notifications.length === 0 ?
-          <div className={s.page_body}>
-          No new notifications
-          </div>
-          :
-        this.props.notifications.map((el, i) => {
-          return (
-            <div key={i} className={cx(s.notification, { [s.unread]: !el.read })}>
-              <div className={s.message}>
-                {el.message}
-              </div>
-              <div className={s.notification_footer}>
-                <div className={s.time}>
-                  {el.time.toLocaleString()}
-                </div>
-                <IconButton tooltip={el.read===false?"Mark Read":"Mark Unread"} className={s.read_button} onClick={()=>{this.toggleRead(el)}}>
-                  <CheckIcon />
-                </IconButton>
-              </div>
-            </div>
-          )
-        })
-      }
+        <RaisedButton className={s.read_button_all} fullWidth={false} label="MARK ALL AS READ" backgroundColor="#262b2f" labelColor="rgb(217, 217, 217)" onMouseDown={()=>{this.markAllRead()}} />
+        <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
+          <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+            <TableRow selectable={false}>
+              <TableHeaderColumn style={{textAlign: "left"}}>Message</TableHeaderColumn>
+              <TableHeaderColumn style={{textAlign: "left", "width": "200px"}}>Date</TableHeaderColumn>
+              <TableHeaderColumn style={{textAlign: "left", "width": "50px"}}>Read</TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody displayRowCheckbox={false}>
+            {
+              this.props.notifications.length === 0 ?
+                <TableRow selectable={false}>
+                  <TableRowColumn>No new notifications</TableRowColumn>
+                </TableRow>
+                :
+                this.props.notifications.map((el, i) => {
+                  return (
+                    <tr key={i} className={s.row}>
+                      <td className={s.column}>{el.message}</td>
+                      <td width="200px" className={s.column}>{el.time.toLocaleString()}</td>
+                      <td className={s.column} width="50px">
+                        <IconButton tooltip={el.read===false?"Mark Read":"Mark Unread"} className={cx(s.read_button, {[s.is_read]: el.read})} onClick={()=>{this.toggleRead(el)}}>
+                          { el.read === false ? <XIcon /> : <CheckIcon /> }
+                        </IconButton>
+                      </td>
+                    </tr>
+                  )
+                })
+            }
+          </TableBody>
+        </Table>
       </DashboardPage>
     );
   }

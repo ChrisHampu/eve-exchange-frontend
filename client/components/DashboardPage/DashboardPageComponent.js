@@ -19,10 +19,12 @@ export default class DashboardPageComponent extends React.Component {
 
     return (
       <div className={cx(s.root, { [s.full]: this.props.fullWidth }, this.props.className)} style={this.props.style}>
-        <div className={s.page_title} style={this.props.titleStyle}>
-          {this.props.title}
+        <div className={s.container}>
+          <div className={s.page_title} style={this.props.titleStyle}>
+            {this.props.title}
+          </div>
+          {this.props.children}
         </div>
-        {this.props.children}
       </div>
     );
   }

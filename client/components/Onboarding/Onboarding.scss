@@ -4,6 +4,13 @@
   display: flex;
   background-color: $base-color-darker !important;
 
+  > h1 {
+
+    @media (--small-screen) {
+      display: none;
+    }
+  }
+
   > div {
     margin-top: 0 !important;
     margin-right: 1rem !important;

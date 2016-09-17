@@ -3,38 +3,42 @@
 .root {
   color: #fff;
 
-  .page_body {
-    padding-top: 1rem;
+  .read_button_all {
+    max-width: 200px;
+    margin-bottom: 1.5rem;
   }
 
-  .notification {
-    padding: 0.8rem 1.5rem 0.8rem 1.5rem;
-    margin: 0.5rem 0;
-    min-width: 300px;
+  .row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.298039);
+    color: rgb(255, 255, 255);
+    height: 48px;
 
-    .message {
-      font-size: 1.2rem;
-      padding-bottom: 0.5rem;
-      color: $text-grey;
+    .column {
+      padding-left: 24px;
+      padding-right: 24px;
+      height: 48px;
+      font-size: 13px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      background-color: inherit;
+      text-align: left;
+    }
+  }
+
+  .read_button {
+
+    cursor: pointer;
+
+    svg {
+      fill: #ffffff !important;
     }
 
-    .notification_footer {
-      position: relative;
-      .time {
-        font-size: 0.8rem;
-        font-style: italic;
-        color: #59c8e2;
-        display: inline-block;
-      }
-      .read_button {
-        position: absolute !important;
-        right: -1rem;
-        bottom: -1rem;
-      }
-    }
+    &.is_read {
 
-    &.unread {
-      background-color: #3f464c;
+      svg {
+        fill: $text-grey !important;
+      }
     }
   }
 }
