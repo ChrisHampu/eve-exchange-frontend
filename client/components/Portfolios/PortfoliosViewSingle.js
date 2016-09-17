@@ -148,50 +148,52 @@ class PortfoliosViewSingle extends React.Component {
 
     return (
       <div className={s.root}>
-        <Paper zDepth={2}>
-          <div className={s.metadata}>
-            {
-              portfolio.type === 0 ?
-                <div className={s.values}>
-                {portfolio.name} - Total Value of Trading Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>Overall Growth: <span className={s.value}>{formatPercent(100 - (portfolio.startingValue / portfolio.currentValue) * 100)}%</span>
-                </div> :
-                <div className={s.values}>
-                {portfolio.name} - Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber((portfolio.industryValue || 0) * portfolio.industryQuantity)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
-                </div>
-            }
-            <div className={s.corner_menu}>
-              <IconMenu
-                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                className={s.icon_menu}
-              >
-                <MenuItem type="text" primaryText="Delete" onTouchTap={()=>this.deletePortfolio()} style={{cursor: "pointer"}} />
-              </IconMenu>
+        <div className={s.container}>
+          <Paper zDepth={2}>
+            <div className={s.metadata}>
+              {
+                portfolio.type === 0 ?
+                  <div className={s.values}>
+                  {portfolio.name} - Total Value of Trading Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>Overall Growth: <span className={s.value}>{formatPercent(100 - (portfolio.startingValue / portfolio.currentValue) * 100)}%</span>
+                  </div> :
+                  <div className={s.values}>
+                  {portfolio.name} - Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber((portfolio.industryValue || 0) * portfolio.industryQuantity)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
+                  </div>
+              }
+              <div className={s.corner_menu}>
+                <IconMenu
+                  iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                  anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                  className={s.icon_menu}
+                >
+                  <MenuItem type="text" primaryText="Delete" onTouchTap={()=>this.deletePortfolio()} style={{cursor: "pointer"}} />
+                </IconMenu>
+              </div>
             </div>
+          </Paper>
+          <div className={s.content} ref="content">
+            <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content} onChange={()=>this.refs.chart.updateContainer()}>
+              <Tab label="Components" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+                <PortfoliosComponentTable portfolio={portfolio} />
+              </Tab>
+              {
+                portfolio.type === 1 && portfolio.materials && portfolio.materials.length > 0 ?
+                  <Tab label="Materials" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+                    <PortfoliosMaterialTable portfolio={portfolio} /> 
+                  </Tab> : false
+              }
+              <Tab label="Performance Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+                <PortfoliosPerformanceChart ref="chart" width={this.state.width} height={this.state.height} style={{flex: 1}} portfolio={portfolio} />
+              </Tab>
+              {
+                portfolio.type === 1 ?
+                  <Tab label="Component Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+                    <PortfoliosSpiderChart width={this.state.width} height={this.state.height} portfolio={portfolio} />
+                  </Tab> : false
+              }
+            </Tabs>
           </div>
-        </Paper>
-        <div className={s.content} ref="content">
-          <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content} onChange={()=>this.refs.chart.updateContainer()}>
-            <Tab label="Components" style={{backgroundColor: "rgb(29, 33, 37)"}}>
-              <PortfoliosComponentTable portfolio={portfolio} />
-            </Tab>
-            {
-              portfolio.type === 1 && portfolio.materials && portfolio.materials.length > 0 ?
-                <Tab label="Materials" style={{backgroundColor: "rgb(29, 33, 37)"}}>
-                  <PortfoliosMaterialTable portfolio={portfolio} /> 
-                </Tab> : false
-            }
-            <Tab label="Performance Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
-              <PortfoliosPerformanceChart ref="chart" width={this.state.width} height={this.state.height} style={{flex: 1}} portfolio={portfolio} />
-            </Tab>
-            {
-              portfolio.type === 1 ?
-                <Tab label="Component Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
-                  <PortfoliosSpiderChart width={this.state.width} height={this.state.height} portfolio={portfolio} />
-                </Tab> : false
-            }
-          </Tabs>
         </div>
       </div>
     )

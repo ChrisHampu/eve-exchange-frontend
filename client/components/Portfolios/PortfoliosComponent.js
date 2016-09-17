@@ -30,19 +30,6 @@ class Portfolios extends React.Component {
       return (
         this.props.children
       )
-
-      /*
-      const portfolio = this.props.portfolios.find(el => el.portfolioID === parseInt(match[1]));
-
-      if (portfolio) {
-        menu[portfolio.name] = `/dashboard/portfolios/view/${portfolio.portfolioID}`;
-      } else {
-
-        return (
-          this.props.children
-        )
-      }
-      */
     }
 
     return (
