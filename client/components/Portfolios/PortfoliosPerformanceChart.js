@@ -194,30 +194,41 @@ export default class PortfoliosPerformanceChart extends React.Component {
 
   renderLegend() {
 
+    if (!this.refs.container) {
+      return;
+    }
+
     const legend = [];
     let offset = 15;
+    let yOffset = 0;
+
+    const addLegend = (fill, text, _offset) => {
+
+      if ((offset + _offset) > this.refs.container.getWidth()) {
+
+        yOffset += 22;
+        offset = 15;
+      }
+
+      legend.push(<text key={legend.length} fill={fill} fontSize="16" x={offset} y={yOffset} textAnchor="start" alignmentBaseline="middle">{text}</text>);
+      offset += _offset;
+    };
 
     if (this.props.portfolio.type === 0) {
 
-      legend.push(<text key={legend.length} fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Portfolio Value</text>);
-      offset += 112;
+      addLegend("#59c8e2", "Portfolio Value", 112);
 
-      legend.push(<text key={legend.length} fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Average Spread</text>);
-      offset += 118;
+      addLegend("#eba91b", "Average Spread", 118);
 
-      legend.push(<text key={legend.length} fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Growth</text>);
-      offset += 58;
+      addLegend("#5CEF70", "Growth", 58);
 
     } else {
 
-      legend.push(<text key={legend.length} fill="#59c8e2" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Component Value</text>);
-      offset += 136;
+      addLegend("#59c8e2", "Component Value", 136);
 
-      legend.push(<text key={legend.length} fill="#eba91b" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Material Value</text>);
-      offset += 112;
+      addLegend("#eba91b", "Material Value", 112);
 
-      legend.push(<text key={legend.length} fill="#5CEF70" fontSize="16" x={offset} y="0" textAnchor="start" alignmentBaseline="middle">Potential Profit</text>);
-      offset += 58;
+      addLegend("#5CEF70", "Potential Profit", 58);
     }
 
     return (
