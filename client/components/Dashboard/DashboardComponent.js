@@ -19,6 +19,7 @@ import Badge from 'material-ui/Badge';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
+import Drawer from 'material-ui/Drawer';
 
 // Icons
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
@@ -32,6 +33,7 @@ import OrderIcon from 'material-ui/svg-icons/content/content-paste';
 import ForecastIcon from 'material-ui/svg-icons/action/search';
 import UsersIcon from 'material-ui/svg-icons/action/supervisor-account';
 import PortfoliosIcon from 'material-ui/svg-icons/notification/folder-special';
+import MenuToggleIcon from 'material-ui/svg-icons/navigation/menu';
 
 const MainMenu = [
   {
@@ -114,6 +116,14 @@ class Dashboard extends React.Component {
     router: React.PropTypes.object.isRequired
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showMenu: null
+    };
+  }
+
   setRoute(route) {
 
     browserHistory.push(route);
@@ -145,6 +155,9 @@ class Dashboard extends React.Component {
 
   }
 
+  slideoutMenuRequestChange = (open, reason) => { this.setState({showMenu: open}); console.log(open, reason); };
+  slideoutMenuClickItem = (route) => this.setState({showMenu: false}, () => this.setRoute(route));
+
   renderMenu(items) {
 
     return items.map((item, i) => {
@@ -175,6 +188,22 @@ class Dashboard extends React.Component {
     )
   }
 
+  renderSlideoutMenu(items) {
+
+    return items.map((item, i) => {
+      return (item.perm === "premium" ? userHasPremium() : userHasGroup(item.perm) )? 
+      <MenuItem 
+        key={i} 
+        onTouchTap={()=>{ this.slideoutMenuClickItem(item.route); }} 
+        type="text" 
+        style={{cursor: "pointer"}}
+        className={s.slideout_menu_item}
+        primaryText={item.name}
+        leftIcon={item.icon} 
+      /> : null;
+    });
+  }
+
   render() {
 
     return (
@@ -203,9 +232,32 @@ class Dashboard extends React.Component {
             }
           </div>
         </Paper>
+        <Drawer
+          docked={false}
+          //width={200}
+          open={this.state.showMenu}
+          swipeAreaWidth={50}
+          onRequestChange={this.slideoutMenuRequestChange}
+          containerClassName={s.slideout_container}
+        >
+          <div className={s.slideout_header}>
+            <div className={s.slideout_info}>
+              {this.props.auth.name}
+              <IconButton style={{width: "36px", height: "36px", "right": "0.5rem", "bottom": "0.5rem", "position": "absolute"}} tooltip="Notifications" onClick={()=>this.slideoutMenuClickItem("/dashboard/notifications")}>
+                <NotificationsIcon />
+              </IconButton>
+            </div>
+          </div>
+          { this.renderSlideoutMenu(MainMenu) }
+          { this.renderSlideoutMenu(MarketMenu) }
+          { userHasGroup("admin") ? this.renderSlideoutMenu(AdminMenu) : false }
+        </Drawer>
         <div className={s.body_container}>
           <Toolbar className={s.dashboard_header}>
             <ToolbarGroup firstChild={true} className={cx(s.dashboard_toolbar)}>
+              <IconButton className={s.dashboard_header_menutogglebutton} onClick={()=>this.setState({showMenu: this.state.showMenu ? null : true})} style={{width: "56px", height: "56px"}} tooltip="Toggle Menu">
+                <MenuToggleIcon />
+              </IconButton>
               <IconButton className={s.dashboard_header_backbutton} onClick={()=>{ browserHistory.goBack(); }} style={{width: "56px", height: "56px"}} tooltip="Go Back">
                 <LeftArrowIcon />
               </IconButton>
