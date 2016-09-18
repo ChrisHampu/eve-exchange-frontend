@@ -63,6 +63,8 @@
     flex: 1;
     margin-top: 1rem;
     display: flex;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .tab_container {
       display: flex !important;
