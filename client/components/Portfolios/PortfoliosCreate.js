@@ -62,9 +62,9 @@ class PortfoliosCreate extends React.Component {
 
     this.blueprints = [];
 
-    for (var bp in blueprints) {
+    for (var bp in this.props.sde.blueprints) {
 
-      this.blueprints.push(blueprints[bp].name);
+      this.blueprints.push(this.props.sde.blueprints[bp].name);
     }
   }
 
