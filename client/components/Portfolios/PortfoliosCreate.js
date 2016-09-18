@@ -60,7 +60,12 @@ class PortfoliosCreate extends React.Component {
       portfolioIndustryQuantity: 1,
     };
 
-    this.blueprints = this.getBlueprints();
+    this.blueprints = []; 
+ 
+    for (var bp in props.sde.blueprints) { 
+ 
+      this.blueprints.push(props.sde.blueprints[bp].name); 
+    } 
   }
 
   getBlueprints() {
@@ -463,7 +468,7 @@ class PortfoliosCreate extends React.Component {
           <div className={s.select_pane} style={{display: "flex", flexDirection: "column"}}>
             <AutoComplete
               hintText="Type item name"
-              dataSource={getMarketItemNames()}
+              dataSource={getMarketItemNames(this.props.sde.market_items)}
               filter={AutoComplete.fuzzyFilter}
               maxSearchResults={6}
               menuStyle={{cursor: "pointer"}}
