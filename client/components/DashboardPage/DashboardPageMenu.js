@@ -36,10 +36,10 @@ class DashboardPageMenu extends React.Component {
       <div className={s.menu_container}>
         <div className={s.menu}>
         {
-          Object.keys(this.props.menu).map(key => {
+          Object.keys(this.props.menu).map((key, i) => {
             return (
               <div
-                key={key}
+                key={i}
                 className={cx(s.menu_item, { [s.active]: pathName === this.props.menu[key] })} 
                 onClick={()=>{this.setRoute(this.props.menu[key])}}
               >
@@ -56,9 +56,9 @@ class DashboardPageMenu extends React.Component {
           className={s.icon_menu}
         >
         {
-          Object.keys(this.props.menu).map(key => {
+          Object.keys(this.props.menu).map((key, i) => {
             return (
-              <MenuItem type="text" primaryText={key} onTouchTap={()=>this.setRoute(this.props.menu[key])} style={{cursor: "pointer"}} />
+              <MenuItem type="text" primaryText={key} key={i} onTouchTap={()=>this.setRoute(this.props.menu[key])} style={{cursor: "pointer"}} />
             )
           })
         }
