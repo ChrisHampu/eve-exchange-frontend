@@ -228,7 +228,7 @@ class MarketItemChart extends React.Component {
 
     const legend = [];
     let offset = 15;
-    let yOffset = 0;
+    let yOffset = 5;
 
     const addLegend = (fill, text, _offset) => {
 
