@@ -212,11 +212,11 @@ class PortfoliosCreate extends React.Component {
             components = this.state.portfolioSelectedItems.map(el => {
               return {
                 quantity: parseInt(el.quantity),
-                typeID: parseInt(itemNameToID(el.name))
+                typeID: parseInt(itemNameToID(this.props.sde.market_items, el.name))
               }
             });
           } else {
-            components = [{typeID: parseInt(itemNameToID(this.state.portfolioIndustryItem)), quantity: parseInt(this.state.portfolioIndustryQuantity)}]
+            components = [{typeID: parseInt(itemNameToID(this.props.sde.market_items, this.state.portfolioIndustryItem)), quantity: parseInt(this.state.portfolioIndustryQuantity)}]
           }
 
           const body = {
