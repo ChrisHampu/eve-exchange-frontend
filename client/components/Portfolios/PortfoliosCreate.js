@@ -474,6 +474,7 @@ class PortfoliosCreate extends React.Component {
     });
   }
 
+  // TODO: Performance: Cache this result of 'getMarketItemNames(this.props.sde.market_items)' similar to blueprints
   renderTradingSelect() {
     return (
       <div className={cx({[s.fullheight]: this.state.createStepIndex === 2 && this.state.portfolioType === 0})}>

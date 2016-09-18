@@ -220,5 +220,5 @@ export function getMarketItemNames(market_items) {
     return [];
   }
 
-  return [...market_items.map(el=>market_items[el])];
+  return [...market_items.map(el=>el)];
 }
