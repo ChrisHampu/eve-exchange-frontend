@@ -157,7 +157,7 @@ class PortfoliosViewSingle extends React.Component {
                   {portfolio.name} - Total Value of Trading Portfolio: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Average Spread: <span className={s.value}>{formatPercent(portfolio.averageSpread)}%</span>Overall Growth: <span className={s.value}>{formatPercent(100 - (portfolio.startingValue / portfolio.currentValue) * 100)}%</span>
                   </div> :
                   <div className={s.values}>
-                  {portfolio.name} - Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber((portfolio.industryValue || 0) * portfolio.industryQuantity)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
+                  {portfolio.name} - Component Value: <span className={s.value}>{formatNumber(portfolio.currentValue)} ISK</span>Sell Value: <span className={s.value}>{formatNumber(portfolio.industryValue || 0)} ISK</span>Profit Margin: <span className={s.value}>{formatPercent(portfolio.industrySpread)}%</span>Potential Profit: <span className={s.value}>{formatNumber((portfolio.industryValue || 0)-portfolio.currentValue)} ISK</span>
                   </div>
               }
               <div className={s.corner_menu}>
