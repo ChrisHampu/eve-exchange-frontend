@@ -84,6 +84,22 @@ class PortfoliosCreate extends React.Component {
     return blueprints;
   }
 
+  componentWillReceiveProps(newProps) {
+
+    this.props = newProps;
+
+    if (this.blueprints.length) {
+      return;
+    }
+
+    this.blueprints = []; 
+ 
+    for (var bp in newProps.sde.blueprints) { 
+ 
+      this.blueprints.push(newProps.sde.blueprints[bp].name); 
+    } 
+  }
+
   setRoute(path) {
 
     this.context.router.push(path);
