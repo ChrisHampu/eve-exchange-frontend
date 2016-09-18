@@ -184,34 +184,13 @@ export function itemNameToID(market_items, name) {
     return 0;
   }
 
-  let searchName = name;
-  let foundID = 0;
+  const _res = market_items.findIndex(el => el === name);
 
-  const _itemNameToID = (group, name, functor) => {
-
-    if (group.items && group.items.length) {
-
-      for (const item of group.items) {
-
-        if (item.name === name) {
-          foundID = item.id;
-          return;
-        }
-      }
-    }
-
-    for (const child of group.childGroups) {
-
-      functor(child, name, functor);
-    }
+  if (!_res || _res === -1) {
+    return 0;
   }
 
-  for (const group of marketGroups) {
-
-    _itemNameToID(group, searchName, _itemNameToID);
-  }
-
-  return foundID;
+  return _res;
 }
 
 export function getMarketItemNames(market_items) {
