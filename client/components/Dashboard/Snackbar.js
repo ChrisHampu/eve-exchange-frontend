@@ -44,7 +44,7 @@ class AppSnackbar extends React.Component {
         className={this.props.className}
         open={this.state.open}
         message={this.state.message}
-        autoHideDuration={2500}
+        autoHideDuration={3000}
       />
     )
   }

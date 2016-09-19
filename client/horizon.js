@@ -7,6 +7,7 @@ import { updateSubscription } from './actions/subscriptionActions';
 import { setUserOrders } from './actions/marketActions';
 import { updateAllSubscriptions } from './actions/adminActions';
 import { updatePortfolios } from './actions/portfoliosActions';
+import { sendAppNotification } from './actions/./appActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
 import xml2js from 'xml-json-parser';
@@ -19,6 +20,16 @@ try {
 } catch (err) {
   horizon = Horizon({ authType: { type: 'token', storeLocally: true, token: '' }});
 }
+
+horizon.onDisconnected(err => {
+
+  store.dispatch(sendAppNotification("Connection lost or application updated. Please refresh"));
+});
+
+horizon.onSocketError(err => {
+
+  store.dispatch(sendAppNotification("Connection lost or application updated. Please refresh"));
+});
 
 let userData = null;
 let currentSettings = null;
