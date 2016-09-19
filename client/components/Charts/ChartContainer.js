@@ -119,6 +119,8 @@ class ChartContainer extends React.Component {
       return;
     }
 
+    this.forceUpdate = true;
+
     this.update();
   }
 
