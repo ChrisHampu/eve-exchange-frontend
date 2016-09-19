@@ -35,6 +35,7 @@ let userData = null;
 let currentSettings = null;
 let eveApiPulled = false;
 let authToken = null;
+let firstSave = true;
 
 if (hasAuthToken()) {
   horizon("users").fetch().subscribe(()=>{}, ()=>{}, ()=>{});
@@ -47,6 +48,12 @@ store.subscribe(() => {
     currentSettings = store.getState().settings;
 
     horizon('user_settings').replace(currentSettings);
+
+    if (firstSave === false) {
+      store.dispatch(sendAppNotification("New settings have been applied", 1500));
+    } else {
+      firstSave = false;
+    }
 
     if (!eveApiPulled && currentSettings.eveApiKey.keyID.length && currentSettings.eveApiKey.vCode.length) {
       pullApiData(currentSettings.eveApiKey);
