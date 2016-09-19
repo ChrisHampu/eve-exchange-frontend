@@ -7,6 +7,7 @@ import { userHasGroup, userHasPremium } from '../../auth';
 import cx from 'classnames';
 import DashboardView from './DashboardView';
 import s from './DashboardComponent.scss';
+import Snackbar from './Snackbar';
 
 import logo_image from '../../assets/img/ETF-LogoNoBG.png';
 
@@ -236,7 +237,7 @@ class Dashboard extends React.Component {
           docked={false}
           //width={200}
           open={this.state.showMenu}
-          swipeAreaWidth={50}
+          swipeAreaWidth={40}
           onRequestChange={this.slideoutMenuRequestChange}
           containerClassName={s.slideout_container}
         >
@@ -293,6 +294,7 @@ class Dashboard extends React.Component {
             <DashboardView />
           }
         </div>
+        <Snackbar className={s.snackbar} />
       </div>
     );
   }

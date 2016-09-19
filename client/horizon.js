@@ -7,6 +7,7 @@ import { updateSubscription } from './actions/subscriptionActions';
 import { setUserOrders } from './actions/marketActions';
 import { updateAllSubscriptions } from './actions/adminActions';
 import { updatePortfolios } from './actions/portfoliosActions';
+import { sendAppNotification } from './actions/./appActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
 import xml2js from 'xml-json-parser';
@@ -20,10 +21,21 @@ try {
   horizon = Horizon({ authType: { type: 'token', storeLocally: true, token: '' }});
 }
 
+horizon.onDisconnected(err => {
+
+  store.dispatch(sendAppNotification("Connection lost or application updated. Please refresh", 21600000));
+});
+
+horizon.onSocketError(err => {
+
+  store.dispatch(sendAppNotification("Connection lost or application updated. Please refresh", 21600000));
+});
+
 let userData = null;
 let currentSettings = null;
 let eveApiPulled = false;
 let authToken = null;
+let firstSave = true;
 
 if (hasAuthToken()) {
   horizon("users").fetch().subscribe(()=>{}, ()=>{}, ()=>{});
@@ -36,6 +48,12 @@ store.subscribe(() => {
     currentSettings = store.getState().settings;
 
     horizon('user_settings').replace(currentSettings);
+
+    if (firstSave === false) {
+      store.dispatch(sendAppNotification("New settings have been applied", 1500));
+    } else {
+      firstSave = false;
+    }
 
     if (!eveApiPulled && currentSettings.eveApiKey.keyID.length && currentSettings.eveApiKey.vCode.length) {
       pullApiData(currentSettings.eveApiKey);

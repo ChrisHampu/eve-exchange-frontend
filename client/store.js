@@ -10,6 +10,7 @@ import profit from './reducers/profitReducer';
 import admin from './reducers/adminReducer';
 import portfolios from './reducers/portfoliosReducer';
 import sde from './reducers/sdeReducer';
+import app from './reducers/appReducer';
 
 const store = createStore(combineReducers({
   auth,
@@ -22,6 +23,7 @@ const store = createStore(combineReducers({
   admin,
   portfolios,
   sde,
+  app,
   routing
 }), {}, window.devToolsExtension && window.devToolsExtension());
 

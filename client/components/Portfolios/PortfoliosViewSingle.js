@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import s from './PortfoliosViewSingle.scss';
 import cx from 'classnames';
+import { sendAppNotification } from '../../actions/appActions';
 import { formatNumber, formatPercent } from '../../utilities';
 import { getAuthToken } from '../../horizon';
 
@@ -104,7 +105,10 @@ class PortfoliosViewSingle extends React.Component {
         console.log(result);
 
         if (result.error) {
+          store.dispatch(sendAppNotification("There was a problem deleting the portfolio. Please refresh"));
           throw (result.error);
+        } else {
+          store.dispatch(sendAppNotification("Portfolio has been deleted"));
         }
 
         this.setRoute('/dashboard/portfolios/view');

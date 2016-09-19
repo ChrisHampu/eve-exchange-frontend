@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import s from './PortfoliosCreate.scss';
 import cx from 'classnames';
+import { sendAppNotification } from '../../actions/appActions';
 import { getMarketItemNames, itemNameToID, itemIDToName } from '../../market';
 import { getAuthToken } from '../../horizon';
 import { fetchBlueprints } from '../../sde';
@@ -253,7 +254,11 @@ class PortfoliosCreate extends React.Component {
               const result = await res.json();
 
               if (result.error) {
+
                 throw (result.error);
+              } else {
+
+                store.dispatch(sendAppNotification("Portfolio has been created and will update within 5 minutes"));
               }
 
               this.setState({
@@ -273,7 +278,7 @@ class PortfoliosCreate extends React.Component {
               this.setState({
                 createStepLoading: false,
                 showProgressCircle: false,
-                error: "There was an error saving your portfolio"
+                error: "There was a a problem saving your portfolio"
               });
             }
           });
