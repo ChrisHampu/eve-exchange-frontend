@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import s from './ProfileSubscription.scss';
 import cx from 'classnames';
-import { performPremiumUpgrade, performPremiumDowngrade, performWithdrawal } from '../../actions/subscriptionActions';
+import { addPremium, removePremium } from '../../actions/authActions';
 import { formatNumber, formatDate } from '../../utilities';
 import { getAuthToken } from '../../horizon';
 
@@ -164,7 +164,11 @@ class Subscription extends React.Component {
       return res.json();
     })
     .then(res => {
-      // Check success status & notify user
+      if (res.error) {
+        // Something went wrong
+      } else {
+        store.dispatch(addPremium());
+      }
     });
 
     this.closeSubUpgrade();
@@ -184,7 +188,11 @@ class Subscription extends React.Component {
       return res.json();
     })
     .then(res => {
-      // Check success status & notify user
+      if (res.error) {
+        // Something went wrong
+      } else {
+        store.dispatch(removePremium());
+      }
     });
 
     this.closeSubDowngrade();

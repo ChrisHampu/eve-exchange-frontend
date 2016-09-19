@@ -32,6 +32,22 @@ export default function auth(state = { groups: ["guest"], id: null, name: "", co
 
       return { ...state, groups: groups, id: id, name: name, corporation: corporation };
 
+    case "ADD_PREMIUM":
+
+      if (state.groups.indexOf("premium") !== -1) {
+        return state;
+      }
+
+      return { ...state, groups: [ ...state.groups, "premium" ] };
+
+    case "REMOVE_PREMIUM":
+
+      if (state.groups.indexOf("premium") === -1) {
+        return state;
+      }
+
+      return { ...state, groups: state.groups.map(el => el === "premium" ? null : el) };
+
     default:
       return state;
   }  
