@@ -68,7 +68,10 @@ class ChartContainer extends React.Component {
         100
       ],
       zoom: 1
-    }
+    };
+
+    this.mounted = false;
+    this.forceUpdate = false;
   }
 
   getChildContext() {
@@ -93,7 +96,7 @@ class ChartContainer extends React.Component {
       newHeight -= ReactDOM.findDOMNode(this.refs.header).clientHeight + 5;
     }
 
-    if (newHeight !== this.state.containerHeight || newWidth !== this.state.containerWidth) {
+    if (this.forceUpdate === true || (this.state.containerWidth === 0 && this.state.containerHeight === 0 && newHeight !== this.state.containerHeight && newWidth !== this.state.containerWidth)) {
        
       this.setState({
         width: newWidth - this.state.margin.left - this.state.margin.right,
@@ -104,18 +107,40 @@ class ChartContainer extends React.Component {
 
         this.props.onChartChanged();
       });
+
+      this.forceUpdate = false;
       
     }
+  }
+
+  onResize() {
+
+    if (!this.mounted) {
+      return;
+    }
+
+    this.update();
   }
 
   componentDidMount() {
 
     this.update();
+
+    window.addEventListener("resize", ()=>this.onResize());
+
+    this.mounted = true;
   }
 
   componentDidUpdate() {
 
     this.update();
+  }
+
+  componentWillUnmount() {
+
+    window.removeEventListener("resize", ()=>this.onResize());
+
+    this.mounted = false;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -152,13 +177,23 @@ class ChartContainer extends React.Component {
 
   setFrequency = (event, index, value) => {
 
+    // TODO: Pretty much a race condition
+    // The chart will update by reading off the new frequency and adjusting its data
+    // But if we render/update now, before the chart updates, the size will be in an inconsistent state
+    // because the container will update, then the chart/data will update, and the container won't re-update in time
+    // so the data could require a different container than we pre-render
+    // onChartChanged() could trigger a container update, but then we could be in an infinite loop all over again from re-rendering
+    this.state.frequency = Object.keys(this.props.frequencyLevels)[value]
+
+    this.props.onChartChanged();
+
     this.setState({
       frequency: Object.keys(this.props.frequencyLevels)[value]
     }, () => {
 
-      this.update();
+      this.forceUpdate = true;
 
-      this.props.onChartChanged();
+      this.update();
     });
   };
 
