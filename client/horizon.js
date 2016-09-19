@@ -23,12 +23,12 @@ try {
 
 horizon.onDisconnected(err => {
 
-  store.dispatch(sendAppNotification("Connection lost or application updated. Please refresh", 300000));
+  store.dispatch(sendAppNotification("Connection lost or application updated. Please refresh", 21600000));
 });
 
 horizon.onSocketError(err => {
 
-  store.dispatch(sendAppNotification("Connection lost or application updated. Please refresh", 300000));
+  store.dispatch(sendAppNotification("Connection lost or application updated. Please refresh", 21600000));
 });
 
 let userData = null;
