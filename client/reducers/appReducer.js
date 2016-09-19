@@ -1,6 +1,9 @@
 const initialState = {
 
-  notification: null
+  notification: {
+    message: null,
+    duration: 3000
+  }
 };
 
 export default function auth(state = initialState, action) {
@@ -12,7 +15,7 @@ export default function auth(state = initialState, action) {
         return state;
       }
 
-      return { ...state, notification: action.notification };
+      return { ...state, notification: { message: action.notification, duration: action.duration || 3000 } };
 
     default:
       return state;

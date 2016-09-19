@@ -16,7 +16,8 @@ class AppSnackbar extends React.Component {
 
     this.state = {
       open: false,
-      message: ""
+      message: "",
+      duration: 3000
     };
   }
 
@@ -27,7 +28,8 @@ class AppSnackbar extends React.Component {
 
       this.setState({
         open: true,
-        message: this.props.notification
+        message: this.props.notification.message,
+        duration: this.props.notification.duration
       });
     } else if(this.state.open) {
 
@@ -44,7 +46,7 @@ class AppSnackbar extends React.Component {
         className={this.props.className}
         open={this.state.open}
         message={this.state.message}
-        autoHideDuration={3000}
+        autoHideDuration={this.state.duration}
       />
     )
   }
