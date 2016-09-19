@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import cx from 'classnames';
 import s from './ProfitTransactions.scss'
-import { formatNumberUnit, formatDate } from '../../utilities';
+import { formatNumberUnit, prettyDate } from '../../utilities';
 
 import CircularProgress from 'material-ui/CircularProgress';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -53,7 +53,7 @@ class ProfitTransactions extends React.Component {
                   this.props.transactions.map((el, i) => {
                     return (
                      <TableRow key={i} selectable={false}>
-                        <TableRowColumn style={{textAlign: "center"}}>{formatDate(el.time)}</TableRowColumn>
+                        <TableRowColumn style={{textAlign: "center"}}>{prettyDate(el.time)}</TableRowColumn>
                         <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{el.name}</span></TableRowColumn>
                         <TableRowColumn style={this.formatColoured(el.totalProfit)}>{formatNumberUnit(el.totalProfit)}</TableRowColumn>
                         <TableRowColumn style={{textAlign: "center"}}>{el.quantity}</TableRowColumn>
