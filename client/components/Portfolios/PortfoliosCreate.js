@@ -255,6 +255,8 @@ class PortfoliosCreate extends React.Component {
 
               if (result.error) {
 
+                store.dispatch(sendAppNotification(result.error));
+
                 throw (result.error);
               } else {
 
@@ -278,7 +280,7 @@ class PortfoliosCreate extends React.Component {
               this.setState({
                 createStepLoading: false,
                 showProgressCircle: false,
-                error: "There was a a problem saving your portfolio"
+                error: `There was a a problem saving your portfolio: ${e}`
               });
             }
           });
