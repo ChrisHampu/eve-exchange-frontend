@@ -16,8 +16,6 @@ const initialState = {
 }
 */
 
-const PremiumPrice = 125000000;
-
 export default function subscription(state = initialState, action) {
 
   switch(action.type) {
@@ -28,21 +26,6 @@ export default function subscription(state = initialState, action) {
       }
 
       return { ...state, ...action.subscription, userID: action.id };
-
-    case "UPGRADE_PREMIUM":
-
-      return { ...state, premium: true, balance: state.balance - PremiumPrice };
-
-    case "DOWNGRADE_PREMIUM":
-
-      return { ...state, premium: false };
-
-    case "PERFORM_WITHDRAWAL":
-      if (!action.amount || action.amount < 1 || action.amount > state.balance) {
-        return state;
-      }
-
-      return { ...state, balance: state.balance - action.amount };
 
     default:
       return state;
