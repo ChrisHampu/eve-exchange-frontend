@@ -21,3 +21,7 @@ export function removeApiKey() {
 export function updateChartSetting(setting, value) {
   return { type: "UPDATE_CHART_SETTING", setting, value };
 }
+
+export function updateGeneralSetting(setting, value) {
+  return { type: "UPDATE_GENERAL_SETTING", setting, value };
+}
