@@ -8,6 +8,9 @@ const initialState = {
     characterName: "",
     expires: null
   },
+  general: {
+    auto_renew: true
+  },
   chart_visuals: {
     price: true,
     spread: true,
@@ -76,6 +79,18 @@ export default function settings(state = initialState, action) {
       }
 
       return { ...state, chart_visuals: { ...state.chart_visuals, [action.setting]: action.value } };
+
+    case "UPDATE_GENERAL_SETTING":
+
+      if (!action.setting) {
+        return state;
+      }
+
+      if (action.value === 'undefined' || action.value === null) {
+        return state;
+      }
+
+      return { ...state, general: { ...state.general, [action.setting]: action.value } };
 
     default:
       return state;
