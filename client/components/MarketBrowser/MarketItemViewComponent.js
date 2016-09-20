@@ -34,40 +34,11 @@ class MarketItemViewComponent extends React.Component {
     this.state = {
       item: {
         id: this.props.params.id,
-        name: itemIDToName(this.props.sde.market_items, this.props.params.id),
-        width: 0,
-        height: 0
+        name: itemIDToName(this.props.sde.market_items, this.props.params.id)
       }
     };
 
     subscribeItem(this.state.item.id, 0);
-  }
-
-  updateContainer() {
-
-    if (!this.refs.content) {
-      return;
-    }
-
-    const newHeight = ReactDOM.findDOMNode(this.refs.content).clientHeight - 50; // -50 for the tab header
-    const newWidth = ReactDOM.findDOMNode(this.refs.content).clientWidth;
-
-    if (newHeight != this.state.height || newWidth != this.state.width) {
-      this.setState({
-        width: newWidth,
-        height: newHeight
-      });
-    }
-  }
-
-  componentDidMount() {
-
-    this.updateContainer();
-  }
-
-  componentDidUpdate() {
-
-    this.updateContainer();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -137,7 +108,7 @@ class MarketItemViewComponent extends React.Component {
           <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
             <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
               <div className={s.market_item_chart_container}>
-                <MarketItemChart style={{flex: 1}} item={this.state.item} width={this.state.width} height={this.state.height} />
+                <MarketItemChart style={{flex: 1}} item={this.state.item} />
               </div>
             </Tab>
             <Tab label="Price Ladder" style={{backgroundColor: "rgb(38, 43, 47)"}}>
