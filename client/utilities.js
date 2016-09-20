@@ -84,16 +84,19 @@ export function prettyDate(time) {
     if (isNaN(day_diff) || day_diff < 0)
         return;
 
+    const week_diff = Math.ceil(day_diff / 7);
+    const month_diff = Math.ceil(day_diff / 30);
+
     return day_diff == 0 && (
         diff < 60 && "just now" ||
-        diff < 120 && "1 minute ago" ||
+        diff < 120 && "a minute ago" ||
         diff < 3600 && Math.floor(diff / 60) + " minutes ago" ||
-        diff < 7200 && "1 hour ago" ||
-        diff < 86400 && Math.floor(diff / 3600) + " hours ago") ||
-        day_diff == 1 && "Yesterday" ||
+        diff < 7200 && "about an hour ago" ||
+        diff < 86400 && `about ${Math.floor(diff / 3600)} hours ago`) ||
+        day_diff == 1 && "a day ago" ||
         day_diff < 7 && day_diff + " days ago" ||
-        day_diff < 31 && `${Math.ceil(day_diff / 7)} week${Math.ceil(day_diff / 7)===1?"":"s"} ago` ||
-        `${Math.ceil(day_diff / 30)} month${Math.ceil(day_diff / 30)===1?"":"s"} ago`;
+        day_diff < 31 && `${week_diff===1?"a":week_diff} week${week_diff===1?"":"s"} ago` ||
+        `${month_diff===1?"a":month_diff} month${month_diff===1?"":"s"} ago`;
 }
 
 export async function getAPIKeyInfo(keyID, vCode) {
