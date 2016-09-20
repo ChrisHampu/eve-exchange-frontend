@@ -64,7 +64,7 @@ export default {
       ],
       exclude: ['node_modules/process-es6/**', 'node_modules/redux/**'],
       namedExports: {
-        'client/vendor/d3.js': ['scaleTime', 'scaleLinear', 'timeHour', 'timeMinute', 'timeDay', 'line', 'area', 'select', 'axisLeft', 'axisBottom', 'axisRight', 'curveCatmullRom'],
+        'client/vendor/d3.js': ['scaleUtc', 'scaleLinear', 'timeHour', 'timeMinute', 'timeDay', 'line', 'area', 'select', 'axisLeft', 'axisBottom', 'axisRight', 'curveCatmullRom'],
         'react': ['PropTypes', 'createElement'],
         'react-router': ['browserHistory'],
         'react-redux': ['Provider']

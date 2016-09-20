@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 import React from 'react';
-import { scaleTime, scaleLinear, timeHour, timeDay } from '../../vendor/d3';
+import { scaleUtc, scaleLinear, timeHour, timeDay } from '../../vendor/d3';
 import { formatNumber } from '../../utilities';
 
 import ChartContainer from '../Charts/ChartContainer';
@@ -24,7 +24,7 @@ export default class PortfoliosPerformanceChart extends React.Component {
     super(props);
 
     this.state = {
-      xScale: scaleTime(),
+      xScale: scaleUtc(),
       yScale: scaleLinear(),
       volScale: scaleLinear(),
       percentScale: scaleLinear(),

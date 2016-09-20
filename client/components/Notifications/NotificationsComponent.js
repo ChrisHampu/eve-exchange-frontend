@@ -6,6 +6,7 @@ import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import s from './NotificationsComponent.scss';
 import cx from 'classnames';
 import horizon from '../../horizon';
+import { prettyDate } from '../../utilities';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
@@ -50,7 +51,7 @@ class Notifications extends React.Component {
                   return (
                     <tr key={i} className={s.row}>
                       <td className={s.column}>{el.message}</td>
-                      <td width="200px" className={s.column}>{el.time.toLocaleString()}</td>
+                      <td width="200px" className={s.column}>{prettyDate(el.time)}</td>
                       <td className={s.column} width="50px">
                         <IconButton tooltip={el.read===false?"Mark Read":"Mark Unread"} className={cx(s.read_button, {[s.is_read]: el.read})} onClick={()=>{this.toggleRead(el)}}>
                           { el.read === false ? <XIcon /> : <CheckIcon /> }

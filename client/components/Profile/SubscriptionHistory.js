@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import React from 'react';
 import s from './SubscriptionHistory.scss';
-import { formatNumber, formatDate } from '../../utilities';
+import { formatNumber, prettyDate } from '../../utilities';
 
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -87,7 +87,7 @@ export default class SubscriptionHistory extends React.Component {
                     history.map((el, i) => {
                       return (
                         <TableRow key={i} selectable={false}>
-                          <TableRowColumn>{formatDate(el.time)}</TableRowColumn>
+                          <TableRowColumn>{prettyDate(el.time)}</TableRowColumn>
                           <TableRowColumn>{el.type===0?"Deposit":"Withdrawal"}</TableRowColumn>
                           <TableRowColumn style={el.type===0?{color: "#4CAF50"}:{color: "#F44336"}}>{formatNumber(el.amount)} ISK</TableRowColumn>
                           <TableRowColumn>{el.description}</TableRowColumn>

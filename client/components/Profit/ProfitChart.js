@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
-import { scaleTime, scaleLinear, timeHour, timeMinute, timeDay } from '../../vendor/d3';
+import { scaleUtc, scaleLinear, timeHour, timeMinute, timeDay } from '../../vendor/d3';
 import { formatNumber } from '../../utilities';
 
 import ChartContainer from '../Charts/ChartContainer';
@@ -26,7 +26,7 @@ class ProfitChart extends React.Component {
     super(props);
 
     this.state = {
-      xScale: scaleTime(),
+      xScale: scaleUtc(),
       profitScale: scaleLinear(),
       taxScale: scaleLinear()
     }
