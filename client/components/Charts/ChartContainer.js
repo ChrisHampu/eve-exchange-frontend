@@ -93,7 +93,7 @@ class ChartContainer extends React.Component {
     const newWidth = this.props.overrideWidth || ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth;
 
     if (this.props.overrideHeight) {
-      newHeight -= ReactDOM.findDOMNode(this.refs.header).clientHeight + 5;
+      newHeight -= ReactDOM.findDOMNode(this.refs.header).clientHeight;
     }
 
     if (this.forceUpdate === true || (this.state.containerWidth === 0 && this.state.containerHeight === 0 && newHeight !== this.state.containerHeight && newWidth !== this.state.containerWidth)) {
@@ -109,7 +109,6 @@ class ChartContainer extends React.Component {
       });
 
       this.forceUpdate = false;
-      
     }
   }
 
@@ -331,15 +330,13 @@ class ChartContainer extends React.Component {
             </div>
           </div>
         </div>
-        <div style={{display: "flex", width: "100%", height: "100%"}}>
-          <div ref="chart_anchor" className={s.chart}>
-            <svg onMouseMove={(ev) => this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()} width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
-              <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
-                {this.props.children}
-              </g>
-            </svg>
+        <div ref="chart_anchor" className={s.chart}>
+          <svg onMouseMove={(ev) => this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()} width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
+            <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
+              {this.props.children}
+            </g>
+          </svg>
           <Tooltip ref="tooltip" />
-          </div>
         </div>
       </div>
     );
