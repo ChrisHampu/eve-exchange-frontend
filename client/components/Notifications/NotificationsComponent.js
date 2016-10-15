@@ -84,7 +84,7 @@ class Notifications extends React.Component {
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
             {
-              this.props.notifications.length === 0 ?
+              !this.props.notifications || this.props.notifications.length === 0 ?
                 <TableRow selectable={false}>
                   <TableRowColumn>No new notifications</TableRowColumn>
                 </TableRow>
