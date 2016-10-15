@@ -113,7 +113,7 @@ export async function publishMinutes(type) {
 
       console.log("Awaiting record completion");
       await recordReady(record);
-      console.log("Resolving minute docs");
+      console.log(`Resolving ${docs.length} minute docs for type ${type}`);
       resolve();
     });
   })
