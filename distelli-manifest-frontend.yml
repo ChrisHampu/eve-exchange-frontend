@@ -3,6 +3,7 @@ champu/EVE-Exchange-Frontend:
   Build:
     - echo "Bundling production release."
   PkgInclude:
+    - 'build-server/**'
     - 'build/**'
     - package.json
   PostInstall:
