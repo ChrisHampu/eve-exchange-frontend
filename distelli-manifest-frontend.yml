@@ -6,6 +6,8 @@ champu/EVE-Exchange-Frontend:
     - 'build-server/**'
     - 'build/**'
     - package.json
+    - deepstream.dev.yaml
+    - deepstream.permissions.yaml
   PostInstall:
     - npm install --production
   Exec:
