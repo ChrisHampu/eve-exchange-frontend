@@ -20,7 +20,8 @@ class MarketItemChart extends React.Component {
   static propTypes = {
 
     item: React.PropTypes.object,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    region: React.PropTypes.number
   };
 
   constructor(props) {
@@ -113,7 +114,7 @@ class MarketItemChart extends React.Component {
       return null;
     }
 
-    const region = store.getState().settings.market.region;
+    const region = this.props.region || store.getState().settings.market.region;
 
     if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
 

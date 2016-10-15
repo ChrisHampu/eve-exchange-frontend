@@ -17,6 +17,7 @@ import IconButton from 'material-ui/IconButton/IconButton';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CheckIcon from 'material-ui/svg-icons/action/check-circle';
+import LeftArrowIcon from 'material-ui/svg-icons/navigation/chevron-left';
 
 class MarketItemViewComponent extends React.Component {
 
@@ -34,7 +35,8 @@ class MarketItemViewComponent extends React.Component {
     this.state = {
       item: {
         id: this.props.params.id,
-        name: itemIDToName(this.props.sde.market_items, this.props.params.id)
+        name: itemIDToName(this.props.sde.market_items, this.props.params.id),
+        regionOverride: null
       }
     };
 
@@ -97,10 +99,19 @@ class MarketItemViewComponent extends React.Component {
             >
               {
                 this.isChartPinned() ? 
-                  <MenuItem type="text" primaryText="Unpin From Dashboard" onTouchTap={()=>{this.unPinChart()}} style={{cursor: "pointer"}}/>
-                  : <MenuItem type="text" primaryText="Pin To Dashboard" onTouchTap={()=>{this.pinChart()}} style={{cursor: "pointer"}}/>
+                  <MenuItem type="text" primaryText="Unpin From Dashboard" innerDivStyle={{padding: "0 16px 0 55px"}} onTouchTap={()=>{this.unPinChart()}} style={{cursor: "pointer"}} insetChildren={true} />
+                  : <MenuItem type="text" primaryText="Pin To Dashboard" innerDivStyle={{padding: "0 16px 0 55px"}} onTouchTap={()=>{this.pinChart()}} style={{cursor: "pointer"}} insetChildren={true} />
               }
-              <MenuItem type="text" primaryText="Settings" onTouchTap={()=>this.context.router.push('/dashboard/profile/settings')} style={{cursor: "pointer"}}/>
+              <MenuItem type="text" primaryText="Settings" innerDivStyle={{padding: "0 16px 0 55px"}} onTouchTap={()=>this.context.router.push('/dashboard/profile/settings')} style={{cursor: "pointer"}} insetChildren={true} />
+              <MenuItem type="text" primaryText="Change Hub" innerDivStyle={{padding: "0 16px 0 55px"}} style={{cursor: "pointer"}} leftIcon={<LeftArrowIcon />}
+                menuItems={[
+                  <MenuItem type="text" primaryText="Jita" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({regionOverride: 10000002})}/>,
+                  <MenuItem type="text" primaryText="Amarr" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({regionOverride: 10000043})}/>,
+                  <MenuItem type="text" primaryText="Dodixie" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({regionOverride: 10000032})}/>,
+                  <MenuItem type="text" primaryText="Hek" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({regionOverride: 10000042})}/>,
+                  <MenuItem type="text" primaryText="Rens" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({regionOverride: 10000030})}/>
+                ]}
+              />
             </IconMenu>
           </div>
         </div>
@@ -108,11 +119,11 @@ class MarketItemViewComponent extends React.Component {
           <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
             <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
               <div className={s.market_item_chart_container}>
-                <MarketItemChart style={{flex: 1}} item={this.state.item} />
+                <MarketItemChart style={{flex: 1}} item={this.state.item} region={this.state.regionOverride} />
               </div>
             </Tab>
             <Tab label="Price Ladder" style={{backgroundColor: "rgb(38, 43, 47)"}}>
-                <MarketBrowserOrderTable item={this.state.item}/>
+                <MarketBrowserOrderTable item={this.state.item} region={this.state.regionOverride} />
             </Tab>
           </Tabs>
         </div>

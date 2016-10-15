@@ -11,7 +11,8 @@ class MarketBrowserOrderTable extends React.Component {
 
   static propTypes = {
 
-    item: React.PropTypes.object
+    item: React.PropTypes.object,
+    region: React.PropTypes.number
   };
 
   constructor(props) {
@@ -24,7 +25,7 @@ class MarketBrowserOrderTable extends React.Component {
 
   getMarketOrders() {
 
-    const region = store.getState().settings.market.region;
+    const region = this.props.region || store.getState().settings.market.region;
 
     if (typeof this.props.market.item[this.props.item.id] !== 'undefined'
       && typeof this.props.market.item[this.props.item.id].orders !== 'undefined'
@@ -37,7 +38,7 @@ class MarketBrowserOrderTable extends React.Component {
 
   getMarketAggregates() {
 
-    const region = store.getState().settings.market.region;
+    const region = this.props.region || store.getState().settings.market.region;
 
     if (typeof this.props.market.item[this.props.item.id] !== 'undefined'
       && typeof this.props.market.item[this.props.item.id].minutes !== 'undefined'
@@ -52,7 +53,13 @@ class MarketBrowserOrderTable extends React.Component {
 
     const _id = orderID.toString();
 
-    if (this.props.market.user_orders.find(el => el.orderID === _id)) {
+    const orders = this.props.market.user_orders;
+
+    if (!orders || orders.length === 0) {
+      return false;
+    }
+
+    if (orders.find(el => el.orderID === _id)) {
       return true;
     }
 
