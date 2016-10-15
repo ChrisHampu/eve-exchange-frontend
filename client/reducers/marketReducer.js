@@ -57,6 +57,11 @@ function extractAggregateRegions(data) {
     }
   }
 
+  Object.keys(regions).forEach(region => {
+
+    regions[region] = regions[region].sort((el1, el2) => el2.time - el1.time);
+  });
+
   return regions;
 }
 
