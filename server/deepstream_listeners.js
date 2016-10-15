@@ -75,10 +75,10 @@ export function configureListeners(deepstream) {
     } else {
 
       // Remove from update list
-      subscribed_orders.splice(subscribed_orders.indexOf(type), 1);
+      //subscribed_orders.splice(subscribed_orders.indexOf(type), 1);
 
       // Remove record so its not in memory
-      deepstream.record.getRecord(eventName).discard();
+      //deepstream.record.getRecord(eventName).discard();
     }
   });
 
