@@ -9,7 +9,7 @@ export default class Login extends React.Component {
     super(props);
 
     this.state = {
-      endpoint: "http://localhost:5000/oauth"
+      endpoint: "http://evetradeforecaster.com/oauth"
     };
   }
 
