@@ -5,7 +5,7 @@ import babel from 'rollup-plugin-babel';
 import postcss from 'rollup-plugin-postcss';
 import image from 'rollup-plugin-image';
 import commonjs from 'rollup-plugin-commonjs';
-import builtins from 'rollup-plugin-node-builtins';
+import builtins from './utils/node-builtins/dist/rollup-plugin-node-builtins.es6.js';
 import globals from './utils/node-globals/dist/rollup-plugin-node-globals.es6.js';
 
 // PostCSS plugins
