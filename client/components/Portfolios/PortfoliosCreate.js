@@ -7,7 +7,7 @@ import s from './PortfoliosCreate.scss';
 import cx from 'classnames';
 import { sendAppNotification } from '../../actions/appActions';
 import { getMarketItemNames, itemNameToID, itemIDToName } from '../../market';
-import { getAuthToken } from '../../horizon';
+import { getAuthToken } from '../../deepstream';
 import { fetchBlueprints } from '../../sde';
 import { getMarketGroupTree } from '../../market';
 

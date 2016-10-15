@@ -7,7 +7,7 @@ import s from './PortfoliosComponentTable.scss';
 import cx from 'classnames';
 import { formatNumberUnit, formatPercent } from '../../utilities';
 import { itemIDToName } from '../../market';
-import { getAuthToken } from '../../horizon';
+import { getAuthToken } from '../../deepstream';
 import { updateComponentDataSingle } from '../../actions/portfoliosActions';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';

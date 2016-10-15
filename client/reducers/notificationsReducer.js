@@ -1,10 +1,10 @@
 /*
   Structure
   {
-    id: <guid>,
+    _id: <guid>,
     time: <timestring>,
     message: <string>,
-    userID: <id>,
+    user_id: <id>,
     read: <boolean>
   }
 */

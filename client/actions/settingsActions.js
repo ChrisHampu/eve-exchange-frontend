@@ -25,3 +25,7 @@ export function updateChartSetting(setting, value) {
 export function updateGeneralSetting(setting, value) {
   return { type: "UPDATE_GENERAL_SETTING", setting, value };
 }
+
+export function updateMarketSetting(setting, value) {
+  return { type: "UPDATE_MARKET_SETTING", setting, value };
+}

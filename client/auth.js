@@ -1,5 +1,5 @@
 import store from './store';
-import { hasAuthToken, getCurrentUser, clearAuthToken } from './horizon';
+import { hasAuthToken, deepstreamLogout, deepstreamLogin } from './deepstream';
 
 export const userLevels = {
   "guest": 0,
@@ -14,7 +14,7 @@ export function logout(redirect) {
 
     return (nextState, transition) => {
 
-      clearAuthToken();
+      deepstreamLogout();
 
       redirectToRoot(transition);
       return;
@@ -70,21 +70,29 @@ export function requireAccess(requiredAccessLevel) {
   return (nextState, transition, callback) => {
 
     if (!hasAuthToken()) {
-      console.log("Auth token missing");
       redirectToLogin(transition);
       
       callback();
+      return;
     }
 
-    getCurrentUser().then(() => {
+    try {
+      deepstreamLogin().then(() => {
 
-      if (!userHasGroup(_requiredAccessLevel)) {
+        if (!userHasGroup(_requiredAccessLevel)) {
 
-        console.log("Permission denied");
+          redirectToLogin(transition);
+        }
+
+        callback();
+      }).catch((err) => {
+
         redirectToLogin(transition);
-      }
-
+        callback();
+      });
+    } catch (err) {
+      redirectToLogin(transition);
       callback();
-    });
+    }
   }
 }

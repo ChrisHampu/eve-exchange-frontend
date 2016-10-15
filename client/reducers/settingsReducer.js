@@ -8,6 +8,9 @@ const initialState = {
     characterName: "",
     expires: null
   },
+  market: {
+    region: 10000002
+  },
   general: {
     auto_renew: true
   },
@@ -91,6 +94,18 @@ export default function settings(state = initialState, action) {
       }
 
       return { ...state, general: { ...state.general, [action.setting]: action.value } };
+
+    case "UPDATE_MARKET_SETTING":
+
+      if (!action.setting) {
+        return state;
+      }
+
+      if (action.value === 'undefined' || action.value === null) {
+        return state;
+      }
+
+      return { ...state, market: { ...state.general, [action.setting]: action.value } };
 
     default:
       return state;

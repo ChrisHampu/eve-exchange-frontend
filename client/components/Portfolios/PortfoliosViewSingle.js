@@ -8,7 +8,7 @@ import s from './PortfoliosViewSingle.scss';
 import cx from 'classnames';
 import { sendAppNotification } from '../../actions/appActions';
 import { formatNumber, formatPercent } from '../../utilities';
-import { getAuthToken } from '../../horizon';
+import { getAuthToken } from '../../deepstream';
 
 import PortfoliosComponentTable from './PortfoliosComponentTable';
 import PortfoliosMaterialTable from './PortfoliosMaterialTable';

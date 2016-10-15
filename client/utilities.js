@@ -40,10 +40,16 @@ export function formatPercent(num) {
 
 export function formatDate(date) {
 
-  let minutes = date.getUTCMinutes() < 10 ? `0${date.getUTCMinutes()}` : date.getUTCMinutes();
-  let hours = date.getUTCHours() < 10 ? `0${date.getUTCHours()}` : date.getUTCHours();   
+  let _date = date;
 
-  return `${date.getUTCDate()} ${getMonthNumberToText(date.getUTCMonth())} ${hours}:${minutes}`;
+  if (typeof date === "string") {
+    _date = new Date(date);
+  }
+
+  let minutes = _date.getUTCMinutes() < 10 ? `0${_date.getUTCMinutes()}` : _date.getUTCMinutes();
+  let hours = _date.getUTCHours() < 10 ? `0${_date.getUTCHours()}` : _date.getUTCHours();   
+
+  return `${_date.getUTCDate()} ${getMonthNumberToText(_date.getUTCMonth())} ${hours}:${minutes}`;
 }
 
 export function getMonthNumberToText(month) {
@@ -77,8 +83,13 @@ export function getMonthNumberToText(month) {
 }
 
 export function prettyDate(time) {
-    var date = time,
-        diff = (((new Date()).getTime() - date.getTime()) / 1000),
+    var date = time;
+
+    if (typeof date === "string") {
+      date = new Date(date);
+    }
+
+    var diff = (((new Date()).getTime() - date.getTime()) / 1000),
         day_diff = Math.floor(diff / 86400);
 
     if (isNaN(day_diff) || day_diff < 0)

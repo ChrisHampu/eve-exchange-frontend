@@ -1,109 +1,102 @@
 import store from './store';
 import { setAggregateMinuteData, setAggregateHourlyData, setAggregateDailyData, setOrderData } from './actions/marketActions';
-import horizon from './horizon';
+import deepstream from './deepstream';
 import fuzzy from 'fuzzy';
 import { fetchGroups } from './sde';
 
-const subscriptions = [];
+const subscriptions = {};
 
 fetchGroups();
 
-export function subscribeItem(id, region) {
+export function subscribeItem(id) {
 
-  const idx = subscriptions.findIndex((el) => {
+  if (subscriptions.hasOwnProperty(id)) {
+    return;
+  }
 
-    return el.id === id && el.region === region;
+  let minuteSubscription = null;
+  let hourSubscription = null;
+  let orderSubscription = null;
+  let dailySubscription = null;
+
+  minuteSubscription = deepstream.record.getRecord(`market_minutes/${id}`);
+
+  minuteSubscription.subscribe(data => {
+
+    // Generate the 'open' data
+    // Also
+    // Data is ordered specifically to retrieve the newest records from the database
+    // But must be reversed into old -> new ordering for displaying on charts
+
+    if (!data) {
+      console.log("Error subscribing to aggregates for " + id);
+      return;
+    }
+
+    store.dispatch(setAggregateMinuteData(id, data));
   });
 
-  if (idx === -1) {
+  hourSubscription = deepstream.record.getRecord(`market_hourly/${id}`);
 
-    console.log("Subscribing to " + id);
+  hourSubscription.subscribe(data => {
 
-    let minuteSubscription = null;
-    let hourSubscription = null;
-    let orderSubscription = null;
-    let dailySubscription = null;
-
-    try {
-      minuteSubscription = horizon('aggregates').order('time', 'descending').findAll({type: parseInt(id)}).limit(2016).watch().defaultIfEmpty().subscribe(data => {
-
-        // Generate the 'open' data
-        // Also
-        // Data is ordered specifically to retrieve the newest records from the database
-        // But must be reversed into old -> new ordering for displaying on charts
-
-        if (!data) {
-          console.log("Error subscribing to aggregates for " + id);
-          return;
-        }
-
-        store.dispatch(setAggregateMinuteData(id, data));
-      });
-
-        hourSubscription = horizon('aggregates_hourly').order('time', 'descending').findAll({type: parseInt(id)}).limit(168).watch().defaultIfEmpty().subscribe(data => {
-
-        if (!data) {
-          console.log("Error subscribing to aggregates for " + id);
-          return;
-        }
-
-        store.dispatch(setAggregateHourlyData(id, data));
-      });
-
-        dailySubscription = horizon('aggregates_daily').order('time', 'descending').findAll({type: parseInt(id)}).watch().defaultIfEmpty().subscribe(data => {
-
-        if (!data) {
-          console.log("Error subscribing to aggregates for " + id);
-          return;
-        }
-
-        store.dispatch(setAggregateDailyData(id, data));
-        });
-    } catch(e) {
-      console.log(e);
+    if (!data) {
+      console.log("Error subscribing to aggregates for " + id);
+      return;
     }
 
-    try {
-      orderSubscription = horizon('orders').order('price', 'descending').findAll({type: parseInt(id)}).watch().defaultIfEmpty().subscribe(data => {
+    store.dispatch(setAggregateHourlyData(id, data));
+  });
 
-        if (!data) {
-          console.log("Error subscribing to order data for " + id);
-          return;
-        }
+  dailySubscription = deepstream.record.getRecord(`market_daily/${id}`);
 
-        store.dispatch(setOrderData(id, data));
-      })
-    } catch(e) {
-      
-      console.log(e)
+  dailySubscription.subscribe(data => {
+
+    if (!data) {
+      console.log("Error subscribing to aggregates for " + id);
+      return;
     }
 
-    subscriptions.push({
-      id,
-      region,
-      minuteSubscription,
-      hourSubscription,
-      dailySubscription,
-      orderSubscription
-    });
+    store.dispatch(setAggregateDailyData(id, data));
+  });
+
+  orderSubscription = deepstream.record.getRecord(`market_orders/${id}`);
+
+  orderSubscription.subscribe(data => {
+
+    if (!data) {
+      console.log("Error subscribing to order data for " + id);
+      return;
+    }
+
+    store.dispatch(setOrderData(id, data));
+  });
+
+  subscriptions[id] = {
+    minuteSubscription,
+    hourSubscription,
+    dailySubscription,
+    orderSubscription
   };
 }
 
-export function unsubscribeItem(id, region) {
+export function unsubscribeItem(id) {
  
-  const idx = subscriptions.findIndex((el) => {
-
-    return el.id === id && el.region === region;
-  });
-
-  if (idx !== -1) {
-
-    subscriptions[idx].minuteSubscription.unsubscribe();
-    subscriptions[idx].hourSubscription.unsubscribe();
-    subscriptions[idx].dailySubscription.unsubscribe();
-    subscriptions[idx].orderSubscription.unsubscribe();
-    subscriptions.splice(idx, 1);
+  if (!subscriptions.hasOwnProperty(id)) {
+    console.log(`Market subscription for ${id} is already discarded`);
+    return;
   }
+  subscriptions[id].minuteSubscription.unsubscribe();
+  subscriptions[id].hourSubscription.unsubscribe();
+  subscriptions[id].dailySubscription.unsubscribe();
+  subscriptions[id].orderSubscription.unsubscribe();
+
+  subscriptions[id].minuteSubscription.discard();
+  subscriptions[id].hourSubscription.discard();
+  subscriptions[id].dailySubscription.discard();
+  subscriptions[id].orderSubscription.discard();
+
+  delete subscriptions[id];
 }
 
 export function getMarketGroupTree(market_groups, searchText) {

@@ -1,5 +1,12 @@
 
-export default function auth(state = { groups: ["guest"], id: null, name: "", corporation: "" }, action) {
+const initialState = {
+  groups: ["standard"],
+  id: null,
+  name: "",
+  corporation: ""
+};
+
+export default function auth(state = initialState, action) {
 
   switch(action.type) {
 
@@ -8,24 +15,19 @@ export default function auth(state = { groups: ["guest"], id: null, name: "", co
         return state;
       }
 
-      let id = action.user.id || state.id;
+      let id = action.user.user_id || state.id;
       let groups = state.groups;
-      let name = action.user.name || state.name;
+      let name = action.user.user_name || state.name;
       let corporation = action.user.corporation || state.corporation;
 
-      if (action.user.groups) {
+      if (action.user.premium !== undefined || action.user.admin !== undefined) {
+        groups = ["standard"];
 
-        groups = ["guest"];
-
-        if (action.user.groups.indexOf("authenticated") !== -1) {
-          groups.push("standard");
-        }
-
-        if (action.user.groups.indexOf("premium") !== -1) {
+        if (action.user.premium === true) {
           groups.push("premium");
         }
 
-        if (action.user.groups.indexOf("admin") !== -1) {
+        if (action.user.admin === true) {
           groups.push("admin");
         }
       }

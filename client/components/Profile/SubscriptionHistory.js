@@ -31,7 +31,7 @@ export default class SubscriptionHistory extends React.Component {
     if (this.props.subscription.history) {
 
       history = this.props.subscription.history
-      .sort((el1, el2) => el2.time - el1.time);
+      .sort((el1, el2) => new Date(el2.time) - new Date(el1.time));
 
       switch(this.state.subFilter) {
         case 0:

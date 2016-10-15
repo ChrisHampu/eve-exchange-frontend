@@ -1,7 +1,5 @@
 import React from 'react';
 import s from './LoginComponent.scss';
-import horizon from '../../horizon';
-import { getAuthEndpoint } from '../../horizon';
 import sso_image from '../../assets/img/EVESSO_Button.png';
 
 export default class Login extends React.Component {
@@ -11,15 +9,8 @@ export default class Login extends React.Component {
     super(props);
 
     this.state = {
-      endpoint: ""
+      endpoint: "http://localhost:5000/oauth"
     };
-  }
-
-  async componentWillMount() {
-
-    this.setState({
-      endpoint: await getAuthEndpoint()
-    });
   }
 
   render() {

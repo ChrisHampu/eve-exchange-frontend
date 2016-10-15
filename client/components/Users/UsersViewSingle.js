@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { formatNumberUnit, formatDate } from '../../utilities';
-import horizon from '../../horizon';
+import deepstream from '../../deepstream';
 import s from './UsersViewSingle.scss';
 
 import SubscriptionHistory from '../Profile/SubscriptionHistory';
@@ -53,17 +53,12 @@ class UsersViewSingle extends React.Component {
       return;
     }
 
-    const history = sub.history;
-
-    history.push({
-      "amount": newBal ,
-      "description":  "Deposit by " + this.props.auth.name,
-      "processed": true,
-      "time": new Date(),
-      "type": 0
+    deepstream.event.emit('admin_add_balance', {
+      user_id: sub.user_id,
+      admin_id: store.getState().auth.id,
+      admin_name: store.getState().auth.name,
+      balance: newBal
     });
-
-    horizon('subscription').update({id: sub.id, balance: sub.balance + newBal, history});
   }
 
   doRemoveBalance() {
@@ -76,22 +71,17 @@ class UsersViewSingle extends React.Component {
       return;
     }
 
-    const history = sub.history;
-
-    history.push({
-      "amount": newBal,
-      "description":  "Manual adjustment by " + this.props.auth.name,
-      "processed": true,
-      "time": new Date(),
-      "type": 1
+    deepstream.event.emit('admin_remove_balance', {
+      user_id: sub.user_id,
+      admin_id: store.getState().auth.id,
+      admin_name: store.getState().auth.name,
+      balance: newBal
     });
-
-    horizon('subscription').update({id: sub.id, balance: Math.max(0, sub.balance - newBal), history});
   }
 
   getSubscription() {
 
-    return this.props.subs.find(el => el.userID === this.props.params.id);
+    return this.props.subs.find(el => el.user_id === parseInt(this.props.params.id));
   }
 
   render() {
@@ -110,10 +100,10 @@ class UsersViewSingle extends React.Component {
       <div className={s.root}>
         <div className={s.content}>
           <div className={s.title}>
-          Viewing <span className={s.name}>{sub.userName}</span>
+          Viewing <span className={s.name}>{sub.user_name}</span>
           </div>
           <div className={s.status}>
-          {sub.premium ? <span><span className={s.premium}>Premium</span> expires {formatDate(new Date(sub.subscription_date.getTime() + 2592000000))}</span> : "Free"}
+          {sub.premium ? <span><span className={s.premium}>Premium</span> expires {formatDate(new Date(new Date(sub.subscription_date).getTime() + 2592000000))}</span> : "Free"}
           </div>
           <div className={s.balance}>
           {formatNumberUnit(sub.balance)} Balance

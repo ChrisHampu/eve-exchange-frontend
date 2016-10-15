@@ -42,7 +42,7 @@ class UsersView extends React.Component {
 
     if (this.state.search) {
 
-      subs = fuzzy.filter(this.state.search, subs, { extract: item => item.userName.toLowerCase() }).map(el => el.original);
+      subs = fuzzy.filter(this.state.search, subs, { extract: item => item.user_name.toLowerCase() }).map(el => el.original);
 
     } else if (this.state.subFilter) {
 
@@ -96,7 +96,7 @@ class UsersView extends React.Component {
                   subs.map((el, i) => {
                     return (
                      <TableRow key={i} selectable={false}>
-                        <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/users/view/${el.userID}`)}}>{el.userName}</span></TableRowColumn>
+                        <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/users/view/${el.user_id}`)}}>{el.user_name}</span></TableRowColumn>
                         <TableRowColumn style={{textAlign: "center"}}>{el.premium ? <span className={s.premium}>Premium</span> : "Free"}</TableRowColumn>
                         <TableRowColumn style={{textAlign: "center"}}>{formatNumberUnit(el.balance)}</TableRowColumn>
                       </TableRow>

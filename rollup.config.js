@@ -54,8 +54,8 @@ export default {
     nodeResolve({
       jsnext: true,
       browser: true,
-      preferBuiltins: true
-    }),  
+      preferBuiltins: false
+    }),
     commonjs({
       include: [
         'node_modules/**',
@@ -78,7 +78,11 @@ export default {
       const values = {
         'var index = Object': 'var _reduxMap = Object',
         "\\( index && index\\['default'\\] \\) \\|\\| index": "( _reduxMap && _reduxMap['default'] ) || _reduxMap",
-        'var _RadioButton = index\\$\\d\\d': 'var _RadioButton = RadioButton$1'
+        'var _RadioButton = index\\$\\d\\d': 'var _RadioButton = RadioButton$1',
+        'TcpConnection, events.EventEmitter': 'TcpConnection, events',
+        'var name = message.data\\[ message.action === C.ACTIONS.ACK \\? 1 : 0 \\];': 'var name = message.data[ message.action === C.ACTIONS.ACK ? 1 : 0 ];\nvar processed;',
+        'var events = createCommonjsModule\\(function': 'var events_mui = createCommonjsModule(function',
+        'var _events = events;': 'var _events = events_mui'
       };
 
       const keys = Object.keys(values);

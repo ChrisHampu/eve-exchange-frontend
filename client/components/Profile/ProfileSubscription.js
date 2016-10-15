@@ -7,7 +7,7 @@ import s from './ProfileSubscription.scss';
 import cx from 'classnames';
 import { addPremium, removePremium } from '../../actions/authActions';
 import { formatNumber, formatDate } from '../../utilities';
-import { getAuthToken } from '../../horizon';
+import { getAuthToken } from '../../deepstream';
 
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -310,7 +310,7 @@ class Subscription extends React.Component {
               Subscription Expires:
             </div>
             <div className={s.info_value}>
-              {this.props.subscription.subscription_date ? formatDate(new Date(this.props.subscription.subscription_date.getTime() + 2592000000)) : "Never"}
+              {this.props.subscription.subscription_date ? formatDate(new Date(new Date(this.props.subscription.subscription_date).getTime() + 2592000000)) : "Never"}
             </div>
           </div>
           <div className={s.info_row}>

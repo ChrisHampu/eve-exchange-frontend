@@ -62,7 +62,7 @@ class MarketItemChart extends React.Component {
       new Date(maxDate.getTime())
     ]);
 
-    this.state.yScale.domain([Math.min(...data.map((el) => { return el.buyFifthPercentile})), Math.max(...data.map((el) => { return el.buyFifthPercentile}))]);
+    this.state.yScale.domain([Math.min(...data.map((el) => { return el.buyPercentile})), Math.max(...data.map((el) => { return el.buyPercentile}))]);
 
     this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0}))), Math.ceil(Math.max(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0})))]);
 
@@ -113,11 +113,16 @@ class MarketItemChart extends React.Component {
       return null;
     }
 
-    if (typeof this.props.market.region[0] !== 'undefined' && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined') {
+    const region = store.getState().settings.market.region;
+
+    if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
 
       switch(this.refs.container.getFrequency()) {
         case "minutes":
-          var arr = this.props.market.region[0].item[this.props.item.id].minutes;
+          if (!this.props.market.item[this.props.item.id].minutes) {
+            return null;
+          }
+          var arr = this.props.market.item[this.props.item.id].minutes[region];
           if (!arr) {
             return null;
           }
@@ -127,7 +132,10 @@ class MarketItemChart extends React.Component {
           }
           return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
         case "hours":
-          var arr = this.props.market.region[0].item[this.props.item.id].hours;
+          if (!this.props.market.item[this.props.item.id].hours) {
+            return null;
+          }
+          var arr = this.props.market.item[this.props.item.id].hours[region];
           if (!arr) {
             return null;
           }
@@ -137,7 +145,10 @@ class MarketItemChart extends React.Component {
           }
           return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
         case "daily":
-          var arr = this.props.market.region[0].item[this.props.item.id].daily;
+          if (!this.props.market.item[this.props.item.id].daily) {
+            return null;
+          }
+          var arr = this.props.market.item[this.props.item.id].daily[region];
           if (!arr) {
             return null;
           }
@@ -199,8 +210,8 @@ class MarketItemChart extends React.Component {
     return { 
       view: 
         <div>
-          Buy: {formatNumber(el.buyFifthPercentile)}<br />
-          Sell: {formatNumber(el.sellFifthPercentile)}<br />
+          Buy: {formatNumber(el.buyPercentile)}<br />
+          Sell: {formatNumber(el.sellPercentile)}<br />
           Spread: {Math.round(el.spread*Math.pow(10,2))/Math.pow(10,2)}%<br />
           {
             this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ?
@@ -301,7 +312,7 @@ class MarketItemChart extends React.Component {
           <g>
             {
               this.props.chart_visuals.price ?
-                <Area viewportHeight={this.state.ohlcHeight} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyFifthPercentile} />
+                <Area viewportHeight={this.state.ohlcHeight} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyPercentile} />
                 : false
             }
             {
