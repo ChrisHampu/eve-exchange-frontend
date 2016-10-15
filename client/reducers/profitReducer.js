@@ -44,11 +44,15 @@ export default function profit(state = initialState, action) {
         return state;
       }
 
-      return { ...state, toplist: action.toplist };
+      return { ...state, toplist: action.toplist || [] };
 
     case "UPDATE_HOURLY_CHART":
       if (!action.chart) {
         return state;
+      }
+
+      if (!action.chart.length || action.chart.length === 0) {
+        return { ...state, chart: { ...state.chart, hourly: [] } };
       }
 
       for (var i = 0; i < action.chart.length; i++) {
@@ -62,6 +66,10 @@ export default function profit(state = initialState, action) {
     case "UPDATE_DAILY_CHART":
       if (!action.chart) {
         return state;
+      }
+
+      if (!action.chart.length || action.chart.length === 0) {
+        return { ...state, chart: { ...state.chart, daily: [] } };
       }
 
       for (var i = 0; i < action.chart.length; i++) {
