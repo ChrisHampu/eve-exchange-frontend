@@ -46,8 +46,8 @@ deploy:
   - echo "  - EVE-Exchange-Frontend-Production" >> /etc/distelli.yml
   - echo "  - EVE-Exchange-Backend-Production" >> /etc/distelli.yml
   - '"/usr/local/bin/distelli" login -conf /etc/distelli.yml'
-  - '"/usr/local/bin/distelli" deploy -q -y -m "Deployment from Gitlab" -f distelli-manifest-frontend.yml --env EVE-Exchange-Frontend'
-  - '"/usr/local/bin/distelli" deploy -q -y -m "Deployment from Gitlab" -f distelli-manifest-backend.yml --env EVE-Exchange-Backend'
+  - '"/usr/local/bin/distelli" deploy -q -y -m "Deployment from Gitlab" -f distelli-manifest-frontend.yml --env EVE-Exchange-Frontend-Production'
+  - '"/usr/local/bin/distelli" deploy -q -y -m "Deployment from Gitlab" -f distelli-manifest-backend.yml --env EVE-Exchange-Backend-Production'
   stage: deploy
   environment: production
   only:
