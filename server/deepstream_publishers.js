@@ -104,12 +104,16 @@ export async function publishOrders(type) {
 export async function publishMinutes(type) {
 
   return new Promise((resolve, reject) => {
+
+    console.log("Loading minute docs from db");
     getCollection('minutes').find({type}).toArray(async (err, docs) => {
 
+      console.log("Setting deepstream record");
       var record = deepstream.record.getRecord(`market_minutes/${type}`).set(docs);
 
+      console.log("Awaiting record completion");
       await recordReady(record);
-
+      console.log("Resolving minute docs");
       resolve();
     });
   })
