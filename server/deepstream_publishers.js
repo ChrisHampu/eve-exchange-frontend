@@ -28,16 +28,7 @@ export async function publishLogin(user_id) {
       await recordReady(record);
     });
 
-    getCollection('subscription').findOne({user_id}, async (err, result) => {
-
-      if (!result) {
-        return;
-      }
-
-      var record = deepstream.record.getRecord(`subscription/${user_id}`).set(result);
-
-      await recordReady(record);
-    });
+    publishSubscription(user_id);
 
     getCollection('profit_top_items').findOne({user_id}, async (err, result) => {
 
