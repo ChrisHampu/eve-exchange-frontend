@@ -164,17 +164,15 @@ function setDeepstreamSubscriptions(user_info) {
 
   deepstream.record.getRecord(`profit_chart/${user_info.user_id}`).subscribe(profit => {
 
-    if (!profit) {
+    if (!profit || !profit.length) {
 
       store.dispatch(updateHourlyChart([]));
       store.dispatch(updateDailyChart([]));
       return;
     }
 
-    const _profit = profit.sort((doc1, doc2) => doc2.time - doc1.time);
-
-    const hourly = _profit.filter(doc => doc.frequency === "hourly");
-    const daily = _profit.filter(doc => doc.frequency === "daily");
+    const hourly = profit.filter(doc => doc.frequency === "hourly");
+    const daily = profit.filter(doc => doc.frequency === "daily");
 
     store.dispatch(updateHourlyChart(hourly));
     store.dispatch(updateDailyChart(daily));
