@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux'
 import Root from './components/Root/RootContainer';
 import store from './store';
+import './deepstream';
 
 const rootNode = document.createElement('div');
 rootNode.style.cssText = "height: 100%; min-height: 100%";

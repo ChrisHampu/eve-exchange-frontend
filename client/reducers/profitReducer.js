@@ -51,12 +51,24 @@ export default function profit(state = initialState, action) {
         return state;
       }
 
+      for (var i = 0; i < action.chart.length; i++) {
+        action.chart[i].time = new Date(action.chart[i].time);
+      }
+
+      action.chart = action.chart.sort((el1, el2) => el2.time - el1.time);
+
       return { ...state, chart: { ...state.chart, hourly: action.chart } };
 
     case "UPDATE_DAILY_CHART":
       if (!action.chart) {
         return state;
       }
+
+      for (var i = 0; i < action.chart.length; i++) {
+        action.chart[i].time = new Date(action.chart[i].time);
+      }
+
+      action.chart = action.chart.sort((el1, el2) => el2.time - el1.time);
 
       return { ...state, chart: { ...state.chart, daily: action.chart } };
 

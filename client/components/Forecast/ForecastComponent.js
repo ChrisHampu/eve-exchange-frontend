@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import s from './ForecastComponent.scss';
 import cx from 'classnames';
-import horizon, { getAuthToken } from '../../horizon';
+import { getAuthToken } from '../../deepstream';
 import { itemIDToName } from '../../market';
 import { formatNumberUnit, formatPercent } from '../../utilities';
 

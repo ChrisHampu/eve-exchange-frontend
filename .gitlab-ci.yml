@@ -8,25 +8,11 @@ stages:
 
 build:
   script:
-    # SSH agent/key
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_DEPLOY_KEY")
-    - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    # Pull submodule
-    - git submodule sync
-    - git submodule update --init --remote --recursive
     # Base npm install + configure binaries
     - npm install
     - ln -s $(pwd)/node_modules/.bin/babel /usr/bin/babel
     - ln -s $(pwd)/node_modules/.bin/rollup /usr/bin/rollup
-    # Build horizon client
-    - cd horizon/client
-    - npm install
-    - npm run compile && npm run build
     # Build client
-    - cd ../..
     - rollup -c rollup.prod.config.js >> output
     # Show full build output to console and check for errors
     - cat output
@@ -45,10 +31,7 @@ build:
     paths:
     - build/
     - build-server/
-    - horizon/client/dist/
-    - horizon/server/src/
     - package.json
-    - .babelrc
     when: on_success
     expire_in: 1 day
   allow_failure: false
@@ -60,9 +43,11 @@ deploy:
   - "echo \"DistelliAccessToken: '$DISTELLI_ACCESS_TOKEN'\" > /etc/distelli.yml"
   - "echo \"DistelliSecretKey: '$DISTELLI_SECRET_KEY'\" >> /etc/distelli.yml"
   - echo "Environments:" >> /etc/distelli.yml
-  - echo "  - EVEForecasterProduction" >> /etc/distelli.yml
+  - echo "  - EVE-Exchange-Frontend-Production" >> /etc/distelli.yml
+  - echo "  - EVE-Exchange-Backend-Production" >> /etc/distelli.yml
   - '"/usr/local/bin/distelli" login -conf /etc/distelli.yml'
-  - '"/usr/local/bin/distelli" deploy -q -y -m "Deployment from Gitlab" --env EVEForecasterProduction'
+  - '"/usr/local/bin/distelli" deploy -q -y -m "Deployment from Gitlab" -f distelli-manifest-frontend.yml --env EVE-Exchange-Frontend'
+  - '"/usr/local/bin/distelli" deploy -q -y -m "Deployment from Gitlab" -f distelli-manifest-backend.yml --env EVE-Exchange-Backend'
   stage: deploy
   environment: production
   only:

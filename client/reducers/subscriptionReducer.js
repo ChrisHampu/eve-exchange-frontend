@@ -1,5 +1,5 @@
 const initialState = {
-  userID: null,
+  user_id: null,
   balance: 0,
   history: [],
   premium: false,

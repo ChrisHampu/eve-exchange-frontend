@@ -3,7 +3,11 @@ const initialState = {
   market_items: null,
   blueprints: null,
   stationid2name: {
-    60003760: 'Jita IV - Moon 4 - Caldari Navy Assembly Plant'
+    60003760: 'Jita IV - Moon 4 - Caldari Navy Assembly Plant',
+    60008494: "Amarr VIII (Oris) - Emperor Family Academy",
+    60004588: "Rens VI - Moon 8 - Brutor Tribe Treasury",
+    60011866: "Dodixie IX - Moon 20 - Federation Navy Assembly Plant",
+    60005686: "Hek VIII - Moon 12 - Boundless Creation Factory"
   }
 };
 

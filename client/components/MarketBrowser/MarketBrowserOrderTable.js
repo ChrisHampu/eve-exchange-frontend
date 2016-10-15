@@ -24,10 +24,12 @@ class MarketBrowserOrderTable extends React.Component {
 
   getMarketOrders() {
 
-    if (typeof this.props.market.region[0] !== 'undefined'
-      && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined'
-      && typeof this.props.market.region[0].item[this.props.item.id].orders !== 'undefined') {
-      return this.props.market.region[0].item[this.props.item.id].orders;
+    const region = store.getState().settings.market.region;
+
+    if (typeof this.props.market.item[this.props.item.id] !== 'undefined'
+      && typeof this.props.market.item[this.props.item.id].orders !== 'undefined'
+      && typeof this.props.market.item[this.props.item.id].orders[region] !== 'undefined') {
+      return this.props.market.item[this.props.item.id].orders[region];
     }
 
     return [];
@@ -35,10 +37,12 @@ class MarketBrowserOrderTable extends React.Component {
 
   getMarketAggregates() {
 
-    if (typeof this.props.market.region[0] !== 'undefined'
-      && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined'
-      && typeof this.props.market.region[0].item[this.props.item.id].aggregates !== 'undefined') {
-      return this.props.market.region[0].item[this.props.item.id].aggregates;
+    const region = store.getState().settings.market.region;
+
+    if (typeof this.props.market.item[this.props.item.id] !== 'undefined'
+      && typeof this.props.market.item[this.props.item.id].minutes !== 'undefined'
+      && typeof this.props.market.item[this.props.item.id].minutes[region] !== 'undefined') {
+      return this.props.market.item[this.props.item.id].minutes[region];
     }
 
     return [];
@@ -60,10 +64,10 @@ class MarketBrowserOrderTable extends React.Component {
     let sellOrders = this.getMarketOrders().filter(el => el.buy === false).sort((el1, el2) => el1.price - el2.price);
     let buyOrders = this.getMarketOrders().filter(el => el.buy === true).sort((el1, el2) => el2.price - el1.price);
 
-    const aggregate = this.getMarketAggregates()[this.getMarketAggregates().length-1] || { sellFifthPercentile: 0, buyFifthPercentile: 0 };
+    const current = this.getMarketAggregates().sort((el1, el2) => el1.time - el2.time)[0] || { sellPercentile: 0, buyPercentile: 0 };
 
-    const topSell = sellOrders.splice(0, Math.min(10, sellOrders.filter(el => el.price > aggregate.sellFifthPercentile).length));
-    const topBuy = buyOrders.splice(0, Math.min(10, buyOrders.filter(el => el.price > aggregate.buyFifthPercentile).length));
+    const topSell = sellOrders.splice(0, Math.min(10, sellOrders.filter(el => el.price > current.sellPercentile).length));
+    const topBuy = buyOrders.splice(0, Math.min(10, buyOrders.filter(el => el.price > current.buyPercentile).length));
 
     return (
       <div className={s.market_item_order_container}>

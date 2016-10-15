@@ -1,11 +1,13 @@
 /* eslint-disable global-require */
+import 'whatwg-fetch';
 import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
+import { sendAppNotification } from '../../actions/appActions';
+import { getAuthToken } from '../../deepstream';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import s from './NotificationsComponent.scss';
 import cx from 'classnames';
-import horizon from '../../horizon';
 import { prettyDate } from '../../utilities';
 
 import RaisedButton from 'material-ui/RaisedButton';
@@ -18,14 +20,54 @@ import XIcon from 'material-ui/svg-icons/navigation/close';
 
 class Notifications extends React.Component {
 
-  markAllRead() {
+  async markAllRead() {
 
-    horizon('notifications').replace(this.props.notifications.filter(el => el.read === false).map(el => { return { ...el, read: true } }));
+    const res = await fetch(`http://api.evetradeforecaster.com/notification/all/read`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${getAuthToken()}`
+      }
+    });
+
+    const result = await res.json();
+
+    if (result.error) {
+
+      store.dispatch(sendAppNotification(result.error));
+
+      throw (result.error);
+    } else {
+
+      store.dispatch(sendAppNotification("Notifications have been marked as read"));
+    }
   }
 
-  toggleRead(notification) {
+  async toggleRead(notification) {
 
-    horizon('notifications').replace({...notification, read: !notification.read});
+    const status = notification.read ? "unread" : "read";
+
+    const res = await fetch(`http://api.evetradeforecaster.com/notification/${notification._id}/${status}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${getAuthToken()}`
+      }
+    });
+
+    const result = await res.json();
+
+    if (result.error) {
+
+      store.dispatch(sendAppNotification(result.error));
+
+      throw (result.error);
+    } else {
+
+      store.dispatch(sendAppNotification("Notification status updated"));
+    }
   }
 
   render() {

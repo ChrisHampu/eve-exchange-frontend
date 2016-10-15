@@ -50,7 +50,7 @@ class ProfitTransactions extends React.Component {
                     <TableRowColumn>No records available</TableRowColumn>
                   </TableRow>
                   :
-                  this.props.transactions.map((el, i) => {
+                  this.props.transactions.sort((el1, el2) => new Date(el2.time) - new Date(el1.time)).map((el, i) => {
                     return (
                      <TableRow key={i} selectable={false}>
                         <TableRowColumn style={{textAlign: "center"}}>{prettyDate(el.time)}</TableRowColumn>

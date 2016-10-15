@@ -16,9 +16,73 @@
     ]
   }
 }
+
+{
+  item: { -> type id
+    minutes: { -> region
+      [data]
+    }
+  }
+}
+
+{
+  item:
+}
+
+item[29668].region[10000002].minutes
+
 */
 
-export default function market(state = { user_orders: [], region: {} }, action) {
+function extractAggregateRegions(data) {
+
+  const regions = {};
+
+  for (let i = 0; i < data.length; i++) {
+
+    const record = data[i];
+
+    const time = new Date(record.time);
+
+    for (let j = 0; j < record.regions.length; j++) {
+
+      const region = record.regions[j];
+
+      if (!regions.hasOwnProperty(region.region)) {
+        regions[region.region] = [];
+      }
+
+      region.time = time;
+
+      regions[region.region].push(region);
+    }
+  }
+
+  return regions;
+}
+
+function extractOrderRegions(data) {
+
+  const regions = {};
+
+  for (let i = 0; i < data.length; i++) {
+
+    const order = data[i];
+
+    if (!regions.hasOwnProperty(order.region)) {
+      regions[order.region] = [];
+    }
+
+    order.time = new Date(order.time)
+
+    regions[order.region].push(order);
+  }
+
+  return regions;
+}
+
+export default function market(state = { user_orders: [], item: {} }, action) {
+
+  let payload = {};
 
   switch(action.type) {
 
@@ -27,70 +91,52 @@ export default function market(state = { user_orders: [], region: {} }, action) 
         return state;
       }
 
-      if ( typeof state.region[0] === 'undefined' || state.region[0].item.length === 0) {
+      payload = extractAggregateRegions(action.data);
 
-        return { ...state, region: { ...state.region, 0: { item: { [action.id]: { minutes: action.data } } } } };
+      if (!state.item.hasOwnProperty(action.id)) {
+        return { ...state, item: { [action.id]: { minutes: payload } } };
       }
 
-      if ( typeof state.region[0].item[action.id] === 'undefined') {
-
-        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { orders: [], minutes: action.data } }}  } };
-      }
-
-      return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], minutes: action.data } }}  } };
+      return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], minutes: payload } } };
 
     case "SET_AGGREGATE_HOURLY_DATA":
       if (!action.data || !action.id) {
         return state;
       }
 
-      if ( typeof state.region[0] === 'undefined' || state.region[0].item.length === 0) {
+      payload = extractAggregateRegions(action.data);
 
-        return { ...state, region: { ...state.region, 0: { item: { [action.id]: { hours: action.data } } } } };
+      if (!state.item.hasOwnProperty(action.id)) {
+        return { ...state, item: { [action.id]: { hours: payload } } };
       }
 
-      if ( typeof state.region[0].item[action.id] === 'undefined') {
-
-        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { orders: [], hours: action.data } }}  } };
-      }
-
-      return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], hours: action.data } }}  } };
+      return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], hours: payload } } };
 
     case "SET_AGGREGATE_DAILY_DATA":
       if (!action.data || !action.id) {
         return state;
       }
 
-      let data = action.data.sort((el1, el2) => el2.time - el1.time);
+      payload = extractAggregateRegions(action.data);
 
-      if ( typeof state.region[0] === 'undefined' || state.region[0].item.length === 0) {
-
-        return { ...state, region: { ...state.region, 0: { item: { [action.id]: { daily: data } } } } };
+      if (!state.item.hasOwnProperty(action.id)) {
+        return { ...state, item: { [action.id]: { daily: payload } } };
       }
 
-      if ( typeof state.region[0].item[action.id] === 'undefined') {
-
-        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { orders: [], daily: data } }}  } };
-      }
-
-      return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], daily: data } }}  } };
+      return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], daily: payload } } };
 
     case "SET_ORDER_DATA":
       if (!action.data || !action.id) {
         return state;
       }
 
-      if ( typeof state.region[0] === 'undefined' || state.region[0].item.length === 0) {
+      let payload = extractOrderRegions(action.data);
 
-        return { ...state, region: { ...state.region, 0: { item: { [action.id]: { orders: action.data } } } } };
+      if (!state.item.hasOwnProperty(action.id)) {
+        return { ...state, item: { [action.id]: { orders: payload } } };
       }
 
-      if ( typeof state.region[0].item[action.id] === 'undefined') {
-
-        return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { aggregates: [], orders: action.data } }}  } };
-      }
-
-      return { ...state, region: { ...state.region, 0: { item: { ...state.region[0].item, [action.id]: { ...state.region[0].item[action.id], orders: action.data } }}  } };
+      return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], orders: payload } } };
 
     case "SET_USER_ORDERS":
       if (!action.orders) {

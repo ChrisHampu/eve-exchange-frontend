@@ -41,25 +41,25 @@ const MainMenu = [
     "name": "Dashboard",
     "route": "/dashboard",
     "icon": <DashboardIcon />,
-    "perm": "guest"
+    "perm": "standard"
   },
   {
     "name": "Profile",
     "route": "/dashboard/profile",
     "icon": <ProfileIcon />,
-    "perm": "guest"
+    "perm": "standard"
   },
   {
     "name": "Notifications",
     "route": "/dashboard/notifications",
     "icon": <NotificationsIcon />,
-    "perm": "guest"
+    "perm": "standard"
   },
   {
     "name": "Logout",
     "route": "/logout",
     "icon": <ExitIcon />,
-    "perm": "guest"
+    "perm": "standard"
   }
 ];
 
@@ -68,19 +68,19 @@ const MarketMenu = [
     "name": "Browser",
     "route": "/dashboard/browser",
     "icon": <BrowserIcon />,
-    "perm": "guest"
+    "perm": "standard"
   },
   {
     "name": "Orders",
     "route": "/dashboard/orders",
     "icon": <OrderIcon />,
-    "perm": "guest"
+    "perm": "standard"
   },
   {
     "name": "Profit",
     "route": "/dashboard/profit",
     "icon": <ProfitIcon />,
-    "perm": "guest"
+    "perm": "standard"
   },
   {
     "name": "Forecast",

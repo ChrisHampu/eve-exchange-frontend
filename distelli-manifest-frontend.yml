@@ -1,11 +1,10 @@
-champu/EVETradeForecaster:
+champu/EVE-Exchange-Frontend:
 
   Build:
     - echo "Bundling production release."
   PkgInclude:
-    - '*'
-  PkgExclude:
-    - 'node_modules/**'
+    - 'build/**'
+    - package.json
   PostInstall:
     - npm install --production
   Exec:
