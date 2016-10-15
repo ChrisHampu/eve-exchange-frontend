@@ -90,12 +90,15 @@ export async function publishLogin(user_id) {
 export async function publishOrders(type) {
 
   return new Promise((resolve, reject) => {
+    console.log("Loading order docs from db");
     getCollection('orders').find({type}).toArray(async (err, docs) => {
 
+      console.log("Setting deepstream record");
       var record = deepstream.record.getRecord(`market_orders/${type}`).set(docs);
 
+      console.log("Awaiting record completion");
       await recordReady(record);
-
+      console.log(`Resolving ${docs.length} minute docs for type ${type}`);
       resolve();
     });
   })
