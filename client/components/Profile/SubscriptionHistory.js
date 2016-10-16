@@ -28,7 +28,7 @@ export default class SubscriptionHistory extends React.Component {
 
     let history = null;
 
-    if (this.props.subscription.history && this.props.history.length) {
+    if (this.props.subscription.history && this.props.subscription.history.length) {
 
       history = this.props.subscription.history
       .sort((el1, el2) => new Date(el2.time) - new Date(el1.time));
