@@ -9,7 +9,7 @@ import DashboardView from './DashboardView';
 import s from './DashboardComponent.scss';
 import Snackbar from './Snackbar';
 
-import logo_image from '../../assets/img/ETF-LogoNoBG.png';
+import logo_image from '../../assets/img/eve-x-logo.png';
 
 // Material UI
 import Paper from 'material-ui/Paper';
