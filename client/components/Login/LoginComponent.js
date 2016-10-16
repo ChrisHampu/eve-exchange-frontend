@@ -18,7 +18,7 @@ export default class Login extends React.Component {
       <div className={s.root}>
         <div>
           <div className={s.text}>
-          Sign in to begin using EVE Trade Forecaster
+          Sign in to begin using EVE Exchange
           </div>
           <a href={this.state.endpoint} style={{backgroundImage: `url(${sso_image.src})`}}></a>
         </div>

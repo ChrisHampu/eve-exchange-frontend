@@ -33,7 +33,7 @@ export default class OnboardingComponent extends React.Component {
     return (
         <div>
           <Paper>
-            <AppBar className={s.header} title="EVE Trade Forecaster" showMenuIconButton={false} iconElementRight={
+            <AppBar className={s.header} title="EVE Exchange" showMenuIconButton={false} iconElementRight={
               <Tabs inkBarStyle={{display:"none"}}>
                 {
                   this.state.loggedIn ?
