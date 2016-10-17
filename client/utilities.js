@@ -125,8 +125,6 @@ export async function getAPIKeyInfo(keyID, vCode) {
     }
   }
 
-  console.log(xml);
-
   const info = xml.eveapi.result.key;
   const characters = [];
 
@@ -144,13 +142,17 @@ export async function getAPIKeyInfo(keyID, vCode) {
     }
   }
 
-  console.log(xml.eveapi.result.key.rowset.row);
-  
-  for (const char of xml.eveapi.result.key.rowset.row) {
-    
+  if (xml.eveapi.result.key.rowset.row.length) {
+    for (const char of xml.eveapi.result.key.rowset.row) {
+      
+      characters.push({characterID: char._characterID, characterName: char._characterName});
+    }
+  } else {
+
+    let char = xml.eveapi.result.key.rowset.row;
+
     characters.push({characterID: char._characterID, characterName: char._characterName});
   }
-  console.log(characters);
 
   return { info: { type: info._type, expires: info._expires, accessMask: info._accessMask }, characters };
 }
