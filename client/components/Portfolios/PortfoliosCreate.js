@@ -10,6 +10,7 @@ import { getMarketItemNames, itemNameToID, itemIDToName } from '../../market';
 import { getAuthToken } from '../../deepstream';
 import { fetchBlueprints } from '../../sde';
 import { getMarketGroupTree } from '../../market';
+import { APIEndpointURL } from '../../globals';
 
 import MarketBrowserListItem from '../MarketBrowser/MarketBrowserListItem';
 
@@ -241,7 +242,7 @@ class PortfoliosCreate extends React.Component {
             }, 500);
 
             try {
-              const res = await fetch(`http://api.evetradeforecaster.com/portfolio/create`, {
+              const res = await fetch(`${APIEndpointURL}/portfolio/create`, {
                 method: 'POST',
                 headers: {
                   'Accept': 'application/json',

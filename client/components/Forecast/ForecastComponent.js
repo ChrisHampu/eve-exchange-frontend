@@ -8,6 +8,7 @@ import cx from 'classnames';
 import { getAuthToken } from '../../deepstream';
 import { itemIDToName } from '../../market';
 import { formatNumberUnit, formatPercent } from '../../utilities';
+import { APIEndpointURL } from '../../globals';
 
 // Components
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
@@ -17,8 +18,6 @@ import CircularProgress from 'material-ui/CircularProgress';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-
-const rootUrl = "http://api.evetradeforecaster.com/market/forecast/";
 
 class ForecastComponent extends React.Component {
 
@@ -88,7 +87,7 @@ class ForecastComponent extends React.Component {
         queueQuery: false
       }, async () => {
 
-        const res = await fetch(`${rootUrl}${params}`, {
+        const res = await fetch(`${APIEndpointURL}/market/forecast/${params}`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',

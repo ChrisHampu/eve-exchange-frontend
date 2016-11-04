@@ -8,6 +8,7 @@ import cx from 'classnames';
 import { addPremium, removePremium } from '../../actions/authActions';
 import { formatNumber, formatDate } from '../../utilities';
 import { getAuthToken } from '../../deepstream';
+import { APIEndpointURL } from '../../globals';
 
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -152,7 +153,7 @@ class Subscription extends React.Component {
 
   doPremiumUpgrade() {
 
-    fetch(`http://api.evetradeforecaster.com/subscription/subscribe`, {
+    fetch(`${APIEndpointURL}/subscription/subscribe`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -176,7 +177,7 @@ class Subscription extends React.Component {
 
   doPremiumDowngrade() {
     
-    fetch(`http://api.evetradeforecaster.com/subscription/unsubscribe`, {
+    fetch(`${APIEndpointURL}/subscription/unsubscribe`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -200,7 +201,7 @@ class Subscription extends React.Component {
 
   doWithdrawal() {
 
-    fetch(`http://api.evetradeforecaster.com/subscription/withdraw/${this.state.withdrawal}`, {
+    fetch(`${APIEndpointURL}/subscription/withdraw/${this.state.withdrawal}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

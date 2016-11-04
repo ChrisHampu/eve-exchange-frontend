@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import store from './store';
 import { updateMarketGroups, updateBlueprints } from './actions/sdeActions';
+import { APIEndpointURL } from './globals';
 
 let market_groups = null;
 let blueprints = null;
@@ -11,7 +12,7 @@ export async function fetchGroups() {
     return;
   }
 
-  const res = await fetch(`http://api.evetradeforecaster.com/sde/marketgroups`, {method: 'get'});
+  const res = await fetch(`${APIEndpointURL}/sde/marketgroups`, {method: 'get'});
   const body = await res.json();
 
   market_groups = body;
@@ -27,7 +28,7 @@ export async function fetchBlueprints() {
     return;
   }
 
-  const res = await fetch(`http://api.evetradeforecaster.com/sde/blueprints`, {method: 'get'});
+  const res = await fetch(`${APIEndpointURL}/sde/blueprints`, {method: 'get'});
   const body = await res.json();
 
   blueprints = body;

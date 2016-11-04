@@ -9,6 +9,7 @@ import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import s from './NotificationsComponent.scss';
 import cx from 'classnames';
 import { prettyDate } from '../../utilities';
+import { APIEndpointURL } from '../../globals';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
@@ -22,7 +23,7 @@ class Notifications extends React.Component {
 
   async markAllRead() {
 
-    const res = await fetch(`http://api.evetradeforecaster.com/notification/all/read`, {
+    const res = await fetch(`${APIEndpointURL}/notification/all/read`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -48,7 +49,7 @@ class Notifications extends React.Component {
 
     const status = notification.read ? "unread" : "read";
 
-    const res = await fetch(`http://api.evetradeforecaster.com/notification/${notification._id}/${status}`, {
+    const res = await fetch(`${APIEndpointURL}/notification/${notification._id}/${status}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

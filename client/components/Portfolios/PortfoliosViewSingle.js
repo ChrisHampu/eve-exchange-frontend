@@ -9,6 +9,7 @@ import cx from 'classnames';
 import { sendAppNotification } from '../../actions/appActions';
 import { formatNumber, formatPercent } from '../../utilities';
 import { getAuthToken } from '../../deepstream';
+import { APIEndpointURL } from '../../globals';
 
 import PortfoliosComponentTable from './PortfoliosComponentTable';
 import PortfoliosMaterialTable from './PortfoliosMaterialTable';
@@ -91,7 +92,7 @@ class PortfoliosViewSingle extends React.Component {
       try {
         const portfolio = this.getPortfolio();
 
-        const res = await fetch(`http://api.evetradeforecaster.com/portfolio/delete/${portfolio.portfolioID}`, {
+        const res = await fetch(`${APIEndpointURL}/portfolio/delete/${portfolio.portfolioID}`, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',

@@ -1,0 +1,1 @@
+export const APIEndpointURL = "http://api.eve.exchange";
