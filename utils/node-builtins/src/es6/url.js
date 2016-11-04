@@ -20,7 +20,7 @@
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-import {toASCII} from 'punycode';
+import punycode from 'punycode';
 import {isObject,isString,isNullOrUndefined,isNull} from 'util';
 import {parse as qsParse,stringify as qsStringify} from 'querystring';
 export {
@@ -299,7 +299,7 @@ function parse(self, url, parseQueryString, slashesDenoteHost) {
       // It only converts parts of the domain name that
       // have non-ASCII characters, i.e. it doesn't matter if
       // you call it with a domain that already is ASCII-only.
-      self.hostname = toASCII(self.hostname);
+      self.hostname = punycode.toASCII(self.hostname);
     }
 
     p = self.port ? ':' + self.port : '';
