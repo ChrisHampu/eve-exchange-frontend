@@ -57,7 +57,7 @@ export default function subscription(state = initialState, action) {
             hourlyChart: hourly,
             dailyChart: daily
           }
-        });
+        })
       };
 
     case "UPDATE_COMPONENT_DATA_SINGLE":
