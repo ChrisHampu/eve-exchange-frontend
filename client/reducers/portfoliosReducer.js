@@ -36,7 +36,23 @@ export default function subscription(state = initialState, action) {
         return state;
       }
 
-      return { ...state, all: action.portfolios };
+      // Fix all of the timestamps in each portfolio
+      const portfolios = action.portfolios.map(el => {
+        return  { 
+          ...el, 
+          time: new Date(el.time),
+          hourlyChart: el.hourlyChart.map(el2 => {
+
+            return { ...el2, time: new Date(el2.time) }
+          }),
+          dailyChart: el.dailyChart.map(el2 => {
+
+            return { ...el2, time: new Date(el2.time) }
+          })
+        }
+      });
+
+      return { ...state, all: portfolios };
 
     case "UPDATE_COMPONENT_DATA_SINGLE":
       if (!action.typeID || !action.data) {
