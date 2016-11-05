@@ -38,16 +38,22 @@ export default function subscription(state = initialState, action) {
 
       // Fix all of the timestamps in each portfolio
       const portfolios = action.portfolios.map(el => {
+
+        const hourly = el.hourlyChart;
+        const daily = el.dailyChart;
+
+        for (var i = 0; i < hourly.length; i++) {
+          hourly[i].time = new Date(hourly[i].time);
+        }
+
+        for (var i = 0; i < daily.length; i++) {
+          daily[i].time = new Date(daily[i].time);
+        }
+
         return  { 
           ...el, 
-          hourlyChart: el.hourlyChart.map(chart => {
-
-            return { ...chart, time: new Date(chart.time) }
-          }),
-          dailyChart: el.dailyChart.map(chart => {
-
-            return { ...chart, time: new Date(chart.time) }
-          })
+          hourlyChart: hourly,
+          dailyChart: daily
         }
       });
 
