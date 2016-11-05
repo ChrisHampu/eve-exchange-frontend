@@ -42,11 +42,11 @@ export default function subscription(state = initialState, action) {
           ...el, 
           hourlyChart: el.hourlyChart.map(chart => {
 
-            return { ...el2, time: new Date(chart.time) }
+            return { ...chart, time: new Date(chart.time) }
           }),
           dailyChart: el.dailyChart.map(chart => {
 
-            return { ...el2, time: new Date(chart.time) }
+            return { ...chart, time: new Date(chart.time) }
           })
         }
       });
