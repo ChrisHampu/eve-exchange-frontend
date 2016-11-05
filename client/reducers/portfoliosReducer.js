@@ -40,14 +40,13 @@ export default function subscription(state = initialState, action) {
       const portfolios = action.portfolios.map(el => {
         return  { 
           ...el, 
-          time: new Date(el.time),
-          hourlyChart: el.hourlyChart.map(el2 => {
+          hourlyChart: el.hourlyChart.map(chart => {
 
-            return { ...el2, time: new Date(el2.time) }
+            return { ...el2, time: new Date(chart.time) }
           }),
-          dailyChart: el.dailyChart.map(el2 => {
+          dailyChart: el.dailyChart.map(chart => {
 
-            return { ...el2, time: new Date(el2.time) }
+            return { ...el2, time: new Date(chart.time) }
           })
         }
       });
