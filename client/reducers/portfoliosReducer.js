@@ -42,14 +42,15 @@ export default function subscription(state = initialState, action) {
         all: action.portfolios.map(el => {
 
           let hourly = el.hourlyChart;
-          let daily = el.dailyChart;
 
-          for (var i = 0; i < hourly.length; i++) {
-            hourly[i].time = new Date(hourly[i].time);
+          for (var i = 0; i < el.hourlyChart.length; i++) {
+            hourly[i].time = new Date(el.hourlyChart[i].time);
           }
 
-          for (var i = 0; i < daily.length; i++) {
-            daily[i].time = new Date(daily[i].time);
+          let daily = el.dailyChart;
+
+          for (var i = 0; i < el.dailyChart.length; i++) {
+            daily[i].time = new Date(el.dailyChart[i].time);
           }
 
           return  { 
