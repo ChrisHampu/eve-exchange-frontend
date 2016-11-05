@@ -37,27 +37,28 @@ export default function subscription(state = initialState, action) {
       }
 
       // Fix all of the timestamps in each portfolio
-      const portfolios = action.portfolios.map(el => {
+      return {
+        ...state,
+        all: action.portfolios.map(el => {
 
-        const hourly = el.hourlyChart;
-        const daily = el.dailyChart;
+          let hourly = el.hourlyChart;
+          let daily = el.dailyChart;
 
-        for (var i = 0; i < hourly.length; i++) {
-          hourly[i].time = new Date(hourly[i].time);
-        }
+          for (var i = 0; i < hourly.length; i++) {
+            hourly[i].time = new Date(hourly[i].time);
+          }
 
-        for (var i = 0; i < daily.length; i++) {
-          daily[i].time = new Date(daily[i].time);
-        }
+          for (var i = 0; i < daily.length; i++) {
+            daily[i].time = new Date(daily[i].time);
+          }
 
-        return  { 
-          ...el, 
-          hourlyChart: hourly,
-          dailyChart: daily
-        }
-      });
-
-      return { ...state, all: portfolios };
+          return  { 
+            ...el, 
+            hourlyChart: hourly,
+            dailyChart: daily
+          }
+        });
+      };
 
     case "UPDATE_COMPONENT_DATA_SINGLE":
       if (!action.typeID || !action.data) {
