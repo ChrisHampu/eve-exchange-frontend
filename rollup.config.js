@@ -2,7 +2,7 @@ import { rollup } from 'rollup';
 import MagicString from 'magic-string';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
-import postcss from 'rollup-plugin-postcss';
+import postcss from './utils/postcss/index.js';
 import image from 'rollup-plugin-image';
 import commonjs from 'rollup-plugin-commonjs';
 import builtins from './utils/node-builtins/dist/rollup-plugin-node-builtins.es6.js';
@@ -26,22 +26,23 @@ export default {
   plugins: [
     image(),
     postcss({
-        plugins: [
-          _import(),
-          postcssModules({
-            getJSON (id, exportTokens) {
-              cssExportMap[id] = exportTokens;
-            }
-          }),
-          simplevars(),
-          nested(),
-          cssnext({ warnForDuplicates: false }),
-          cssnano(),
-        ],
-        getExport (id) {
-          return cssExportMap[id];
-        },
-        extensions: [ '.css', '.scss' ],
+      plugins: [
+        _import(),
+        postcssModules({
+          getJSON (id, exportTokens) {
+            cssExportMap[id] = exportTokens;
+          }
+        }),
+        simplevars(),
+        nested(),
+        cssnext({ warnForDuplicates: false }),
+        cssnano(),
+      ],
+      getExport (id) {
+        return cssExportMap[id];
+      },
+      extensions: [ '.css', '.scss' ],
+      combineStyleTags: true
     }),
     babel({
       babelrc: false,
@@ -78,7 +79,7 @@ export default {
       const values = {
         'var index = Object': 'var _reduxMap = Object',
         "\\( index && index\\['default'\\] \\) \\|\\| index": "( _reduxMap && _reduxMap['default'] ) || _reduxMap",
-        'var _RadioButton = index\\$\\d\\d': 'var _RadioButton = RadioButton$1',
+        'var _RadioButton = index\\$\\d\\d\\d': 'var _RadioButton = RadioButton$1',
         'TcpConnection, events.EventEmitter': 'TcpConnection, events',
         'var name = message.data\\[ message.action === C.ACTIONS.ACK \\? 1 : 0 \\];': 'var name = message.data[ message.action === C.ACTIONS.ACK ? 1 : 0 ];\nvar processed;',
         'var events = createCommonjsModule\\(function': 'var events_mui = createCommonjsModule(function',
