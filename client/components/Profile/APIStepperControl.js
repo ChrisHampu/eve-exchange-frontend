@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import s from './APIStepperControl.scss';
 import cx from 'classnames';
-import { getAPIKeyInfo } from '../../utilities';
+import { getAPIKeyInfo, formatNumber } from '../../utilities';
 import { updateApiKey, removeApiKey } from '../../actions/settingsActions';
 import { APIEndpointURL } from '../../globals';
 import { getAuthToken } from '../../deepstream';
@@ -49,6 +49,7 @@ class APIStepperControl extends React.Component {
         characters: []
       },
       selectedCharacter: 0,
+      selectedDivision: 0,
       removeApiDialogOpen: false
     };
   }
@@ -81,6 +82,11 @@ class APIStepperControl extends React.Component {
               createKeyLoading: false,
               error: 'This API key is expired'
             }));
+          } else if (api.info.type === 1 && api.divisions.length === 0) {
+            this.dummyAsync(() => this.setState({
+              createKeyLoading: false,
+              error: 'Failed to load wallet divisions. Do you have the necessary permissions to access the corporation wallets?'
+            }));
           } else {
             this.dummyAsync(() => this.setState({
               createKeyLoading: false,
@@ -106,24 +112,20 @@ class APIStepperControl extends React.Component {
               }));
             }
           } else {
-            this.dummyAsync(() => this.setState({
-              createKeyLoading: false,
-              createStepIndex: this.state.createStepIndex + 1,
-              error: null
-            }));
+            if (this.state.apiKeyInfo.divisions[this.state.selectedDivision] === 'undefined') {
+              this.dummyAsync(() => this.setState({
+                createKeyLoading: false,
+                error: "Not a valid division. Go back and try again."
+              }));
+            } else {
+              this.dummyAsync(() => this.setState({
+                createKeyLoading: false,
+                createStepIndex: this.state.createStepIndex + 1,
+                error: null
+              }));
+            }
           }
       } else if (this.state.createStepIndex === 2) {
-
-        // Update info
-        /*
-        store.dispatch(updateApiKey({
-          keyID: this.state.keyID,
-          vCode: this.state.vCode,
-          expires: this.state.apiKeyInfo.info.expires,
-          characterID: this.state.apiKeyInfo.characters[this.state.selectedCharacter].characterID,
-          characterName: this.state.apiKeyInfo.characters[this.state.selectedCharacter].characterName
-        }));
-        */
 
         this.setState({createKeyLoading: true}, async () => {
 
@@ -141,7 +143,8 @@ class APIStepperControl extends React.Component {
                 type: this.state.apiKeyInfo.info.type,
                 characterID: parseInt(this.state.apiKeyInfo.info.type == 0 ? 
                   this.state.apiKeyInfo.characters[this.state.selectedCharacter].characterID 
-                  : this.state.apiKeyInfo.characters[0].characterID)
+                  : this.state.apiKeyInfo.characters[0].characterID),
+                walletKey: this.state.apiKeyInfo.divisions.length ? this.state.apiKeyInfo.divisions[this.state.selectedDivision].key : 0
               })
             });
 
@@ -264,7 +267,7 @@ class APIStepperControl extends React.Component {
           return (
             <div>
               <div style={{marginBottom: "1.5rem"}}>
-                Select which character to use
+                Select which character to use.
               </div>
               <RadioButtonGroup 
                 name="selectCharacter" 
@@ -290,9 +293,26 @@ class APIStepperControl extends React.Component {
           return (
             <div>
               <div style={{marginBottom: "1.5rem"}}>
-                Confirm that the below corporation is the one you'd like to add:
-                <div style={{color: "#fff", marginTop: "1rem"}}>{this.state.apiKeyInfo.characters[0].corporationName}</div>
+                Select which wallet division to use. Division 1 is your master wallet.
               </div>
+              <RadioButtonGroup 
+                name="selectDivision" 
+                defaultSelected="0" 
+                className={s.char_select}
+                onChange={(ev, val)=>this.setState({selectedDivision: parseInt(val)})}>
+                {
+                  this.state.apiKeyInfo.divisions.map((el, i) => {
+                    return (
+                      <RadioButton
+                        key={i}
+                        value={i.toString()}
+                        label={`Division ${el.key-999}  -  Balance: ${formatNumber(el.balance)} ISK`}
+                        style={{marginBottom: "1rem", fill: "rgb(36, 173, 204)"}}
+                      />
+                    )
+                  })
+                }
+              </RadioButtonGroup>
             </div>
           );
 
@@ -310,13 +330,13 @@ class APIStepperControl extends React.Component {
         if (this.props.type === 0)
           return (
             <div>
-              <div>EVE Exchange will use the following API features to pull data for statistical usage.</div>
+              <div>EVE Exchange will use the following API features using your key.</div>
               <div style={{marginTop: "0.3rem"}}>If you agree with the following usage, then hit Confirm to continue.</div>
               <ul style={{marginTop: "1rem"}}>
                 <li style={{marginBottom: "0.3rem"}}>WalletTransactions & WalletJournal for profit tracking</li>
                 <li style={{marginBottom: "0.3rem"}}>MarketOrders to display your open positions in the price ladders</li>
                 <li style={{marginBottom: "0.3rem"}}>AccountBalance to display your liquid isk value</li>
-                <li style={{marginBottom: "0.3rem"}}>AssetList to display your capital isk value</li>
+                <li style={{marginBottom: "0.3rem"}}>AssetList to display your assets & capital isk value</li>
                 <li>CharacterInfo and CharacetSheet to retrieve & verify character Information</li>
               </ul>
             </div>
@@ -324,13 +344,13 @@ class APIStepperControl extends React.Component {
         else
           return (
             <div>
-              <div>EVE Exchange will use the following API features to pull data for statistical usage.</div>
+              <div>EVE Exchange will use the following API features using your key</div>
               <div style={{marginTop: "0.3rem"}}>If you agree with the following usage, then hit Confirm to continue.</div>
               <ul style={{marginTop: "1rem"}}>
                 <li style={{marginBottom: "0.3rem"}}>WalletTransactions & WalletJournal for profit tracking</li>
                 <li style={{marginBottom: "0.3rem"}}>MarketOrders to display your open positions in the price ladders</li>
-                <li style={{marginBottom: "0.3rem"}}>AccountBalance to display your liquid isk value</li>
-                <li style={{marginBottom: "0.3rem"}}>AssetList to display your capital isk value</li>
+                <li style={{marginBottom: "0.3rem"}}>AccountBalance to access corporation wallet divisions</li>
+                <li style={{marginBottom: "0.3rem"}}>AssetList to display your assets & capital isk value</li>
                 <li>CorporationSheet to retrieve & verify corporation Information</li>
               </ul>
             </div>
@@ -389,7 +409,7 @@ class APIStepperControl extends React.Component {
                 }
               </Step>
               <Step>
-                <StepLabel>{this.props.type === 0 ? "Select character" : "Verify corporation"}</StepLabel>
+                <StepLabel>{this.props.type === 0 ? "Select character" : "Select wallet division"}</StepLabel>
               </Step>
               <Step>
                 <StepLabel>Review permissions</StepLabel>

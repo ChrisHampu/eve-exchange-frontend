@@ -110,7 +110,7 @@ export function prettyDate(time) {
         `${month_diff===1?"a":month_diff} month${month_diff===1?"":"s"} ago`;
 }
 
-export async function getAPIKeyInfo(keyID, vCode) {
+export async function getAPIKeyInfo(keyID, vCode, characterID) {
 
   let destUrl = `https://api.eveonline.com/account/APIKeyInfo.xml.aspx?keyID=${keyID}&vCode=${vCode}`;
 
@@ -126,6 +126,7 @@ export async function getAPIKeyInfo(keyID, vCode) {
 
   const info = xml.eveapi.result.key;
   const characters = [];
+  const divisions = [];
   let type = 0;
 
   /*
@@ -135,16 +136,6 @@ export async function getAPIKeyInfo(keyID, vCode) {
     }
   }
   */
-
-  switch(info._type) {
-    case "Account":
-      break;
-    case "Character":
-      break;
-    case "Corporation":
-      type = 1;
-      break;
-  }
 
   console.log(xml.eveapi.result.key.rowset.row);
   
@@ -161,5 +152,35 @@ export async function getAPIKeyInfo(keyID, vCode) {
     characters.push({characterID: char._characterID, characterName: char._characterName, corporationName: char._corporationName});
   }
 
-  return { info: { type: type, expires: new Date(info._expires), accessMask: info._accessMask }, characters };
+  if (info._type === "Corporation") {
+
+    // Load extra corp info
+    type = 1;
+
+    try {
+      const charID = characters[0].characterID;
+      const division_response = await fetch(`https://api.eveonline.com/corp/AccountBalance.xml.aspx?characterID=${charID}&keyID=${keyID}&vCode=${vCode}`);
+      const division_text = await division_response.text();
+      const division_xml = new xml2js().xml_str2json(division_text);
+
+      if (division_xml.eveapi.error) {
+        throw division_xml.eveapi.error;
+      }
+
+      console.log(division_xml.eveapi.result);
+
+      for (const div of division_xml.eveapi.result.rowset.row) {
+        
+        divisions.push({key: parseInt(div._accountKey), balance: parseFloat(div._balance)});
+      }
+
+      console.log(divisions);
+
+    } catch (e) {
+      console.log(e);
+    }
+
+  }
+
+  return { info: { type: type, expires: new Date(info._expires), accessMask: info._accessMask }, characters, divisions };
 }

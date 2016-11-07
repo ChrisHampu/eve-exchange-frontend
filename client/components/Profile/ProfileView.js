@@ -187,7 +187,7 @@ class ProfileView extends React.Component {
                   >
                     <CardHeader
                       title={profile.type === 0 ? profile.character_name : profile.corporation_name}
-                      subtitle={profile.type === 0 ? profile.corporation_name : `CEO: ${profile.character_name}`}
+                      subtitle={profile.type === 0 ? profile.corporation_name : `Accessor: ${profile.character_name}`}
                       avatar={`https://image.eveonline.com/${profile.type===0?"Character":"Corporation"}/${profile.type===0?profile.character_id:profile.corporation_id}_64.${profile.type===0?"jpg":"png"}`}
                       actAsExpander={true}
                       showExpandableButton={true}
@@ -225,48 +225,6 @@ class ProfileView extends React.Component {
     )
   }
 }
-
-/*
-<Avatar className={s.avatar} src={`https://image.eveonline.com/Character/${this.props.auth.id}_256.jpg`} size={192} />
-          <div className={s.basic_info}>
-            <div className={s.info_field}>
-              <div className={s.info_key}>
-              Name:
-              </div>
-              <div className={s.info_value}>
-              
-              </div>
-            </div>
-            <div className={s.info_field}>
-              <div className={s.info_key}>
-              Corporation:
-              </div>
-              <div className={s.info_value}>
-              
-              </div>
-            </div>
-            <div className={s.info_field}>
-              <div className={s.info_key}>
-              Subscription:
-              </div>
-              <div className={s.info_value}>
-              {this.subscriptionLevelToName()}
-              </div>
-            </div>
-            {
-              this.props.eveapi.accountBalance ?
-              <div className={s.info_field}>
-                <div className={s.info_key}>
-                Balance:
-                </div>
-                <div className={s.info_value}>
-                
-                </div>
-              </div>
-              : false
-            }
-          </div>
-          */
 
 const mapStateToProps = function(store) {
   return { auth: store.auth, subscription: store.subscription, eveapi: store.eveapi, settings: store.settings };
