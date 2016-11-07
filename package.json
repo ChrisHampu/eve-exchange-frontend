@@ -41,6 +41,7 @@
     "babel-preset-stage-3": "^6.17.0",
     "buffer-es6": "^4.9.2",
     "crypto-browserify": "^3.11.0",
+    "concat-with-sourcemaps": "^0.0.0",
     "cssnano": "^3.7.4",
     "eslint": "^2.11.1",
     "eslint-config-airbnb": "^9.0.1",
