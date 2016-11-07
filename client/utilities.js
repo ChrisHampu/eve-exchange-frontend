@@ -112,7 +112,6 @@ export function prettyDate(time) {
 
 export async function getAPIKeyInfo(keyID, vCode) {
 
-  
   let destUrl = `https://api.eveonline.com/account/APIKeyInfo.xml.aspx?keyID=${keyID}&vCode=${vCode}`;
 
   const response = await fetch(destUrl);
@@ -127,6 +126,7 @@ export async function getAPIKeyInfo(keyID, vCode) {
 
   const info = xml.eveapi.result.key;
   const characters = [];
+  let type = 0;
 
   /*
   if (info.accessMask !== "23072779") {
@@ -136,23 +136,30 @@ export async function getAPIKeyInfo(keyID, vCode) {
   }
   */
 
-  if (info._type !== "Account" && info._type !== "Character") {
-    return {
-      error: "Must be account or character key"
-    }
+  switch(info._type) {
+    case "Account":
+      break;
+    case "Character":
+      break;
+    case "Corporation":
+      type = 1;
+      break;
   }
 
+  console.log(xml.eveapi.result.key.rowset.row);
+  
+  // TODO: Add corp info
   if (xml.eveapi.result.key.rowset.row.length) {
     for (const char of xml.eveapi.result.key.rowset.row) {
       
-      characters.push({characterID: char._characterID, characterName: char._characterName});
+      characters.push({characterID: char._characterID, characterName: char._characterName, corporationName: char._corporationName});
     }
   } else {
 
     let char = xml.eveapi.result.key.rowset.row;
 
-    characters.push({characterID: char._characterID, characterName: char._characterName});
+    characters.push({characterID: char._characterID, characterName: char._characterName, corporationName: char._corporationName});
   }
 
-  return { info: { type: info._type, expires: info._expires, accessMask: info._accessMask }, characters };
+  return { info: { type: type, expires: new Date(info._expires), accessMask: info._accessMask }, characters };
 }

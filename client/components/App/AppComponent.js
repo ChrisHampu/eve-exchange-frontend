@@ -16,7 +16,7 @@ theme.palette.primary2Color = 'rgb(40, 46, 51)';
 theme.palette.accent1Color = '#eba91b';
 theme.palette.accent2Color = '#eba91b';
 theme.palette.accent3Color = '#eba91b';
-theme.palette.alternateTextColor = '#59c8e2';
+theme.palette.alternateTextColor = '#eba91b';
 
 export default class App extends React.Component {
   static propTypes = {

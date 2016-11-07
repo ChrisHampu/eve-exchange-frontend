@@ -44,12 +44,18 @@ export default function subscription(state = initialState, action) {
           let hourly = el.hourlyChart;
 
           for (var i = 0; i < el.hourlyChart.length; i++) {
+            if (!el.hourlyChart[i]) {
+              continue;
+            }
             hourly[i].time = new Date(el.hourlyChart[i].time);
           }
 
           let daily = el.dailyChart;
 
           for (var i = 0; i < el.dailyChart.length; i++) {
+            if (!el.dailyChart[i]) {
+              continue;
+            }
             daily[i].time = new Date(el.dailyChart[i].time);
           }
 

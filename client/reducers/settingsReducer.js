@@ -20,7 +20,8 @@ const initialState = {
     spread_sma: true,
     volume: true,
     volume_sma: true
-  }
+  },
+  profiles: []
 };
 
 export default function settings(state = initialState, action) {

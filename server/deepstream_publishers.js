@@ -234,6 +234,32 @@ export async function publishNotifications(user_id) {
   });
 }
 
+export async function publishSettings(user_id) {
+
+  return new Promise((resolve, reject) => {
+    getCollection('settings').findOne({user_id: parseInt(user_id)}, async (err, result) => {
+
+      if (!result) {
+        console.log("No settings found for user " + user_id);
+        resolve();
+        return;
+      }
+
+      try {
+        var record = deepstream.record.getRecord(`settings/${user_id}`).set(result);
+
+        await recordReady(record);
+
+      } catch (err) {
+        console.log("Error publishing settings record for user " + user_id);
+        console.log(err);
+      }
+
+      resolve();
+    });
+  });
+}
+
 export async function publishProfit(user_id) {
 
   return new Promise((resolve, reject) => {

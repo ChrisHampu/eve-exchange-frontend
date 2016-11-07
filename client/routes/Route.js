@@ -9,7 +9,7 @@ import ProfileComponent from '../components/Profile/ProfileComponent';
 import ProfileSubscription from '../components/Profile/ProfileSubscription';
 import ProfileSubscriptionHistory from '../components/Profile/ProfileSubscriptionHistory';
 import ProfileSettings from '../components/Profile/ProfileSettings';
-import ProfileAPIKey from '../components/Profile/ProfileAPIKey';
+import APITypeSelector from '../components/Profile/APITypeSelector';
 import AdminComponent from '../components/Admin/AdminComponent';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
@@ -41,7 +41,7 @@ export default (
           <Route path="subscription" component={ProfileSubscription} />
           <Route path="history" component={ProfileSubscriptionHistory} />
           <Route path="settings" component={ProfileSettings} />
-          <Route path="apikey" component={ProfileAPIKey} />
+          <Route path="addapi" component={APITypeSelector} />
         </Route>
         <Route path="notifications" components={{main: NotificationsComponent }} />
         <Route path="browser" components={{main: MarketBrowserComponent}}>

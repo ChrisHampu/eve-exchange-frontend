@@ -1,6 +1,15 @@
 
 .profile_info {
 
+  .container {
+    
+    .card {
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
   .avatar {
     vertical-align: middle;
   }

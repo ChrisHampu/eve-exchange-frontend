@@ -18,7 +18,6 @@ class Profile extends React.Component {
           'Profile': "/dashboard/profile",
           'Subscription': "/dashboard/profile/subscription",
           'Account History': "/dashboard/profile/history",
-          'API Key': "/dashboard/profile/apikey",
           'Settings': "/dashboard/profile/settings" }}
           location={this.props.location}
         />

@@ -3,7 +3,7 @@ import KoaRouter from 'koa-router';
 import body from 'koa-better-body';
 import config from './config/environment';
 import { connectDeepstream } from './deepstream_interface';
-import { publishLogin, publishPortfolios, publishSubscription, publishNotifications } from './deepstream_publishers';
+import { publishLogin, publishPortfolios, publishSubscription, publishNotifications, publishSettings } from './deepstream_publishers';
 import { configureListeners, triggerOrderListeners, triggerMinutesListeners, triggerHourlyListeners, triggerDailyListeners, triggerPortfolioListeners, triggerProfitListeners } from './deepstream_listeners';
 import { configureAdminListeners } from './deepstream_admin';
 
@@ -47,8 +47,16 @@ router.post('/publish/notifications/:id', async (ctx) => {
 
 router.post('/publish/subscription/:id', async (ctx) => {
 
-
   await publishSubscription(ctx.params.id).catch(err => {
+    console.log(err);
+  });
+
+  ctx.body = "Success";
+});
+
+router.post('/publish/settings/:id', async (ctx) => {
+
+  await publishSettings(ctx.params.id).catch(err => {
     console.log(err);
   });
 
