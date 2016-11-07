@@ -38,7 +38,6 @@ class APIStepperControl extends React.Component {
     super(props);
 
     this.state = {
-      createKey: false,
       createStepIndex: 0,
       createKeyLoading: false,
       keyID: "",
@@ -49,8 +48,7 @@ class APIStepperControl extends React.Component {
         characters: []
       },
       selectedCharacter: 0,
-      selectedDivision: 0,
-      removeApiDialogOpen: false
+      selectedDivision: 0
     };
   }
 
@@ -65,36 +63,41 @@ class APIStepperControl extends React.Component {
     if (!this.state.createKeyLoading) {
 
       if (this.state.createStepIndex === 0) {
-       getAPIKeyInfo(this.state.keyID, this.state.vCode).then((api) => {
 
-          if (api.error) {
-            this.setState({
-              createKeyLoading: false,
-              error: api.error
-            })
-          } else if (api.info.type !== this.props.type) {
-            this.dummyAsync(() => this.setState({
-              createKeyLoading: false,
-              error: `Not a valid ${this.props.type===0?"character":"corporation"} key.`
-            }));
-          } else if (new Date() > api.info.expires) {
-            this.dummyAsync(() => this.setState({
-              createKeyLoading: false,
-              error: 'This API key is expired'
-            }));
-          } else if (api.info.type === 1 && api.divisions.length === 0) {
-            this.dummyAsync(() => this.setState({
-              createKeyLoading: false,
-              error: 'Failed to load wallet divisions. Do you have the necessary permissions to access the corporation wallets?'
-            }));
-          } else {
-            this.dummyAsync(() => this.setState({
-              createKeyLoading: false,
-              createStepIndex: this.state.createStepIndex + 1,
-              apiKeyInfo: api,
-              error: null
-            }));
-          }
+        this.setState({
+          createKeyLoading: true
+        }, () => {
+          getAPIKeyInfo(this.state.keyID, this.state.vCode).then((api) => {
+
+            if (api.error) {
+              this.setState({
+                createKeyLoading: false,
+                error: api.error
+              })
+            } else if (api.info.type !== this.props.type) {
+              this.dummyAsync(() => this.setState({
+                createKeyLoading: false,
+                error: `Not a valid ${this.props.type===0?"character":"corporation"} key.`
+              }));
+            } else if (new Date() > api.info.expires) {
+              this.dummyAsync(() => this.setState({
+                createKeyLoading: false,
+                error: 'This API key is expired'
+              }));
+            } else if (api.info.type === 1 && api.divisions.length === 0) {
+              this.dummyAsync(() => this.setState({
+                createKeyLoading: false,
+                error: 'Failed to load wallet divisions. Do you have the necessary permissions to access the corporation wallets?'
+              }));
+            } else {
+              this.dummyAsync(() => this.setState({
+                createKeyLoading: false,
+                createStepIndex: this.state.createStepIndex + 1,
+                apiKeyInfo: api,
+                error: null
+              }));
+            }
+          });
         });
       } else if (this.state.createStepIndex === 1) {
 
@@ -216,23 +219,26 @@ class APIStepperControl extends React.Component {
             {
               this.props.type === 0 ? 
                 <div>
-                  <div>Access mask should be set to 23072779</div>
+                  <div>Access mask should be set to <b>23072779</b></div>
                   <div>
-                    The following permissions should be enabled:
+                    Only the following permissions should be enabled:
                     <ul>
                       <li>WalletTransactions, WalletJournal, MarketOrders, AccountBalance under 'Account and Market'</li>
-                      <li>CharacterInfo, CharacterSheet, AssetList under Private Information</li>
+                      <li>CharacterInfo, CharacterSheet, AssetList under 'Private Information'</li>
                     </ul>
+                  </div>
+                  <div style={{marginTop: "1rem"}}>
+                  <a href="https://community.eveonline.com/support/api-key/CreatePredefined?accessMask=23072779" target="_blank">Click here</a> to use predefined settings.
                   </div>
                 </div>
                 :
                 <div>
-                  <div>Access mask should be set to 3149835</div>
+                  <div>Access mask should be set to <b>3149835</b>. You must use a Director or CEO character and set 'Type' to <b>Corporation</b>.</div>
                   <div>
-                    The following permissions should be enabled:
+                    Only the following permissions should be enabled:
                     <ul>
                       <li>WalletTransactions, WalletJournal, MarketOrders, AccountBalance under 'Account and Market'</li>
-                      <li>CorporationSheet, AssetList under Private Information</li>
+                      <li>CorporationSheet, AssetList under 'Private Information'</li>
                     </ul>
                   </div>
                 </div>
@@ -322,7 +328,7 @@ class APIStepperControl extends React.Component {
             <div>
               There was an error while processing your API key request. You can try to correct the below error and try again,
               or contact Maxim Stride for support.<br />
-              Please include this error messagage in any support request.
+              Please include this error message in any support request.
               <div className={s.error_text}>{this.state.error}</div>
             </div>
           );
@@ -366,6 +372,7 @@ class APIStepperControl extends React.Component {
   }
 
   renderCreateKey() {
+
     return (
       <div>
         <div>

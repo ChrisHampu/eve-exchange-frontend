@@ -33,6 +33,7 @@ class OrdersComponent extends React.Component {
               <TableHeaderColumn style={{textAlign: "center"}}>Volume Remaining</TableHeaderColumn>
               <TableHeaderColumn style={{textAlign: "center"}}>Type</TableHeaderColumn>
               <TableHeaderColumn style={{textAlign: "center"}}>Location</TableHeaderColumn>
+              <TableHeaderColumn style={{textAlign: "center"}}>Who</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
@@ -50,6 +51,7 @@ class OrdersComponent extends React.Component {
                       <TableRowColumn style={{textAlign: "center"}}>{el.volRemaining}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{el.bid === "0" ? "Sell" : "Buy"}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{parseInt(el.stationID) > 1000000000000 ? "Citadel" : (this.props.sde.stationid2name[parseInt(el.stationID)] || "Station")}</TableRowColumn>
+                      <TableRowColumn style={{textAlign: "center"}}>{el.who}</TableRowColumn>
                     </TableRow>
                   )
                 })

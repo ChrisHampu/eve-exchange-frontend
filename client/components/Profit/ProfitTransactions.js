@@ -41,6 +41,7 @@ class ProfitTransactions extends React.Component {
                 <TableHeaderColumn style={{textAlign: "center"}}>Item Name</TableHeaderColumn>
                 <TableHeaderColumn style={{textAlign: "center"}}>Profit</TableHeaderColumn>
                 <TableHeaderColumn style={{textAlign: "center"}}>Volume Sold</TableHeaderColumn>
+                <TableHeaderColumn style={{textAlign: "center"}}>Who</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody displayRowCheckbox={false}>
@@ -57,6 +58,7 @@ class ProfitTransactions extends React.Component {
                         <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{el.name}</span></TableRowColumn>
                         <TableRowColumn style={this.formatColoured(el.totalProfit)}>{formatNumberUnit(el.totalProfit)}</TableRowColumn>
                         <TableRowColumn style={{textAlign: "center"}}>{el.quantity}</TableRowColumn>
+                        <TableRowColumn style={{textAlign: "center"}}>{el.who}</TableRowColumn>
                       </TableRow>
                     )
                   })
