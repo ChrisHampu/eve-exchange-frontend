@@ -365,7 +365,8 @@ class APIStepperControl extends React.Component {
       case 3:
         return (
           <div>
-            <div>Your API is set up and ready for use. Hit Finish to close the setup box.</div>
+            <div>Your API is set up and ready for use. Profit data, market orders, and transactions will begin to show up during the next API pull which happens hourly.</div>
+            <div className={{marginTop: "1rem"}}>Hit Finish to close this setup box and return to the profile page.</div>
           </div>
         );
     }
