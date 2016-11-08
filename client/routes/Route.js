@@ -27,6 +27,7 @@ import PortfoliosComponent from '../components/Portfolios/PortfoliosComponent';
 import PortfoliosCreate from '../components/Portfolios/PortfoliosCreate';
 import PortfoliosViewAll from '../components/Portfolios/PortfoliosViewAll';
 import PortfoliosViewSingle from '../components/Portfolios/PortfoliosViewSingle';
+import ProfitProfileStatistics from '../components/Profit/ProfitProfileStatistics';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -42,6 +43,7 @@ export default (
           <Route path="history" component={ProfileSubscriptionHistory} />
           <Route path="settings" component={ProfileSettings} />
           <Route path="addapi" component={APITypeSelector} />
+          <Route path=":id" component={ProfitProfileStatistics} />
         </Route>
         <Route path="notifications" components={{main: NotificationsComponent }} />
         <Route path="browser" components={{main: MarketBrowserComponent}}>
@@ -56,7 +58,6 @@ export default (
         </Route>
         <Route path="portfolios" components={{main: PortfoliosComponent}} onEnter={requireAccess("premium")}>
           <Route path="create" component={PortfoliosCreate} />
-
           <Route path="view" component={PortfoliosViewAll}>
             <Route path=":id" component={PortfoliosViewSingle} />
           </Route>

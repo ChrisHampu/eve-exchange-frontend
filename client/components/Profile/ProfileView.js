@@ -156,13 +156,16 @@ class ProfileView extends React.Component {
                   : <div>Your main character does not yet have an API key entry.</div>
                 }
               </CardText>
-              <CardActions>
-                <FlatButton label="Statistics" onTouchTap={()=>{}} />
-                {
-                  master ? <FlatButton label="Remove" onTouchTap={(e,t) => this.handleRemove(master.id)} />
-                  : null
-                }
-              </CardActions>
+              {
+                master ? 
+                  <CardActions>
+                    <FlatButton label="Statistics" onTouchTap={()=>this.context.router.push(`/dashboard/profile/${master.id}`)} />
+                    <FlatButton label="Remove" onTouchTap={(e,t) => this.handleRemove(master.id)} />
+                  </CardActions> :
+                  <CardActions>
+                    <FlatButton label="Add API Key" onTouchTap={()=>this.context.router.push(`/dashboard/profile/addapi`)} />
+                  </CardActions>
+              }
             </Card>
           </div>
           {
@@ -204,7 +207,7 @@ class ProfileView extends React.Component {
                       <div>vCode: {profile.vcode}</div>
                     </CardText>
                     <CardActions>
-                      <FlatButton label="Statistics" onTouchTap={()=>{}} />
+                      <FlatButton label="Statistics" onTouchTap={()=>this.context.router.push(`/dashboard/profile/${profile.id}`)} />
                       <FlatButton label="Remove" onTouchTap={(e,t) => {this.handleRemove(profile.id)}} />
                     </CardActions>
                   </Card>

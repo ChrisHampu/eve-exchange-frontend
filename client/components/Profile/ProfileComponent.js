@@ -8,9 +8,30 @@ import DashboardPageBody from '../DashboardPage/DashboardPageBody';
 import ProfileView from './ProfileView';
 import cx from 'classnames';
 
+import OverlayStack from '../OverlayStack/OverlayStack';
+
 class Profile extends React.Component {
 
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
+
   render() {
+
+    const locations = [
+      "/dashboard/profile",
+      "/dashboard/profile/subscription",
+      "/dashboard/profile/history",
+      "/dashboard/profile/settings",
+      "/dashboard/profile/addapi"
+    ];
+
+    let useStack = false;
+
+    if (locations.indexOf(this.props.location.pathname) === -1) {
+
+      useStack = true;
+    }
 
     return (
       <DashboardPage title={this.props.auth.name} fullWidth={true}>
@@ -19,9 +40,16 @@ class Profile extends React.Component {
           'Subscription': "/dashboard/profile/subscription",
           'Account History': "/dashboard/profile/history",
           'Settings': "/dashboard/profile/settings" }}
-          location={this.props.location}
+          location={!useStack?this.props.location:{pathname:"/dashboard/profile"}}
         />
-        <DashboardPageBody children={this.props.children} defaultComponent={<ProfileView />} />
+        {
+          !useStack ? <DashboardPageBody children={this.props.children} defaultComponent={<ProfileView />} />
+          :
+          <OverlayStack popStack={()=>this.context.router.push('/dashboard/profile')}>
+            {<div style={{padding:"2rem"}}><ProfileView /></div>}
+            {this.props.children}
+          </OverlayStack>
+        }
       </DashboardPage>
     );
   }
