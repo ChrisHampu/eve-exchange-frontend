@@ -38,12 +38,14 @@ class ProfitProfileStatistics extends React.Component {
     }
 
     const comparator = profile.type === 0 ? profile.character_name : profile.corporation_name;
+    const date_24hrs = 86400000; // Number of milliseconds in a day
+    const date_now = (new Date()).getTime();
 
     const user_orders = this.props.user_orders.filter(el=>el.who===comparator);
 
     activeOrders = user_orders.length;
 
-    const transactions = this.props.profit.transactions.filter(el=>el.who===comparator).sort((el1, el2) => new Date(el2.time) - new Date(el1.time)).slice(0, 8);
+    const transactions = this.props.profit.transactions.filter(el=>el.who===comparator&&date_now-(new Date(el.time)).getTime()<date_24hrs).sort((el1, el2) => new Date(el2.time) - new Date(el1.time));
 
     return (
       <div className={s.root}>
