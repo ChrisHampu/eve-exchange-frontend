@@ -216,13 +216,13 @@ class MarketItemChart extends React.Component {
           Spread: {Math.round(el.spread*Math.pow(10,2))/Math.pow(10,2)}%<br />
           {
             this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ?
-               <span>Spread SMA: {Math.round((el.spreadSMA || 0)*Math.pow(10,2))/Math.pow(10,2)}%<br /></span>
+               <span>Spread SMA: {Math.round((el.spread_sma || 0)*Math.pow(10,2))/Math.pow(10,2)}%<br /></span>
                : false
           }
           Volume: {formatNumber(el.tradeVolume || 0)}<br />
           {
             this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma ?
-               <span>Volume SMA: {formatNumber(el.tradeVolumeSMA || 0)}<br /></span>
+               <span>Volume SMA: {formatNumber(el.volume_sma || 0)}<br /></span>
                : false
           }
         </div>,
@@ -327,12 +327,12 @@ class MarketItemChart extends React.Component {
                 : false
             }
             { this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ? 
-                <Indicator thickLine={true} lineColour="#F8654F" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => (el.spreadSMA || 0)/100 } />
+                <Indicator thickLine={true} lineColour="#F8654F" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => (el.spread_sma || 0)/100 } />
                 : false
             }
 
             { this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma ? 
-                <Indicator thickLine={true} lineColour="#eba91b" data={data} heightOffset={height-this.state.volHeight} xScale={this.state.xScale} yScale={this.state.volScale} xAccessor={el => el.time} yAccessor={el => el.tradeVolumeSMA || 0} />
+                <Indicator thickLine={true} lineColour="#eba91b" data={data} heightOffset={height-this.state.volHeight} xScale={this.state.xScale} yScale={this.state.volScale} xAccessor={el => el.time} yAccessor={el => el.volume_sma || 0} />
                 : false
             }
             <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
