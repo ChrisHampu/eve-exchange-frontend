@@ -175,7 +175,7 @@ class ProfileView extends React.Component {
               return (
                 <div 
                   className={s.card}
-                  style={{width: this.props.settings.profiles.length%2==0&&this.props.settings.profiles.length>1&&this.props.settings.profiles.length-1===i?"100%":"50%"}}
+                  style={{width: this.props.settings.profiles.length%2==(master?1:0)&&this.props.settings.profiles.length>1&&this.props.settings.profiles.length-1===i?"100%":"50%"}}
                   key={i}
                 >
                   <Card 
