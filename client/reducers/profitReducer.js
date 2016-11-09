@@ -47,7 +47,7 @@ export default function profit(state = initialState, action) {
         return state;
       }
 
-      return { ...state, toplist: action.toplist };
+      return { ...state, toplist: { items: action.toplist.items || [], profiles: action.toplist.profiles || [] } };
 
     case "UPDATE_HOURLY_CHART":
       if (!action.chart || !Array.isArray(action.chart)) {
