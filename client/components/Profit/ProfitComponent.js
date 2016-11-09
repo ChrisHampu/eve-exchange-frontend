@@ -18,7 +18,8 @@ class ProfitComponent extends React.Component {
           'Chart': "/dashboard/profit",
           'Transactions': "/dashboard/profit/transactions",
           'Top Items': "/dashboard/profit/topitems",
-          'Statistics': "/dashboard/profit/stats"}}
+          'Top Profiles': "/dashboard/profit/profiles",
+          'All Time': "/dashboard/profit/alltime"}}
           location={this.props.location}
         />
         <DashboardPageBody children={this.props.children} defaultComponent={<ProfitChart style={{flex: 1, width: "100%"}}/>} />

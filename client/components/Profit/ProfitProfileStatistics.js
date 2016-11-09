@@ -38,6 +38,7 @@ class ProfitProfileStatistics extends React.Component {
     }
 
     const comparator = profile.type === 0 ? profile.character_name : profile.corporation_name;
+    const comparator_id = profile.type === 0 ? profile.character_id : profile.corporation_id;
     const date_24hrs = 86400000; // Number of milliseconds in a day
     const date_now = (new Date()).getTime();
 
@@ -47,6 +48,18 @@ class ProfitProfileStatistics extends React.Component {
 
     const transactions = this.props.profit.transactions.filter(el=>el.who===comparator&&date_now-(new Date(el.time)).getTime()<date_24hrs).sort((el1, el2) => new Date(el2.time) - new Date(el1.time));
 
+    let totalProfit = 0;
+    let avgProfit = 0;
+    let totalTransactions = 0;
+
+    const top_index = this.props.profit.toplist.profiles.findIndex(el => el.whoID === comparator_id);
+
+    if (top_index !== -1) {
+      totalProfit = this.props.profit.toplist.profiles[top_index].totalProfit;
+      avgProfit = this.props.profit.toplist.profiles[top_index].avgProfit;
+      totalTransactions = this.props.profit.toplist.profiles[top_index].salesCount;
+    }
+
     return (
       <div className={s.root}>
         <Paper zDepth={2}>
@@ -55,7 +68,7 @@ class ProfitProfileStatistics extends React.Component {
               <div className={s.avatar}>
                 <img size="40" src={`https://image.eveonline.com/${profile.type===0?"Character":"Corporation"}/${profile.type===0?profile.character_id:profile.corporation_id}_64.${profile.type===0?"jpg":"png"}`} />
               </div>
-              {profile.type===0?profile.character_name:profile.corporation_name} - Active Orders: <span className={s.value}>{activeOrders}</span>
+              {profile.type===0?profile.character_name:profile.corporation_name} - Total Profit: <span className={s.value}>{formatNumberUnit(totalProfit)}</span>Avg/Transaction: <span className={s.value}>{formatNumberUnit(avgProfit)}</span>Total Transactions: <span className={s.value}>{totalTransactions}</span>Active Orders: <span className={s.value}>{activeOrders}</span>
             </div>
           </div>
         </Paper>

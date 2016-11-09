@@ -343,10 +343,6 @@ class MarketItemChart extends React.Component {
   }
 }
 
-
-// purp 7355C4
-// green "#5CEF70"
-
 const mapStateToProps = function(store) {
   return { market: store.market, chart_visuals: store.settings.chart_visuals };
 }

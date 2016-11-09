@@ -144,7 +144,7 @@ export default function market(state = { user_orders: [], item: {} }, action) {
       return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], orders: payload } } };
 
     case "SET_USER_ORDERS":
-      if (!action.orders) {
+      if (!action.orders || !Array.isArray(action.orders)) {
         return state;
       }
 

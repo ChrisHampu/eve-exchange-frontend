@@ -1,6 +1,9 @@
 
 const initialState = {
-  toplist: [],
+  toplist: {
+    items: [],
+    profiles: []
+  },
   chart: {
     hourly: null,
     daily: null
@@ -44,10 +47,10 @@ export default function profit(state = initialState, action) {
         return state;
       }
 
-      return { ...state, toplist: action.toplist || [] };
+      return { ...state, toplist: action.toplist };
 
     case "UPDATE_HOURLY_CHART":
-      if (!action.chart) {
+      if (!action.chart || !Array.isArray(action.chart)) {
         return state;
       }
 
@@ -64,7 +67,7 @@ export default function profit(state = initialState, action) {
       return { ...state, chart: { ...state.chart, hourly: action.chart } };
 
     case "UPDATE_DAILY_CHART":
-      if (!action.chart) {
+      if (!action.chart || !Array.isArray(action.chart)) {
         return state;
       }
 

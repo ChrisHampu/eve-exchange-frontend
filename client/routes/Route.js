@@ -28,6 +28,7 @@ import PortfoliosCreate from '../components/Portfolios/PortfoliosCreate';
 import PortfoliosViewAll from '../components/Portfolios/PortfoliosViewAll';
 import PortfoliosViewSingle from '../components/Portfolios/PortfoliosViewSingle';
 import ProfitProfileStatistics from '../components/Profit/ProfitProfileStatistics';
+import ProfitTopProfiles from '../components/Profit/ProfitProfiles';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -53,8 +54,9 @@ export default (
         <Route path="forecast" components={{main: ForecastComponent}} onEnter={requireAccess("premium")}/>
         <Route path="profit" components={{main: ProfitComponent }}>
           <Route path="topitems" component={ProfitTopItems} />
-          <Route path="stats" component={ProfitAlltime} />
+          <Route path="alltime" component={ProfitAlltime} />
           <Route path="transactions" component={ProfitTransactions} />
+          <Route path="profiles" component={ProfitTopProfiles} />
         </Route>
         <Route path="portfolios" components={{main: PortfoliosComponent}} onEnter={requireAccess("premium")}>
           <Route path="create" component={PortfoliosCreate} />
