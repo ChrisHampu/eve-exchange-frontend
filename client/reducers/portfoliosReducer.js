@@ -32,7 +32,7 @@ export default function subscription(state = initialState, action) {
   switch(action.type) {
 
     case "UPDATE_PORTFOLIOS":
-      if (!action.portfolios) {
+      if (!action.portfolios || !Array.isArray(action.portfolios)) {
         return state;
       }
 
