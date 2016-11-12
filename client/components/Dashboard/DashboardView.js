@@ -34,8 +34,7 @@ class DashboardView extends React.Component {
               Dashboard
               </div>
               <div>
-              This is your personalized dashboard that can be used to quickly view multiple realtime charts.<br />
-              Use the market browser to find and pin charts to your dashboard.
+              You do not have any charts pinned to your dashboard yet.<br />You can do so from the <b>Market Browser</b> by selecting an item and clicking "Pin to Dashboard" from the top right context menu.
               </div>
             </div>
             :
