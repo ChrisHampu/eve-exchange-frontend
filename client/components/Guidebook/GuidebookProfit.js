@@ -10,7 +10,7 @@ export default class GuidebookHome extends React.Component {
         <div className={s.title}>Profit Tracking</div>
         <p>Profit data is calculated for each profile on your account and then aggregated each hour. This is due to the EVE API cache timing, and we cannot yet perform this process at a shorter interval.</p>
         <h3>Profit Chart</h3>
-        <p>The profit chart supports hourly and daily intervals along with zooming and scrolling. The information showed on the profit chart is the <b>total</b> profit and taxes paid across all of your active profiles. If you lose ISK on any transactions, then it is possible for the chart to go into the negative.</p>
+        <p>The profit chart supports hourly and daily intervals along with zooming and scrolling. The information showed on the profit chart is the <b>total</b> profit, taxes, and broker fees paid across all of your active profiles. Profit does not have broker fees or taxes subtracted from it. If you lose ISK on any transactions, then it is possible for the chart to go into the negative.</p>
         <h3>Transactions</h3>
         <p>A transaction is when an item is bought and then later resold in any quantity. The profit shown in the transaction log is the total profit made for the quantity shown. Transactions are tagged with the profile that made the sale. In order for a transaction to count, the item has to both be bought and sold on the same profile. Multiple profiles buying and selling the same item will result in separate transactions. Transaction data is on an hourly cache timer.</p>
         <h3>Top Items</h3>

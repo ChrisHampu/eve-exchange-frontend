@@ -58,7 +58,7 @@ class ProfitChart extends React.Component {
     ]);
 
     this.state.profitScale.domain([Math.min(...data.map((el) => { return el.profit})), Math.max(...data.map((el) => { return el.profit}))]);
-    this.state.taxScale.domain([Math.min(...data.map((el) => { return Math.abs(el.taxes)})), Math.max(...data.map((el) => { return Math.abs(el.taxes)}))]);
+    this.state.taxScale.domain([Math.min(...data.map((el) => { return Math.abs(el.taxes)+Math.abs(el.broker)})), Math.max(...data.map((el) => { return Math.abs(el.taxes)+Math.abs(el.broker)}))]);
 
     this.state.xScale.range([0, this.refs.container.getWidth()]);
     this.state.profitScale.range([this.refs.container.getHeight(), 0]);
@@ -181,13 +181,13 @@ class ProfitChart extends React.Component {
           {
             data && data.length > 0 ?
             <g>
-              <Line fill="#F44336" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return Math.abs(el.taxes);}} />
-              <Line fill="#4CAF50" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => { return el.profit;}} />
+              <Line fill="#F44336" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => Math.abs(el.taxes) + Math.abs(el.broker)} />
+              <Line fill="#4CAF50" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => el.profit} />
               <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
            </g> : false
           }
-          <text transform={`translate(-55,-60)rotate(270 0 ${Math.round(height/2)})`} fill="#4CAF50" fontSize="20" x="0" y={Math.round(height/2)} textAnchor="end" alignmentBaseline="middle">Profit</text>
-          <text transform={`translate(+55,-40)rotate(90 ${width} ${Math.round(height/2)})`} fill="#F44336" fontSize="20" x={width} y={Math.round(height/2)} textAnchor="end" alignmentBaseline="middle">Taxes</text>
+          <text transform={`translate(-55,0)rotate(270 0 ${Math.round(height/2)})`} fill="#4CAF50" fontSize="20" x="0" y={Math.round(height/2)} textAnchor="middle" alignmentBaseline="middle">Profit</text>
+          <text transform={`translate(+55,0)rotate(90 ${width} ${Math.round(height/2)})`} fill="#F44336" fontSize="20" x={width} y={Math.round(height/2)} textAnchor="middle" alignmentBaseline="middle">Broker + Taxes</text>
         </ChartContainer>
      </div>
     );
