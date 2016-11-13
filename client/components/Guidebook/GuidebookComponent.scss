@@ -1,0 +1,44 @@
+@import '../variables.scss';
+
+.container {
+  padding: 1rem 1rem 1rem 1rem;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+
+  .inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .sidebar {
+      min-width: 250px;
+      background-color: $base-color-darkest !important;
+      border-radius: 0.5rem !important;
+      font-size: 0.9rem;
+      padding: 1rem;
+      overflow-y: auto;
+
+      .divider {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        padding: 1rem 0 0.5rem 0;
+        border-bottom: 1px solid $base-color-light;
+      }
+
+      .link {
+        padding-top: 0.45rem;
+
+        a {
+          color: $blue-color;
+
+          &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

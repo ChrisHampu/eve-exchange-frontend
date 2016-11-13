@@ -35,6 +35,7 @@ import ForecastIcon from 'material-ui/svg-icons/action/search';
 import UsersIcon from 'material-ui/svg-icons/action/supervisor-account';
 import PortfoliosIcon from 'material-ui/svg-icons/notification/folder-special';
 import MenuToggleIcon from 'material-ui/svg-icons/navigation/menu';
+import GuidebookIcon from 'material-ui/svg-icons/av/library-books';
 
 const MainMenu = [
   {
@@ -53,6 +54,12 @@ const MainMenu = [
     "name": "Notifications",
     "route": "/dashboard/notifications",
     "icon": <NotificationsIcon />,
+    "perm": "standard"
+  },
+  {
+    "name": "Reference",
+    "route": "/dashboard/reference",
+    "icon": <GuidebookIcon />,
     "perm": "standard"
   },
   {
