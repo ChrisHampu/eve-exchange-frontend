@@ -1,0 +1,43 @@
+@import '../variables.scss';
+
+.body {
+  margin: 0 2.5rem 1rem;
+  width: 100%;
+  color: #aeaeae;
+
+  li {
+    padding-top: 0.35rem;
+  }
+
+  .link {
+    color: $blue-color;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  .title {
+    font-size: 1.75rem;
+    padding: 0.5rem 0 0.75rem 0;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid $base-color-light;
+  }
+
+  h3 {
+    margin: 2rem 0 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  h4 {
+    margin: 2rem 0 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  p {
+    transition: all .2s ease-in;
+  }
+}

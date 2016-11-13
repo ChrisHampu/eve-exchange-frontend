@@ -30,6 +30,22 @@ import PortfoliosViewSingle from '../components/Portfolios/PortfoliosViewSingle'
 import ProfitProfileStatistics from '../components/Profit/ProfitProfileStatistics';
 import ProfitTopProfiles from '../components/Profit/ProfitProfiles';
 
+// Guidebook
+import GuidebookComponent from '../components/Guidebook/GuidebookComponent';
+import GuidebookContact from '../components/Guidebook/GuidebookContact';
+import GuidebookForecast from '../components/Guidebook/GuidebookForecast';
+import GuidebookMarketBrowser from '../components/Guidebook/GuidebookMarketBrowser';
+import GuidebookMarketDashboard from '../components/Guidebook/GuidebookMarketDashboard';
+import GuidebookMarketIntro from '../components/Guidebook/GuidebookMarketIntro';
+import GuidebookMarketOrders from '../components/Guidebook/GuidebookMarketOrders';
+import GuidebookNotifications from '../components/Guidebook/GuidebookNotifications';
+import GuidebookPortfolios from '../components/Guidebook/GuidebookPortfolios';
+import GuidebookPremium from '../components/Guidebook/GuidebookPremium';
+import GuidebookProfile from '../components/Guidebook/GuidebookProfile';
+import GuidebookProfit from '../components/Guidebook/GuidebookProfit';
+import GuidebookSettings from '../components/Guidebook/GuidebookSettings';
+import GuidebookAbout from '../components/Guidebook/GuidebookAbout';
+
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
 export default (
@@ -69,6 +85,21 @@ export default (
           <Route path="view" component={UsersView}>
             <Route path=":id" component={UsersViewSingle} />
           </Route>
+        </Route>
+        <Route path="reference" components={{main: GuidebookComponent}}>
+          <Route path="contact" component={GuidebookContact} />
+          <Route path="forecast" component={GuidebookForecast} />
+          <Route path="browser" component={GuidebookMarketBrowser} />
+          <Route path="settings" component={GuidebookSettings} />
+          <Route path="premium" component={GuidebookPremium} />
+          <Route path="profile" component={GuidebookProfile} />
+          <Route path="notifications" component={GuidebookNotifications} />
+          <Route path="market-intro" component={GuidebookMarketIntro} />
+          <Route path="dashboard" component={GuidebookMarketDashboard} />
+          <Route path="orders" component={GuidebookMarketOrders} />
+          <Route path="profit" component={GuidebookProfit} />
+          <Route path="portfolios" component={GuidebookPortfolios} />
+          <Route path="about" component={GuidebookAbout} />
         </Route>
       </Route>
     </Route>
