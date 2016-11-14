@@ -9,7 +9,10 @@ const initialState = {
     expires: null
   },
   market: {
-    region: 10000002
+    region: 10000002,
+    simulation_broker_fee: 0,
+    simulation_sales_tax: 0.75,
+    simulation_margin: 0
   },
   general: {
     auto_renew: true
@@ -106,7 +109,7 @@ export default function settings(state = initialState, action) {
         return state;
       }
 
-      return { ...state, market: { ...state.general, [action.setting]: action.value } };
+      return { ...state, market: { ...state.market, [action.setting]: action.value } };
 
     default:
       return state;

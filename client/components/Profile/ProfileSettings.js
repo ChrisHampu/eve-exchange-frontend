@@ -11,6 +11,7 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import Checkbox from 'material-ui/Checkbox';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
 
 class Settings extends React.Component {
 
@@ -46,13 +47,79 @@ class Settings extends React.Component {
             <div className={s.settings_header}>
             Default Hub
             </div>
-            <SelectField value={store.getState().settings.market.region} onChange={(event, index, value) => this._updateMarketSetting('region', value)}>
+            <SelectField value={this.props.settings.market.region} onChange={(event, index, value) => this._updateMarketSetting('region', value)}>
               <MenuItem value={10000002} primaryText="Jita" />
               <MenuItem value={10000043} primaryText="Amarr" />
               <MenuItem value={10000032} primaryText="Dodixie" />
               <MenuItem value={10000042} primaryText="Hek" />
               <MenuItem value={10000030} primaryText="Rens" />
             </SelectField>
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Simulation Broker Fee
+            </div>
+            <TextField
+              type="number"
+              errorText={(this.props.settings.market.simulation_broker_fee >= 0 && this.props.settings.market.simulation_broker_fee <= 100) || !this.props.settings.market.simulation_broker_fee ? null : "Enter a percentage between 0 and 100"}
+              floatingLabelText={`Current: ${this.props.settings.market.simulation_broker_fee||0}%`}
+              floatingLabelStyle={{color: "#BDBDBD"}}
+              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+              inputStyle={{color: "#FFF"}}
+              style={{display: "block", marginBottom: ".8rem"}}
+              onChange={(event) => {
+
+                const value = parseFloat(event.target.value);
+                if (value >= 0 && value <= 100) {
+                  this._updateMarketSetting('simulation_broker_fee', parseFloat(value));
+                }
+              }}
+            />
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Simulation Sales Tax
+            </div>
+            <TextField
+              type="number"
+              errorText={(this.props.settings.market.simulation_sales_tax >= 0 && this.props.settings.market.simulation_sales_tax <= 100) || !this.props.settings.market.simulation_sales_tax ? null : "Enter a percentage between 0 and 100"}
+              floatingLabelText={`Current: ${this.props.settings.market.simulation_sales_tax||0}%`}
+              floatingLabelStyle={{color: "#BDBDBD"}}
+              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+              inputStyle={{color: "#FFF"}}
+              style={{display: "block"}}
+              onChange={(event) => {
+
+                const value = parseFloat(event.target.value);
+                if (value >= 0 && value <= 100) {
+                  this._updateMarketSetting('simulation_sales_tax', parseFloat(value));
+                }
+              }}
+            />
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Simulation Margin
+            </div>
+            <TextField
+              type="number"
+              errorText={(this.props.settings.market.simulation_margin >= 0 && this.props.settings.market.simulation_margin <= 100000000) || !this.props.settings.market.simulation_margin ? null : "Enter a percentage between 0 and 100M"}
+              floatingLabelText={`Current: ${this.props.settings.market.simulation_margin||0} ISK`}
+              floatingLabelStyle={{color: "#BDBDBD"}}
+              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+              inputStyle={{color: "#FFF"}}
+              style={{display: "block"}}
+              onChange={(event) => {
+
+                const value = parseFloat(event.target.value);
+                if (value >= 0 && value <= 100000000) {
+                  this._updateMarketSetting('simulation_margin', parseFloat(value));
+                }
+              }}
+            />
           </div>
         </div>
         <div className={s.settings_area}>

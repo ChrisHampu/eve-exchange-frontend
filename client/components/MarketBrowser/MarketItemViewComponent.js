@@ -9,6 +9,7 @@ import { userHasPremium } from '../../auth';
 import { formatNumberUnit, formatPercent } from '../../utilities';
 
 import MarketBrowserOrderTable from './MarketBrowserOrderTable';
+import MarketBrowserSimulate from './MarketBrowserSimulate';
 import MarketItemChart from '../Charts/MarketItemChart';
 
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -166,7 +167,10 @@ class MarketItemViewComponent extends React.Component {
               </div>
             </Tab>
             <Tab label="Price Ladder" style={{backgroundColor: "rgb(38, 43, 47)"}}>
-                <MarketBrowserOrderTable item={this.state.item} region={this.state.regionOverride} />
+              <MarketBrowserOrderTable item={this.state.item} region={this.state.regionOverride} />
+            </Tab>
+            <Tab label="Simulate" style={{backgroundColor: "rgb(38, 43, 47)"}}>
+              <MarketBrowserSimulate data={first} item={this.state.item} region={this.state.regionOverride} />
             </Tab>
           </Tabs>
         </div>

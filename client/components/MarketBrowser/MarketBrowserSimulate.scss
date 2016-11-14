@@ -1,0 +1,84 @@
+@import '../variables.scss';
+
+.container {
+  padding-top: 20px;
+  flex: 1;
+  margin: 0 1rem;
+  color: $text-grey;
+
+  .gold {
+    color: $gold-color;
+  }
+
+  .settings {
+
+    background-color: $base-color-darkest;
+    padding: 0.5rem;
+    border: 1px solid $base-color-light;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .preface {
+      margin-right: 0.5rem;
+    }
+
+    .key {
+      margin-right: 0.35rem;
+    }
+
+    .value {
+      margin-right: 1rem;
+      color: $gold-color;
+    }
+
+    .edit {
+      flex: 1;
+      text-align: right;
+    }
+  }
+
+  .group {
+    margin-top: 1rem;
+    font-weight: 300;
+    
+    .item {
+      display: inline-block;
+      margin-right: 0.75rem;
+
+      > span {
+        color: #fff;
+      }
+    }
+  }
+
+  .profit {
+    margin-top: 1.5rem;
+    text-transform: uppercase;
+
+    > span {
+      font-size: 1.15rem;
+      color: $gold-color;
+    }
+  }
+
+  .clipboard {
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 2em;
+    height: 2em;
+    padding: 0;
+    opacity: 0;   
+  }
+}
