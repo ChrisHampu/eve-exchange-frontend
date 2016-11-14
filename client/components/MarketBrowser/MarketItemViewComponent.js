@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import { subscribeItem, unsubscribeItem, itemIDToName } from '../../market';
 import { pinChartToDashboard, unPinChartFromDashboard } from '../../actions/settingsActions';
+import { userHasPremium } from '../../auth';
+import { formatNumberUnit, formatPercent } from '../../utilities';
 
 import MarketBrowserOrderTable from './MarketBrowserOrderTable';
 import MarketItemChart from '../Charts/MarketItemChart';
@@ -74,12 +76,53 @@ class MarketItemViewComponent extends React.Component {
     store.dispatch(unPinChartFromDashboard(parseInt(this.state.item.id)));
   }
 
+ getAggregateData() {
+
+    const region = this.state.region || store.getState().settings.market.region;
+
+    if (typeof this.props.market.item[this.state.item.id] !== 'undefined') {
+
+      if (userHasPremium()) {
+        if (!this.props.market.item[this.state.item.id].minutes) {
+          return null;
+        }
+        var arr = this.props.market.item[this.state.item.id].minutes[region];
+        if (!arr) {
+          return null;
+        }
+        return arr[0];
+      } else {
+        if (!this.props.market.item[this.state.item.id].hours) {
+          return null;
+        }
+        var arr = this.props.market.item[this.state.item.id].hours[region];
+        if (!arr) {
+          return null;
+        }
+        return arr[0];
+      }
+    }
+
+    return null;
+  }
+
   render() {
+
+    const first = this.getAggregateData();
+
+    let buy = 0, sell = 0, spread = 0;
+
+    if (first) {
+      buy = first.buyPercentile;
+      sell = first.sellPercentile;
+      spread = first.spread;
+    }
+
     return (
       <div className={s.market_item_view}>
         <div className={s.market_item_view_header}>
           <div className={s.market_item_view_header_name}>
-            {this.state.item.name}
+            {this.state.item.name} - Buy: <span>{formatNumberUnit(buy)}</span>  Sell: <span>{formatNumberUnit(sell)}</span>  Spread: <span>{formatPercent(spread)}%</span>
           </div>
           {
             this.isChartPinned() ?
@@ -133,7 +176,7 @@ class MarketItemViewComponent extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { settings: store.settings, sde: store.sde };
+  return { settings: store.settings, sde: store.sde, market: store.market };
 }
 
 export default connect(mapStateToProps)(MarketItemViewComponent);

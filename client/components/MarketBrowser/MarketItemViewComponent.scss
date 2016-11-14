@@ -20,6 +20,10 @@
       font-weight: 300;
       display: inline-block;
       padding-top: 12px;
+
+      span {
+        color: $gold-color;
+      }
     }
     .market_item_view_header_menus {
       position: absolute;
