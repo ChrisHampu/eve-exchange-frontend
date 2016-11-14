@@ -78,7 +78,7 @@ class MarketItemViewComponent extends React.Component {
 
  getAggregateData() {
 
-    const region = this.state.region || store.getState().settings.market.region;
+    const region = this.state.regionOverride || store.getState().settings.market.region;
 
     if (typeof this.props.market.item[this.state.item.id] !== 'undefined') {
 
