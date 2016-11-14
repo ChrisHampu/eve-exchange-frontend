@@ -5,8 +5,7 @@
 }
 
 .market_browser {
-  //background-color: $base-color-darkest;
-  background-color: #262b2f;
+  background-color: $base-color-darkest;
   color: $text-grey;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -16,7 +15,6 @@
   max-width: 600px;
   width: 600px;
   font-size: 0.9em;
-  font-weight: 700;
   box-shadow: rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px;
   flex: 1;
   box-sizing: border-box;
