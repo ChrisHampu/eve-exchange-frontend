@@ -57,6 +57,16 @@ class Settings extends React.Component {
           </div>
           <div className={s.settings_body}>
             <div className={s.settings_header}>
+            Default Tab
+            </div>
+            <SelectField value={this.props.settings.market.default_tab||0} onChange={(event, index, value) => this._updateMarketSetting('default_tab', value)}>
+              <MenuItem value={0} primaryText="Chart" />
+              <MenuItem value={1} primaryText="Price Ladder" />
+              <MenuItem value={2} primaryText="Simulate" />
+            </SelectField>
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
             Simulation Broker Fee
             </div>
             <TextField

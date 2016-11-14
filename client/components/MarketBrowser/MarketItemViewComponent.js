@@ -160,7 +160,7 @@ class MarketItemViewComponent extends React.Component {
           </div>
         </div>
         <div style={{height: "100%", flex: 1, display: "flex", flexDirection: "column"}} ref="content">
-          <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
+          <Tabs initialSelectedIndex={this.props.settings.market.default_tab} style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
             <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
               <div className={s.market_item_chart_container}>
                 <MarketItemChart style={{flex: 1}} item={this.state.item} region={this.state.regionOverride} />
