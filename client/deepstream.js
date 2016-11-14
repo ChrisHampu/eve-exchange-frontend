@@ -180,7 +180,7 @@ function setDeepstreamSubscriptions(user_info) {
 
   deepstream.record.getRecord(`notifications/${user_info.user_id}`).subscribe(data => {
 
-    if (!data || data.length === 0) {
+    if (!data || data.length === 0 || !Array.isArray(data)) {
       store.dispatch(updateNotifications([]));
       return;
     }
