@@ -67,6 +67,15 @@ class Settings extends React.Component {
           </div>
           <div className={s.settings_body}>
             <div className={s.settings_header}>
+            Simulation Strategy
+            </div>
+            <SelectField value={this.props.settings.market.simulation_strategy||0} onChange={(event, index, value) => this._updateMarketSetting('simulation_strategy', value)}>
+              <MenuItem value={0} primaryText="Undercut/Overcut Top Orders" />
+              <MenuItem value={1} primaryText="Use Percentile Prices" />
+            </SelectField>
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
             Simulation Broker Fee
             </div>
             <TextField
@@ -111,12 +120,21 @@ class Settings extends React.Component {
           </div>
           <div className={s.settings_body}>
             <div className={s.settings_header}>
+            Simulation Margin Type
+            </div>
+            <SelectField value={this.props.settings.market.simulation_margin_type||0} onChange={(event, index, value) => this._updateMarketSetting('simulation_margin_type', value)}>
+              <MenuItem value={0} primaryText="Exact Value" />
+              <MenuItem value={1} primaryText="Percentage" />
+            </SelectField>
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
             Simulation Margin
             </div>
             <TextField
               type="number"
-              errorText={(this.props.settings.market.simulation_margin >= 0 && this.props.settings.market.simulation_margin <= 100000000) || !this.props.settings.market.simulation_margin ? null : "Enter a percentage between 0 and 100M"}
-              floatingLabelText={`Current: ${this.props.settings.market.simulation_margin||0} ISK`}
+              errorText={(this.props.settings.market.simulation_margin >= 0 && this.props.settings.market.simulation_margin <= 100000000) || !this.props.settings.market.simulation_margin ? null : "Enter a value between 0 and 100M"}
+              floatingLabelText={`Current: ${this.props.settings.market.simulation_margin||0} ${(this.props.settings.market.simulation_margin_type||0)===0?'ISK':'%'}`}
               floatingLabelStyle={{color: "#BDBDBD"}}
               underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
               underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}

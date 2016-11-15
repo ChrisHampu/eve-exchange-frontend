@@ -12,8 +12,10 @@ const initialState = {
     region: 10000002,
     default_tab: 0,
     simulation_broker_fee: 0,
-    simulation_sales_tax: 0.75,
-    simulation_margin: 0
+    simulation_sales_tax: 0,
+    simulation_margin: 0,
+    simulation_strategy: 0,
+    simulation_margin_type: 0
   },
   general: {
     auto_renew: true

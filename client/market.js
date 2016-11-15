@@ -197,3 +197,91 @@ export function getMarketItemNames(market_items) {
 
   return [...market_items.map(el=>el)];
 }
+
+export function _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin) {
+
+  const accessor = data[type][interval][region][ data[type][interval][region].length - 1 ];
+  const orders = data[type].orders[region];
+
+  let buy_price = 0;
+  let sell_price = 0;
+
+  if (strategy === 0) { // undercut/overcut orders
+
+    buy_price = Math.max(...orders.filter(el=>el.buy === true).map(el=>el.price));
+    sell_price = Math.min(...orders.filter(el=>el.buy === false).map(el=>el.price));
+
+  } else { // use percentiles
+
+    buy_price = accessor.buyPercentile;
+    sell_price = accessor.sellPercentile;
+  }
+
+  buy_price = buy_price * quantity;
+  sell_price = sell_price * quantity;
+
+  if (margin > 0) {
+
+    if (margin_type === 0) { // Exact value
+
+      buy_price = buy_price + margin;
+      sell_price = sell_price - margin;
+
+    } else { // Percentage
+
+      buy_price = buy_price + buy_price * margin / 100;
+      sell_price = sell_price - sell_price * margin / 100;
+    }
+  }
+
+  const broker = broker_fee > 0 ? buy_price * broker_fee / 100 : 0;
+  const tax = sales_tax > 0 ? sell_price * sales_tax / 100 : 0;
+
+  return {
+    buy: buy_price,
+    sell: sell_price,
+    tax,
+    broker,
+    profit: sell_price - buy_price - tax - broker
+  };
+}
+
+export function simulateTrade(type, quantity, data, settings, region) {
+
+  let result = {};
+
+  if (!data[type] || data[type] === 'undefined') {
+    return null;
+  }
+
+  let interval = 'hours';
+
+  if (settings.premium) {
+    interval = 'minutes';
+  }
+
+  if (!data[type][interval] || data[type][interval] === 'undefined') {
+    return null;
+  }
+
+  if (!data[type].orders || data[type].orders === 'undefined') {
+    return null;
+  }
+
+  // All simulation user settings
+  const strategy = settings.market.simulation_strategy || 0;
+  const margin_type = settings.market.simulation_margin_type || 0;
+  const sales_tax = settings.market.simulation_sales_tax || 0;
+  const broker_fee = settings.market.simulation_broker_fee || 0;
+  const margin = settings.market.simulation_margin || 0;
+
+  // If region is given, perform a single trade for that region. Otherwise simulate every region
+  let regions = region ? {[region]:0} : data[type][interval];
+
+  Object.keys(regions).forEach(region => {
+
+    result[region] = _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin);
+  });
+
+  return result;
+}

@@ -2,35 +2,9 @@
 {
   market: {
     user_orders: [],
-    region: {
-      {
-        id: 0,
-        item: [
-          {
-            id: 0,
-            aggregates: [data]
-            orders: [data]
-          }
-        ]
-      }
-    ]
+    item[item_id].{minutes,hours,daily}[region]
   }
 }
-
-{
-  item: { -> type id
-    minutes: { -> region
-      [data]
-    }
-  }
-}
-
-{
-  item:
-}
-
-item[29668].region[10000002].minutes
-
 */
 
 function extractAggregateRegions(data) {

@@ -39,12 +39,12 @@ class MarketItemViewComponent extends React.Component {
     this.state = {
       item: {
         id: this.props.params.id,
-        name: itemIDToName(this.props.sde.market_items, this.props.params.id),
-        regionOverride: null
+        name: itemIDToName(this.props.sde.market_items, this.props.params.id)
       },
       tab: (this.props.settings.market && this.props.settings.market.default_tab != undefined) ? this.props.settings.market.default_tab : 0,
       width: 0,
-      height: 0
+      height: 0,
+      regionOverride: null
     };
 
     subscribeItem(this.state.item.id, 0);
@@ -95,7 +95,7 @@ class MarketItemViewComponent extends React.Component {
         if (!arr) {
           return null;
         }
-        return arr[0];
+        return arr[arr.length-1];
       } else {
         if (!this.props.market.item[this.state.item.id].hours) {
           return null;
@@ -104,7 +104,7 @@ class MarketItemViewComponent extends React.Component {
         if (!arr) {
           return null;
         }
-        return arr[0];
+        return arr[arr.length-1];
       }
     }
 
@@ -202,7 +202,7 @@ class MarketItemViewComponent extends React.Component {
               <MarketBrowserOrderTable item={this.state.item} region={this.state.regionOverride} />
             </div>
             <div className={cx(s.tab, { [s.show]: this.state.tab===2})}>
-              <MarketBrowserSimulate data={first} item={this.state.item} region={this.state.regionOverride} />
+              <MarketBrowserSimulate data={first} item={this.state.item} region={this.state.regionOverride || store.getState().settings.market.region} />
             </div>
           </div>
         </div>

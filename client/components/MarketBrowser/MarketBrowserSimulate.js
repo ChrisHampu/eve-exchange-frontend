@@ -5,6 +5,7 @@ import s from './MarketBrowserSimulate.scss';
 import cx from 'classnames';
 import { browserHistory } from 'react-router';
 import { formatNumber } from '../../utilities';
+import { simulateTrade } from '../../market';
 
 // Material UI
 import TextField from 'material-ui/TextField';
@@ -18,7 +19,6 @@ class MarketBrowserSimulate extends React.Component {
     data: React.PropTypes.object,
     region: React.PropTypes.number
   };
-
 
   constructor(props) {
     super(props);
@@ -34,29 +34,33 @@ class MarketBrowserSimulate extends React.Component {
 
   render() {
 
-    if (!this.props.data) {
+    let result = null;
+
+    try {
+      const simulation = simulateTrade(this.props.item.id, 1, this.props.market.item, this.props.settings, this.props.region);
+
+      result = simulation[this.props.region];
+    } catch(err) {
+
+    }
+
+    if (!this.props.data || !result) {
       return (
         <div>Loading...</div>
       )
     }
 
-    const simulated_buy = this.props.data.buyPercentile + (this.props.settings.market.simulation_margin ? this.props.settings.market.simulation_margin : 0);
-    const simulated_sell = this.props.data.sellPercentile - (this.props.settings.market.simulation_margin ? this.props.settings.market.simulation_margin : 0);
-    const estimated_broker = simulated_buy * (this.props.settings.market.simulation_broker_fee ? this.props.settings.market.simulation_broker_fee : 0) / 100;
-    const estimated_tax = simulated_sell * (this.props.settings.market.simulation_sales_tax ? this.props.settings.market.simulation_sales_tax : 0) / 100;
-    const estimated_profit = simulated_sell - simulated_buy - estimated_broker - estimated_tax;
-
     return (
       <div className={s.container}>
         <div className={s.settings}>
           <div className={s.preface}>
-          Configured settings -
+          Simulation settings -
           </div>
           <div className={s.key}>
           Margin:
           </div>
           <div className={s.value}>
-          {this.props.settings.market.simulation_margin||0} ISK
+          {this.props.settings.market.simulation_margin||0}{(this.props.settings.market.simulation_margin_type||0)===0?' ISK':'%'}
           </div>
           <div className={s.key}>
           Broker's Fee:
@@ -89,13 +93,13 @@ class MarketBrowserSimulate extends React.Component {
             underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
             inputStyle={{color: "#FFF"}}
             style={{marginRight: "1rem"}}
-            value={simulated_buy}
+            value={result.buyy}
           />
           <RaisedButton
             backgroundColor="#1d2125"
             labelColor="rgb(235, 169, 27)"
             label="Copy"
-            onTouchTap={()=>this.copyToClipboard(simulated_buy)}
+            onTouchTap={()=>this.copyToClipboard(result.buy)}
           />
         </div>
         <div>
@@ -107,24 +111,24 @@ class MarketBrowserSimulate extends React.Component {
             underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
             inputStyle={{color: "#FFF"}}
             style={{marginRight: "1rem"}}
-            value={simulated_sell}
+            value={result.sell}
           />
           <RaisedButton
             backgroundColor="#1d2125"
             labelColor="rgb(235, 169, 27)"
             label="Copy"
-            onTouchTap={()=>this.copyToClipboard(simulated_sell)}
+            onTouchTap={()=>this.copyToClipboard(result.sell)}
           />
         </div>
         <div className={s.group}>
           <div className={s.item}>
-          Broker's Fee: <span>{formatNumber(estimated_broker)}</span> ISK
+          Broker's Fee: <span>{formatNumber(result.broker)}</span> ISK
           </div>
           <div className={s.item}>
-          Sales Tax: <span>{formatNumber(estimated_tax)}</span> ISK
+          Sales Tax: <span>{formatNumber(result.tax)}</span> ISK
           </div>
         </div>
-        <div className={s.profit}>Estimated Profit: <span>{formatNumber(estimated_profit)} ISK</span></div>
+        <div className={s.profit}>Estimated Profit: <span>{formatNumber(result.profit)} ISK</span></div>
         <textarea ref="clipboard" className={s.clipboard} />
       </div>
     );
@@ -132,7 +136,7 @@ class MarketBrowserSimulate extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { settings: store.settings };
+  return { settings: store.settings, market: store.market };
 }
 
 export default connect(mapStateToProps)(MarketBrowserSimulate);
