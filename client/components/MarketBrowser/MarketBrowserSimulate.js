@@ -93,7 +93,7 @@ class MarketBrowserSimulate extends React.Component {
             underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
             inputStyle={{color: "#FFF"}}
             style={{marginRight: "1rem"}}
-            value={result.buyy}
+            value={result.buy}
           />
           <RaisedButton
             backgroundColor="#1d2125"
@@ -129,6 +129,9 @@ class MarketBrowserSimulate extends React.Component {
           </div>
         </div>
         <div className={s.profit}>Estimated Profit: <span>{formatNumber(result.profit)} ISK</span></div>
+        {
+          result.profit <= 0 || result.sell <= 0 || result.buy <= 0 ? <div style={{marginTop: "1.5rem"}}>There's no ideal trade for this item</div> : null
+        }
         <textarea ref="clipboard" className={s.clipboard} />
       </div>
     );
