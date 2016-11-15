@@ -99,7 +99,7 @@ export default function market(state = { user_orders: [], item: {} }, action) {
       payload = extractAggregateRegions(action.data);
 
       if (!state.item.hasOwnProperty(action.id)) {
-        return { ...state, item: { [action.id]: { minutes: payload } } };
+        return { ...state, item: {...state.item, [action.id]: { minutes: payload } } };
       }
 
       return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], minutes: payload } } };
@@ -112,7 +112,7 @@ export default function market(state = { user_orders: [], item: {} }, action) {
       payload = extractAggregateRegions(action.data);
 
       if (!state.item.hasOwnProperty(action.id)) {
-        return { ...state, item: { [action.id]: { hours: payload } } };
+        return { ...state, item: {...state.item, [action.id]: { hours: payload } } };
       }
 
       return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], hours: payload } } };
@@ -125,7 +125,7 @@ export default function market(state = { user_orders: [], item: {} }, action) {
       payload = extractAggregateRegions(action.data);
 
       if (!state.item.hasOwnProperty(action.id)) {
-        return { ...state, item: { [action.id]: { daily: payload } } };
+        return { ...state, item: { ...state.item, [action.id]: { daily: payload } } };
       }
 
       return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], daily: payload } } };
@@ -138,7 +138,7 @@ export default function market(state = { user_orders: [], item: {} }, action) {
       let payload = extractOrderRegions(action.data);
 
       if (!state.item.hasOwnProperty(action.id)) {
-        return { ...state, item: { [action.id]: { orders: payload } } };
+        return { ...state, item: { ...state.item, [action.id]: { orders: payload } } };
       }
 
       return { ...state, item: { ...state.item, [action.id]: { ...state.item[action.id], orders: payload } } };

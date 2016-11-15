@@ -30,6 +30,7 @@ export function subscribeItem(id) {
 
     if (!data) {
       console.log("Error subscribing to aggregates for " + id);
+      store.dispatch(setAggregateMinuteData(id, []));
       return;
     }
 
@@ -42,6 +43,7 @@ export function subscribeItem(id) {
 
     if (!data) {
       console.log("Error subscribing to aggregates for " + id);
+      store.dispatch(setAggregateHourlyData(id, []));
       return;
     }
 
@@ -54,6 +56,7 @@ export function subscribeItem(id) {
 
     if (!data) {
       console.log("Error subscribing to aggregates for " + id);
+      store.dispatch(setAggregateDailyData(id, []));
       return;
     }
 

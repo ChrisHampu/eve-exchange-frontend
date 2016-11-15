@@ -67,7 +67,8 @@ class ChartContainer extends React.Component {
         80,
         100
       ],
-      zoom: 1
+      zoom: 1,
+      header: 48
     };
 
     this.mounted = false;
@@ -85,7 +86,7 @@ class ChartContainer extends React.Component {
 
   update() {
 
-    if (!this.refs.chart_anchor || !this.props.data) {
+    if (!this.refs.chart_anchor) {
       return;
     }
 
@@ -93,7 +94,7 @@ class ChartContainer extends React.Component {
     const newWidth = this.props.overrideWidth || ReactDOM.findDOMNode(this.refs.chart_anchor).clientWidth;
 
     if (this.props.overrideHeight) {
-      newHeight -= ReactDOM.findDOMNode(this.refs.header).clientHeight;
+      newHeight -= this.state.header;
     }
 
     if (this.forceUpdate === true || (this.state.containerWidth === 0 && this.state.containerHeight === 0 && newHeight !== this.state.containerHeight && newWidth !== this.state.containerWidth)) {
@@ -331,7 +332,7 @@ class ChartContainer extends React.Component {
           </div>
         </div>
         <div ref="chart_anchor" className={s.chart}>
-          <svg onMouseMove={(ev) => this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()} width={this.state.width+this.state.margin.left+this.state.margin.right} height={this.state.height+this.state.margin.top+this.state.margin.bottom}>
+          <svg onMouseMove={(ev) => this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()} width="100%" height="100%" >
             <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
               {this.props.children}
             </g>
@@ -343,4 +344,4 @@ class ChartContainer extends React.Component {
   }
 }
 
-export default ChartContainer;
+export default ChartContainer;//viewBox={`0 0 ${this.state.width} ${this.state.height}`}

@@ -13,7 +13,6 @@ import Indicator from './Indicator';
 import Area from './Area';
 import Tooltip from './Tooltip';
 import Scrollbar from './Scrollbar';
-import { subscribeItem, unsubscribeItem } from '../../market';
 
 class MarketItemChart extends React.Component {
 
@@ -21,7 +20,9 @@ class MarketItemChart extends React.Component {
 
     item: React.PropTypes.object,
     title: React.PropTypes.string,
-    region: React.PropTypes.number
+    region: React.PropTypes.number,
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
   };
 
   constructor(props) {
@@ -299,6 +300,8 @@ class MarketItemChart extends React.Component {
         data={data} 
         title={this.props.title} 
         onChartChanged={()=>this.chartChanged()}
+        overrideWidth={this.props.width}
+        overrideHeight={this.props.height}
       >
         <g>
         {this.renderLegend()}

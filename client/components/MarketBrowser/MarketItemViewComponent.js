@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import s from './MarketItemViewComponent.scss';
+import cx from 'classnames';
 import { connect } from 'react-redux';
 import store from '../../store';
 import { subscribeItem, unsubscribeItem, itemIDToName } from '../../market';
@@ -40,7 +41,10 @@ class MarketItemViewComponent extends React.Component {
         id: this.props.params.id,
         name: itemIDToName(this.props.sde.market_items, this.props.params.id),
         regionOverride: null
-      }
+      },
+      tab: (this.props.settings.market && this.props.settings.market.default_tab != undefined) ? this.props.settings.market.default_tab : 0,
+      width: 0,
+      height: 0
     };
 
     subscribeItem(this.state.item.id, 0);
@@ -107,6 +111,13 @@ class MarketItemViewComponent extends React.Component {
     return null;
   }
 
+  componentDidMount() {
+    this.setState({
+      height: ReactDOM.findDOMNode(this.refs.container).clientHeight,
+      width: ReactDOM.findDOMNode(this.refs.container).clientWidth
+    });
+  }
+
   render() {
 
     const first = this.getAggregateData();
@@ -160,19 +171,40 @@ class MarketItemViewComponent extends React.Component {
           </div>
         </div>
         <div style={{height: "100%", flex: 1, display: "flex", flexDirection: "column"}} ref="content">
-          <Tabs initialSelectedIndex={this.props.settings.market.default_tab} style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
-            <Tab label="Chart" style={{backgroundColor: "rgb(38, 43, 47)"}}>
-              <div className={s.market_item_chart_container}>
-                <MarketItemChart style={{flex: 1}} item={this.state.item} region={this.state.regionOverride} />
+          <div className={s.button_container}>
+            <button className={cx(s.button, { [s.show]: this.state.tab===0})} onClick={()=>this.setState({tab: 0})}>
+              <div>
+                <div className={s.text}>
+                Chart
+                </div>
               </div>
-            </Tab>
-            <Tab label="Price Ladder" style={{backgroundColor: "rgb(38, 43, 47)"}}>
+            </button>
+            <button className={cx(s.button, { [s.show]: this.state.tab===1})} onClick={()=>this.setState({tab: 1})}>              
+              <div>
+                <div className={s.text}>
+                Price Ladder
+                </div>
+              </div>
+            </button>
+            <button className={cx(s.button, { [s.show]: this.state.tab===2})} onClick={()=>this.setState({tab: 2})}>
+              <div>
+                <div className={s.text}>
+                Simulate
+                </div>
+              </div>
+            </button>
+          </div>
+          <div className={s.tabs} ref="container">
+            <div className={cx(s.tab, { [s.show]: this.state.tab===0})}>
+              <MarketItemChart item={this.state.item} region={this.state.regionOverride} width={this.state.width} height={this.state.height}/>
+            </div>
+            <div className={cx(s.tab, { [s.show]: this.state.tab===1})}>
               <MarketBrowserOrderTable item={this.state.item} region={this.state.regionOverride} />
-            </Tab>
-            <Tab label="Simulate" style={{backgroundColor: "rgb(38, 43, 47)"}}>
+            </div>
+            <div className={cx(s.tab, { [s.show]: this.state.tab===2})}>
               <MarketBrowserSimulate data={first} item={this.state.item} region={this.state.regionOverride} />
-            </Tab>
-          </Tabs>
+            </div>
+          </div>
         </div>
       </div>
     )
