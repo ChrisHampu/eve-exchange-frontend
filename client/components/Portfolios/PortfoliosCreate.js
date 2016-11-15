@@ -152,6 +152,56 @@ class PortfoliosCreate extends React.Component {
     }));
   }
 
+  parseEFT(eft) {
+
+    this.refs.eft.value = "";
+
+    const lines = eft.split('\n');
+
+    if (!lines.length) {
+      this.refs.eft.value = "";
+      return;
+    }
+
+    const header = /^\[(.+), (.+)\]/.exec(lines.shift());
+
+    try {
+      if (header.length !== 3) {
+
+        sendAppNotification("Failed to parse EFT header");
+        return;
+      }
+    } catch (err) {
+
+      sendAppNotification("Failed to parse EFT header");
+      return;
+    }
+
+    const ship = header[1];
+
+    this.addTradingItem({name: ship}, 1);
+
+    for (const line of lines) {
+
+      if (!line.length || line[0] === ' ') {
+        continue;
+      }
+
+      const match = /^(.+) x([0-9]+)|(.+)/.exec(line);
+
+      const count = parseInt(match[2]) || 1;
+
+      let item = match[1] || match[3];
+
+      // EFT adds a comma with a preloaded ammo type after it. Remove anything after the first comma
+      if (item.indexOf(',') !== -1) {
+        item = item.split(', ')[0];
+      }
+
+      this.addTradingItem({name: item}, count);
+    }
+  }
+
   handleCreatePortfolioNext = () => {
 
     if (!this.state.createStepLoading) {
@@ -366,6 +416,7 @@ class PortfoliosCreate extends React.Component {
               inputStyle={{color: "#FFF"}}
               style={{display: "block", marginBottom: ".8rem"}}
               onChange={(event) => this.setState({portfolioDesc: event.target.value})}
+              ref="eft"
             />
           </div>
         );
@@ -440,7 +491,7 @@ class PortfoliosCreate extends React.Component {
     });
   };
 
-  addTradingItem(item) {
+  addTradingItem(item, quantity) {
 
     if (!item && (!this.state.portfolioSearchTradingQuantity || !this.state.portfolioSearchTradingItem)) {
       this.setState({
@@ -451,7 +502,7 @@ class PortfoliosCreate extends React.Component {
       const items = this.state.portfolioSelectedItems;
 
       const newItem = item ? item.name : this.state.portfolioSearchTradingItem;
-      const newQuantity = this.state.portfolioSearchTradingQuantity || 1;
+      const newQuantity = quantity || this.state.portfolioSearchTradingQuantity || 1;
 
       const existingIndex = items.findIndex(el => el.name == newItem);
 
@@ -491,25 +542,43 @@ class PortfoliosCreate extends React.Component {
         </div>
         <div className={s.select_columns}>
           <div className={s.select_pane} style={{display: "flex", flexDirection: "column"}}>
-            <AutoComplete
-              hintText="Type item name"
-              dataSource={getMarketItemNames(this.props.sde.market_items)}
-              filter={AutoComplete.fuzzyFilter}
-              maxSearchResults={6}
-              menuStyle={{cursor: "pointer"}}
-              onNewRequest={this.updateTradingSearch}
-              onUpdateInput={this.updateTradingSearchText}
-            />
-            <TextField
-              type="number"
-              floatingLabelText="Type quantity"
-              inputStyle={{color: "#FFF"}}
-              style={{display: "block", marginBottom: ".8rem"}}
-              onChange={(event) => this.setState({portfolioSearchTradingQuantity: event.target.value})}
-            />
+            <div style={{display: "flex"}}>
+              <div style={{verticalAlign: "middle"}}>
+                <AutoComplete
+                  hintText="Type item name"
+                  dataSource={getMarketItemNames(this.props.sde.market_items)}
+                  filter={AutoComplete.fuzzyFilter}
+                  maxSearchResults={6}
+                  menuStyle={{cursor: "pointer"}}
+                  onNewRequest={this.updateTradingSearch}
+                  onUpdateInput={this.updateTradingSearchText}
+                />
+                <TextField
+                  type="number"
+                  floatingLabelText="Type quantity"
+                  inputStyle={{color: "#FFF"}}
+                  style={{display: "block", marginBottom: ".8rem"}}
+                  onChange={(event) => this.setState({portfolioSearchTradingQuantity: parseInt(event.target.value)})}
+                />
+              </div>
+              <div style={{flex: "1", verticalAlign: "middle", color: "#eba91b", display: "flex", alignItems: "center", fontWeight: 300}}><span style={{minWidth: "30px", width: "100%", textAlign: "center"}}>OR</span></div>
+              <div style={{verticalAlign: "middle"}}>
+                <div style={{marginTop: "0.75rem", fontSize: "16px", lineHeight: "24px", width: "256px", height: "72px", display: "block", position: "relative", backgroundColor: "transparent", transition: "height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms", marginBottom: "0.8rem"}}>
+                  <label style={{position: "absolute", lineHeight: "22px", top: "38px", transition: "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms", zIndex: 1, cursor: "text", pointerEvents: "none", color: "rgba(255, 255, 255, 0.298039)", transform: "scale(1) translate(0px, 0px)", transformOrigin: "left top 0px", userSelect: "none"}}>
+                  Paste EFT
+                  </label>
+                  <textarea onChange={(event)=>this.parseEFT(event.target.value)} ref="eft" type="text" style={{padding: "0px", position: "relative", width: "100%", border: "none", outline: "none", backgroundColor: "rgba(0, 0, 0, 0)", color: "rgb(255, 255, 255)", cursor: "initial", height: "100%", boxSizing: "border-box", marginTop: "14px"}} />
+                <div>
+                  <hr style={{borderTop: "none rgba(255, 255, 255, 0.298039)", borderRight: "none rgba(255, 255, 255, 0.298039)", borderBottom: "1px solid rgba(255, 255, 255, 0.298039)", borderLeft: "none rgba(255, 255, 255, 0.298039)", bottom: "8px", boxSizing: "content-box", margin: "0px", position: "absolute", width: "100%"}} />
+                  <hr style={{borderTop: "none rgb(51, 58, 65)", borderRight: "none rgb(51, 58, 65)", borderBottom: "2px solid rgb(51, 58, 65)", borderLeft: "none rgb(51, 58, 65)", bottom: "8px", boxSizing: "content-box", margin: "0px", position: "absolute", width: "100%", transition: "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms", transform: "scaleX(0)"}} />
+                  </div>
+                </div>
+              </div>
+            </div>
             <FlatButton
               label="Add Item"
               labelStyle={{color: "rgb(235, 169, 27)"}}
+              style={{maxWidth: "256px"}}
               primary={true}
               onTouchTap={()=>{this.addTradingItem()}}
             />
@@ -520,7 +589,7 @@ class PortfoliosCreate extends React.Component {
           <div className={cx(s.select_pane, s.market_browser)}>
             {
               getMarketGroupTree(this.props.sde.market_groups).map((el, i) => {
-                return(<MarketBrowserListItem selector={(item)=>{this.addTradingItem(item)}} element={el} key={i} depth={0} />);
+                return(<MarketBrowserListItem selector={(item)=>{this.addTradingItem(item, 1)}} element={el} key={i} depth={0} />);
               })
             }
           </div>
