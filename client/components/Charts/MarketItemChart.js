@@ -167,6 +167,10 @@ class MarketItemChart extends React.Component {
 
   getDataSize() {
 
+    if (!this.refs.container) {
+      return 0;
+    }
+
     if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
 
       const region = this.props.region || store.getState().settings.market.region;
