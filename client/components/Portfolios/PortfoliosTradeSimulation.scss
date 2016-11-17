@@ -1,0 +1,94 @@
+@import '../variables.scss';
+
+.root {
+  padding-top: 20px;
+  color: $text-grey;
+  display: flex;
+  flex-direction: column;
+
+  .settings {
+
+    background-color: $base-color-darkest;
+    padding: 0.5rem;
+    border: 1px solid $base-color-light;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .preface {
+      margin-right: 0.5rem;
+    }
+
+    .key {
+      margin-right: 0.35rem;
+    }
+
+    .value {
+      margin-right: 1rem;
+      color: $gold-color;
+    }
+
+    .edit {
+      flex: 1;
+      text-align: right;
+    }
+  }
+
+  .clipboard {
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 2em;
+    height: 2em;
+    padding: 0;
+    opacity: 0;   
+  }
+
+  .table {
+    flex: 1;
+    margin-top: 1rem;
+    overflow-y: auto;
+
+    table {
+      background-color: rgb(40, 46, 51) !important;
+    }
+  }
+
+  .results {
+    margin-top: 1.5rem;
+    
+    .result_group {
+      display: inline-block;
+      margin-right: 1.5rem;
+      font-size: 1.1rem;
+
+      .result_key {
+        display: inline-block;
+        margin-right: 0.3rem;
+      }
+
+      .result_value {
+        display: inline-block;
+      }
+
+      .result_profit_key {
+        text-transform: uppercase;
+        font-size: 1.2rem;
+      }
+
+      .result_profit_value {
+        color: $gold-color;
+      }
+    }
+  }
+}

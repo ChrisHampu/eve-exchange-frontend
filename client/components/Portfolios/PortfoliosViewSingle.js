@@ -15,6 +15,7 @@ import PortfoliosComponentTable from './PortfoliosComponentTable';
 import PortfoliosMaterialTable from './PortfoliosMaterialTable';
 import PortfoliosPerformanceChart from './PortfoliosPerformanceChart';
 import PortfoliosSpiderChart from './PortfoliosSpiderChart';
+import PortfoliosTradeSimulation from './PortfoliosTradeSimulation';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import IconMenu from 'material-ui/IconMenu';
@@ -195,7 +196,10 @@ class PortfoliosViewSingle extends React.Component {
                 portfolio.type === 1 ?
                   <Tab label="Component Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
                     <PortfoliosSpiderChart width={this.state.width} height={this.state.height} portfolio={portfolio} />
-                  </Tab> : false
+                  </Tab> : 
+                  <Tab label="Trade Simulation" style={{backgroundColor: "rgb(29, 33, 37)"}}>
+                    <PortfoliosTradeSimulation portfolio={portfolio} />
+                  </Tab>
               }
             </Tabs>
           </div>
