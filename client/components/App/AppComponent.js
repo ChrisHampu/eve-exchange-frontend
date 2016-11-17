@@ -5,10 +5,9 @@ import store from '../../store';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
-// Disable temporarily until package is fixed
-//import injectTapEventPlugin from 'react-tap-event-plugin';
-//injectTapEventPlugin();
+injectTapEventPlugin();
 
 const theme = darkBaseTheme;
 
