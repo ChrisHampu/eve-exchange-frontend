@@ -74,6 +74,21 @@ class MarketBrowserSimulate extends React.Component {
           <div className={s.value}>
           {this.props.settings.market.simulation_sales_tax||0}%
           </div>
+          <div className={s.key}>
+          Overhead:
+          </div>
+          <div className={s.value}>
+          {this.props.settings.market.simulation_overhead||0} ISK
+          </div>
+          <div className={s.key}>
+          Wanted Profit:
+          </div>
+          <div className={s.value}>
+          {
+            !this.props.settings.market.simulation_wanted_profit || this.props.settings.market.simulation_wanted_profit === 0 ?
+            "Disabled" : `${this.props.settings.market.simulation_wanted_profit}%`
+          }
+          </div>
           <div className={s.edit}>
             <RaisedButton
               backgroundColor="rgb(30, 35, 39)"
@@ -127,10 +142,17 @@ class MarketBrowserSimulate extends React.Component {
           <div className={s.item}>
           Sales Tax: <span>{formatNumber(result.tax)}</span> ISK
           </div>
+          <div className={s.item}>
+          Overhead: <span>{formatNumber(result.overhead)}</span> ISK
+          </div>
         </div>
         <div className={s.profit}>Estimated Profit: <span>{formatNumber(result.profit)} ISK</span></div>
         {
           result.profit <= 0 || result.sell <= 0 || result.buy <= 0 ? <div style={{marginTop: "1.5rem"}}>There's no ideal trade for this item</div> : null
+        }
+        {
+          this.props.settings.market.simulation_wanted_profit && this.props.settings.market.simulation_wanted_profit > 0 ?
+          <div style={{marginTop: "1.5rem", fontWeight: "600", fontSize: "0.9rem"}}>USING REQUESTED PROFIT MARGIN: <span style={{color: "rgb(235, 169, 27)"}}>{this.props.settings.market.simulation_wanted_profit}%</span></div> : null
         }
         <textarea ref="clipboard" className={s.clipboard} />
       </div>

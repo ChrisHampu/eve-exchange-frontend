@@ -198,7 +198,7 @@ export function getMarketItemNames(market_items) {
   return [...market_items.map(el=>el)];
 }
 
-export function _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin) {
+export function _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin, wanted_margin, overhead) {
 
   const accessor = data[type][interval][region][ data[type][interval][region].length - 1 ];
   const orders = data[type].orders[region];
@@ -237,12 +237,29 @@ export function _doSimulateTrade(type, quantity, data, settings, region, interva
   const broker = broker_fee > 0 ? buy_price * broker_fee / 100 : 0;
   const tax = sales_tax > 0 ? sell_price * sales_tax / 100 : 0;
 
+  let profit = sell_price - buy_price - tax - broker;
+
+  if (overhead && overhead > 0) {
+    profit -= overhead;
+  }
+
+  if (wanted_margin && wanted_margin > 0) {
+
+    const multiplier = wanted_margin / 100; // Get profit %
+
+    const wanted_profit = (buy_price + tax + broker + overhead) * multiplier;
+
+    profit = wanted_profit;
+    sell_price = buy_price + wanted_profit;
+  }
+
   return {
     buy: buy_price,
     sell: sell_price,
     tax,
     broker,
-    profit: sell_price - buy_price - tax - broker
+    overhead: overhead || 0,
+    profit: profit
   };
 }
 
@@ -274,13 +291,19 @@ export function simulateTrade(type, quantity, data, settings, region) {
   const sales_tax = settings.market.simulation_sales_tax || 0;
   const broker_fee = settings.market.simulation_broker_fee || 0;
   const margin = settings.market.simulation_margin || 0;
+  const wanted_margin = settings.market.simulation_wanted_profit || 0;
+  const overhead = settings.market.simulation_overhead || 0;
 
   // If region is given, perform a single trade for that region. Otherwise simulate every region
   let regions = region ? {[region]:0} : data[type][interval];
 
   Object.keys(regions).forEach(region => {
 
-    result[region] = _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin);
+    try {
+      result[region] = _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin, wanted_margin, overhead);
+    } catch(err) {
+      console.log(err);
+    }
   });
 
   return result;

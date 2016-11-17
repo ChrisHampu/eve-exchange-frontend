@@ -15,7 +15,9 @@ const initialState = {
     simulation_sales_tax: 0,
     simulation_margin: 0,
     simulation_strategy: 0,
-    simulation_margin_type: 0
+    simulation_margin_type: 0,
+    simulation_overhead: 0,
+    simulation_wanted_profit: 0
   },
   general: {
     auto_renew: true

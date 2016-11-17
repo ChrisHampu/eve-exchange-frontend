@@ -41,6 +41,51 @@ class Settings extends React.Component {
         </div>
         <div className={s.settings_area}>
           <div className={s.settings_area_header}>
+          Market Chart Visualizations
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Main Chart
+            </div>
+            <Checkbox
+              className={s.checkbox}
+              label="Price"
+              checked={this.props.settings.chart_visuals.price}
+              onCheck={(ev, val) => this._updateChartSetting('price', val) }
+            />
+            <Checkbox
+              className={s.checkbox}
+              label="Spread"
+              checked={this.props.settings.chart_visuals.spread}
+              onCheck={(ev, val) => this._updateChartSetting('spread', val) }
+            />
+            <Checkbox
+              className={s.checkbox}
+              label="Spread SMA"
+              checked={this.props.settings.chart_visuals.spread_sma}
+              onCheck={(ev, val) => this._updateChartSetting('spread_sma', val) }
+            />
+          </div>
+         <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Sub Chart
+            </div>
+            <Checkbox
+              className={s.checkbox}
+              label="Volume"
+              checked={this.props.settings.chart_visuals.volume}
+              onCheck={(ev, val) => this._updateChartSetting('volume', val) }
+            />
+            <Checkbox
+              className={s.checkbox}
+              label="Volume SMA"
+              checked={this.props.settings.chart_visuals.volume_sma}
+              onCheck={(ev, val) => this._updateChartSetting('volume_sma', val) }
+            />
+          </div>
+        </div>
+        <div className={s.settings_area}>
+          <div className={s.settings_area_header}>
           Market
           </div>
           <div className={s.settings_body}>
@@ -149,49 +194,48 @@ class Settings extends React.Component {
               }}
             />
           </div>
-        </div>
-        <div className={s.settings_area}>
-          <div className={s.settings_area_header}>
-          Market Chart Visualizations
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Simulation Overhead Costs (Freight)
+            </div>
+            <TextField
+              type="number"
+              errorText={(this.props.settings.market.simulation_overhead >= 0 && this.props.settings.market.simulation_overhead <= 100000000000) || !this.props.settings.market.simulation_overhead ? null : "Enter a value between 0 and 100B"}
+              floatingLabelText={`Current: ${this.props.settings.market.simulation_overhead||0} ISK`}
+              floatingLabelStyle={{color: "#BDBDBD"}}
+              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+              inputStyle={{color: "#FFF"}}
+              style={{display: "block"}}
+              onChange={(event) => {
+
+                const value = parseFloat(event.target.value);
+                if (value >= 0 && value <= 100000000000) {
+                  this._updateMarketSetting('simulation_overhead', parseFloat(value));
+                }
+              }}
+            />
           </div>
           <div className={s.settings_body}>
             <div className={s.settings_header}>
-            Main Chart
+            Simulation Minimum Wanted Profit (Percentage; 0 to ignore)
             </div>
-            <Checkbox
-              className={s.checkbox}
-              label="Price"
-              checked={this.props.settings.chart_visuals.price}
-              onCheck={(ev, val) => this._updateChartSetting('price', val) }
-            />
-            <Checkbox
-              className={s.checkbox}
-              label="Spread"
-              checked={this.props.settings.chart_visuals.spread}
-              onCheck={(ev, val) => this._updateChartSetting('spread', val) }
-            />
-            <Checkbox
-              className={s.checkbox}
-              label="Spread SMA"
-              checked={this.props.settings.chart_visuals.spread_sma}
-              onCheck={(ev, val) => this._updateChartSetting('spread_sma', val) }
-            />
-          </div>
-         <div className={s.settings_body}>
-            <div className={s.settings_header}>
-            Sub Chart
-            </div>
-            <Checkbox
-              className={s.checkbox}
-              label="Volume"
-              checked={this.props.settings.chart_visuals.volume}
-              onCheck={(ev, val) => this._updateChartSetting('volume', val) }
-            />
-            <Checkbox
-              className={s.checkbox}
-              label="Volume SMA"
-              checked={this.props.settings.chart_visuals.volume_sma}
-              onCheck={(ev, val) => this._updateChartSetting('volume_sma', val) }
+            <TextField
+              type="number"
+              errorText={(this.props.settings.market.simulation_wanted_profit >= 0 && this.props.settings.market.simulation_wanted_profit <= 100) || !this.props.settings.market.simulation_wanted_profit ? null : "Enter a value between 0 and 100"}
+              floatingLabelText={`Current: ${this.props.settings.market.simulation_wanted_profit||0}%`}
+              floatingLabelStyle={{color: "#BDBDBD"}}
+              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+              inputStyle={{color: "#FFF"}}
+              style={{display: "block"}}
+              onChange={(event) => {
+
+                const value = parseFloat(event.target.value);
+                if (value >= 0 && value <= 100) {
+                  this._updateMarketSetting('simulation_wanted_profit', parseFloat(value));
+                }
+              }}
             />
           </div>
         </div>
