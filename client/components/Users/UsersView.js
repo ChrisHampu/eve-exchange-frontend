@@ -88,7 +88,7 @@ class UsersView extends React.Component {
             </TableHeader>
             <TableBody displayRowCheckbox={false}>
               {
-                subs.length === 0 ?
+                !subs || !Array.isArray(subs) || subs.length === 0 ?
                   <TableRow selectable={false}>
                     <TableRowColumn>No records available</TableRowColumn>
                   </TableRow>
