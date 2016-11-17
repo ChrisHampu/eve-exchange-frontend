@@ -30,7 +30,8 @@ class ChartContainer extends React.Component {
     getHitTestableData: React.PropTypes.func.isRequired,
     getTooltipPresentation: React.PropTypes.func.isRequired,
     overrideWidth: React.PropTypes.number,
-    overrideHeight: React.PropTypes.number
+    overrideHeight: React.PropTypes.number,
+    totalDataSize: React.PropTypes.number
   };
 
   static childContextTypes = {
@@ -39,7 +40,8 @@ class ChartContainer extends React.Component {
     height: React.PropTypes.number,
     pageSize: React.PropTypes.number,
     dataSize: React.PropTypes.number,
-    frequency: React.PropTypes.string
+    frequency: React.PropTypes.string,
+    totalDataSize: React.PropTypes.number
   };
 
   constructor(props) {
@@ -80,7 +82,8 @@ class ChartContainer extends React.Component {
       width: this.state.width,
       height: this.state.height,
       pageSize: this.state.pageSize,
-      dataSize: this.props.data ? this.props.data.length : 0
+      dataSize: this.props.data ? this.props.data.length : 0,
+      totalDataSize: this.props.totalDataSize
     }
   }
 

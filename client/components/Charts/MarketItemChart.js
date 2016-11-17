@@ -167,15 +167,17 @@ class MarketItemChart extends React.Component {
 
   getDataSize() {
 
-    if (typeof this.props.market.region[0] !== 'undefined' && typeof this.props.market.region[0].item[this.props.item.id] !== 'undefined') {
+    if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
+
+      const region = this.props.region || store.getState().settings.market.region;
 
       switch(this.refs.container.getFrequency()) {
         case "minutes":
-          return this.props.market.region[0].item[this.props.item.id].minutes ? this.props.market.region[0].item[this.props.item.id].minutes.length : 0;
+          return this.props.market.item[this.props.item.id].minutes ? this.props.market.item[this.props.item.id].minutes[region].length : 0;
         case "hours":
-          return this.props.market.region[0].item[this.props.item.id].hours ? this.props.market.region[0].item[this.props.item.id].hours.length : 0;
+          return this.props.market.item[this.props.item.id].hours ? this.props.market.item[this.props.item.id].hours[region].length : 0;
         case "daily":
-          return this.props.market.region[0].item[this.props.item.id].daily ? this.props.market.region[0].item[this.props.item.id].daily.length : 0;
+          return this.props.market.item[this.props.item.id].daily ? this.props.market.item[this.props.item.id].daily[region].length : 0;
       }
     }
 
@@ -302,6 +304,7 @@ class MarketItemChart extends React.Component {
         onChartChanged={()=>this.chartChanged()}
         overrideWidth={this.props.width}
         overrideHeight={this.props.height}
+        totalDataSize={this.getDataSize()}
       >
         <g>
         {this.renderLegend()}

@@ -137,6 +137,10 @@ export default class PortfoliosPerformanceChart extends React.Component {
 
   getDataSize() {
 
+    if (!this.refs.container) {
+      return 0;
+    }
+
     switch(this.refs.container.getFrequency()) {
       case "hours":
         return this.props.portfolio.hourlyChart.length;
@@ -280,6 +284,7 @@ export default class PortfoliosPerformanceChart extends React.Component {
         onChartChanged={()=>this.chartChanged()}
         overrideHeight={this.props.height}
         overrideWidth={this.props.width}
+        totalDataSize={this.getDataSize()}
       >
         <g>
         {this.renderLegend()}

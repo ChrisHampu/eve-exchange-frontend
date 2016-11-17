@@ -14,7 +14,8 @@ export default class Scrollbar extends React.Component {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
     pageSize: React.PropTypes.number.isRequired,
-    dataSize: React.PropTypes.number.isRequired
+    dataSize: React.PropTypes.number.isRequired,
+    totalDataSize: React.PropTypes.number.isRequired
   };
 
   constructor(props) {
@@ -26,26 +27,33 @@ export default class Scrollbar extends React.Component {
       startX: 0,
       barWidth: 0,
       contextWidth: 0,
-      resistance: 3
+      resistance: 3,
+      dataSize: 0
     }; 
   }
 
   update() {
 
-    if (this.context.width === this.state.contextWidth) {
+    if (!this.context.totalDataSize || !this.context.width || (this.context.width === this.state.contextWidth && this.context.totalDataSize == this.state.dataSize)) {
       return;
     }
 
     let barWidth = 0;
 
     if (this.context.dataSize >= this.context.pageSize ) {
-      barWidth = this.context.dataSize ? Math.max(Math.round(this.context.width / this.context.dataSize), 25) : 100;
+
+      const minimum = 0;
+      const maximum = Math.max(this.context.width, this.context.width * (this.context.totalDataSize / this.context.pageSize));
+      const thumbLength = this.context.width / (maximum) * this.context.width;
+
+      barWidth = Math.max(thumbLength, 25);
     }
 
     this.setState({
       handleX: this.context.width - barWidth,
       barWidth: barWidth,
-      contextWidth: this.context.width
+      contextWidth: this.context.width,
+      dataSize: this.context.totalDataSize
     });
   }
 

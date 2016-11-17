@@ -112,6 +112,33 @@ class ProfitChart extends React.Component {
     return null;
   }
 
+  getChartDataSize() {
+
+    if (!this.refs.container) {
+      return 0;
+    }
+
+    switch(this.refs.container.getFrequency()) {
+      case "hours":
+        var arr = this.props.chart.hourly;
+        if (!arr) {
+          return 0;
+        }
+
+        return arr.length;
+        
+      case "days":
+        var arr = this.props.chart.daily;
+        if (!arr) {
+          return 0;
+        }
+
+        return arr.length;
+    }
+
+    return 0;  
+  }
+
   getHitTestableData() {
 
     return this.getChartData().map(el => this.state.xScale(el.time));
@@ -173,7 +200,8 @@ class ProfitChart extends React.Component {
           title={this.props.title}
           onChartChanged={()=>this.chartChanged()}
           getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
-          getHitTestableData={()=>this.getHitTestableData()} 
+          getHitTestableData={()=>this.getHitTestableData()}
+          totalDataSize={this.getChartDataSize()}
         >
           <Axis anchor="left" scale={this.state.profitScale} ticks={5} formatISK={true} />
           <Axis anchor="right" scale={this.state.taxScale} ticks={5} style={{transform: `translateX(${width}px)`}} formatISK={true} />
