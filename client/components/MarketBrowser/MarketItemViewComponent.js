@@ -39,7 +39,7 @@ class MarketItemViewComponent extends React.Component {
     this.state = {
       item: {
         id: this.props.params.id,
-        name: itemIDToName(this.props.sde.market_items, this.props.params.id)
+        name: itemIDToName(this.props.params.id)
       },
       tab: (this.props.settings.market && this.props.settings.market.default_tab != undefined) ? this.props.settings.market.default_tab : 0,
       width: 0,
@@ -61,7 +61,7 @@ class MarketItemViewComponent extends React.Component {
     this.setState({
       item: {
         id: nextProps.params.id,
-        name: itemIDToName(this.props.sde.market_items, nextProps.params.id)
+        name: itemIDToName(nextProps.params.id)
       }
     })
   }

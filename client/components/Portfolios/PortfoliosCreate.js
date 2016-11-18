@@ -8,7 +8,6 @@ import cx from 'classnames';
 import { sendAppNotification } from '../../actions/appActions';
 import { getMarketItemNames, itemNameToID, itemIDToName } from '../../market';
 import { getAuthToken } from '../../deepstream';
-import { fetchBlueprints } from '../../sde';
 import { getMarketGroupTree } from '../../market';
 import { APIEndpointURL } from '../../globals';
 
@@ -32,9 +31,6 @@ import IconButton from 'material-ui/IconButton';
 
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
 import RemoveIcon from 'material-ui/svg-icons/content/remove';
-
-// TODO: Move to a centralized location or let it stay lazy loaded here?
-fetchBlueprints();
 
 class PortfoliosCreate extends React.Component {
 
@@ -64,42 +60,15 @@ class PortfoliosCreate extends React.Component {
 
     this.blueprints = []; 
  
-    for (var bp in props.sde.blueprints) { 
+    for (var i = 0; i < this.props.sde.blueprints.length; i++) { 
  
-      this.blueprints.push(props.sde.blueprints[bp].name); 
+      this.blueprints.push(itemIDToName(this.props.sde.blueprints[i]));
     } 
   }
 
   getBlueprints() {
 
-    const blueprints = [];
-
-    if (!this.props.sde.blueprints) {
-      return blueprints;
-    }
-
-    for (var bp in this.props.sde.blueprints) {
-
-      blueprints.push(this.props.sde.blueprints[bp].name);
-    }
-
-    return blueprints;
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    this.props = newProps;
-
-    if (this.blueprints.length) {
-      return;
-    }
-
-    this.blueprints = []; 
- 
-    for (var bp in newProps.sde.blueprints) { 
- 
-      this.blueprints.push(newProps.sde.blueprints[bp].name); 
-    } 
+    return this.blueprints;
   }
 
   setRoute(path) {
@@ -264,11 +233,11 @@ class PortfoliosCreate extends React.Component {
             components = this.state.portfolioSelectedItems.map(el => {
               return {
                 quantity: parseInt(el.quantity),
-                typeID: parseInt(itemNameToID(this.props.sde.market_items, el.name))
+                typeID: parseInt(itemNameToID(el.name))
               }
             });
           } else {
-            components = [{typeID: parseInt(itemNameToID(this.props.sde.market_items, this.state.portfolioIndustryItem)), quantity: parseInt(this.state.portfolioIndustryQuantity)}]
+            components = [{typeID: parseInt(itemNameToID(this.state.portfolioIndustryItem)), quantity: parseInt(this.state.portfolioIndustryQuantity)}]
           }
 
           const body = {
@@ -533,7 +502,6 @@ class PortfoliosCreate extends React.Component {
     });
   }
 
-  // TODO: Performance: Cache this result of 'getMarketItemNames(this.props.sde.market_items)' similar to blueprints
   renderTradingSelect() {
     return (
       <div className={cx({[s.fullheight]: this.state.createStepIndex === 2 && this.state.portfolioType === 0})}>
@@ -546,7 +514,7 @@ class PortfoliosCreate extends React.Component {
               <div style={{verticalAlign: "middle"}}>
                 <AutoComplete
                   hintText="Type item name"
-                  dataSource={getMarketItemNames(this.props.sde.market_items)}
+                  dataSource={getMarketItemNames()}
                   filter={AutoComplete.fuzzyFilter}
                   maxSearchResults={6}
                   menuStyle={{cursor: "pointer"}}

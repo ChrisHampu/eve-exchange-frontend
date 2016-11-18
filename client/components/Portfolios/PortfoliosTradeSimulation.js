@@ -120,7 +120,7 @@ class PortfoliosTradeSimulation extends React.Component {
                 if (!el.simulation) {
                   return (
                     <TableRow key={i} selectable={false}>
-                      <TableRowColumn>{el.quantity}x {itemIDToName(this.props.market_items, el.typeID)}</TableRowColumn>
+                      <TableRowColumn>{el.quantity}x {itemIDToName(el.typeID)}</TableRowColumn>
                       <TableRowColumn>No simulation data available</TableRowColumn>
                     </TableRow>
                   )
@@ -128,7 +128,7 @@ class PortfoliosTradeSimulation extends React.Component {
 
                 return (
                   <TableRow key={i} selectable={false}>
-                    <TableRowColumn>{el.quantity}x {itemIDToName(this.props.market_items, el.typeID)}</TableRowColumn>
+                    <TableRowColumn>{el.quantity}x {itemIDToName(el.typeID)}</TableRowColumn>
                     <TableRowColumn>
                       <TextField
                         type="number"
@@ -224,7 +224,7 @@ class PortfoliosTradeSimulation extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { settings: store.settings, market_items: store.sde.market_items };
+  return { settings: store.settings };
 }
 
 export default connect(mapStateToProps)(PortfoliosTradeSimulation);

@@ -10,7 +10,7 @@ import { itemIDToName } from '../../market';
 
 import CircularProgress from 'material-ui/CircularProgress';
 
-class PortfoliosSpiderChart extends React.Component {
+export default class PortfoliosSpiderChart extends React.Component {
 
   static propTypes = {
 
@@ -177,7 +177,7 @@ class PortfoliosSpiderChart extends React.Component {
                   )
                 })
               }
-              <text fontSize="0.95em" fill="#95a1ac" x={radius*(1-Math.sin(i*radians/componentCount))-30*Math.sin(i*radians/componentCount)} y={radius*(1-Math.cos(i*radians/componentCount))-20*Math.cos(i*radians/componentCount)} textAnchor="middle" dy="1em" style={{transform: `translate(0, -10px)`}}>{itemIDToName(this.props.market_items, el.typeID)}</text>
+              <text fontSize="0.95em" fill="#95a1ac" x={radius*(1-Math.sin(i*radians/componentCount))-30*Math.sin(i*radians/componentCount)} y={radius*(1-Math.cos(i*radians/componentCount))-20*Math.cos(i*radians/componentCount)} textAnchor="middle" dy="1em" style={{transform: `translate(0, -10px)`}}>{itemIDToName(el.typeID)}</text>
            </g>
           )
         })
@@ -266,9 +266,3 @@ class PortfoliosSpiderChart extends React.Component {
     );
   }
 }
-
-const mapStateToProps = function(store) {
-  return { market_items: store.sde.market_items };
-}
-
-export default connect(mapStateToProps)(PortfoliosSpiderChart);

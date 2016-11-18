@@ -128,16 +128,6 @@ export async function getAPIKeyInfo(keyID, vCode, characterID) {
   const characters = [];
   const divisions = [];
   let type = 0;
-
-  /*
-  if (info.accessMask !== "23072779") {
-    return {
-      error: "Access mask must be 23072779"
-    }
-  }
-  */
-
-  console.log(xml.eveapi.result.key.rowset.row);
   
   // TODO: Add corp info
   if (xml.eveapi.result.key.rowset.row.length) {
@@ -167,19 +157,20 @@ export async function getAPIKeyInfo(keyID, vCode, characterID) {
         throw division_xml.eveapi.error;
       }
 
-      console.log(division_xml.eveapi.result);
-
       for (const div of division_xml.eveapi.result.rowset.row) {
         
         divisions.push({key: parseInt(div._accountKey), balance: parseFloat(div._balance)});
       }
 
-      console.log(divisions);
-
     } catch (e) {
       console.log(e);
     }
-
+  } else {
+    if (info.accessMask !== "23072779") {
+      return {
+        error: "Access mask must be 23072779"
+      }
+    }
   }
 
   return { info: { type: type, expires: new Date(info._expires), accessMask: info._accessMask }, characters, divisions };

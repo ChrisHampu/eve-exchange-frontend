@@ -5,6 +5,8 @@ fetch = require('node-fetch');
 
 xml2js = require('xml2js');
 
+var exclude_blueprints = true;
+
 var parser = new xml2js.Parser();
 
 var groups = [];
@@ -66,11 +68,6 @@ try {
 
   for(var i in _yaml) {
 
-    // Skip infantry gear
-    if (_yaml[i].marketGroupID === 350001) {
-      continue;
-    }
-
     if (!_yaml[i].parentGroupID)  {
 
       var children = [];
@@ -81,6 +78,15 @@ try {
 
       for (var child of children) {
         findItems(child);
+      }
+
+      // Skip infantry gear & special edition & trade goods
+      if (_yaml[i].marketGroupID === 350001 || _yaml[i].marketGroupID === 63 || _yaml[i].marketGroupID === 1659 || _yaml[i].marketGroupID === 19) {
+        continue;
+      }
+
+      if (exclude_blueprints && _yaml[i].marketGroupID === 9 ) {
+        continue;
       }
 
       groups.push({name: _yaml[i].marketGroupName, id: _yaml[i].marketGroupID, childGroups: children});

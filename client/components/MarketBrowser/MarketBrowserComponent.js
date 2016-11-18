@@ -1,7 +1,6 @@
 /* eslint-disable global-require */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
 import s from './MarketBrowserComponent.scss';
 import cx from 'classnames';
 import { browserHistory } from 'react-router'
@@ -16,7 +15,7 @@ import OverlayStack from '../OverlayStack/OverlayStack';
 // Material UI
 import TextField from 'material-ui/TextField';
 
-class MarketBrowserComponent extends React.Component {
+export default class MarketBrowserComponent extends React.Component {
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired
@@ -56,7 +55,7 @@ class MarketBrowserComponent extends React.Component {
           />
         </div>
         {
-          getMarketGroupTree(this.props.sde.market_groups, this.state.searchText).map((el, i) => {
+          getMarketGroupTree(this.state.searchText).map((el, i) => {
             return(<MarketBrowserListItem selector={(item)=>{this.selectItem(item);}} element={el} key={i} depth={0} />);
           })
         }
@@ -76,10 +75,3 @@ class MarketBrowserComponent extends React.Component {
     );
   }
 }
-
-
-const mapStateToProps = function(store) {
-  return { sde: store.sde };
-}
-
-export default connect(mapStateToProps)(MarketBrowserComponent);

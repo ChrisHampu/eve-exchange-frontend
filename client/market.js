@@ -2,11 +2,10 @@ import store from './store';
 import { setAggregateMinuteData, setAggregateHourlyData, setAggregateDailyData, setOrderData } from './actions/marketActions';
 import deepstream from './deepstream';
 import fuzzy from 'fuzzy';
-import { fetchGroups } from './sde';
+
+const sde = store.getState().sde;
 
 const subscriptions = {};
-
-fetchGroups();
 
 export function subscribeItem(id) {
 
@@ -102,14 +101,10 @@ export function unsubscribeItem(id) {
   delete subscriptions[id];
 }
 
-export function getMarketGroupTree(market_groups, searchText) {
-
-  if (!market_groups) {
-    return [];
-  }
+export function getMarketGroupTree(searchText) {
 
   if (!searchText || searchText.length === 0) {
-    return market_groups;
+    return sde.market_groups;
   }
 
   const _getGroups = (group, searchText, accumulator, functor) => {
@@ -144,7 +139,7 @@ export function getMarketGroupTree(market_groups, searchText) {
 
   const groups = [];
 
-  for (const group of market_groups) {
+  for (const group of sde.market_groups) {
 
     const add = [];
 
@@ -158,29 +153,20 @@ export function getMarketGroupTree(market_groups, searchText) {
   return groups;
 }
 
-export function itemIDToName(market_items, id) {
-
-  if (!market_items) {
-    return "Loading";
-  }
+export function itemIDToName(id) {
 
   let searchID = typeof id === "string" ? parseInt(id) : id;
-  let name = "Unknown";
 
-  if (searchID in market_items) {
-    return market_items[searchID];
+  if (sde.market_items[searchID] !== 'undefined') {
+    return sde.market_items[searchID];
   }
 
-  return name;
+  return "Unknown";
 }
 
-export function itemNameToID(market_items, name) {
+export function itemNameToID(name) {
 
-  if (!market_items) {
-    return 0;
-  }
-
-  const _res = market_items.findIndex(el => el === name);
+  const _res = Object.keys(sde.market_items).find(key => sde.market_items[key] === name);
 
   if (!_res || _res === -1) {
     return 0;
@@ -189,13 +175,9 @@ export function itemNameToID(market_items, name) {
   return _res;
 }
 
-export function getMarketItemNames(market_items) {
+export function getMarketItemNames() {
 
-  if (!market_items) {
-    return [];
-  }
-
-  return [...market_items.map(el=>el)];
+  return Object.values(sde.market_items);
 }
 
 export function _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin, wanted_margin, overhead) {
