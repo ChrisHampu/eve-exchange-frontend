@@ -556,7 +556,7 @@ class PortfoliosCreate extends React.Component {
           </div>
           <div className={cx(s.select_pane, s.market_browser)}>
             {
-              getMarketGroupTree(this.props.sde.market_groups).map((el, i) => {
+              getMarketGroupTree().map((el, i) => {
                 return(<MarketBrowserListItem selector={(item)=>{this.addTradingItem(item, 1)}} element={el} key={i} depth={0} />);
               })
             }
