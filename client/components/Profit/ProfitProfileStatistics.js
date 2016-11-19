@@ -134,7 +134,7 @@ class ProfitProfileStatistics extends React.Component {
                 user_orders.map((el, i) => {
                   return (
                     <TableRow key={i} selectable={false}>
-                      <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(this.props.sde.market_items, el.typeID)}</span></TableRowColumn>
+                      <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.typeID}`)}}>{itemIDToName(el.typeID)}</span></TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{formatNumberUnit(parseInt(el.price))}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{el.volRemaining}</TableRowColumn>
                       <TableRowColumn style={{textAlign: "center"}}>{el.bid === "0" ? "Sell" : "Buy"}</TableRowColumn>
