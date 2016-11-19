@@ -1,11 +1,15 @@
 import React from 'react';
-import AppBar from 'material-ui/AppBar';
-import Paper from 'material-ui/Paper';
-import {Tabs, Tab} from 'material-ui/Tabs';
 import { browserHistory } from 'react-router'
 import s from './Onboarding.scss';
 import cx from 'classnames';
 import { isLoggedIn } from '../../auth';
+
+import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+
+import LockIcon from 'material-ui/svg-icons/action/lock-outline';
+import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 
 export default class OnboardingComponent extends React.Component {
 
@@ -31,24 +35,42 @@ export default class OnboardingComponent extends React.Component {
 
   render() {
     return (
-        <div>
-          <Paper>
-            <AppBar className={s.header} title="EVE Exchange" showMenuIconButton={false} iconElementRight={
-              <Tabs inkBarStyle={{display:"none"}}>
-                {
-                  this.state.loggedIn ?
-                    <Tab onActive={()=>{ this.setRoute("/dashboard"); }} label="Dashboard" style={{padding: "0.5rem 1.5rem", fontSize: "1.2rem"}} />
-                    : <Tab onActive={()=>{ this.setRoute("/login"); }} label="Login" style={{padding: "0.5rem 1.5rem", fontSize: "1.2rem"}} />
-                }
-                {
-                  this.state.loggedIn ?
-                    <Tab onActive={()=>{ this.setRoute("/logout"); }} label="Logout" style={{padding: "0.5rem 1.5rem", fontSize: "1.2rem"}} />
-                  : false
-                }
-              </Tabs>
-            }/>
-        </Paper>
-        <div style={{color: "#ffffff", padding: "1rem"}}>This is the onboarding/home page.</div>
+      <div className={s.container}>
+        <div className={cx(s.main, s.landing)}>
+          <div className={s.dashboard}>
+            <FlatButton 
+              label="Dashboard" 
+              secondary={true} 
+              onClick={()=>this.setRoute(this.state.loggedIn?"/dashboard":"/login")}
+            />
+          </div>
+          <div className={s.scroll_down}>
+            <IconButton
+              style={{width: "48px", height: "48px"}}
+            >
+              <ArrowDown />
+            </IconButton>
+          </div>
+          <div className={s.main_title}>
+            <div className={s.site_title}>
+            eve.exchange
+            </div>
+            <div className={s.site_blurb}>
+            The most advanced trading application in New Eden
+            </div>
+            <RaisedButton
+              label={this.state.loggedIn?"Go to your dashboard":"Sign in with SSO"}
+              secondary={true}
+              icon={<LockIcon />}
+              labelColor="#000000"
+              labelStyle={{color: "#000000"}}
+              onClick={()=>this.setRoute(this.state.loggedIn?"/dashboard":"/login")}
+            />
+            <div className={s.button_blurb}>
+            No registration required, instance access
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

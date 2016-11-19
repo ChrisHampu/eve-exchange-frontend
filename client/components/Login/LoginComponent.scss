@@ -24,3 +24,20 @@
   color: $gold-color;
   padding: 0 1.5rem;
 }
+
+.hover {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  height: 56px;
+  background-color: $base-color-darkest;
+
+  .logo {
+    margin: 0 auto;
+    width: 126px;
+
+    img {
+      max-height: 56px;
+    }
+  }
+}

@@ -1,17 +1,12 @@
 import React from 'react';
 import s from './LoginComponent.scss';
+
+import { APIEndpointURL } from '../../globals';
+
 import sso_image from '../../assets/img/EVESSO_Button.png';
+import logo_image from '../../assets/img/eve-x-logo.png';
 
 export default class Login extends React.Component {
-
-  constructor(props) {
-
-    super(props);
-
-    this.state = {
-      endpoint: "http://api.eve.exchange/oauth"
-    };
-  }
 
   render() {
     return (
@@ -20,7 +15,12 @@ export default class Login extends React.Component {
           <div className={s.text}>
           Sign in to begin using EVE Exchange
           </div>
-          <a href={this.state.endpoint} style={{backgroundImage: `url(${sso_image.src})`}}></a>
+          <a href={`${APIEndpointURL}/oauth`} style={{backgroundImage: `url(${sso_image.src})`}}></a>
+        </div>
+        <div className={s.hover}>
+          <div className={s.logo}>
+            <img src={`${logo_image.src}`} />
+          </div>
         </div>
       </div>
     );

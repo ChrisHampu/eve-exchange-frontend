@@ -1,22 +1,77 @@
 @import '../variables.scss';
 
-.header {
-  display: flex;
-  background-color: $base-color-darker !important;
+.container {
+  position: relative;
+  height: 100%;
+  min-height: 100vh;
+  color: $white;
 
-  > h1 {
+  .main {
+    background: #1c1f24 url(/assets/img/Landing1.jpg) no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
 
-    @media (--small-screen) {
-      display: none;
+    .dashboard {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .scroll_down {
+      position: absolute;
+      width: 100%;
+      bottom: 4rem;
+
+      > button {
+        display: block !important;
+        margin: 0 auto !important;
+        width: 7rem !important;
+        height: 7rem !important;
+
+        span {
+          padding: 16px 0 0 16px !important;
+        }
+
+        svg {
+          width: 7rem !important;
+          height: 7rem !important;
+          fill: $gold-color !important;
+        }
+      }
+    }
+
+    .main_title {
+
+      color: $gold-color;
+      margin: 0 auto;
+      text-align: center;
+
+      .site_title {
+        font-size: 3.5rem;
+        font-weight: 300;
+      }
+
+      .site_blurb {
+        font-size: 1.6rem;
+        margin: 0.5rem 0 0.75rem 0;
+      }
+
+      .button_blurb {
+        font-size: 1rem;
+        margin-top: 0.5rem;
+      }
     }
   }
 
-  > div {
-    margin-top: 0 !important;
-    margin-right: 1rem !important;
+  .landing {
+    height: 100%;
+    min-height: 100vh;
+    background-color: $base-color;
+    position: relative;
 
-    > div > div {
-      background-color: $base-color-darker !important;
+    &.dark {
+      background-color: $base-color-darkest;
     }
   }
 }
