@@ -31,7 +31,7 @@ record:
     read: "$userid == user.data.user_id || user.data.admin === true"
 
   portfolios/$userid:
-    read: "($userid == user.data.user_id && user.data.premium === true) || user.data.admin === true"
+    read: "$userid == user.data.user_id || user.data.admin === true"
 
   market_minutes/$itemid:
     create: "user.isAuthenticated === true || user.data.admin === true"
