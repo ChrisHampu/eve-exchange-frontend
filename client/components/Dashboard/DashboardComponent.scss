@@ -27,7 +27,7 @@
     min-width: 225px;
     display: none;
 
-    @media (--large-screen) {
+    @media (--large-screen), (--x-large-screen) {
       display: block;
     }
 
@@ -166,7 +166,7 @@
           fill: $base-color-lightest !important;
         }
 
-        @media (--large-screen) {
+        @media (--large-screen), (--x-large-screen) {
           display: none !important;
         }
       }
