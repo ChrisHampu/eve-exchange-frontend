@@ -11,6 +11,7 @@ import ProfileSubscriptionHistory from '../components/Profile/ProfileSubscriptio
 import ProfileSettings from '../components/Profile/ProfileSettings';
 import APITypeSelector from '../components/Profile/APITypeSelector';
 import AdminComponent from '../components/Admin/AdminComponent';
+import AdminLoginLog from '../components/Admin/AdminLoginLog';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
 import NotificationsComponent from '../components/Notifications/NotificationsComponent';
@@ -85,6 +86,8 @@ export default (
           <Route path="view" component={UsersView}>
             <Route path=":id" component={UsersViewSingle} />
           </Route>
+        </Route>
+        <Route path="loginlog" components={{main: AdminLoginLog}} onEnter={requireAccess("admin")}>
         </Route>
         <Route path="reference" components={{main: GuidebookComponent}}>
           <Route path="contact" component={GuidebookContact} />

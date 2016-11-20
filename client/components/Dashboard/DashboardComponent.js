@@ -36,6 +36,7 @@ import UsersIcon from 'material-ui/svg-icons/action/supervisor-account';
 import PortfoliosIcon from 'material-ui/svg-icons/notification/folder-special';
 import MenuToggleIcon from 'material-ui/svg-icons/navigation/menu';
 import GuidebookIcon from 'material-ui/svg-icons/av/library-books';
+import LogIcon from 'material-ui/svg-icons/action/assignment-turned-in';
 
 const MainMenu = [
   {
@@ -114,6 +115,12 @@ const AdminMenu = [
     "name": "Users",
     "route": "/dashboard/users",
     "icon": <UsersIcon />,
+    "perm": "admin"
+  },
+  {
+    "name": "Login Log",
+    "route": "/dashboard/loginlog",
+    "icon": <LogIcon />,
     "perm": "admin"
   }
 ];

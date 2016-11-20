@@ -74,6 +74,23 @@ export async function publishLogin(user_id) {
       await recordReady(record);
     });
 
+    getCollection('login_log').insertOne({
+      user_id: user_id,
+      time: new Date()
+    }, (err, db) => {
+
+      getCollection('login_log').find().sort({time: -1}).limit(100).toArray(async (err, docs) => {
+
+        if (!docs) {
+          return;
+        }
+
+        var record = deepstream.record.getRecord('admin/login_log').set(docs);
+
+        await recordReady(record);
+      });
+    });
+
     resolve();
   });
 }

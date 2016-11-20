@@ -1,7 +1,8 @@
 
 const initialState = {
 
-  subscriptions: []
+  subscriptions: [],
+  login_log: []
 };
 
 export default function auth(state = initialState, action) {
@@ -14,6 +15,13 @@ export default function auth(state = initialState, action) {
       }
 
       return { ...state, subscriptions: action.subs };
+
+    case "UPDATE_LOGIN_LOG":
+      if (!action.log) {
+        return state;
+      }
+
+      return { ...state, login_log: action.log };
 
     default:
       return state;

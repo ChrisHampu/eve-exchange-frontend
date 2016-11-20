@@ -5,7 +5,7 @@ import { updateUserSettings } from './actions/settingsActions';
 import { updateNotifications } from './actions/notificationsActions';
 import { updateSubscription } from './actions/subscriptionActions';
 import { setUserOrders } from './actions/marketActions';
-import { updateAllSubscriptions } from './actions/adminActions';
+import { updateAllSubscriptions, updateLoginLog } from './actions/adminActions';
 import { updatePortfolios } from './actions/portfoliosActions';
 import { sendAppNotification } from './actions/./appActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
@@ -224,6 +224,15 @@ function setDeepstreamAdminSubscriptions() {
     }
 
     store.dispatch(updateAllSubscriptions(subs)); 
+  });
+
+  deepstream.record.getRecord('admin/login_log').subscribe(log => {
+
+    if (!log) {
+      return;
+    }
+
+    store.dispatch(updateLoginLog(log)); 
   });
 } 
 
