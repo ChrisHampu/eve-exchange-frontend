@@ -110,7 +110,7 @@
           height: 100%;
           flex-direction: column;
 
-          @media (--small-screen), (--medium-screen) {
+          @media (--medium-screen) {
             flex-direction: row;
           }
 
