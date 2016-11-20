@@ -1,16 +1,64 @@
 record:
   "*":
-    create: true
-    write: true
-    read: true
-    delete: true
-    listen: true
+    create: "user.data.admin === true"
+    write: "user.data.admin === true"
+    read: "user.data.admin === true"
+    delete: "user.data.admin === true"
+    listen: "user.data.admin === true"
+
+  settings/$userid:
+    read: "$userid == user.data.user_id || user.data.admin === true"
+
+  profit_alltime/$userid:
+    read: "$userid == user.data.user_id || user.data.admin === true"
+
+  profit_top_items/$userid:
+    read: "$userid == user.data.user_id || user.data.admin === true"
+
+  profit_transactions/$userid:
+    read: "$userid == user.data.user_id || user.data.admin === true"
+
+  profit_chart/$userid:
+    read: "$userid == user.data.user_id || user.data.admin === true"
+
+  notifications/$userid:
+    read: "$userid == user.data.user_id || user.data.admin === true"
+
+  subscription/$userid:
+    read: "$userid == user.data.user_id || user.data.admin === true"
+
+  user_orders/$userid:
+    read: "$userid == user.data.user_id || user.data.admin === true"
+
+  portfolios/$userid:
+    read: "($userid == user.data.user_id && user.data.premium === true) || user.data.admin === true"
+
+  market_minutes/$itemid:
+    create: "user.isAuthenticated === true || user.data.admin === true"
+    read: "user.isAuthenticated === true || user.data.admin === true"
+
+  market_hourly/$itemid:
+    create: "user.isAuthenticated === true || user.data.admin === true"
+    read: "user.isAuthenticated === true || user.data.admin === true"
+
+  market_daily/$itemid:
+    create: "user.isAuthenticated === true || user.data.admin === true"
+    read: "user.isAuthenticated === true || user.data.admin === true"
+
+  market_orders/$itemid:
+    create: "user.isAuthenticated === true || user.data.admin === true"
+    read: "user.isAuthenticated === true || user.data.admin === true"
+
 event:
   "*":
-    publish: true
-    subscribe: true
-    listen: true
+    publish: "user.data.admin === true"
+    subscribe: "user.data.admin === true"
+    listen: "user.data.admin === true"
+
+  settings/$userid:
+    publish: "$userid == user.data.user_id || user.data.admin === true"
+
 rpc:
   "*":
-    provide: true
-    request: true
+    provide: false
+    request: false

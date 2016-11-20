@@ -118,99 +118,103 @@ function setDeepstreamSubscriptions(user_info) {
 
   let currentSettings = null;
 
-  deepstream.record.getRecord(`settings/${user_info.user_id}`).subscribe(data => {
+  try {
+    deepstream.record.getRecord(`settings/${user_info.user_id}`).subscribe(data => {
 
-    currentSettings = data;
-    store.dispatch(updateUserSettings(user_info.user_id, data));
-  });
+      currentSettings = data;
+      store.dispatch(updateUserSettings(user_info.user_id, data));
+    });
 
-  store.subscribe(() => {
- 
-    if (store.getState().settings !== currentSettings && store.getState().settings && store.getState().settings.userID) { 
+    store.subscribe(() => {
+   
+      if (store.getState().settings !== currentSettings && store.getState().settings && store.getState().settings.userID) { 
 
-      // Publish new settings to deepstream
-      deepstream.event.emit(`settings/${user_info.user_id}`, store.getState().settings);
-      currentSettings = store.getState().settings;
-    }
-  });
+        // Publish new settings to deepstream
+        deepstream.event.emit(`settings/${user_info.user_id}`, store.getState().settings);
+        currentSettings = store.getState().settings;
+      }
+    });
 
-  deepstream.record.getRecord(`profit_transactions/${user_info.user_id}`).subscribe(transactions => {
+    deepstream.record.getRecord(`profit_transactions/${user_info.user_id}`).subscribe(transactions => {
 
-    if (!transactions) {
-      return;
-    }
+      if (!transactions) {
+        return;
+      }
 
-    store.dispatch(updateTransactions(transactions));
-  });
+      store.dispatch(updateTransactions(transactions));
+    });
 
-  deepstream.record.getRecord(`profit_alltime/${user_info.user_id}`).subscribe(stats => {
+    deepstream.record.getRecord(`profit_alltime/${user_info.user_id}`).subscribe(stats => {
 
-    if (!stats) {
-      return;
-    }
+      if (!stats) {
+        return;
+      }
 
-    store.dispatch(updateAlltimeStats(stats));
-  });
+      store.dispatch(updateAlltimeStats(stats));
+    });
 
-  deepstream.record.getRecord(`profit_top_items/${user_info.user_id}`).subscribe(profit => {
+    deepstream.record.getRecord(`profit_top_items/${user_info.user_id}`).subscribe(profit => {
 
-    if (!profit) {
-      store.dispatch(updateToplist({items: []}));
-      return;
-    }
+      if (!profit) {
+        store.dispatch(updateToplist({items: []}));
+        return;
+      }
 
-    store.dispatch(updateToplist(profit));
-  });
+      store.dispatch(updateToplist(profit));
+    });
 
-  deepstream.record.getRecord(`profit_chart/${user_info.user_id}`).subscribe(profit => {
+    deepstream.record.getRecord(`profit_chart/${user_info.user_id}`).subscribe(profit => {
 
-    if (!profit || !profit.length) {
+      if (!profit || !profit.length) {
 
-      store.dispatch(updateHourlyChart([]));
-      store.dispatch(updateDailyChart([]));
-      return;
-    }
+        store.dispatch(updateHourlyChart([]));
+        store.dispatch(updateDailyChart([]));
+        return;
+      }
 
-    const hourly = profit.filter(doc => doc.frequency === "hourly");
-    const daily = profit.filter(doc => doc.frequency === "daily");
+      const hourly = profit.filter(doc => doc.frequency === "hourly");
+      const daily = profit.filter(doc => doc.frequency === "daily");
 
-    store.dispatch(updateHourlyChart(hourly));
-    store.dispatch(updateDailyChart(daily));
-  });
+      store.dispatch(updateHourlyChart(hourly));
+      store.dispatch(updateDailyChart(daily));
+    });
 
-  deepstream.record.getRecord(`notifications/${user_info.user_id}`).subscribe(data => {
+    deepstream.record.getRecord(`notifications/${user_info.user_id}`).subscribe(data => {
 
-    if (!data || data.length === 0 || !Array.isArray(data)) {
-      store.dispatch(updateNotifications([]));
-      return;
-    }
+      if (!data || data.length === 0 || !Array.isArray(data)) {
+        store.dispatch(updateNotifications([]));
+        return;
+      }
 
-    store.dispatch(updateNotifications(data.sort((el1, el2) => new Date(el2.time) - new Date(el1.time))));
-  });
+      store.dispatch(updateNotifications(data.sort((el1, el2) => new Date(el2.time) - new Date(el1.time))));
+    });
 
-  deepstream.record.getRecord(`subscription/${user_info.user_id}`).subscribe(data => {
+    deepstream.record.getRecord(`subscription/${user_info.user_id}`).subscribe(data => {
 
-    store.dispatch(updateSubscription(user_info.user_id, data));
-  });
+      store.dispatch(updateSubscription(user_info.user_id, data));
+    });
 
-  deepstream.record.getRecord(`user_orders/${user_info.user_id}`).subscribe(orders => {
+    deepstream.record.getRecord(`user_orders/${user_info.user_id}`).subscribe(orders => {
 
-    if (!orders) {
-      return;
-    }
+      if (!orders) {
+        return;
+      }
 
-    store.dispatch(setUserOrders(orders));
-  });
+      store.dispatch(setUserOrders(orders));
+    });
 
-  deepstream.record.getRecord(`portfolios/${user_info.user_id}`).subscribe(portfolios => {
+    deepstream.record.getRecord(`portfolios/${user_info.user_id}`).subscribe(portfolios => {
 
-    if (!portfolios) {
-      store.dispatch(updatePortfolios([]));
-      return;
-    }
+      if (!portfolios) {
+        store.dispatch(updatePortfolios([]));
+        return;
+      }
 
-    store.dispatch(updatePortfolios(portfolios));
-  });
+      store.dispatch(updatePortfolios(portfolios));
+    });
+  } catch(err) {
+    console.log("There was an error while subscribing to user data", err);
+  }
 
   subscribed = true;
 }
@@ -327,6 +331,8 @@ deepstream.on('connectionStateChanged', (state) => {
 deepstream.on('error', (err, event, topic) => {
 
   // TODO: Send client notification
+
+  console.log(err, event, topic);
 });
 
 export default deepstream;

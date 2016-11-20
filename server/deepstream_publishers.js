@@ -74,6 +74,30 @@ export async function publishLogin(user_id) {
       await recordReady(record);
     });
 
+    getCollection('user_orders').find({user_id: parseInt(user_id)}).toArray(async (err, docs) => {
+
+      try {
+        var record = deepstream.record.getRecord(`user_orders/${parseInt(user_id)}`).set(docs);
+        await recordReady(record);
+
+      } catch (err) {
+        console.log("Error setting user_orders record for user " + user_id);
+        console.log(err);
+      }
+    });
+
+    getCollection('profit_chart').find({user_id: parseInt(user_id)}).toArray(async (err, docs) => {
+
+      try {
+        var record = deepstream.record.getRecord(`profit_chart/${parseInt(user_id)}`).set(docs);
+        await recordReady(record);
+
+      } catch (err) {
+        console.log("Error setting profit_chart record for user " + user_id);
+        console.log(err);
+      }
+    });    
+
     getCollection('login_log').insertOne({
       user_id: user_id,
       time: new Date()
