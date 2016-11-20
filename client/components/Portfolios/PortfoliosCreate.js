@@ -515,7 +515,7 @@ class PortfoliosCreate extends React.Component {
                 <AutoComplete
                   hintText="Type item name"
                   dataSource={getMarketItemNames()}
-                  filter={AutoComplete.fuzzyFilter}
+                  filter={AutoComplete.caseInsensitiveFilter}
                   maxSearchResults={6}
                   menuStyle={{cursor: "pointer"}}
                   onNewRequest={this.updateTradingSearch}
