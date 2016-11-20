@@ -30,6 +30,7 @@ export async function connectMongoDB() {
       collections['user_orders'] = mongodb.collection("user_orders");
       collections['portfolios'] = mongodb.collection("portfolios");
       collections['notifications'] = mongodb.collection("notifications");
+      collections['login_log'] = mongodb.collection("login_log");
 
       resolve();
     });
