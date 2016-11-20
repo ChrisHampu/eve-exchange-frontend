@@ -338,7 +338,7 @@ class PortfoliosCreate extends React.Component {
               Select which type of portfolio to create
             </div>
             <RadioButtonGroup 
-              name="selectCharacter" 
+              name="selectPortfolioType" 
               defaultSelected="0"
               className={s.select}
               onChange={(ev, val)=>this.setState({portfolioType: parseInt(val)})}>
@@ -633,7 +633,7 @@ class PortfoliosCreate extends React.Component {
         <AutoComplete
           hintText="Type item to manufacture"
           dataSource={this.blueprints}
-          filter={AutoComplete.fuzzyFilter}
+          filter={AutoComplete.caseInsensitiveFilter}
           maxSearchResults={6}
           menuStyle={{cursor: "pointer"}}
           onNewRequest={this.updateIndustrySearch}
