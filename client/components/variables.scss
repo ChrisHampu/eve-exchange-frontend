@@ -29,7 +29,9 @@ $text-grey: #BDBDBD;
    Media Queries
    ========================================================================== */
 
-@custom-media --large-screen (width >= 1025px);
+@custom-media --x-large-screen (width > 1366px);
+
+@custom-media --large-screen (width > 1024px) and (width <= 1366px);
 
 @custom-media --medium-screen (width > 768px) and (width <= 1024px);
 

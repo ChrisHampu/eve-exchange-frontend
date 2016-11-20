@@ -171,7 +171,7 @@ export default class OnboardingComponent extends React.Component {
                 </div>
               </div>
             </div>
-            <div className={s.image} style={{maxWidth: "1224px"}}>
+            <div className={s.image}>
               <img src="/assets/img/Landing4.jpg" />
             </div>
           </div>
