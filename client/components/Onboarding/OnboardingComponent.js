@@ -9,7 +9,6 @@ import logo_image from '../../assets/img/eve-x-logo.png';
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {Table, TableBody, TableHeader, TableRow} from 'material-ui/Table';
 
 import LockIcon from 'material-ui/svg-icons/action/lock-outline';
 import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
@@ -207,68 +206,76 @@ export default class OnboardingComponent extends React.Component {
         </div>
         <div className={cx(s.landing, s.dark)}>
           <div className={s.comparison}>
-            <Table selectable={false} style={{backgroundColor: "inherit"}}>
-              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow selectable={false}>
-                  <th style={{padding: "0 24px", height: "56px", textAlign: "center", whiteSpace: "nowrap", textOverflow: "ellipsis", color: "rgb(235, 169, 27)", position: "relative", backgroundColor: "inherit"}}>
-                  
-                  </th>
-                  <th style={{padding: "0 24px", height: "56px", textAlign: "center", whiteSpace: "nowrap", textOverflow: "ellipsis", color: "#ffffff", position: "relative", backgroundColor: "inherit", fontWeight: "700", fontSize: "1.4rem"}}>
-                    Basic
-                  </th>
-                  <th style={{padding: "0 24px", height: "56px", textAlign: "center", whiteSpace: "nowrap", textOverflow: "ellipsis", color: "rgb(235, 169, 27)", position: "relative", backgroundColor: "inherit", fontWeight: "700", fontSize: "1.4rem"}}>
-                    Premium
-                  </th>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false} style={{backgroundColor: "inherit"}}>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.gold, s.left)}>Cost</td>
-                  <td className={s.column}>Free</td>
-                  <td className={cx(s.column, s.gold)}>150M ISK/Month</td>
-                </tr>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.gold, s.left)}>Real-time charts & market browser</td>
-                  <td className={s.column}><CheckIcon color="#ffffff" /></td>
-                  <td className={s.column}><CheckIcon color="#eba91b" /></td>
-                </tr>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.gold, s.left)}>Price ladder & order tracking</td>
-                  <td className={s.column}><CheckIcon color="#ffffff" /></td>
-                  <td className={s.column}><CheckIcon color="#eba91b" /></td>
-                </tr>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.gold, s.left)}>Customizable dashboard</td>
-                  <td className={s.column}><CheckIcon color="#ffffff" /></td>
-                  <td className={s.column}><CheckIcon color="#eba91b" /></td>
-                </tr>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.gold, s.left)}>Complete documentation</td>
-                  <td className={s.column}><CheckIcon color="#ffffff" /></td>
-                  <td className={s.column}><CheckIcon color="#eba91b" /></td>
-                </tr>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.gold, s.left)}>Profit tracking for</td>
-                  <td className={s.column}>Up to 5 characters</td>
-                  <td className={cx(s.column, s.gold)}>Up to 15 characters & corporations</td>
-                </tr>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.left)}><a className={s.blue} href="https://api.eve.exchange" target="_blank">REST API Access</a></td>
-                  <td className={s.column}>Most endpoints</td>
-                  <td className={cx(s.column, s.gold)}>All endpoints</td>
-                </tr>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.gold, s.left)}>Trade forecasting</td>
-                  <td className={s.column}></td>
-                  <td className={s.column}><CheckIcon color="#eba91b" /></td>
-                </tr>
-                <tr className={s.row}>
-                  <td className={cx(s.column, s.gold, s.left)}>Portfolios</td>
-                  <td className={s.column}></td>
-                  <td className={s.column}><CheckIcon color="#eba91b" /></td>
-                </tr>
-              </TableBody>
-            </Table>
+            <div style={{height: "auto", overflow: "auto"}}>
+              <div>
+                <table style={{backgroundColor: "inherit", padding: "0px 24px", width: "100%", borderCollapse: "collapse", borderSpacing: "0px", tableLayout: "fixed"}}>
+                  <thead style={{borderBottom: "1px solid rgba(255, 255, 255, 0.298039)"}}>
+                    <tr style={{borderBottom: "1px solid rgba(255, 255, 255, 0.298039)", color: "rgb(255, 255, 255)", height: "48px"}}>
+                      <th style={{padding: "0 24px", height: "56px", textAlign: "center", whiteSpace: "nowrap", textOverflow: "ellipsis", color: "rgb(235, 169, 27)", position: "relative", backgroundColor: "inherit"}}>
+                      
+                      </th>
+                      <th style={{padding: "0 24px", height: "56px", textAlign: "center", whiteSpace: "nowrap", textOverflow: "ellipsis", color: "#ffffff", position: "relative", backgroundColor: "inherit", fontWeight: "700", fontSize: "1.4rem"}}>
+                        Basic
+                      </th>
+                      <th style={{padding: "0 24px", height: "56px", textAlign: "center", whiteSpace: "nowrap", textOverflow: "ellipsis", color: "rgb(235, 169, 27)", position: "relative", backgroundColor: "inherit", fontWeight: "700", fontSize: "1.4rem"}}>
+                        Premium
+                      </th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div style={{height: "inherit", overflowX: "hidden", overflowY: "auto"}}>
+                <table style={{backgroundColor: "inherit", padding: "0px 24px", width: "100%", borderCollapse: "collapse", borderSpacing: "0px", tableLayout: "fixed"}}>
+                  <tbody style={{backgroundColor: "inherit"}}>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.gold, s.left)}>Cost</td>
+                      <td className={s.column}>Free</td>
+                      <td className={cx(s.column, s.gold)}>150M ISK/Month</td>
+                    </tr>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.gold, s.left)}>Real-time charts & market browser</td>
+                      <td className={s.column}><CheckIcon color="#ffffff" /></td>
+                      <td className={s.column}><CheckIcon color="#eba91b" /></td>
+                    </tr>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.gold, s.left)}>Price ladder & order tracking</td>
+                      <td className={s.column}><CheckIcon color="#ffffff" /></td>
+                      <td className={s.column}><CheckIcon color="#eba91b" /></td>
+                    </tr>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.gold, s.left)}>Customizable dashboard</td>
+                      <td className={s.column}><CheckIcon color="#ffffff" /></td>
+                      <td className={s.column}><CheckIcon color="#eba91b" /></td>
+                    </tr>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.gold, s.left)}>Complete documentation</td>
+                      <td className={s.column}><CheckIcon color="#ffffff" /></td>
+                      <td className={s.column}><CheckIcon color="#eba91b" /></td>
+                    </tr>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.gold, s.left)}>Profit tracking for</td>
+                      <td className={s.column}>Up to 5 characters</td>
+                      <td className={cx(s.column, s.gold)}>Up to 15 characters & corporations</td>
+                    </tr>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.left)}><a className={s.blue} href="https://api.eve.exchange" target="_blank">REST API Access</a></td>
+                      <td className={s.column}>Most endpoints</td>
+                      <td className={cx(s.column, s.gold)}>All endpoints</td>
+                    </tr>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.gold, s.left)}>Trade forecasting</td>
+                      <td className={s.column}></td>
+                      <td className={s.column}><CheckIcon color="#eba91b" /></td>
+                    </tr>
+                    <tr className={s.row}>
+                      <td className={cx(s.column, s.gold, s.left)}>Portfolios</td>
+                      <td className={s.column}></td>
+                      <td className={s.column}><CheckIcon color="#eba91b" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
             <div className={s.signup_button}>
               <div className={s.cta}>
               Get started in just a few clicks, no registration required
