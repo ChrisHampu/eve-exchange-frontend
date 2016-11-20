@@ -5,13 +5,15 @@ fetch = require('node-fetch');
 
 xml2js = require('xml2js');
 
-var exclude_blueprints = true;
+var exclude_blueprints = false;
 
 var parser = new xml2js.Parser();
 
 var groups = [];
 
 var items = null;
+
+var id2name = {};
 
 function findItems(obj) {
 
@@ -37,6 +39,8 @@ function findItems(obj) {
       if (items[i].marketGroupID === obj.id) {
 
         obj.items.push({id: i, name: items[i].name.en});
+
+        id2name[i] = items[i].name.en;
       }
     }
   }
@@ -101,6 +105,7 @@ try {
 
   fs.writeFileSync('market_groups.json', JSON.stringify(groups));
   fs.writeFileSync('market_ids.json', JSON.stringify(ids));
+  fs.writeFileSync('market_id_to_name.json', JSON.stringify(id2name));
   fs.writeFileSync('market_ids_str.json', JSON.stringify(ids_str));
 
 } catch (e) {
