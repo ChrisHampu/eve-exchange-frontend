@@ -13,7 +13,7 @@ const initialState = {
 
 const _getGroups = (group) => {
 
-  if (group.items) {
+  if (group.items && Array.isArray(group.items)) {
     for (var i = 0; i < group.items.length; i++) {
 
       initialState.market_items[group.items[i].id] = group.items[i].name;
