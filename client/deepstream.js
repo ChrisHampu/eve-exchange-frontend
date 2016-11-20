@@ -185,7 +185,7 @@ function setDeepstreamSubscriptions(user_info) {
       return;
     }
 
-    store.dispatch(updateNotifications(data.sort((el1, el2) => el2.time - el1.time)));
+    store.dispatch(updateNotifications(data.sort((el1, el2) => new Date(el2.time) - new Date(el1.time))));
   });
 
   deepstream.record.getRecord(`subscription/${user_info.user_id}`).subscribe(data => {

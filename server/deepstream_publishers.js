@@ -81,15 +81,13 @@ export async function publishLogin(user_id) {
 export async function publishOrders(type) {
 
   return new Promise((resolve, reject) => {
-    console.log("Loading order docs from db");
+
     getCollection('orders').find({type}).toArray(async (err, docs) => {
 
-      console.log("Setting deepstream record");
       var record = deepstream.record.getRecord(`market_orders/${type}`).set(docs);
 
-      console.log("Awaiting record completion");
       await recordReady(record);
-      console.log(`Resolving ${docs.length} minute docs for type ${type}`);
+
       resolve();
     });
   })
@@ -99,15 +97,12 @@ export async function publishMinutes(type) {
 
   return new Promise((resolve, reject) => {
 
-    console.log("Loading minute docs from db");
     getCollection('minutes').find({type}).toArray(async (err, docs) => {
 
-      console.log("Setting deepstream record");
       var record = deepstream.record.getRecord(`market_minutes/${type}`).set(docs);
 
-      console.log("Awaiting record completion");
       await recordReady(record);
-      console.log(`Resolving ${docs.length} minute docs for type ${type}`);
+
       resolve();
     });
   })
@@ -146,7 +141,7 @@ export async function publishPortfolios(user_id) {
   return new Promise((resolve, reject) => {
     getCollection('portfolios').find({user_id: parseInt(user_id)}).toArray(async (err, docs) => {
 
-      var record = deepstream.record.getRecord(`portfolios/${user_id}`).set(docs);
+      var record = deepstream.record.getRecord(`portfolios/${parseInt(user_id)}`).set(docs);
 
       await recordReady(record);
 
@@ -169,7 +164,7 @@ export async function publishSubscription(user_id) {
           delete doc.subscription_data;
         }
 
-        var record = deepstream.record.getRecord(`subscription/${user_id}`).set(doc);
+        var record = deepstream.record.getRecord(`subscription/${parseInt(user_id)}`).set(doc);
         await recordReady(record);
 
       } catch (err) {
@@ -219,14 +214,15 @@ export async function publishAdminSubscriptions() {
 export async function publishNotifications(user_id) {
 
   return new Promise((resolve, reject) => {
+
     getCollection('notifications').find({user_id: parseInt(user_id)}).toArray(async (err, docs) => {
 
       try {
-        var record = deepstream.record.getRecord(`notifications/${user_id}`).set(docs);
+        var record = deepstream.record.getRecord(`notifications/${parseInt(user_id)}`).set(docs);
         await recordReady(record);
 
       } catch (err) {
-        console.log("Error setting notification record for user " + user_id);
+        console.log("Error setting notification record for user " + parseInt(user_id));
         console.log(err);
       }
       resolve();
@@ -246,7 +242,7 @@ export async function publishSettings(user_id) {
       }
 
       try {
-        var record = deepstream.record.getRecord(`settings/${user_id}`).set(result);
+        var record = deepstream.record.getRecord(`settings/${parseInt(user_id)}`).set(result);
 
         await recordReady(record);
 
@@ -266,7 +262,7 @@ export async function publishProfit(user_id) {
     getCollection('profit_chart').find({user_id: parseInt(user_id)}).toArray(async (err, docs) => {
 
       try {
-        var record = deepstream.record.getRecord(`profit_chart/${user_id}`).set(docs);
+        var record = deepstream.record.getRecord(`profit_chart/${parseInt(user_id)}`).set(docs);
         await recordReady(record);
 
       } catch (err) {
@@ -290,7 +286,7 @@ export async function publishProfit(user_id) {
     getCollection('profit_top_items').findOne({user_id: parseInt(user_id)}, async (err, docs) => {
 
       try {
-        var record = deepstream.record.getRecord(`profit_top_items/${user_id}`).set(docs);
+        var record = deepstream.record.getRecord(`profit_top_items/${parseInt(user_id)}`).set(docs);
         await recordReady(record);
 
       } catch (err) {
@@ -302,7 +298,7 @@ export async function publishProfit(user_id) {
     getCollection('profit_alltime').findOne({user_id: parseInt(user_id)}, async (err, docs) => {
 
       try {
-        var record = deepstream.record.getRecord(`profit_alltime/${user_id}`).set(docs);
+        var record = deepstream.record.getRecord(`profit_alltime/${parseInt(user_id)}`).set(docs);
         await recordReady(record);
 
       } catch (err) {
@@ -314,7 +310,7 @@ export async function publishProfit(user_id) {
     getCollection('user_orders').find({user_id: parseInt(user_id)}).toArray(async (err, docs) => {
 
       try {
-        var record = deepstream.record.getRecord(`user_orders/${user_id}`).set(docs);
+        var record = deepstream.record.getRecord(`user_orders/${parseInt(user_id)}`).set(docs);
         await recordReady(record);
 
       } catch (err) {

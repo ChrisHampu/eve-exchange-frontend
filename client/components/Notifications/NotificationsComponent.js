@@ -79,7 +79,7 @@ class Notifications extends React.Component {
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow selectable={false}>
               <TableHeaderColumn style={{textAlign: "left"}}>Message</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "left", "width": "200px"}}>Date</TableHeaderColumn>
+              <TableHeaderColumn style={{textAlign: "left", "width": "200px"}}>When</TableHeaderColumn>
               <TableHeaderColumn style={{textAlign: "left", "width": "50px"}}>Read</TableHeaderColumn>
             </TableRow>
           </TableHeader>
