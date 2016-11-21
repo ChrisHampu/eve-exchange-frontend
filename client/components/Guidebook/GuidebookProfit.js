@@ -19,6 +19,8 @@ export default class GuidebookHome extends React.Component {
         <p>This page provides an overview for all profiles (including removed ones) and how much profit they have generated in total.</p>
         <h3>All Time Statistics</h3>
         <p>The statistics shown are overall profit, taxes, and broker fees generated for all profiles on the account over several timespans.</p>
+        <h3>Limits</h3>
+        <p>If you have more than 5 profiles on a free account as a result of adding many profiles and then unsubscribing, only your first 5 <b>character</b> profiles will have profit tracking enabled. Corporation profiles are limited to premium subscribers and won't count towards this limit.</p> 
       </div>
     );
   }

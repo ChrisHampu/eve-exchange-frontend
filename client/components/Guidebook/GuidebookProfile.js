@@ -21,6 +21,8 @@ export default class GuidebookHome extends React.Component {
         <h3>Adding a new profile</h3>
         <p>Profiles can be created by clicking the <b>+</b> at the bottom right of your profile page or <span className={s.link} onClick={()=>this.setRoute("/dashboard/profile/addapi")}>clicking here</span>. You'll need to select whether you want to add a character or corporation API key. The relevant page will outline the <b>exact</b> permissions that your API key must have in order to be accepted. We don't wish to have access to more than we need to from your API keys.</p>
         <p><b>Keep in mind that after creating a new profile, it may take up to an hour for data to begin showing up for that profile</b></p>
+        <h3>Limits</h3>
+        <p>Corporation profiles are limited to <b>premium</b> subscribers. There is currently a limit of 5 character profiles for free accounts, and up to 15 character or corporation profiles for premium subscribers.</p>
       </div>
     );
   }
