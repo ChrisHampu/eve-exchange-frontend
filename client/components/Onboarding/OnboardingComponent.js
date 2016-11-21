@@ -296,7 +296,7 @@ export default class OnboardingComponent extends React.Component {
             <img src={`${logo_image.src}`} />
           </div>
           <div className={s.copyright}>
-            Copyright <span>&copy;</span> 2016 EVE Exchange
+            Copyright &copy; 2016 <span>EVE Exchange</span>. All EVE related materials are property of CCP Games.
           </div>
         </div>
       </div>
