@@ -301,7 +301,7 @@ class MarketItemChart extends React.Component {
       <ChartContainer 
         getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
         getHitTestableData={()=>this.getHitTestableData()} 
-        frequencyLevels={userHasPremium() ? {minutes: "5 Minutes", hours: "1 Hour", daily: "1 Day"} : {hours: "1 Hour", daily: "1 Day"}} 
+        frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour", daily: "1 Day"}} 
         ref="container"
         data={data} 
         title={this.props.title} 
