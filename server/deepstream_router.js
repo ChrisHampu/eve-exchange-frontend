@@ -3,7 +3,7 @@ import KoaRouter from 'koa-router';
 import body from 'koa-better-body';
 import config from './config/environment';
 import { connectDeepstream } from './deepstream_interface';
-import { publishLogin, publishPortfolios, publishSubscription, publishNotifications, publishSettings } from './deepstream_publishers';
+import { publishLogin, publishPortfolios, publishSubscription, publishNotifications, publishSettings, publishAuditLog } from './deepstream_publishers';
 import { configureListeners, triggerOrderListeners, triggerMinutesListeners, triggerHourlyListeners, triggerDailyListeners, triggerPortfolioListeners, triggerProfitListeners } from './deepstream_listeners';
 import { configureAdminListeners } from './deepstream_admin';
 
@@ -122,6 +122,13 @@ router.post('/publish/market/daily', async (ctx) => {
 
   var diff = process.hrtime(t1);
   console.log(`Daily aggregates published in ${diff[0]} seconds`);
+
+  ctx.body = "Success";
+});
+
+router.post('/publish/audit', async (ctx) => {
+
+  publishAuditLog();
 
   ctx.body = "Success";
 });

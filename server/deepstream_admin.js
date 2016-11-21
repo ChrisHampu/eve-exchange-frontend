@@ -1,5 +1,5 @@
 import { getCollection } from './mongo_interface';
-import { publishSubscription } from './deepstream_publishers';
+import { publishSubscription, publishAuditLog } from './deepstream_publishers';
 
 export function configureAdminListeners(deepstream) {
 
@@ -34,6 +34,18 @@ export function configureAdminListeners(deepstream) {
 
       publishSubscription(command.user_id);
     });
+
+    getCollection('audit_log').insertOne({
+      'user_id': command.admin_id,
+      'target': command.user_id,
+      'balance': command.balance,
+      'action': 0,
+      'time': new Date()
+    }, (err, db) => {
+
+      publishAuditLog();
+    });
+
   });
 
   deepstream.event.subscribe('admin_remove_balance', command => {
@@ -61,6 +73,17 @@ export function configureAdminListeners(deepstream) {
     }, (err, res) => {
 
       publishSubscription(command.user_id);
+    });
+
+    getCollection('audit_log').insertOne({
+      'user_id': command.admin_id,
+      'target': command.user_id,
+      'balance': command.balance,
+      'action': 1,
+      'time': new Date()
+    }, (err, db) => {
+
+      publishAuditLog();
     });
   });
 }

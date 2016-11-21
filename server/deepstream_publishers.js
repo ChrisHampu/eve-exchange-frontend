@@ -119,6 +119,25 @@ export async function publishLogin(user_id) {
   });
 }
 
+export async function publishAuditLog() {
+
+  return new Promise((resolve, reject) => {
+
+    getCollection('audit_log').find().sort({time: -1}).limit(100).toArray(async (err, docs) => {
+
+      if (!docs) {
+        return;
+      }
+
+      var record = deepstream.record.getRecord('admin/audit_log').set(docs);
+
+      await recordReady(record);
+
+      resolve();
+    });
+  }) 
+}
+
 export async function publishOrders(type) {
 
   return new Promise((resolve, reject) => {
@@ -180,7 +199,14 @@ export async function publishDaily(type) {
 export async function publishPortfolios(user_id) {
 
   return new Promise((resolve, reject) => {
+
     getCollection('portfolios').find({user_id: parseInt(user_id)}).toArray(async (err, docs) => {
+
+      for (var i = 0; i < docs.length; i++) {
+        if (docs[i].simulation === null) {
+          delete docs[i].simulation;
+        }
+      }
 
       var record = deepstream.record.getRecord(`portfolios/${parseInt(user_id)}`).set(docs);
 

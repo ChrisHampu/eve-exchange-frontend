@@ -2,8 +2,34 @@
 const initialState = {
 
   subscriptions: [],
-  login_log: []
+  login_log: [],
+  audit_log: []
 };
+
+/*
+  audit_log: [{
+    user_id: number,
+    target: number or user_id,
+    action: enum,
+    balance: number
+    time: date
+  }]
+
+  action: {
+    0: deposit by admin,
+    1: withdrawal by admin,
+    2: subscribed,
+    3: unsubscribed,
+    4: renewed,
+    5: created portfolio <target id>,
+    6: deleted portfolio <target id>,
+    7: added api key <target>,
+    8: deleted api key <target>,
+    9: subscription expired,
+    10: withdrawal request,
+    11: new account
+  }
+*/
 
 export default function auth(state = initialState, action) {
 
@@ -22,6 +48,13 @@ export default function auth(state = initialState, action) {
       }
 
       return { ...state, login_log: action.log };
+
+    case "UPDATE_AUDIT_LOG":
+      if (!action.log) {
+        return state;
+      }
+
+      return { ...state, audit_log: action.log };
 
     default:
       return state;

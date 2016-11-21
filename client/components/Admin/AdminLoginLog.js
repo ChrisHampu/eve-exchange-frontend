@@ -19,7 +19,7 @@ class AdminLoginLog extends React.Component {
           <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow selectable={false}>
-                <TableHeaderColumn style={{textAlign: "left"}}>Name</TableHeaderColumn>
+                <TableHeaderColumn style={{textAlign: "left"}}>Who</TableHeaderColumn>
                 <TableHeaderColumn style={{textAlign: "center"}}>When</TableHeaderColumn>
               </TableRow>
             </TableHeader>

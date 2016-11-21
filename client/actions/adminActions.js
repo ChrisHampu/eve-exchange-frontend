@@ -5,3 +5,7 @@ export function updateAllSubscriptions(subs) {
 export function updateLoginLog(log) {
   return { type: "UPDATE_LOGIN_LOG", log };
 }
+
+export function updateAuditLog(log) {
+  return { type: "UPDATE_AUDIT_LOG", log };
+}
