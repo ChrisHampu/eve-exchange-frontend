@@ -8,3 +8,13 @@
     color: color($blue-color lightness(+15%));
   }
 }
+
+.header {
+  padding: 1rem;
+  cursor: pointer;
+  user-select: none;
+
+  svg {
+    vertical-align: middle;
+  }
+}
