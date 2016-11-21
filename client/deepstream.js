@@ -17,7 +17,6 @@ const deepstream = Deepstream();
 const token_name = 'token';
 let subscribed = false;
 let subscriptions = [];
-let user_data = null;
 let connected = false;
 
 function parseQuery(str) {
@@ -135,7 +134,7 @@ function setDeepstreamSubscriptions(user_info) {
         currentSettings = store.getState().settings;
 
         if (!firstSave) {
-          store.dispatch(sendAppNotification("New settings have been applied", 1250));
+          store.dispatch(sendAppNotification("New settings have been applied", 1000));
         } else {
           firstSave = false;
         }
@@ -336,19 +335,28 @@ export function deepstreamLogout() {
 
 setAuthTokenFromQuery();
 
+let notifyError = false;
+
 deepstream.on('connectionStateChanged', (state) => {
 
-  if (state === 'OPEN' && user_data) {
+  if (state === 'OPEN') {
 
-    // TODO: Re-connection success notification
+    if (notifyError == true) {
+
+      store.dispatch(sendAppNotification("Connection to server restored, but application has likely updated and requires refreshing", 5000));
+      notifyError = false;
+    }
+  } else if(state === 'ERROR') {
+
+    if (notifyError == false) {
+      store.dispatch(sendAppNotification("Connection to server lost or application has updated. Please refresh the page in a few moments", 5000));
+      notifyError = true;
+    }
   }
 });
 
 deepstream.on('error', (err, event, topic) => {
 
-  // TODO: Send client notification
-
-  console.log(err, event, topic);
 });
 
 export default deepstream;
