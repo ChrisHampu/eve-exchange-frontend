@@ -1,8 +1,8 @@
 import React from 'react';
 import cx from 'classnames';
-
 import s from './APITypeSelector.scss';
 import APIStepperControl from './APIStepperControl';
+import { userHasPremium } from '../../auth';
 
 class APITypeSelector extends React.Component {
 
@@ -27,9 +27,13 @@ class APITypeSelector extends React.Component {
                 <div>Add Character</div>
               </div>
             </div>
-            <div className={s.card}>
-              <div onClick={()=>this.setState({type: 1})} className={s.text}>
-                <div>Add Corporation</div>
+            <div className={cx(s.card, { [s.premium]: !userHasPremium()})}>
+              <div onClick={()=>!userHasPremium() ? null : this.setState({type: 1})} className={s.text}>
+                <div>Add Corporation
+                {
+                  !userHasPremium() ? <div className={s.premium_text}>Requires a premium subscription</div> : null
+                }
+                </div>
               </div>
             </div>
           </div>

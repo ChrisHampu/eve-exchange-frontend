@@ -23,9 +23,31 @@
           margin: 0 auto;
     }
   }
-}
 
-.card:hover {
-  background-color: #292d31;
-  font-size: 1.65rem;
+  .premium_text {
+    font-size: 1.1rem;
+    color: #eba91b;
+    padding-top: 0.5rem;
+  }
+
+  &:hover {
+    background-color: #292d31;
+    font-size: 1.65rem;
+  }
+
+  &.premium {
+
+    transition: none;
+    background-color: #181c1f;
+    cursor: default;
+
+    .text {
+      color: #986800;
+    }
+
+    &:hover {
+      font-size: 1.4rem;
+      background-color: #181c1f;
+    }
+  }
 }

@@ -7,6 +7,7 @@ import cx from 'classnames';
 import { formatNumber } from '../../utilities';
 import { APIEndpointURL } from '../../globals';
 import { getAuthToken } from '../../deepstream';
+import { userHasPremium } from '../../auth';
 import { sendAppNotification } from '../../actions/appActions';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -194,7 +195,11 @@ class ProfileView extends React.Component {
                       titleColor={this.props.subscription.premium?"rgb(235, 169, 27)":"rgba(255, 255, 255, 0.870588)"}
                     />
                     <CardText>
-                      Wallet Balance: {formatNumber(profile.wallet_balance||0)} ISK
+                      {
+                        !userHasPremium() && profile.type === 1?
+                        <div className={s.disabled}>Profit tracking is paused for this profile while you do not have an active premium subscription</div> :
+                        <span>Wallet Balance: {formatNumber(profile.wallet_balance||0)} ISK</span>
+                      } 
                     </CardText>
                     <CardText 
                       expandable={true}
