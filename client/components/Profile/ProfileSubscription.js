@@ -6,6 +6,7 @@ import store from '../../store';
 import s from './ProfileSubscription.scss';
 import cx from 'classnames';
 import { addPremium, removePremium } from '../../actions/authActions';
+import { sendAppNotification } from '../../actions/appActions';
 import { formatNumber, formatDate } from '../../utilities';
 import { getAuthToken } from '../../deepstream';
 import { APIEndpointURL } from '../../globals';
@@ -167,8 +168,10 @@ class Subscription extends React.Component {
     .then(res => {
       if (res.error) {
         // Something went wrong
+        store.dispatch(sendAppNotification("There was a problem processing your request: " + res.error, 5000));
       } else {
         store.dispatch(addPremium());
+        store.dispatch(sendAppNotification("Your account has been upgraded to premium status"));
       }
     });
 
@@ -191,8 +194,10 @@ class Subscription extends React.Component {
     .then(res => {
       if (res.error) {
         // Something went wrong
+        store.dispatch(sendAppNotification("There was a problem processing your request: " + res.error, 5000));
       } else {
         store.dispatch(removePremium());
+        store.dispatch(sendAppNotification("Your downgrade request has been processed"));
       }
     });
 
@@ -214,6 +219,11 @@ class Subscription extends React.Component {
     })
     .then(res => {
       // Check success status & notify user
+      if (res.error) {
+        store.dispatch(sendAppNotification("There was a problem processing your request: " + res.error, 5000));
+      } else {
+        store.dispatch(sendAppNotification("Your withdrawal request has been submitted"));
+      }
     });
 
     this.closeWithdrawalDialog();

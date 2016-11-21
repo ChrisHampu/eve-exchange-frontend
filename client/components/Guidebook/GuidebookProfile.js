@@ -20,7 +20,7 @@ export default class GuidebookHome extends React.Component {
         <p>Market orders, journal history, and transactions are all pulled each hour from the EVE API using the key attached to each individual profile. All of the data is tagged to each profile, so you can get aggregated statistics as well as see how each individual profile is performing. Your active orders page & transactions page will show which profile any data belongs to. Clicking <b>Statistics</b> on your profile page can show you individualized data for a profile.</p>
         <h3>Adding a new profile</h3>
         <p>Profiles can be created by clicking the <b>+</b> at the bottom right of your profile page or <span className={s.link} onClick={()=>this.setRoute("/dashboard/profile/addapi")}>clicking here</span>. You'll need to select whether you want to add a character or corporation API key. The relevant page will outline the <b>exact</b> permissions that your API key must have in order to be accepted. We don't wish to have access to more than we need to from your API keys.</p>
-        <p><b>Keep in mind that after creating a new profile, it may take up to an hour for data to begin showing up for that profile</b></p>
+        <p><b>Keep in mind that after creating a new profile, it may take up to an hour for data to begin showing up for that profile.</b></p>
         <h3>Limits</h3>
         <p>Corporation profiles are limited to <b>premium</b> subscribers. There is currently a limit of 5 character profiles for free accounts, and up to 15 character or corporation profiles for premium subscribers.</p>
       </div>

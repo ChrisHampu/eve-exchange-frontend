@@ -117,6 +117,7 @@ function setDeepstreamSubscriptions(user_info) {
   }
 
   let currentSettings = null;
+  let firstSave = true;
 
   try {
     deepstream.record.getRecord(`settings/${user_info.user_id}`).subscribe(data => {
@@ -132,6 +133,12 @@ function setDeepstreamSubscriptions(user_info) {
         // Publish new settings to deepstream
         deepstream.event.emit(`settings/${user_info.user_id}`, store.getState().settings);
         currentSettings = store.getState().settings;
+
+        if (!firstSave) {
+          store.dispatch(sendAppNotification("New settings have been applied", 1250));
+        } else {
+          firstSave = false;
+        }
       }
     });
 
