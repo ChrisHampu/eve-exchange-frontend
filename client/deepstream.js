@@ -289,7 +289,8 @@ export async function deepstreamLogin() {
 
     if (!token) {
 
-      // TODO: What do if no token?
+      store.dispatch(sendAppNotification("Authorization token has expired. Please refresh and sign in with SSO again", 5000));
+
       reject("No auth token");
       return;
     }
@@ -298,7 +299,8 @@ export async function deepstreamLogin() {
       
       if (!success) {
 
-        // TODO: What do if error?
+        store.dispatch(sendAppNotification("There's a problem authorizing with the server. Try refreshing in a few moments", 5000));
+
         reject("Failed to login to deepstream");
         return;
       }
@@ -355,8 +357,14 @@ deepstream.on('connectionStateChanged', (state) => {
   }
 });
 
+let errorNotified = false;
+
 deepstream.on('error', (err, event, topic) => {
 
+  if (!errorNotified && event === 'connectionError') {
+    store.dispatch(sendAppNotification("There's a problem connecting to the server. Please refresh the page in a few moments", 5000));
+    errorNotified = true;
+  }
 });
 
 export default deepstream;

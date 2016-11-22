@@ -6,6 +6,7 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import Snackbar from './Snackbar';
 
 injectTapEventPlugin();
 
@@ -26,11 +27,12 @@ export default class App extends React.Component {
   render() {
 
     return (
-      <div className={s.root}>
-        <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
+      <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
+        <div className={s.root}>
           {this.props.children}
-        </MuiThemeProvider>
-      </div>
+          <Snackbar className={s.snackbar} />
+        </div>
+      </MuiThemeProvider>
     );
   }
 }

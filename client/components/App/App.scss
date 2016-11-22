@@ -38,6 +38,18 @@ span {
     appearance: none !important;
 }
 
+.snackbar {
+
+  > div {
+    background-color: $base-color-darkest !important;
+    text-align: center;
+
+    > div {
+      color: $white !important;
+    }
+  }
+}
+
 ::-webkit-scrollbar {
   width: 12px;
 }

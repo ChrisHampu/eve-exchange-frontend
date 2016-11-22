@@ -7,18 +7,6 @@
   display: flex;
   overflow: hidden;
 
-  .snackbar {
-
-    > div {
-      background-color: $base-color-darkest !important;
-      text-align: center;
-
-      > div {
-        color: $white !important;
-      }
-    }
-  }
-
   .sidebar_container {
     background-color: $base-color-darker !important;
     align-items: center;
