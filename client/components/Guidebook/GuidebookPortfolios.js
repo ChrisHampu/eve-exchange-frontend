@@ -19,8 +19,8 @@ export default class GuidebookHome extends React.Component {
         <p>The chart for this portfolio will track the total price of components, the build costs of components, and the potential profit as a percentage. The chart supports hourly and daily intervals.</p>
         <h3>Creating Portfolios</h3>
         <p>Each portfolio requres only a name and optionally a description. Trading and industry portfolios have their own separate requirements.</p>
-        <p><b>Note:</b> There is a limit of <b>25</b> portfolios per premium account. If you require more, contact us about your use cases and we can consider raising this limit.<br />
-        <b>Note:</b> Each portfolio has a limit of 20 items/components. If you require more, contact us about your use cases and we can consider raising this limit.</p>
+        <p><b>Note:</b> There is a limit of <b>100</b> portfolios per premium account. If you require more, contact us about your use cases and we can consider raising this limit.<br />
+        <b>Note:</b> Each portfolio has a limit of 25 items or components. If you require more, contact us about your use cases and we can consider raising this limit.</p>
       </div>
     );
   }
