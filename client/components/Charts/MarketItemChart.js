@@ -68,9 +68,9 @@ class MarketItemChart extends React.Component {
 
     this.state.yScale.domain([Math.min(...completeData.map((el) => { return el.buyPercentile})), Math.max(...completeData.map((el) => { return el.buyPercentile}))]);
 
-    this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0}))), Math.ceil(Math.max(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0})))]);
+    this.state.volScale.domain([Math.floor(Math.min(...completeData.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0}))), Math.ceil(Math.max(...completeData.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0})))]);
 
-    this.state.percentScale.domain([Math.min(...data.map((el) => { return Math.max(0, el.spread) / 100 })), Math.max(...data.map((el) => { return Math.max(0, el.spread) / 100 }))]);
+    this.state.percentScale.domain([Math.min(...completeData.map((el) => { return Math.max(0, el.spread) / 100 })), Math.max(...completeData.map((el) => { return Math.max(0, el.spread) / 100 }))]);
 
     this.state.xScale.range([0, this.refs.container.getWidth()]);
     this.state.yScale.range([this.state.ohlcHeight, 0]);
