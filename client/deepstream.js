@@ -289,7 +289,7 @@ export async function deepstreamLogin() {
 
     if (!token) {
 
-      store.dispatch(sendAppNotification("Authorization token has expired. Please refresh and sign in with SSO again", 5000));
+      store.dispatch(sendAppNotification("Authorization token has expired. Please refresh and sign in with SSO again", 5000000000));
 
       reject("No auth token");
       return;

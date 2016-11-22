@@ -19,6 +19,9 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
+import UpArrow from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import DownArrow from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+
 export default class ForecastComponent extends React.Component {
 
   static contextTypes = {
@@ -38,8 +41,8 @@ export default class ForecastComponent extends React.Component {
       searchResults: null,
       loading: false,
       queueQuery: true,
-      sort: 0,
-      direction: 0
+      sort: 2,
+      direction: 1
     };
   }
 
@@ -118,8 +121,7 @@ export default class ForecastComponent extends React.Component {
   setPriceMin = (event) => this.setState({queueQuery: true, priceMinimum: event.target.value || null});
   setPriceMax = (event) => this.setState({queueQuery: true, priceMaximum: event.target.value || null});
 
-  setSort = (event, index, value) => this.setState({sort: value});
-  setDirection = (event, index, value) => this.setState({direction: value});
+  setSort = (value) => this.setState({sort: value, direction: value === this.state.sort ? this.state.direction === 1 ? 0 : 1 : this.state.direction});
 
   verifyPrice() {
 
@@ -156,20 +158,24 @@ export default class ForecastComponent extends React.Component {
 
       results = this.state.searchResults;
 
-      if (this.state.sort) {
-
-        if (this.state.sort === 1) {
-
-          results = results.sort((el1, el2) => this.state.direction ? el1.buyFifthPercentile - el2.buyFifthPercentile : el2.buyFifthPercentile - el1.buyFifthPercentile);
+      if (this.state.sort === 0) {
+        if (this.state.direction === 0) {
+          results = results.sort((el1, el2) => +(itemIDToName(el1.type) > itemIDToName(el2.type)) || +(itemIDToName(el1.type) === itemIDToName(el2.type)) - 1);
+        } else {
+          results = results.sort((el1, el2) => +(itemIDToName(el2.type) > itemIDToName(el1.type)) || +(itemIDToName(el2.type) === itemIDToName(el1.type)) - 1);
         }
-        else if (this.state.sort === 2) {
+      }
+      else if (this.state.sort === 1) {
 
-          results = results.sort((el1, el2) => this.state.direction ? el1.spreadSMA - el2.spreadSMA : el2.spreadSMA - el1.spreadSMA);
-        }
-        else if (this.state.sort === 3) {
+        results = results.sort((el1, el2) => !this.state.direction ? el1.buyPercentile - el2.buyPercentile : el2.buyPercentile - el1.buyPercentile);
+      }
+      else if (this.state.sort === 2) {
 
-          results = results.sort((el1, el2) => this.state.direction ? el1.tradeVolumeSMA - el2.tradeVolumeSMA : el2.tradeVolumeSMA - el1.tradeVolumeSMA);
-        }
+        results = results.sort((el1, el2) => !this.state.direction ? el1.spread_sma - el2.spread_sma : el2.spread_sma - el1.spread_sma);
+      }
+      else if (this.state.sort === 3) {
+
+        results = results.sort((el1, el2) => !this.state.direction ? el1.volume_sma - el2.volume_sma : el2.volume_sma - el1.volume_sma);
       }
 
       results = results.slice(0, 100);
@@ -180,21 +186,7 @@ export default class ForecastComponent extends React.Component {
       <div style={{"paddingLeft": "1rem"}}>
         <div className={s.header}>
           <div className={s.title}>
-          Forecast Results
-          </div>
-          <div className={s.selector}>
-            <SelectField value={this.state.sort} onChange={this.setSort}>
-              <MenuItem type="text" value={0} primaryText="Unsorted" style={{cursor: "pointer"}}/>
-              <MenuItem type="text" value={1} primaryText="Sort by Price" style={{cursor: "pointer"}} />
-              <MenuItem type="text" value={2} primaryText="Sort by Spread" style={{cursor: "pointer"}} />
-              <MenuItem type="text" value={3} primaryText="Sort by Volume" style={{cursor: "pointer"}} />
-            </SelectField>
-          </div>
-          <div className={s.selector}>
-            <SelectField value={this.state.direction} onChange={this.setDirection}>
-              <MenuItem type="text" value={0} primaryText="Descending" style={{cursor: "pointer"}}/>
-              <MenuItem type="text" value={1} primaryText="Ascending" style={{cursor: "pointer"}} />
-            </SelectField>
+          Results
           </div>
           <div className={s.counter}>
           Showing {results.length} results
@@ -203,10 +195,38 @@ export default class ForecastComponent extends React.Component {
         <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow selectable={false}>
-              <TableHeaderColumn style={{textAlign: "center"}}>Name</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Price</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Spread</TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>Volume</TableHeaderColumn>
+              <TableHeaderColumn style={{textAlign: "center"}}>
+                <div className={s.table_header} onClick={()=>this.setSort(0)}>
+                Name
+                {
+                  this.state.sort == 0 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+                }
+                </div>
+              </TableHeaderColumn>
+              <TableHeaderColumn style={{textAlign: "center"}}>
+                <div className={s.table_header} onClick={()=>this.setSort(1)}>
+                Price
+                {
+                  this.state.sort == 1 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+                }
+                </div>
+              </TableHeaderColumn>
+              <TableHeaderColumn style={{textAlign: "center"}}>
+                <div className={s.table_header} onClick={()=>this.setSort(2)}>
+                Spread
+                {
+                  this.state.sort == 2 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+                }
+                </div>
+              </TableHeaderColumn>
+              <TableHeaderColumn style={{textAlign: "center"}}>
+                <div className={s.table_header} onClick={()=>this.setSort(3)}>
+                Volume
+                {
+                  this.state.sort == 3 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+                }
+                </div>
+              </TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
@@ -220,9 +240,9 @@ export default class ForecastComponent extends React.Component {
                   return (
                     <tr key={i} className={s.row}>
                       <td className={s.column}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{itemIDToName(el.type)}</span></td>
-                      <td className={s.column}>{formatNumberUnit(el.buyFifthPercentile)}</td>
-                      <td className={s.column}>{formatPercent(el.spreadSMA)}%</td>
-                      <td className={s.column}>{el.tradeVolumeSMA.toFixed(0)}</td>
+                      <td className={s.column}>{formatNumberUnit(el.buyPercentile)}</td>
+                      <td className={s.column}>{formatPercent(el.spread_sma)}%</td>
+                      <td className={s.column}>{el.volume_sma.toFixed(0)}</td>
                     </tr>
                   )
                 })

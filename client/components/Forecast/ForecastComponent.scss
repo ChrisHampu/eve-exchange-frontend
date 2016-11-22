@@ -74,3 +74,13 @@
     font-size: 0.9rem;
   }
 }
+
+.table_header {
+  padding: 1rem;
+  cursor: pointer;
+  user-select: none;
+
+  svg {
+    vertical-align: middle;
+  }
+}
