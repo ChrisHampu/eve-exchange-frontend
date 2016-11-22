@@ -262,7 +262,7 @@ export default class ForecastComponent extends React.Component {
       <DashboardPage title="Forecast" className={s.root} fullWidth={true}>
         <OverlayStack popStack={()=>this.setState({showItem: null})}>
           <div className={s.container}>
-            <div className={s.pane}>
+            <div className={cx(s.pane, s.aside)}>
               <TextField
                 type="number"
                 errorText={this.verifyPrice()}
