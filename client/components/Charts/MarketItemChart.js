@@ -49,6 +49,8 @@ class MarketItemChart extends React.Component {
       return;
     }
 
+    const completeData = this.getCompleteAggregateData();
+
     this.state.ohlcHeight = Math.floor(this.refs.container.getHeight()*0.70);
     this.state.ohlcOffset = Math.floor(this.refs.container.getHeight()*0.75);
     this.state.volHeight = Math.floor(this.refs.container.getHeight()*0.25);
@@ -64,7 +66,7 @@ class MarketItemChart extends React.Component {
       new Date(maxDate.getTime())
     ]);
 
-    this.state.yScale.domain([Math.min(...data.map((el) => { return el.buyPercentile})), Math.max(...data.map((el) => { return el.buyPercentile}))]);
+    this.state.yScale.domain([Math.min(...completeData.map((el) => { return el.buyPercentile})), Math.max(...completeData.map((el) => { return el.buyPercentile}))]);
 
     this.state.volScale.domain([Math.floor(Math.min(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0}))), Math.ceil(Math.max(...data.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0})))]);
 
@@ -159,6 +161,51 @@ class MarketItemChart extends React.Component {
             return arr;
           }
           return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
+      }
+    }
+
+    return null;
+  }
+
+  getCompleteAggregateData() {
+
+    // Check if still loading components
+    if (!this.refs.container) {
+      return null;
+    }
+
+    const region = this.props.region || store.getState().settings.market.region;
+
+    if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
+
+      switch(this.refs.container.getFrequency()) {
+        case "minutes":
+          if (!this.props.market.item[this.props.item.id].minutes) {
+            return null;
+          }
+          var arr = this.props.market.item[this.props.item.id].minutes[region];
+          if (!arr) {
+            return null;
+          }
+          return arr;
+        case "hours":
+          if (!this.props.market.item[this.props.item.id].hours) {
+            return null;
+          }
+          var arr = this.props.market.item[this.props.item.id].hours[region];
+          if (!arr) {
+            return null;
+          }
+          return arr;
+        case "daily":
+          if (!this.props.market.item[this.props.item.id].daily) {
+            return null;
+          }
+          var arr = this.props.market.item[this.props.item.id].daily[region];
+          if (!arr) {
+            return null;
+          }
+          return arr;
       }
     }
 
