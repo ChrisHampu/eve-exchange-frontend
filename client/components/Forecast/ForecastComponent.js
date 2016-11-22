@@ -12,6 +12,8 @@ import { APIEndpointURL } from '../../globals';
 
 // Components
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
+import OverlayStack from '../OverlayStack/OverlayStack';
+import MarketItemViewComponent from '../MarketBrowser/MarketItemViewComponent';
 
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -42,7 +44,8 @@ export default class ForecastComponent extends React.Component {
       loading: false,
       queueQuery: true,
       sort: 2,
-      direction: 1
+      direction: 1,
+      showItem: null
     };
   }
 
@@ -239,7 +242,7 @@ export default class ForecastComponent extends React.Component {
                 results.map((el, i) => {
                   return (
                     <tr key={i} className={s.row}>
-                      <td className={s.column}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{itemIDToName(el.type)}</span></td>
+                      <td className={s.column}><span className={s.browser_route} onClick={()=>this.setState({showItem: el.type})}>{itemIDToName(el.type)}</span></td>
                       <td className={s.column}>{formatNumberUnit(el.buyPercentile)}</td>
                       <td className={s.column}>{formatPercent(el.spread_sma)}%</td>
                       <td className={s.column}>{el.volume_sma.toFixed(0)}</td>
@@ -257,85 +260,90 @@ export default class ForecastComponent extends React.Component {
 
     return (
       <DashboardPage title="Forecast" className={s.root} fullWidth={true}>
-        <div className={s.container}>
-          <div className={s.pane}>
-            <TextField
-              type="number"
-              errorText={this.verifyPrice()}
-              floatingLabelText="Minimum Buy Price"
-              floatingLabelStyle={{color: "#BDBDBD"}}
-              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
-              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
-              inputStyle={{color: "#FFF"}}
-              style={{display: "block", marginBottom: ".8rem"}}
-              onChange={this.setPriceMin}
-            />
-            <TextField
-              type="number"
-              errorText={this.verifyPrice()}
-              floatingLabelText="Maximum Buy Price"
-              floatingLabelStyle={{color: "#BDBDBD"}}
-              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
-              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
-              inputStyle={{color: "#FFF"}}
-              style={{display: "block", marginBottom: ".8rem"}}
-              onChange={this.setPriceMax}
-            />
-            <TextField
-              type="number"
-              errorText={this.verifySpread()}
-              floatingLabelText="Minimum Spread"
-              floatingLabelStyle={{color: "#BDBDBD"}}
-              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
-              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
-              inputStyle={{color: "#FFF"}}
-              style={{display: "block", marginBottom: ".8rem"}}
-              onChange={this.setSpreadMin}
-            />
-            <TextField
-              type="number"
-              errorText={this.verifySpread()}
-              floatingLabelText="Maximum Spread"
-              floatingLabelStyle={{color: "#BDBDBD"}}
-              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
-              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
-              inputStyle={{color: "#FFF"}}
-              style={{display: "block", marginBottom: ".8rem"}}
-              onChange={this.setSpreadMax}
-            />
-            <TextField
-              type="number"
-              errorText={this.verifyVolume()}
-              floatingLabelText="Minimum Volume"
-              floatingLabelStyle={{color: "#BDBDBD"}}
-              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
-              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
-              inputStyle={{color: "#FFF"}}
-              style={{display: "block", marginBottom: ".8rem"}}
-              onChange={this.setVolumeMin}
-            />
-            <TextField
-              type="number"
-              errorText={this.verifyVolume()}
-              floatingLabelText="Maximum Volume"
-              floatingLabelStyle={{color: "#BDBDBD"}}
-              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
-              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
-              inputStyle={{color: "#FFF"}}
-              style={{display: "block", marginBottom: ".8rem"}}
-              onChange={this.setVolumeMax}
-            />
+        <OverlayStack popStack={()=>this.setState({showItem: null})}>
+          <div className={s.container}>
+            <div className={s.pane}>
+              <TextField
+                type="number"
+                errorText={this.verifyPrice()}
+                floatingLabelText="Minimum Buy Price"
+                floatingLabelStyle={{color: "#BDBDBD"}}
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                inputStyle={{color: "#FFF"}}
+                style={{display: "block", marginBottom: ".8rem"}}
+                onChange={this.setPriceMin}
+              />
+              <TextField
+                type="number"
+                errorText={this.verifyPrice()}
+                floatingLabelText="Maximum Buy Price"
+                floatingLabelStyle={{color: "#BDBDBD"}}
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                inputStyle={{color: "#FFF"}}
+                style={{display: "block", marginBottom: ".8rem"}}
+                onChange={this.setPriceMax}
+              />
+              <TextField
+                type="number"
+                errorText={this.verifySpread()}
+                floatingLabelText="Minimum Spread"
+                floatingLabelStyle={{color: "#BDBDBD"}}
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                inputStyle={{color: "#FFF"}}
+                style={{display: "block", marginBottom: ".8rem"}}
+                onChange={this.setSpreadMin}
+              />
+              <TextField
+                type="number"
+                errorText={this.verifySpread()}
+                floatingLabelText="Maximum Spread"
+                floatingLabelStyle={{color: "#BDBDBD"}}
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                inputStyle={{color: "#FFF"}}
+                style={{display: "block", marginBottom: ".8rem"}}
+                onChange={this.setSpreadMax}
+              />
+              <TextField
+                type="number"
+                errorText={this.verifyVolume()}
+                floatingLabelText="Minimum Volume"
+                floatingLabelStyle={{color: "#BDBDBD"}}
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                inputStyle={{color: "#FFF"}}
+                style={{display: "block", marginBottom: ".8rem"}}
+                onChange={this.setVolumeMin}
+              />
+              <TextField
+                type="number"
+                errorText={this.verifyVolume()}
+                floatingLabelText="Maximum Volume"
+                floatingLabelStyle={{color: "#BDBDBD"}}
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                inputStyle={{color: "#FFF"}}
+                style={{display: "block", marginBottom: ".8rem"}}
+                onChange={this.setVolumeMax}
+              />
+            </div>
+            <div className={cx(s.pane, s.larger)}>
+            {
+              this.state.loading ?
+                <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
+                  <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
+                </div>
+              : this.renderResults()
+            }
+            </div>
           </div>
-          <div className={cx(s.pane, s.larger)}>
           {
-            this.state.loading ?
-              <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
-                <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
-              </div>
-            : this.renderResults()
+            this.state.showItem ? <MarketItemViewComponent params={{id: this.state.showItem}} /> : null
           }
-          </div>
-        </div>
+        </OverlayStack>
       </DashboardPage>
     );
   }
