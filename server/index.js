@@ -15,6 +15,10 @@ import DeepstreamAuth from './deepstream_auth';
 const httpServer = new Koa();
 httpServer.use(convert(historyApiFallback()));
 
+httpServer.use(mount('/bundle.js', cached(path.join(__dirname, '../build/bundle.js'), {
+  maxAge: 4 * 60 * 60
+})));
+
 httpServer.use(mount('/', cached(path.join(__dirname, '../build'), {
   maxAge: 365 * 24 * 60 * 60
 })));
