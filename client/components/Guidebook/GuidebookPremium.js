@@ -8,8 +8,7 @@ export default class GuidebookHome extends React.Component {
     return (
       <div className={s.body}>
         <div className={s.title}>Premium</div>
-        <p>While most features of this application are free to use, a subscription can be added to your account for a monthly fee of <b>150M ISK</b>. Subscribing 
-        gives a small incentive to our team for the time that is put into building this application and gives access to the following additional features:
+        <p>While most features of this application are free to use, a subscription can be added to your account for a monthly fee of <b>150M ISK</b>. Subscribing gives a small incentive to our team for the time that is put into building this application and gives access to the following additional features:
         <ul>
           <li><b>Forecasting</b>: Allows you to near-instantly search through the entire market for tradeable items that meet specific criteria of price, margin, and daily volume.</li>
           <li><b>Investment Portfolio</b>: Allows you to track a grouping of tradeable items with aggregated prices, volume, and margin over a long period of time, complete with hourly and daily performance charts.</li>

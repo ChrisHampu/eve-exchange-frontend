@@ -16,9 +16,7 @@ export default class GuidebookHome extends React.Component {
         <div className={s.title}>Reference</div>
         <h3>Preface</h3>
         <p>Welcome to the <b>EVE Exchange</b> reference manual.</p>
-        <p>The purpose of these pages are to provide documentation for each of the core features that this application can provide.
-        Additionally, some of the nuances such as cache timers can be provided for features that heavily depend on the EVE API.
-        The goal after reading this reference is that you'll be able to understand how to set yourself up to utilize this application to its fullest and have the best possible trading experience.
+        <p>The purpose of these pages is to provide documentation for each of the core features of the application. Some additional information is also provided on the nuances of the EVE API and how they relate to EVE Exchange. After reading the reference guide users should understand how to set yourself up and utilize this application to its fullest leading to the best possible trading experience.
         </p>
         <h3>Contact & Support</h3>
         <p>If after reading this reference you still have questions or require technical support, the <b className={s.link} onClick={()=>this.setRoute("/dashboard/reference/contact")}>Contact</b> page will outline the best methods to reach a site owner.</p>

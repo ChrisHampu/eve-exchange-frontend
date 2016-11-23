@@ -15,6 +15,7 @@ export default class GuidebookHome extends React.Component {
           <li>Min/Max Daily Volume</li>
           <li>Min/Max Spread</li>
         </ul>
+        <p>Trade Forecast is designed to provide users with in-depth market intelligence allowing them to find unique trading opportunities.</p>
       </div>
     );
   }

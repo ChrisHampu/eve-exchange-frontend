@@ -12,8 +12,10 @@ export default class GuidebookHome extends React.Component {
         <p>If you need to get in contact with the team for any reason, the following methods are listed in order from most effective to least.</p>
         <ul>
           <li>@maxim on Tweetfleet</li>
-          <li>maxim@eve.exchange by email</li>
           <li>Maxim Stride ingame</li>
+          <li>Helios Ramos in game</li>
+          <li>maxim@eve.exchange by email</li>
+          <li>tramos@eve.exchange by email</li>
         </ul>
      </div>
     );
