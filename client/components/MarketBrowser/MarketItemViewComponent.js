@@ -87,25 +87,14 @@ class MarketItemViewComponent extends React.Component {
 
     if (typeof this.props.market.item[this.state.item.id] !== 'undefined') {
 
-      if (userHasPremium()) {
-        if (!this.props.market.item[this.state.item.id].minutes) {
-          return null;
-        }
-        var arr = this.props.market.item[this.state.item.id].minutes[region];
-        if (!arr) {
-          return null;
-        }
-        return arr[arr.length-1];
-      } else {
-        if (!this.props.market.item[this.state.item.id].hours) {
-          return null;
-        }
-        var arr = this.props.market.item[this.state.item.id].hours[region];
-        if (!arr) {
-          return null;
-        }
-        return arr[arr.length-1];
+      if (!this.props.market.item[this.state.item.id].minutes) {
+        return null;
       }
+      var arr = this.props.market.item[this.state.item.id].minutes[region];
+      if (!arr) {
+        return null;
+      }
+      return arr[arr.length-1];
     }
 
     return null;
