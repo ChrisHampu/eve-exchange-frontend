@@ -243,9 +243,9 @@ export default class ForecastComponent extends React.Component {
                   return (
                     <tr key={i} className={s.row}>
                       <td className={s.column}><span className={s.browser_route} onClick={()=>this.setState({showItem: el.type})}>{itemIDToName(el.type)}</span></td>
-                      <td className={s.column}>{formatNumberUnit(el.buyPercentile)}</td>
-                      <td className={s.column}>{formatPercent(el.spread_sma)}%</td>
-                      <td className={s.column}>{el.volume_sma.toFixed(0)}</td>
+                      <td className={s.column}>{formatNumberUnit(el.buyPercentile || 0)}</td>
+                      <td className={s.column}>{formatPercent(el.spread_sma || 0)}%</td>
+                      <td className={s.column}>{el.volume_sma ? el.volume_sma.toFixed(0) : 0}</td>
                     </tr>
                   )
                 })
