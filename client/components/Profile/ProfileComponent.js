@@ -23,6 +23,7 @@ class Profile extends React.Component {
       "/dashboard/profile/subscription",
       "/dashboard/profile/history",
       "/dashboard/profile/settings",
+      "/dashboard/profile/apikey",
       "/dashboard/profile/addapi"
     ];
 
@@ -36,10 +37,12 @@ class Profile extends React.Component {
     return (
       <DashboardPage title={this.props.auth.name} fullWidth={true}>
         <DashboardPageMenu menu={{
-          'Profile': "/dashboard/profile",
-          'Subscription': "/dashboard/profile/subscription",
-          'Account History': "/dashboard/profile/history",
-          'Settings': "/dashboard/profile/settings" }}
+            'Profiles': "/dashboard/profile",
+            'Subscription': "/dashboard/profile/subscription",
+            'Account History': "/dashboard/profile/history",
+            'Settings': "/dashboard/profile/settings",
+            'API Access': "/dashboard/profile/apikey"
+          }}
           location={!useStack?this.props.location:{pathname:"/dashboard/profile"}}
         />
         {

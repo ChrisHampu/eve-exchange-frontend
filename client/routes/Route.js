@@ -10,6 +10,7 @@ import ProfileSubscription from '../components/Profile/ProfileSubscription';
 import ProfileSubscriptionHistory from '../components/Profile/ProfileSubscriptionHistory';
 import ProfileSettings from '../components/Profile/ProfileSettings';
 import APITypeSelector from '../components/Profile/APITypeSelector';
+import ProfileAPIAccess from '../components/Profile/ProfileAPIAccess';
 import AdminComponent from '../components/Admin/AdminComponent';
 import AdminLoginLog from '../components/Admin/AdminLoginLog';
 import AdminAuditLog from '../components/Admin/AdminAuditLog';
@@ -62,6 +63,7 @@ export default (
           <Route path="history" component={ProfileSubscriptionHistory} />
           <Route path="settings" component={ProfileSettings} />
           <Route path="addapi" component={APITypeSelector} />
+          <Route path="apikey" component={ProfileAPIAccess} />
           <Route path=":id" component={ProfitProfileStatistics} />
         </Route>
         <Route path="notifications" components={{main: NotificationsComponent }} />

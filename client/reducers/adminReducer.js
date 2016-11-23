@@ -27,7 +27,11 @@ const initialState = {
     8: deleted api key <target>,
     9: subscription expired,
     10: withdrawal request,
-    11: new account
+    11: new account,
+    12: enable api,
+    13: disable api,
+    14: api expired,
+    15: api renewed
   }
 */
 

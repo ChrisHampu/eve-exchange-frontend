@@ -334,7 +334,7 @@ class Subscription extends React.Component {
           </div>
           <div className={s.info_row}>
             <div className={s.info_key}>
-              Subscription Cost:
+              Subscription Cost (Monthly):
             </div>
             <div className={s.info_value}>
               {formatNumber(PremiumPrice)} ISK
