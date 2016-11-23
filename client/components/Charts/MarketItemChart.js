@@ -130,6 +130,7 @@ class MarketItemChart extends React.Component {
           if (!arr) {
             return null;
           }
+          arr = arr.sort((el1, el2) => el2.time - el1.time);
           var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
           if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
             return arr;

@@ -38,6 +38,14 @@ export default class Scrollbar extends React.Component {
       return;
     }
 
+    let startX = this.state.startX;
+
+    if (this.context.totalDataSize !== this.state.dataSize) {
+
+      // reset variables if data changes
+      startX = 0;
+    }
+
     let barWidth = 0;
 
     if (this.context.dataSize >= this.context.pageSize ) {
@@ -53,7 +61,8 @@ export default class Scrollbar extends React.Component {
       handleX: this.context.width - barWidth,
       barWidth: barWidth,
       contextWidth: this.context.width,
-      dataSize: this.context.totalDataSize
+      dataSize: this.context.totalDataSize,
+      startX: startX
     });
   }
 
