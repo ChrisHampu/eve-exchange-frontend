@@ -180,7 +180,7 @@ class APIAccess extends React.Component {
           </div>
           <div className={s2.info_row}>
             <div className={s2.info_key}>Access Status:</div>
-            <div className={s2.info_value}>{this.props.subscription.api_access===true?"Enabled":"Disabled"}</div>
+            <div className={s2.info_value}>{this.props.subscription.api_access===true?<div style={{color: "#4CAF50"}}>Enabled</div>:<div style={{color: "#F44336"}}>Disabled</div>}</div>
           </div>
           <div className={s2.info_row}>
             <div className={s2.info_key}>Access Cost (Monthly):</div>
