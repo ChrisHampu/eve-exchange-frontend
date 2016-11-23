@@ -12,6 +12,10 @@ export function formatNumber(number) {
 
 export function formatNumberUnit(num) {
 
+  if (!num || num === 'undefined') {
+    return 0;
+  }
+
   let suffix = "";
 
   if (num <= -1000000000000 || num >= 1000000000000) {
