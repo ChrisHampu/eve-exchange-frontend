@@ -13,7 +13,8 @@ export default class GuidebookHome extends React.Component {
           <li><b>Forecasting</b>: Allows you to near-instantly search through the entire market for tradeable items that meet specific criteria of price, margin, and daily volume.</li>
           <li><b>Investment Portfolio</b>: Allows you to track a grouping of tradeable items with aggregated prices, volume, and margin over a long period of time, complete with hourly and daily performance charts.</li>
           <li><b>Industrial Portfolio</b>: Select any manufacturable item and instantly see the components and raw materials necessary to build it along with profit margins, performance charts to track profitability over time, and component charts to see component price hot spots. Calculates materials based on user given material efficiency and other options.</li>
-        </ul>
+          <li><b>API Access</b>: Our extensive API can provide endpoints for retrieving market data, portfolios, forecasts, orders, and more. Full API features require an additional subscription. More information can be found in your profile with complete documentation.</li>
+       </ul>
         You can find further details on these features throughout the reference pages.
         </p>
         <h3>How to Subscribe</h3>

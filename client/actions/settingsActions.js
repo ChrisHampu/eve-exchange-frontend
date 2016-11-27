@@ -29,3 +29,7 @@ export function updateGeneralSetting(setting, value) {
 export function updateMarketSetting(setting, value) {
   return { type: "UPDATE_MARKET_SETTING", setting, value };
 }
+
+export function updateGuidebookSetting(setting, value) {
+  return { type: "UPDATE_GUIDEBOOK_SETTING", setting, value };
+}

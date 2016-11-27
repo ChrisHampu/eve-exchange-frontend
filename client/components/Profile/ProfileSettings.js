@@ -5,7 +5,7 @@ import store from '../../store';
 import s from './ProfileSettings.scss';
 import cx from 'classnames';
 
-import { updateChartSetting, updateGeneralSetting, updateMarketSetting } from '../../actions/settingsActions';
+import { updateChartSetting, updateGeneralSetting, updateMarketSetting, updateGuidebookSetting } from '../../actions/settingsActions';
 
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'; 
 import Checkbox from 'material-ui/Checkbox';
@@ -18,6 +18,7 @@ class Settings extends React.Component {
   _updateGeneralSetting = (setting, newVal) => store.dispatch(updateGeneralSetting(setting, newVal));
   _updateMarketSetting = (setting, newVal) => store.dispatch(updateMarketSetting(setting, newVal));
   _updateChartSetting = (setting, newVal) => store.dispatch(updateChartSetting(setting, newVal));
+  _updateGuidebookSetting = (setting, newVal) => store.dispatch(updateGuidebookSetting(setting, newVal));
 
   render() {
 
@@ -36,6 +37,17 @@ class Settings extends React.Component {
               label="Auto Renew"
               checked={this.props.settings.general.auto_renew}
               onCheck={(ev, val) => this._updateGeneralSetting('auto_renew', val) }
+            />
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Reference Guide
+            </div>
+            <Checkbox
+              className={s.checkbox}
+              label="Show Reference Popups"
+              checked={!this.props.settings.guidebook.disable}
+              onCheck={(ev, val) => this._updateGuidebookSetting('disable', !val) }
             />
           </div>
         </div>

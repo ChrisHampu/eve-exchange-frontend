@@ -29,7 +29,15 @@ const initialState = {
     volume: true,
     volume_sma: true
   },
-  profiles: []
+  profiles: [],
+  guidebook: { // 'guidebook page key': boolean - whether to show (true) or not (false, dismissed)
+    disable: false, // disable all guidebook pages globally
+    profiles: true,
+    market_browser: true,
+    forecast: true,
+    portfolios: true,
+    subscription: true
+  }
 };
 
 export default function settings(state = initialState, action) {
@@ -115,6 +123,18 @@ export default function settings(state = initialState, action) {
       }
 
       return { ...state, market: { ...state.market, [action.setting]: action.value } };
+
+    case "UPDATE_GUIDEBOOK_SETTING":
+
+      if (!action.setting) {
+        return state;
+      }
+
+      if (action.value === 'undefined' || action.value === null) {
+        return state;
+      }
+
+      return { ...state, guidebook: { ...state.guidebook, [action.setting]: action.value } };
 
     default:
       return state;

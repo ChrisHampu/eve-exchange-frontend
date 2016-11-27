@@ -14,6 +14,7 @@ import { APIEndpointURL } from '../../globals';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import OverlayStack from '../OverlayStack/OverlayStack';
 import MarketItemViewComponent from '../MarketBrowser/MarketItemViewComponent';
+import GuidebookLink from '../Guidebook/GuidebookLink';
 
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -260,6 +261,7 @@ export default class ForecastComponent extends React.Component {
 
     return (
       <DashboardPage title="Forecast" className={s.root} fullWidth={true}>
+        <GuidebookLink settingsKey="forecast" page="forecast" style={{padding: "0 1rem"}} />
         <OverlayStack popStack={()=>this.setState({showItem: null})}>
           <div className={s.container}>
             <div className={cx(s.pane, s.aside)}>

@@ -10,6 +10,7 @@ import { sendAppNotification } from '../../actions/appActions';
 import { formatNumber, formatDate } from '../../utilities';
 import { getAuthToken } from '../../deepstream';
 import { APIEndpointURL } from '../../globals';
+import GuidebookLink from '../Guidebook/GuidebookLink';
 
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -308,6 +309,7 @@ class Subscription extends React.Component {
           Please confirm your withdrawal request.<br />
           Allow up to 24 hours for your request to be processed.
         </Dialog>
+        <GuidebookLink settingsKey="subscription" page="premium" />
         <Paper zDepth={2}>
           <div className={s.subscription_info}>
             <div className={s.info_row}>

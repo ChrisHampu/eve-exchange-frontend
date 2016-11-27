@@ -8,9 +8,9 @@ import { getMarketGroupTree } from '../../market';
 
 // Components
 import MarketBrowserListItem from './MarketBrowserListItem';
-import MarketItemViewComponent from './MarketItemViewComponent';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import OverlayStack from '../OverlayStack/OverlayStack';
+import GuidebookLink from '../Guidebook/GuidebookLink';
 
 // Material UI
 import TextField from 'material-ui/TextField';
@@ -67,6 +67,7 @@ export default class MarketBrowserComponent extends React.Component {
 
     return (
       <DashboardPage title="Market Browser" className={s.root}>
+        <GuidebookLink settingsKey="market_browser" page="browser" />
         <OverlayStack popStack={()=>this.context.router.push('/dashboard/browser')}>
           {this.renderMarketBrowser()}
           {this.props.children}

@@ -6,6 +6,8 @@ import s from './PortfoliosViewAll.scss';
 import cx from 'classnames';
 import { formatNumberUnit } from '../../utilities';
 
+import GuidebookLink from '../Guidebook/GuidebookLink';
+
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 class PortfoliosViewAll extends React.Component {
@@ -30,6 +32,7 @@ class PortfoliosViewAll extends React.Component {
 
     return (
       <div>
+        <GuidebookLink settingsKey="portfolios" page="portfolios" />
         <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow selectable={false}>

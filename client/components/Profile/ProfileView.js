@@ -10,6 +10,8 @@ import { getAuthToken } from '../../deepstream';
 import { userHasPremium } from '../../auth';
 import { sendAppNotification } from '../../actions/appActions';
 
+import GuidebookLink from '../Guidebook/GuidebookLink';
+
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
@@ -96,6 +98,7 @@ class ProfileView extends React.Component {
 
     return (
       <div className={s.profile_info}>
+        <GuidebookLink settingsKey="profiles" page="profile" />
         <Dialog
           actions={[
             <FlatButton
