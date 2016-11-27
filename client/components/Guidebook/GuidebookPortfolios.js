@@ -12,6 +12,7 @@ export default class GuidebookHome extends React.Component {
         <p>Portfolios are most useful for tracking the long term performance of items. An investor will want this data to determine whether to continue an investment, add to an investment, or remove certain items from an investment. Industrialists need to know the items they want to build will retain their value throughout a long build cycle. This brings us to the two types of portfolios detailed below.</p>
         <h3>Trading Portflio</h3>
         <p>A trading portfolio will allow you to select multiple items and a quantity for each. This will give you an aggregated total portfolio value, an average spread for each item, and track the change in value for the portfolio (growth).</p>
+        <p>Trade simulation is automatically done for each item in your portfolio and aggregated together to show overall profit potential. This simulation uses the same global market settings as the trade simulator in the market browser and functions the same way.</p>
         <h3>Industry Portfolio</h3>
         <p>An industrial portfolio requires that you select a manufacturable item, a quantity, and optionally a material efficiency to calculate the input build materials. The portfolio will then show you the number of components required to build the item based upon the blueprint used. Additionally, a separate table will show the number of raw materials/ores that would be needed to build each individual blueprint component.</p>
         <p>The data collected during aggregation will show the individual buy price of each build component, the total price to buy the required quantity of each component, and compare that to the cost of building each component along with a margin percentage. This can help you determine if its better to buy some components but build others. Additionally, the component spider chart can show you relative costs and hot spots in the build.</p>
@@ -19,7 +20,8 @@ export default class GuidebookHome extends React.Component {
         <h3>Creating Portfolios</h3>
         <p>Each portfolio requres only a name and optionally a description. Trading and industry portfolios have their own separate requirements.</p>
         <p><b>Note:</b> There is a limit of <b>100</b> portfolios per premium account. If you require more, contact us about your use cases and we can consider raising this limit.<br />
-        <b>Note:</b> Each portfolio has a limit of 25 items or components. If you require more, contact us about your use cases and we can consider raising this limit.</p>
+        <b>Note:</b> Each portfolio has a limit of 25 items or components. If you require more, contact us about your use cases and we can consider raising this limit.<br />
+        <b>Note:</b> Portfolio's currently use the trade hub configured in your user settings to determine which prices to use.</p>
       </div>
     );
   }

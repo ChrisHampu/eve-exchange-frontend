@@ -48,6 +48,7 @@ import GuidebookProfile from '../components/Guidebook/GuidebookProfile';
 import GuidebookProfit from '../components/Guidebook/GuidebookProfit';
 import GuidebookSettings from '../components/Guidebook/GuidebookSettings';
 import GuidebookAbout from '../components/Guidebook/GuidebookAbout';
+import GuidebookMarketUseCases from '../components/Guidebook/GuidebookMarketUseCases';
 
 import { requireAccess, redirectIfAuthed, userLevels, logout } from '../auth';
 
@@ -106,6 +107,7 @@ export default (
           <Route path="profit" component={GuidebookProfit} />
           <Route path="portfolios" component={GuidebookPortfolios} />
           <Route path="about" component={GuidebookAbout} />
+          <Route path="usecases" component={GuidebookMarketUseCases} />
         </Route>
       </Route>
     </Route>

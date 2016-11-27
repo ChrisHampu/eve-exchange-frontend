@@ -29,6 +29,7 @@ class GuidebookSidebar extends React.Component {
       "Browser": "/dashboard/reference/browser",
       "Orders": "/dashboard/reference/orders",
       "Profit": "/dashboard/reference/profit",
+      "Use Cases": "/dashboard/reference/usecases",
       "Premium Features": "Divider",
       "Forecast": "/dashboard/reference/forecast",
       "Portfolios": "/dashboard/reference/portfolios"
