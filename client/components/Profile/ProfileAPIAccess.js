@@ -198,6 +198,9 @@ class APIAccess extends React.Component {
           <ul>
             <li>Current market prices (5 minute cache time)</li>
             <li>Market history (5 minutes, hourly, daily)</li>
+            <li>Retrieving portfolios</li>
+            <li>Retrieving market orders for all profiles</li>
+            <li>Retrieving account notifications</li>
           </ul>
         </div>
       </div>
