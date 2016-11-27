@@ -170,7 +170,7 @@ export async function getAPIKeyInfo(keyID, vCode, characterID) {
       console.log(e);
     }
   } else {
-    if (info.accessMask !== "23072779") {
+    if (info._accessMask !== "23072779") {
       return {
         error: "Access mask must be 23072779"
       }
