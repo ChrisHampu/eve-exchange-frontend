@@ -1,13 +1,6 @@
 const initialState = {
-  userID: null,
+  premium: false,
   pinned_charts: [],
-  eveApiKey: {
-    keyID: "",
-    vCode: "",
-    characterID: "",
-    characterName: "",
-    expires: null
-  },
   market: {
     region: 10000002,
     default_tab: 0,
