@@ -245,7 +245,7 @@ class PortfoliosCreate extends React.Component {
               description: this.state.portfolioDesc,
               components,
               type: this.state.portfolioType,
-              efficiency: Math.max(0, Math.min(10, this.state.portfolioIndustryEfficiency))
+              efficiency: Math.max(0, Math.min(10, parseInt(this.state.portfolioIndustryEfficiency)))
             };
 
           this.setState({
@@ -644,14 +644,14 @@ class PortfoliosCreate extends React.Component {
           floatingLabelText="Number of runs"
           inputStyle={{color: "#FFF"}}
           style={{display: "block", marginBottom: ".8rem"}}
-          onChange={(event) => this.setState({portfolioIndustryQuantity: event.target.value})}
+          onChange={(event) => this.setState({portfolioIndustryQuantity: parseInt(vent.target.value)})}
         />
         <TextField
           type="number"
           floatingLabelText="Material modifier percentage"
           inputStyle={{color: "#FFF"}}
           style={{display: "block", marginBottom: ".8rem"}}
-          onChange={(event) => this.setState({portfolioIndustryEfficiency: event.target.value})}
+          onChange={(event) => this.setState({portfolioIndustryEfficiency: parseInt(event.target.value)})}
         />
         {
           this.state.error ?
