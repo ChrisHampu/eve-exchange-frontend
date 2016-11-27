@@ -175,15 +175,15 @@ class APIAccess extends React.Component {
         <p>In order to use this API key, access must be enabled first. Enabling API access also allows additional exclusive endpoints in order to access market data and other functions.</p>
         <div className={s2.subscription_info} style={{marginTop: "1.5rem"}}>
           <div className={s2.info_row}>
-            <div className={s2.info_key}>Your API key:</div>
+            <div className={s2.info_key}>Your API key</div>
             <div className={s2.info_value}>{this.props.settings.api_key}</div>
           </div>
           <div className={s2.info_row}>
-            <div className={s2.info_key}>Access Status:</div>
+            <div className={s2.info_key}>Access Status</div>
             <div className={s2.info_value}>{this.props.subscription.api_access===true?<div style={{color: "#4CAF50"}}>Enabled</div>:<div style={{color: "#F44336"}}>Disabled</div>}</div>
           </div>
           <div className={s2.info_row}>
-            <div className={s2.info_key}>Access Cost (Monthly):</div>
+            <div className={s2.info_key}>Access Cost (Monthly)</div>
             <div className={s2.info_value}>
             {formatNumber(this.getAccessCost())} ISK
             </div>

@@ -16,6 +16,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import Paper from 'material-ui/Paper';
 
 const PremiumPrice = 150000000;
 
@@ -60,7 +61,7 @@ class Subscription extends React.Component {
     }
 
     return (
-      <div className={s.info_row}>
+      <div className={s.deposit_button}>
         {button}
       </div>
     );
@@ -84,7 +85,7 @@ class Subscription extends React.Component {
     }
 
     return (
-      <div className={s.info_row}>
+      <div>
         {info}
       </div>
     );
@@ -114,7 +115,7 @@ class Subscription extends React.Component {
     }
 
     return (
-      <div className={cx(s.info_row, s.withdrawal_box)}>
+      <div className={cx(s.withdrawal_box)}>
         <TextField
           type="number"
           hintText="Must be less than balance"
@@ -307,50 +308,52 @@ class Subscription extends React.Component {
           Please confirm your withdrawal request.<br />
           Allow up to 24 hours for your request to be processed.
         </Dialog>
-        <div className={s.subscription_info}>
-          <div className={s.info_row}>
-            <div className={s.info_key}>
-              Subscription Level:
+        <Paper zDepth={2}>
+          <div className={s.subscription_info}>
+            <div className={s.info_row}>
+              <div className={s.info_key}>
+                Level
+              </div>
+              <div className={s.info_value}>
+                {this.subscriptionLevelToName()}
+              </div>
             </div>
-            <div className={s.info_value}>
-              {this.subscriptionLevelToName()}
+            <div className={s.info_row}>
+              <div className={s.info_key}>
+                {this.props.settings.general && this.props.settings.general.auto_renew === true?"Renews":"Expires"}
+              </div>
+              <div className={s.info_value}>
+                {this.props.subscription.subscription_date ? formatDate(new Date(new Date(this.props.subscription.subscription_date).getTime() + 2592000000)) : "Never"}
+              </div>
+            </div>
+            <div className={s.info_row}>
+              <div className={s.info_key}>
+                Balance
+              </div>
+              <div className={s.info_value}>
+                {formatNumber(this.props.subscription.balance)} ISK
+              </div>
+            </div>
+            <div className={s.info_row}>
+              <div className={s.info_key}>
+                Cost (Monthly)
+              </div>
+              <div className={s.info_value}>
+                {formatNumber(PremiumPrice)} ISK
+              </div>
             </div>
           </div>
-          <div className={s.info_row}>
-            <div className={s.info_key}>
-              Subscription Expires:
-            </div>
-            <div className={s.info_value}>
-              {this.props.subscription.subscription_date ? formatDate(new Date(new Date(this.props.subscription.subscription_date).getTime() + 2592000000)) : "Never"}
-            </div>
-          </div>
-          <div className={s.info_row}>
-            <div className={s.info_key}>
-              Subscription Balance:
-            </div>
-            <div className={s.info_value}>
-              {formatNumber(this.props.subscription.balance)} ISK
-            </div>
-          </div>
-          <div className={s.info_row}>
-            <div className={s.info_key}>
-              Subscription Cost (Monthly):
-            </div>
-            <div className={s.info_value}>
-              {formatNumber(PremiumPrice)} ISK
-            </div>
-          </div>
-          {this.renderSubscriptionButtons()}
-          {this.renderSubscriptionInfo()}
-          {this.renderWithdrawal()}
-        </div>
+        </Paper>
+        {this.renderSubscriptionButtons()}
+        {this.renderSubscriptionInfo()}
+        {this.renderWithdrawal()}
       </div>
     );
   }
 }
 
 const mapStateToProps = function(store) {
-  return { subscription: store.subscription };
+  return { subscription: store.subscription, settings: store.settings };
 }
 
 export default connect(mapStateToProps)(Subscription);
