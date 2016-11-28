@@ -63,7 +63,7 @@ class ProfileView extends React.Component {
     });
 
     const response = await fetch(`${APIEndpointURL}/apikey/remove/${id}`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -201,7 +201,7 @@ class ProfileView extends React.Component {
                       {
                         profile.error ? 
                         <div className={s.disabled}>Profit tracking is paused: {profile.error}</div> :
-                        !userHasPremium() && profile.type === 1?
+                        !userHasPremium() && profile.type === 1 ?
                         <div className={s.disabled}>Profit tracking is paused for this profile while you do not have an active premium subscription</div> :
                         <span>Wallet Balance: {formatNumber(profile.wallet_balance||0)} ISK</span>
                       } 
