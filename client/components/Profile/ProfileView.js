@@ -199,6 +199,8 @@ class ProfileView extends React.Component {
                     />
                     <CardText>
                       {
+                        profile.error ? 
+                        <div className={s.disabled}>Profit tracking is paused: {profile.error}</div> :
                         !userHasPremium() && profile.type === 1?
                         <div className={s.disabled}>Profit tracking is paused for this profile while you do not have an active premium subscription</div> :
                         <span>Wallet Balance: {formatNumber(profile.wallet_balance||0)} ISK</span>
