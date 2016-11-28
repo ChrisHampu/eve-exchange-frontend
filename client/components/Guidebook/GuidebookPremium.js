@@ -4,6 +4,11 @@ import s from './GuidebookPage.scss';
 
 export default class GuidebookHome extends React.Component {
 
+  setRoute(route) {
+
+    browserHistory.push(route);
+  }
+
   render() {
     return (
       <div className={s.body}>
@@ -26,6 +31,7 @@ export default class GuidebookHome extends React.Component {
         <h3>Downgrade</h3>
         <p>If you wish to cancel your subscription, you can do so anytime from your profile subscription page. Please note that if you do, you will <b>forfeit the remaining time on your active subscription</b>. 
         An alternative is to disable <b>Auto Renew</b> in your account settings and let your subscription expire, downgrading you to a free account. Your balance will stay the same, and you can re-subscribe at a later date.</p>
+        <p>If you have active <span className={s.link} onClick={()=>this.setRoute("/dashboard/reference/api")}>API access</span>, it will be disabled without a refund, as API access is dependent on premium status.</p>
         <h3>Withdrawals</h3>
         <p>If you have deposited a large amount of ISK into your EVE Exchange account and wish to withdraw it for any reason, you may do so anytime by using the withdrawal feature on your subscription page. 
         You must have enough ISK remaining in your account that you wish to withdraw. This process could take up to 24 hours to complete, and you will be notified when it is processed. Your account history log will reflect the withdrawal and whether it has been procssed yet. If you encounter any issues during this process, feel free to contact us to have it sorted out.</p>

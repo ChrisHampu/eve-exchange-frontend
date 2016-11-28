@@ -32,7 +32,8 @@ class GuidebookSidebar extends React.Component {
       "Use Cases": "/dashboard/reference/usecases",
       "Premium Features": "Divider",
       "Forecast": "/dashboard/reference/forecast",
-      "Portfolios": "/dashboard/reference/portfolios"
+      "Portfolios": "/dashboard/reference/portfolios",
+      "API": "/dashboard/reference/api"
     };
   }
 

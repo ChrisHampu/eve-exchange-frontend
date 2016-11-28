@@ -10,6 +10,7 @@ import { getAuthToken } from '../../deepstream';
 import { APIEndpointURL } from '../../globals';
 import { sendAppNotification } from '../../actions/appActions';
 import { formatNumber } from '../../utilities';
+import GuidebookLink from '../Guidebook/GuidebookLink';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -170,9 +171,7 @@ class APIAccess extends React.Component {
         >
           Please confirm your request to disable API access.<br />
         </Dialog>
-        <p>The EVE Exchange API is used by this application for many functions, and is documented and accessible by its users from outside the application as well. The documentation for the API can be found <a href="https://api.eve.exchange" target="_blank">here</a>.</p>
-        <p>While the API can be accessed using the token stored in this application, an easier method is to use the provided API key.</p>
-        <p>In order to use this API key, access must be enabled first. Enabling API access also allows additional exclusive endpoints in order to access market data and other functions.</p>
+        <GuidebookLink settingsKey="api_access" page="api" />
         <div className={s2.subscription_info} style={{marginTop: "1.5rem"}}>
           <div className={s2.info_row}>
             <div className={s2.info_key}>Your API key</div>
