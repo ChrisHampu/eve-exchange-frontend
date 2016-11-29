@@ -33,3 +33,7 @@ export function updateMarketSetting(setting, value) {
 export function updateGuidebookSetting(setting, value) {
   return { type: "UPDATE_GUIDEBOOK_SETTING", setting, value };
 }
+
+export function updateForecastSetting(setting, value) {
+  return { type: "UPDATE_FORECAST_SETTING", setting, value };
+}

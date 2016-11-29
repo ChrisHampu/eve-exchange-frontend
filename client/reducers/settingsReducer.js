@@ -36,6 +36,14 @@ const initialState = {
     forecast: true,
     portfolios: true,
     subscription: true
+  },
+  forecast: {
+    min_buy: 5000000,
+    max_buy: 75000000,
+    min_spread: 10,
+    max_spread: 20,
+    min_volume: 50,
+    max_volume: 200
   }
 };
 
@@ -159,6 +167,23 @@ export default function settings(state = initialState, action) {
       }
 
       newSettings = { ...state, guidebook: { ...state.guidebook, [action.setting]: action.value } }
+
+      saveSettings(newSettings);
+
+      return newSettings;
+
+
+    case "UPDATE_FORECAST_SETTING":
+
+      if (!action.setting) {
+        return state;
+      }
+
+      if (action.value === 'undefined' || action.value === null) {
+        return state;
+      }
+
+      newSettings = { ...state, forecast: { ...state.forecast, [action.setting]: action.value } }
 
       saveSettings(newSettings);
 

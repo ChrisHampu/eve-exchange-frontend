@@ -1,5 +1,7 @@
 /* eslint-disable global-require */
 import 'whatwg-fetch';
+import store from '../../store';
+import { updateForecastSetting } from '../../actions/settingsActions';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
@@ -25,7 +27,7 @@ import MenuItem from 'material-ui/MenuItem';
 import UpArrow from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 import DownArrow from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 
-export default class ForecastComponent extends React.Component {
+class ForecastComponent extends React.Component {
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired
@@ -35,12 +37,6 @@ export default class ForecastComponent extends React.Component {
     super(props);
 
     this.state = {
-      spreadMinimum: null,
-      spreadMaximum: null,
-      volumeMinimum: null,
-      volumeMaximum: null,
-      priceMinimum: null,
-      priceMaximum: null,
       searchResults: null,
       loading: false,
       queueQuery: true,
@@ -66,23 +62,23 @@ export default class ForecastComponent extends React.Component {
 
       let params = '?';
 
-      if (this.state.spreadMinimum) {
-        params += `minspread=${this.state.spreadMinimum}&`;
+      if (this.props.settings.forecast.min_spread) {
+        params += `minspread=${this.props.settings.forecast.min_spread}&`;
       }
-      if (this.state.volumeMinimum) {
-        params += `minvolume=${this.state.volumeMinimum}&`;
+      if (this.props.settings.forecast.min_volum) {
+        params += `minvolume=${this.props.settings.forecast.min_volume}&`;
       }
-      if (this.state.priceMinimum) {
-        params += `minprice=${this.state.priceMinimum}&`;
+      if (this.props.settings.forecast.min_buy) {
+        params += `minprice=${this.props.settings.forecast.min_buy}&`;
       }
-      if (this.state.spreadMaximum) {
-        params += `maxspread=${this.state.spreadMaximum}&`;
+      if (this.props.settings.forecast.max_spread) {
+        params += `maxspread=${this.props.settings.forecast.max_spread}&`;
       }
-      if (this.state.volumeMaximum) {
-        params += `maxvolume=${this.state.volumeMaximum}&`;
+      if (this.props.settings.forecast.max_volume) {
+        params += `maxvolume=${this.props.settings.forecast.max_volume}&`;
       }
-      if (this.state.priceMaximum) {
-        params += `maxprice=${this.state.priceMaximum}&`;
+      if (this.props.settings.forecast.max_buy) {
+        params += `maxprice=${this.props.settings.forecast.max_buy}&`;
       }
 
       if (params.substr(-1) === '&') {
@@ -118,18 +114,18 @@ export default class ForecastComponent extends React.Component {
     this.updateSearch();
   }
 
-  setSpreadMin = (event) => this.setState({queueQuery: true, spreadMinimum: event.target.value || null});
-  setSpreadMax = (event) => this.setState({queueQuery: true, spreadMaximum: event.target.value || null});
-  setVolumeMin = (event) => this.setState({queueQuery: true, volumeMinimum: event.target.value || null});
-  setVolumeMax = (event) => this.setState({queueQuery: true, volumeMaximum: event.target.value || null});
-  setPriceMin = (event) => this.setState({queueQuery: true, priceMinimum: event.target.value || null});
-  setPriceMax = (event) => this.setState({queueQuery: true, priceMaximum: event.target.value || null});
+  setSpreadMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_spread', parseFloat(event.target.value) || null)) };
+  setSpreadMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_spread', parseFloat(event.target.value) || null)) };
+  setVolumeMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_volume', parseFloat(event.target.value) || null)) };
+  setVolumeMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_volume', parseFloat(event.target.value) || null)) };
+  setPriceMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_buy', parseFloat(event.target.value) || null)) };
+  setPriceMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_buy', parseFloat(event.target.value) || null)) };
 
   setSort = (value) => this.setState({sort: value, direction: value === this.state.sort ? this.state.direction === 1 ? 0 : 1 : this.state.direction});
 
   verifyPrice() {
 
-    if (!this.state.priceMinimum && !this.state.priceMaximum) {
+    if (!this.props.settings.forecast.min_buy && !this.props.settings.forecast.max_buy) {
       return "At least one price field is required";
     }
 
@@ -138,7 +134,7 @@ export default class ForecastComponent extends React.Component {
 
   verifySpread() {
 
-    if (!this.state.spreadMinimum && !this.state.spreadMaximum) {
+    if (!this.props.settings.forecast.min_spread && !this.props.settings.forecast.max_spread) {
       return "At least one spread field is required";
     }
 
@@ -147,7 +143,7 @@ export default class ForecastComponent extends React.Component {
 
   verifyVolume() {
 
-    if (!this.state.volumeMinimum && !this.state.volumeMaximum) {
+    if (!this.props.settings.forecast.min_volume && !this.props.settings.forecast.min_volume) {
       return "At least one volume field is required";
     }
 
@@ -275,6 +271,7 @@ export default class ForecastComponent extends React.Component {
                 inputStyle={{color: "#FFF"}}
                 style={{display: "block", marginBottom: ".8rem"}}
                 onChange={this.setPriceMin}
+                value={this.props.settings.forecast.min_buy}
               />
               <TextField
                 type="number"
@@ -286,6 +283,7 @@ export default class ForecastComponent extends React.Component {
                 inputStyle={{color: "#FFF"}}
                 style={{display: "block", marginBottom: ".8rem"}}
                 onChange={this.setPriceMax}
+                value={this.props.settings.forecast.max_buy}
               />
               <TextField
                 type="number"
@@ -297,6 +295,7 @@ export default class ForecastComponent extends React.Component {
                 inputStyle={{color: "#FFF"}}
                 style={{display: "block", marginBottom: ".8rem"}}
                 onChange={this.setSpreadMin}
+                value={this.props.settings.forecast.min_spread}
               />
               <TextField
                 type="number"
@@ -308,6 +307,7 @@ export default class ForecastComponent extends React.Component {
                 inputStyle={{color: "#FFF"}}
                 style={{display: "block", marginBottom: ".8rem"}}
                 onChange={this.setSpreadMax}
+                value={this.props.settings.forecast.max_spread}
               />
               <TextField
                 type="number"
@@ -319,6 +319,7 @@ export default class ForecastComponent extends React.Component {
                 inputStyle={{color: "#FFF"}}
                 style={{display: "block", marginBottom: ".8rem"}}
                 onChange={this.setVolumeMin}
+                value={this.props.settings.forecast.min_volume}
               />
               <TextField
                 type="number"
@@ -330,6 +331,7 @@ export default class ForecastComponent extends React.Component {
                 inputStyle={{color: "#FFF"}}
                 style={{display: "block", marginBottom: ".8rem"}}
                 onChange={this.setVolumeMax}
+                value={this.props.settings.forecast.max_volume}
               />
             </div>
             <div className={cx(s.pane, s.larger)}>
@@ -350,3 +352,9 @@ export default class ForecastComponent extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function(store) {
+  return { settings: store.settings };
+}
+
+export default connect(mapStateToProps)(ForecastComponent);
