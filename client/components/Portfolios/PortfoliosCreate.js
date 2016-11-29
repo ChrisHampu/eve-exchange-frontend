@@ -51,11 +51,14 @@ class PortfoliosCreate extends React.Component {
       portfolioSearchTradingItem: null,
       portfolioSearchIndustryItem: null,
       portfolioSearchTradingQuantity: null,
+      portfolioIndustryOverrideSellPrice: null,
+      portfolioIndustryBuildSystem: null,
       portfolioSelectedItems: [],
       portfolioIndustryEfficiency: 0,
       portfolioIndustryItem: null,
       showProgressCircle: false,
       portfolioIndustryQuantity: 1,
+      suggestedSystems: []
     };
 
     this.blueprints = []; 
@@ -63,7 +66,7 @@ class PortfoliosCreate extends React.Component {
     for (var i = 0; i < this.props.sde.blueprints.length; i++) { 
  
       this.blueprints.push(itemIDToName(this.props.sde.blueprints[i]));
-    } 
+    }
   }
 
   getBlueprints() {
@@ -245,7 +248,9 @@ class PortfoliosCreate extends React.Component {
               description: this.state.portfolioDesc,
               components,
               type: this.state.portfolioType,
-              efficiency: Math.max(0, Math.min(10, parseInt(this.state.portfolioIndustryEfficiency)))
+              efficiency: Math.max(0, Math.min(10, parseInt(this.state.portfolioIndustryEfficiency))),
+              sellPrice: this.state.portfolioIndustryOverrideSellPrice,
+              buildSystem: this.state.portfolioIndustryBuildSystem
             };
 
           this.setState({
@@ -513,13 +518,16 @@ class PortfoliosCreate extends React.Component {
             <div style={{display: "flex"}}>
               <div style={{verticalAlign: "middle"}}>
                 <AutoComplete
-                  hintText="Type item name"
+                  floatingLabelText="Type item name"
                   dataSource={getMarketItemNames()}
                   filter={AutoComplete.caseInsensitiveFilter}
                   maxSearchResults={6}
                   menuStyle={{cursor: "pointer"}}
                   onNewRequest={this.updateTradingSearch}
                   onUpdateInput={this.updateTradingSearchText}
+                  floatingLabelStyle={{color: "#BDBDBD"}}
+                  underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                  underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
                 />
                 <TextField
                   type="number"
@@ -527,6 +535,9 @@ class PortfoliosCreate extends React.Component {
                   inputStyle={{color: "#FFF"}}
                   style={{display: "block", marginBottom: ".8rem"}}
                   onChange={(event) => this.setState({portfolioSearchTradingQuantity: parseInt(event.target.value)})}
+                  floatingLabelStyle={{color: "#BDBDBD"}}
+                  underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                  underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
                 />
               </div>
               <div style={{flex: "1", verticalAlign: "middle", color: "#eba91b", display: "flex", alignItems: "center", fontWeight: 300}}><span style={{minWidth: "30px", width: "100%", textAlign: "center"}}>OR</span></div>
@@ -609,17 +620,47 @@ class PortfoliosCreate extends React.Component {
     );
   }
 
-  updateIndustrySearch = (chosenRequest, index) => {
+  updateIndustrySearch = (chosenRequest, index) => { 
 
     this.setState({
-      portfolioIndustryItem: chosenRequest
+      portfolioIndustryItem: chosenRequest 
     });
   };
 
-  updateIndustrySearchText = (text) => {
+  updateIndustrySearchText = (text) => { 
 
     this.setState({
-      portfolioIndustryItem: text
+      portfolioIndustryItem: text 
+    });
+  };
+
+  updateSystemSearch = (chosenRequest, index) => {
+
+    this.setState({
+      portfolioIndustryBuildSystem: chosenRequest
+    });
+  };
+
+  updateSystemSearchText = (text) => {
+
+    this.setState({
+      portfolioIndustryBuildSystem: text
+    }, async () => {
+
+      const res = await fetch(`${APIEndpointURL}/search/systems?name=${text}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${getAuthToken()}`
+        }
+      });
+
+      const result = await res.json();
+
+      this.setState({
+        suggestedSystems: result.map(el => el.name)
+      },() => console.log(this.state.suggestedSystems))
     });
   };
 
@@ -631,27 +672,59 @@ class PortfoliosCreate extends React.Component {
           The material modifier should be a number from 0 - 10 as the percentage to reduce input materials
         </div>
         <AutoComplete
-          hintText="Type item to manufacture"
+          floatingLabelText="Type item to manufacture"
           dataSource={this.blueprints}
           filter={AutoComplete.caseInsensitiveFilter}
           maxSearchResults={6}
           menuStyle={{cursor: "pointer"}}
           onNewRequest={this.updateIndustrySearch}
           onUpdateInput={this.updateIndustrySearchText}
+          floatingLabelStyle={{color: "#BDBDBD"}}
+          underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+          underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+          errorText={this.state.portfolioIndustryItem===null?"Required field":null}
         />
         <TextField
           type="number"
           floatingLabelText="Number of runs"
+          floatingLabelStyle={{color: "#BDBDBD"}}
+          underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+          underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
           inputStyle={{color: "#FFF"}}
           style={{display: "block", marginBottom: ".8rem"}}
-          onChange={(event) => this.setState({portfolioIndustryQuantity: parseInt(vent.target.value)})}
+          onChange={(event) => this.setState({portfolioIndustryQuantity: parseInt(event.target.value)})}
+        />
+        <TextField
+          type="number"
+          floatingLabelText="Override sell price (per run)"
+          floatingLabelStyle={{color: "#BDBDBD"}}
+          underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+          underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+          inputStyle={{color: "#FFF"}}
+          style={{display: "block", marginBottom: ".8rem"}}
+          onChange={(event) => this.setState({portfolioIndustryOverrideSellPrice: parseInt(event.target.value)})}
         />
         <TextField
           type="number"
           floatingLabelText="Material modifier percentage"
+          floatingLabelStyle={{color: "#BDBDBD"}}
+          underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+          underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
           inputStyle={{color: "#FFF"}}
           style={{display: "block", marginBottom: ".8rem"}}
           onChange={(event) => this.setState({portfolioIndustryEfficiency: parseInt(event.target.value)})}
+        />
+        <AutoComplete
+          floatingLabelStyle={{color: "#BDBDBD"}}
+          underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+          underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+          dataSource={this.state.suggestedSystems}
+          maxSearchResults={6}
+          menuStyle={{cursor: "pointer"}}
+          onNewRequest={this.updateSystemSearch}
+          onUpdateInput={this.updateSystemSearchText}
+          floatingLabelText="Build system"
+          filter={AutoComplete.caseInsensitiveFilter}
         />
         {
           this.state.error ?
@@ -716,7 +789,7 @@ class PortfoliosCreate extends React.Component {
                 <StepLabel>Enter Name and Description</StepLabel>
               </Step>
               <Step>
-                <StepLabel>Select Portfolio Components</StepLabel>
+                <StepLabel>Select Blueprint & Options</StepLabel>
               </Step>
               <Step>
                 <StepLabel>Finalize Creation</StepLabel>
