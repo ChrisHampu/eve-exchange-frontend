@@ -115,30 +115,12 @@ function setDeepstreamSubscriptions(user_info) {
     return;
   }
 
-  let currentSettings = null;
-  let firstSave = true;
+  let saveSettings = false;
 
   try {
     deepstream.record.getRecord(`settings/${user_info.user_id}`).subscribe(data => {
 
-      currentSettings = data;
       store.dispatch(updateUserSettings(user_info.user_id, data));
-    });
-
-    store.subscribe(() => {
-   
-      if (store.getState().settings !== currentSettings && store.getState().settings && store.getState().settings.userID) { 
-
-        // Publish new settings to deepstream
-        deepstream.event.emit(`settings/${user_info.user_id}`, store.getState().settings);
-        currentSettings = store.getState().settings;
-
-        if (!firstSave) {
-          store.dispatch(sendAppNotification("New settings have been applied", 1000));
-        } else {
-          firstSave = false;
-        }
-      }
     });
 
     deepstream.record.getRecord(`profit_transactions/${user_info.user_id}`).subscribe(transactions => {

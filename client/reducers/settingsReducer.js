@@ -1,3 +1,9 @@
+import 'whatwg-fetch';
+import { APIEndpointURL } from '../globals';
+import { getAuthToken } from '../deepstream';
+import store from '../store';
+import { sendAppNotification } from '../actions/appActions';
+
 const initialState = {
   premium: false,
   pinned_charts: [],
@@ -33,7 +39,30 @@ const initialState = {
   }
 };
 
+async function saveSettings(settings) {
+
+  if (!settings) {
+    return;
+  }
+
+  const settings_saved = await fetch(`${APIEndpointURL}/settings/save`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${getAuthToken()}`
+    },
+    body: JSON.stringify({ ...settings, profiles: null })
+  });
+
+  const settings_resp = await settings_saved.json();
+
+  store.dispatch(sendAppNotification(settings_resp.error || settings_resp.message || "New settings have been applied", 1000));
+}
+
 export default function settings(state = initialState, action) {
+
+  let newSettings = null;
 
   switch(action.type) {
 
@@ -50,7 +79,11 @@ export default function settings(state = initialState, action) {
         return state;
       }
 
-      return { ...state, pinned_charts: { ...state.pinned_charts, [action.item.id]: action.item.name } };
+      newSettings = { ...state, pinned_charts: { ...state.pinned_charts, [action.item.id]: action.item.name } }
+
+      saveSettings(newSettings);
+
+      return newSettings;
 
     case "UNPIN_CHART":
 
@@ -61,25 +94,11 @@ export default function settings(state = initialState, action) {
       let charts = Object.assign({}, state.pinned_charts);
       delete charts[action.id];
 
-      return { ...state, pinned_charts: charts };
+      newSettings = { ...state, pinned_charts: charts }
 
-    case "UPDATE_API_KEY":
+      saveSettings(newSettings);
 
-      if (!action.keyInfo) {
-        return state;
-      }
-
-      let info = action.keyInfo;
-
-      if (!info.keyID || !info.vCode || !info.characterID || !info.characterName) {
-        return state;
-      }
-
-      return { ...state, eveApiKey: { ...state.eveApiKey, ...info } };
-
-    case "REMOVE_API_KEY":
-
-      return { ...state, eveApiKey: { keyID: "", vCode: "", characterID: "", characterName: "", expires: null } };
+      return newSettings;
 
     case "UPDATE_CHART_SETTING":
 
@@ -91,7 +110,11 @@ export default function settings(state = initialState, action) {
         return state;
       }
 
-      return { ...state, chart_visuals: { ...state.chart_visuals, [action.setting]: action.value } };
+      newSettings = { ...state, chart_visuals: { ...state.chart_visuals, [action.setting]: action.value } }
+
+      saveSettings(newSettings);
+
+      return newSettings;
 
     case "UPDATE_GENERAL_SETTING":
 
@@ -103,7 +126,11 @@ export default function settings(state = initialState, action) {
         return state;
       }
 
-      return { ...state, general: { ...state.general, [action.setting]: action.value } };
+      newSettings = { ...state, general: { ...state.general, [action.setting]: action.value } }
+
+      saveSettings(newSettings);
+
+      return newSettings;
 
     case "UPDATE_MARKET_SETTING":
 
@@ -115,7 +142,11 @@ export default function settings(state = initialState, action) {
         return state;
       }
 
-      return { ...state, market: { ...state.market, [action.setting]: action.value } };
+      newSettings = { ...state, market: { ...state.market, [action.setting]: action.value } }
+
+      saveSettings(newSettings);
+
+      return newSettings;
 
     case "UPDATE_GUIDEBOOK_SETTING":
 
@@ -127,7 +158,11 @@ export default function settings(state = initialState, action) {
         return state;
       }
 
-      return { ...state, guidebook: { ...state.guidebook, [action.setting]: action.value } };
+      newSettings = { ...state, guidebook: { ...state.guidebook, [action.setting]: action.value } }
+
+      saveSettings(newSettings);
+
+      return newSettings;
 
     default:
       return state;
