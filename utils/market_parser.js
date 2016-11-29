@@ -5,7 +5,7 @@ fetch = require('node-fetch');
 
 xml2js = require('xml2js');
 
-var exclude_blueprints = false;
+var exclude_blueprints = true;
 
 var parser = new xml2js.Parser();
 
@@ -85,11 +85,11 @@ try {
       }
 
       // Skip infantry gear & special edition & trade goods
-      if (_yaml[i].marketGroupID === 350001 || _yaml[i].marketGroupID === 63 || _yaml[i].marketGroupID === 1659 || _yaml[i].marketGroupID === 19) {
+      if (_yaml[i].marketGroupID === 350001 || _yaml[i].marketGroupID === 63 || _yaml[i].marketGroupID === 1659 || _yaml[i].marketGroupID === 2) {
         continue;
       }
 
-      if (exclude_blueprints && _yaml[i].marketGroupID === 9 ) {
+      if (exclude_blueprints && _yaml[i].marketGroupID === 2 ) {
         continue;
       }
 
