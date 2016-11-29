@@ -11,7 +11,6 @@ import { sendAppNotification } from './actions/./appActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
 import xml2js from 'xml-json-parser';
-import { pullApiData } from './eveapi';
 
 const deepstream = Deepstream();
 const token_name = 'token';
@@ -114,8 +113,6 @@ function setDeepstreamSubscriptions(user_info) {
   if (subscribed) {
     return;
   }
-
-  let saveSettings = false;
 
   try {
     deepstream.record.getRecord(`settings/${user_info.user_id}`).subscribe(data => {
