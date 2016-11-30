@@ -439,6 +439,18 @@ class PortfoliosCreate extends React.Component {
                   </div>
                 </div>
             }
+            {
+              this.state.portfolioType === 1 && this.state.portfolioIndustryOverrideSellPrice ?
+                <div style={{marginBottom: "1rem"}}>
+                Overriding Sell Price: <span style={{color: "#fff"}}>{this.state.portfolioIndustryOverrideSellPrice}</span>
+                </div> : false
+            }
+            {
+              this.state.portfolioType === 1 && this.state.portfolioIndustryBuildSystem ?
+                <div style={{marginBottom: "1rem"}}>
+                Build System: <span style={{color: "#fff"}}>{this.state.portfolioIndustryBuildSystem}</span>
+                </div> : false
+            }
             <div style={{color: "#fff", margin: "1.25rem 0"}}>
             If the above looks correct, hit Finish to create your new portfolio
             </div>

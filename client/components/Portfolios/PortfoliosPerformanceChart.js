@@ -190,7 +190,7 @@ export default class PortfoliosPerformanceChart extends React.Component {
         <div>
           Component Value: {formatNumber(el.portfolioValue)}<br />
           Material Value: {formatNumber(el.materialValue)}<br />
-          Potential Profit: {Math.round(el.industrySpread*Math.pow(10,2))/Math.pow(10,2)}%<br />
+          Profit Margin: {Math.round(el.industrySpread*Math.pow(10,2))/Math.pow(10,2)}%<br />
         </div>,
       offset: this.props.portfolio.type === 1 ? 35 : 35
     }
@@ -232,7 +232,7 @@ export default class PortfoliosPerformanceChart extends React.Component {
 
       addLegend("#eba91b", "Material Value", 112);
 
-      addLegend("#5CEF70", "Potential Profit", 58);
+      addLegend("#5CEF70", "Profit Margin", 58);
     }
 
     return (
