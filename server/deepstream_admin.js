@@ -1,5 +1,5 @@
 import { getCollection } from './mongo_interface';
-import { publishSubscription, publishAuditLog } from './deepstream_publishers';
+import { publishSubscription, publishAuditLog, publishNotifications } from './deepstream_publishers';
 
 export function configureAdminListeners(deepstream) {
 
@@ -44,6 +44,16 @@ export function configureAdminListeners(deepstream) {
     }, (err, db) => {
 
       publishAuditLog();
+    });
+
+    getCollection('notifications').insertOne({
+      'user_id': command.user_id,
+      'time': new Date(),
+      'read': false,
+      'message': `A deposit has been made into your account for the amount of ${command.balance} ISK`
+    }, (err, db) => {
+
+      publishNotifications(command.user_id);
     });
 
   });
