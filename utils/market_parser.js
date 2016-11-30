@@ -14,6 +14,7 @@ var groups = [];
 var items = null;
 
 var id2name = {};
+var id2volume = {};
 
 function findItems(obj) {
 
@@ -41,6 +42,7 @@ function findItems(obj) {
         obj.items.push({id: i, name: items[i].name.en});
 
         id2name[i] = items[i].name.en;
+        id2volume[parseInt(i)] = items[i].volume;
       }
     }
   }
@@ -106,6 +108,7 @@ try {
   fs.writeFileSync('market_groups.json', JSON.stringify(groups));
   fs.writeFileSync('market_ids.json', JSON.stringify(ids));
   fs.writeFileSync('market_id_to_name.json', JSON.stringify(id2name));
+  fs.writeFileSync('market_id_to_volume.json', JSON.stringify(id2volume));
   fs.writeFileSync('market_ids_str.json', JSON.stringify(ids_str));
 
 } catch (e) {

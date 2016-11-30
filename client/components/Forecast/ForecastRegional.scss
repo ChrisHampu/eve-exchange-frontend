@@ -1,0 +1,103 @@
+@import '../variables.scss';
+
+.root {
+  width: 100%;
+  height: 100%;
+  .container {
+    flex-direction: row;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+
+    .pane {
+      width: 100%;
+      height: 100%;
+
+      &.larger {
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      &.aside {
+        flex: 0;
+      }
+    }
+  }
+}
+
+.browser_route {
+  color: $blue-color;
+  cursor: pointer;
+
+  &:hover {
+    color: color($blue-color lightness(+15%));
+  }
+}
+
+.row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.298039);
+  color: rgb(255, 255, 255);
+  height: 48px;
+
+  .column {
+    padding-left: 24px;
+    padding-right: 24px;
+    height: 48px;
+    text-align: center;
+    font-size: 13px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background-color: inherit;
+    text-align: center;
+
+    .price {
+
+    }
+
+    .quantity {
+
+    }
+
+    .volume {
+      
+    }
+  }
+}
+
+.header {
+  background-color: #1e2327;
+  padding: 1rem;
+
+  .selector {
+    margin-left: 1.5rem;
+    display: inline-block;
+  }
+
+  .title {
+    display: inline-block;
+    //margin-left: 1.5rem;
+    color: #eba91b;
+    font-weight: 300;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+
+  .counter {
+    display: inline-block;
+    margin-left: 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+.table_header {
+  padding: 1rem;
+  cursor: pointer;
+  user-select: none;
+
+  svg {
+    vertical-align: middle;
+  }
+}

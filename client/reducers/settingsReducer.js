@@ -44,6 +44,12 @@ const initialState = {
     max_spread: 20,
     min_volume: 50,
     max_volume: 200
+  },
+  forecast_regional: {
+    max_volume: 100000,
+    max_price: 1000000000,
+    start_region: 10000043,
+    end_region: 10000002
   }
 };
 
@@ -172,7 +178,6 @@ export default function settings(state = initialState, action) {
 
       return newSettings;
 
-
     case "UPDATE_FORECAST_SETTING":
 
       if (!action.setting) {
@@ -184,6 +189,22 @@ export default function settings(state = initialState, action) {
       }
 
       newSettings = { ...state, forecast: { ...state.forecast, [action.setting]: action.value } }
+
+      saveSettings(newSettings);
+
+      return newSettings;
+
+    case "UPDATE_FORECAST_REGIONAL_SETTING":
+
+      if (!action.setting) {
+        return state;
+      }
+
+      if (action.value === 'undefined' || action.value === null) {
+        return state;
+      }
+
+      newSettings = { ...state, forecast_regional: { ...state.forecast_regional, [action.setting]: action.value } }
 
       saveSettings(newSettings);
 

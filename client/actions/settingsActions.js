@@ -37,3 +37,7 @@ export function updateGuidebookSetting(setting, value) {
 export function updateForecastSetting(setting, value) {
   return { type: "UPDATE_FORECAST_SETTING", setting, value };
 }
+
+export function updateForecastRegionalSetting(setting, value) {
+  return { type: "UPDATE_FORECAST_REGIONAL_SETTING", setting, value };
+}
