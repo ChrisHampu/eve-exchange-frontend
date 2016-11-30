@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import s from './GuidebookPage.scss';
+import { browserHistory } from 'react-router';
 
 export default class GuidebookHome extends React.Component {
 
@@ -13,14 +14,18 @@ export default class GuidebookHome extends React.Component {
     return (
       <div className={s.body}>
         <div className={s.title}>Premium</div>
-        <p>While most features of this application are free to use, a subscription can be added to your account for a monthly fee of <b>150M ISK</b>. Subscribing gives a small incentive to our team for the time that is put into building this application and gives access to the following additional features:
+        <p>While most features of this application are free to use, a subscription can be added to your account for a monthly fee of <b>150M ISK</b>. Subscribing gives a small incentive to our team for the time that is put into building this application and gives access to the following additional features:</p>
         <ul>
           <li><b>Forecasting</b>: Allows you to near-instantly search through the entire market for tradeable items that meet specific criteria of price, margin, and daily volume.</li>
           <li><b>Investment Portfolio</b>: Allows you to track a grouping of tradeable items with aggregated prices, volume, and margin over a long period of time, complete with hourly and daily performance charts.</li>
           <li><b>Industrial Portfolio</b>: Select any manufacturable item and instantly see the components and raw materials necessary to build it along with profit margins, performance charts to track profitability over time, and component charts to see component price hot spots. Calculates materials based on user given material efficiency and other options.</li>
           <li><b>API Access</b>: Our extensive API can provide endpoints for retrieving market data, portfolios, forecasts, orders, and more. Full API features require an additional subscription. More information can be found in your profile with complete documentation.</li>
        </ul>
+        <p>
         You can find further details on these features throughout the reference pages.
+        </p>
+        <p>
+        You can manage your subscription settings at your <span className={s.link} onClick={()=>this.setRoute("/dashboard/profile/subscription")}>profile subscription page</span>.
         </p>
         <h3>How to Subscribe</h3>
         <p>Upgrading your account to a Premium subscription requires that you have a balance on your EVE Exchange account that can cover the minimum of 1 month of Premium. The upgrade can be performed any time from your profile subscription page. In order to add a balance to your account, you can follow the deposit instructions below.</p>
