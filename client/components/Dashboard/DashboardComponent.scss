@@ -163,6 +163,10 @@
           fill: $base-color-lightest !important;
       }
 
+      .dashboard_header_premium_icon svg {
+          fill: $gold-color !important;
+      }
+
       .dashboard_header_notifications_container {
         display: inline-block;
         vertical-align: middle;

@@ -37,6 +37,7 @@ import MenuToggleIcon from 'material-ui/svg-icons/navigation/menu';
 import GuidebookIcon from 'material-ui/svg-icons/av/library-books';
 import LogIcon from 'material-ui/svg-icons/action/assignment-turned-in';
 import LockIcon from 'material-ui/svg-icons/action/lock-outline';
+import StarIcon from 'material-ui/svg-icons/action/grade';
 
 const MainMenu = [
   {
@@ -284,6 +285,14 @@ class Dashboard extends React.Component {
               </IconButton>
             </ToolbarGroup>
             <ToolbarGroup className={cx(s.dashboard_toolbar, s.dashboard_toolbar_right)}>
+              {
+                !userHasPremium() ?
+                  <div className={s.dashboard_header_premium_icon}>
+                      <IconButton style={{width: "56px", height: "56px"}} tooltip="Enjoy Premium Benefits" onClick={()=>this.context.router.push("/dashboard/reference/premium")}>
+                        <StarIcon />
+                      </IconButton>
+                  </div> : false
+              }
               <div className={s.dashboard_header_notifications_container}>
                 <Badge
                   className={cx(s.dashboard_header_notifications, { [s.dashboard_header_notifications_unread]: this.props.notifications.filter(el => el.read === false).length > 0 })}
