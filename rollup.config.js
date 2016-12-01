@@ -79,11 +79,13 @@ export default {
       const values = {
         'var index = Object': 'var _reduxMap = Object',
         "\\( index && index\\['default'\\] \\) \\|\\| index": "( _reduxMap && _reduxMap['default'] ) || _reduxMap",
-        'var _RadioButton = index\\$\\d\\d\\d': 'var _RadioButton = RadioButton$1',
+        'var _RadioButton = index\\$\\d\\d': 'var _RadioButton = RadioButton$1',
         'TcpConnection, events.EventEmitter': 'TcpConnection, events',
         'var name = message.data\\[ message.action === C.ACTIONS.ACK \\? 1 : 0 \\];': 'var name = message.data[ message.action === C.ACTIONS.ACK ? 1 : 0 ];\nvar processed;',
         'var events = createCommonjsModule\\(function': 'var events_mui = createCommonjsModule(function',
-        'var _events = events;': 'var _events = events_mui'
+        'var _events = events;': 'var _events = events_mui',
+        'return setInterval\\$1\\( callback, intervalDuration \\);': 'return setInterval( callback, intervalDuration );',
+        'return setTimeout\\$1\\( callback, timeoutDuration \\);': 'return setTimeout( callback, timeoutDuration );'
       };
 
       const keys = Object.keys(values);
