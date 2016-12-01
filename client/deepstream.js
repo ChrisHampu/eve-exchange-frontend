@@ -12,7 +12,7 @@ import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats,
 import 'whatwg-fetch';
 import xml2js from 'xml-json-parser';
 
-const deepstream = Deepstream();
+const deepstream = Deepstream('wss://eve.exchange');
 const token_name = 'token';
 let subscribed = false;
 let subscriptions = [];
