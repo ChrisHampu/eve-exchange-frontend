@@ -28,6 +28,7 @@ import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
 import BrowserIcon from 'material-ui/svg-icons/action/shopping-cart';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import LeftArrowIcon from 'material-ui/svg-icons/navigation/arrow-back';
+import RightArrowIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 import ProfitIcon from 'material-ui/svg-icons/action/timeline';
 import OrderIcon from 'material-ui/svg-icons/content/content-paste';
 import ForecastIcon from 'material-ui/svg-icons/action/search';
@@ -142,7 +143,8 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      showMenu: null
+      showMenu: null,
+      collapsed: false
     };
   }
 
@@ -170,7 +172,7 @@ class Dashboard extends React.Component {
       }
     }
 
-    return cx(s.sidebar_menu_item, {[s.focused]: focus});
+    return cx(s.sidebar_menu_item, {[s.focused]: focus, [s.collapsed]: this.state.collapsed});
   }
 
   componentWillReceiveProps() {
@@ -183,9 +185,15 @@ class Dashboard extends React.Component {
   renderMenu(items) {
 
     return items.map((item, i) => {
-      return (item.perm === "premium" ? userHasPremium() : userHasGroup(item.perm) )? <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
-       className={this.getPathClass(item)}
-       primaryText={item.name} leftIcon={item.icon} /> : null;
+      return (item.perm === "premium" ? userHasPremium() : userHasGroup(item.perm) ) ?
+        this.state.collapsed ?
+          <IconButton key={i} onTouchTap={()=>{ this.setRoute(item.route); }} className={this.getPathClass(item)}>
+            {item.icon}
+          </IconButton> :
+        <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
+          className={this.getPathClass(item)}
+          primaryText={item.name} leftIcon={item.icon}
+        /> : null;
     });
   }
 
@@ -197,12 +205,17 @@ class Dashboard extends React.Component {
         <div className={s.sidebar_menu_divider}>
         Admin
         </div>
-        <Menu className={s.sidebar_menu}>
+        <Menu className={s.sidebar_menu} width={225}>
           {
             AdminMenu.map((item, i) => {
-              return <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
-               className={this.getPathClass(item)}
-               primaryText={item.name} leftIcon={item.icon} />;
+              return this.state.collapsed ? 
+              <IconButton key={i} onTouchTap={()=>{ this.setRoute(item.route); }} className={this.getPathClass(item)}>
+                {item.icon}
+              </IconButton>
+              : <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
+                  className={this.getPathClass(item)}
+                  primaryText={item.name} leftIcon={item.icon}
+                />;
             })
           }
         </Menu>
@@ -230,28 +243,40 @@ class Dashboard extends React.Component {
 
     return (
       <div className={s.root}>
-        <Paper zDepth={2} className={s.sidebar_container}>
+        <Paper zDepth={2} className={cx(s.sidebar_container, {[s.collapsed]: this.state.collapsed})}>
           <div className={s.sidebar_inner}>
             <div className={s.sidebar_title}>
               <span className={s.name} onClick={()=>this.setRoute('/')}><img src={`${logo_image.src}`} /></span>
             </div>
-            <Divider className={s.divider_line} />
-            <div className={s.sidebar_menu_divider}>
-            Main
+            <div className={s.sidebar_menu_container}>
+              <Divider className={s.divider_line} />
+              <div className={s.sidebar_menu_divider}>
+              Main
+              </div>
+              <Menu className={s.sidebar_menu} width={225}>
+              { this.renderMenu(MainMenu) }
+              </Menu>
+              <Divider className={s.divider_line} />
+              <div className={s.sidebar_menu_divider}>
+              Market
+              </div>
+              <Menu className={s.sidebar_menu} width={225}>
+              { this.renderMenu(MarketMenu) }
+              </Menu>
+              {
+                userHasGroup("admin") ? this.renderAdminMenu() : false
+              }
             </div>
-            <Menu className={s.sidebar_menu}>
-            { this.renderMenu(MainMenu) }
-            </Menu>
-            <Divider className={s.divider_line} />
-            <div className={s.sidebar_menu_divider}>
-            Market
+            <div className={cx(s.sidebar_collapse, {[s.collapsed]: this.state.collapsed})} onClick={()=>this.setState({collapsed: !this.state.collapsed})}>
+              <div className={s.sidebar_collapse_inner}>
+                <div className={s.sidebar_collapse_icon}>
+                  { this.state.collapsed ? <RightArrowIcon color="#95a1ac" viewBox="0 0 18 18"/> : <LeftArrowIcon color="#95a1ac" viewBox="0 0 18 18"/> }
+                </div>
+                <div className={s.sidebar_collapse_text}>
+                  Collapse
+                </div>
+              </div>
             </div>
-            <Menu className={s.sidebar_menu}>
-            { this.renderMenu(MarketMenu) }
-            </Menu>
-            {
-              userHasGroup("admin") ? this.renderAdminMenu() : false
-            }
           </div>
         </Paper>
         <Drawer
