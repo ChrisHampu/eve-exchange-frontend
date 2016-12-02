@@ -193,7 +193,8 @@ class APIAccess extends React.Component {
         }
         <div></div>
         <div>
-          <p>Additional endpoints enabled through subscribing to API access:</p>
+          <p>Benefits of subscribing to API access includes access to all 23+ endpoints fully documented at <a target="_blank" href="https://api.eve.exchange">our API page</a>.</p>
+          <p>Including the following useful endpoints:</p>
           <ul>
             <li>Current market prices (5 minute cache time)</li>
             <li>Market history (5 minutes, hourly, daily)</li>
