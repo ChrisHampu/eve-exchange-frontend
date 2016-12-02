@@ -107,19 +107,17 @@ export function getMarketGroupTree(searchText) {
     return sde.market_groups;
   }
 
+  const _searchText = new RegExp(searchText.toLowerCase());
+
   const _getGroups = (group, searchText, accumulator, functor) => {
 
     if (group.items && group.items.length) {
 
-      const items = fuzzy.filter(searchText, group.items, { extract: item => item.name });
+      let items = group.items.filter(el=>el.name.toLowerCase().match(_searchText));/*, { extract: item => item.name });*/
 
       if (items.length) {
 
-        const _items = items.map((el) => {
-          return group.items[el.index]
-        });
-
-        accumulator.push({...group, items: _items});
+        accumulator.push({...group, items: items});
       }
 
       return;
