@@ -7,6 +7,7 @@ import { userHasGroup, userHasPremium } from '../../auth';
 import cx from 'classnames';
 import DashboardView from './DashboardView';
 import s from './DashboardComponent.scss';
+import FullscreenComponent from './FullscreenComponent';
 
 import logo_image from '../../assets/img/eve-x-logo.png';
 
@@ -348,6 +349,7 @@ class Dashboard extends React.Component {
             <DashboardView />
           }
         </div>
+        <FullscreenComponent />
       </div>
     );
   }

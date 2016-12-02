@@ -113,7 +113,7 @@ class MarketItemChart extends React.Component {
   getAggregateData() {
 
     // Check if still loading components
-    if (!this.refs.container) {
+    if (!this.refs.container || !this.props.item) {
       return null;
     }
 
@@ -171,7 +171,7 @@ class MarketItemChart extends React.Component {
   getCompleteAggregateData() {
 
     // Check if still loading components
-    if (!this.refs.container) {
+    if (!this.refs.container|| !this.props.item) {
       return null;
     }
 

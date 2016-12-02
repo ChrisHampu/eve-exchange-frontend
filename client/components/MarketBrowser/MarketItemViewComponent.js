@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import { subscribeItem, unsubscribeItem, itemIDToName } from '../../market';
 import { pinChartToDashboard, unPinChartFromDashboard } from '../../actions/settingsActions';
+import { appEnterFullscreen } from '../../actions/appActions';
 import { userHasPremium } from '../../auth';
 import { formatNumberUnit, formatPercent } from '../../utilities';
 
@@ -22,6 +23,7 @@ import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CheckIcon from 'material-ui/svg-icons/action/check-circle';
 import LeftArrowIcon from 'material-ui/svg-icons/navigation/chevron-left';
+import FullscreenIcon from 'material-ui/svg-icons/navigation/fullscreen';
 
 class MarketItemViewComponent extends React.Component {
 
@@ -133,6 +135,9 @@ class MarketItemViewComponent extends React.Component {
             : false
           }
           <div className={s.market_item_view_header_menus}>
+            <IconButton onClick={()=>store.dispatch(appEnterFullscreen(1, {item: this.state.item}))} tooltip="Fullscreen" tooltipPosition="bottom-center" style={{zIndex: 1}}>
+              <FullscreenIcon />
+            </IconButton>
             <IconButton onClick={()=>{this.context.router.push('/dashboard/browser')}} tooltip="Close" tooltipPosition="bottom-center" style={{zIndex: 1}}>
               <CloseIcon />
             </IconButton>
