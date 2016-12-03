@@ -30,8 +30,8 @@ export default class GuidebookHome extends React.Component {
         <h3>How to Subscribe</h3>
         <p>Upgrading your account to a Premium subscription requires that you have a balance on your EVE Exchange account that can cover the minimum of 1 month of Premium. The upgrade can be performed any time from your profile subscription page. In order to add a balance to your account, you can follow the deposit instructions below.</p>
         <h4>Deposit</h4>
-        <p>A deposit can be made by sending any ISK amount to <b>EVE Exchange Holdings</b> with the ticker <b>E-XCH</b> and CEO <b>Maxim Stride</b>. Deposits are not yet fully automated, so it may take some time for it to be processed depending on your current timezone. You'll be notified once the deposit has been confirmed.</p>
-        <p>In order to ensure that deposits are applied to the correct account, make sure that the ISK is sent from the main character of your account. That is the character shown in the top right of the application. If a deposit is done incorrectly, the ISK will be returned.</p>
+        <p>A deposit can be made by sending any ISK amount to <b>EVE Exchange Holdings</b> with the ticker <b>E-XCH</b> and CEO <b>Maxim Stride</b>. Deposits are fully automated and processed during regular API pulls which happen on the hour. You'll be notified once the deposit has been confirmed.</p>
+        <p>In order to ensure that deposits are applied to the correct account, make sure that the ISK is sent from the main character of your account. That is the character shown in the top right of the application. If a deposit is done incorrectly, the ISK will be returned by a site admin, but will take a while.</p>
         <p>Any subscription balance added to your EVE Exchange account will never expire.</p>
         <h3>Downgrade</h3>
         <p>If you wish to cancel your subscription, you can do so anytime from your profile subscription page. Please note that if you do, you will <b>forfeit the remaining time on your active subscription</b>. 

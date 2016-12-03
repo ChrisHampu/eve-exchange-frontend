@@ -74,7 +74,7 @@ class Subscription extends React.Component {
 
     if (this.props.subscription.premium === false) {
       if (this.props.subscription.balance < PremiumPrice) {
-        info = <span>In order to subscribe for premium, deposits can be made by sending any ISK amount to <b>EVE Exchange Holdings</b> with the ticker <b>E-XCH</b> and CEO <b>Maxim Stride</b>. Deposits are not yet fully automated, so it may take some time for them to be processed depending on your current timezone. You'll be notified once the deposit has been confirmed.</span>;
+        info = <span>In order to subscribe for premium, deposits can be made by sending any ISK amount to <b>EVE Exchange Holdings</b> with the ticker <b>E-XCH</b> and CEO <b>Maxim Stride</b>. Deposits are fully automated and processed on the hour. You'll be notified once the deposit has been confirmed.</span>;
       } else {
         info = <span>By upgrading to premium you will gain access to all premium features for 30 days with an automatic renewal.<br />
                 The upgrade process will be instant upon clicking the above button and confirming your subscription.</span>;
