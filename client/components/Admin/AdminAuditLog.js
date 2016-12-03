@@ -75,15 +75,22 @@ class AdminAuditLog extends React.Component {
 
                     let name = "";
 
-                    if (!id2name.hasOwnProperty(el.user_id)) {
+                    if (el.user_id && el.user_id > 0 && !id2name.hasOwnProperty(el.user_id)) {
                       id2name[el.user_id] = this.props.subs[this.props.subs.findIndex(sub => sub.user_id === el.user_id)].user_name;
                     }
 
                     if ((el.action === 1 || el.action === 0 ) && !id2name.hasOwnProperty(el.target)) {
-                      id2name[el.target] = this.props.subs[this.props.subs.findIndex(sub => sub.user_id === el.target)].user_name;
+
+                      const _find = this.props.subs.findIndex(sub => sub.user_id === el.target);
+
+                      if (!this.props.subs.hasOwnProperty(_find)) {
+                        id2name[el.target] = "Unknown";
+                      } else {
+                        id2name[el.target] = this.props.subs[_find].user_name;
+                      }
                     }
 
-                    name = id2name[el.user_id];
+                    name = el.user_id ? id2name[el.user_id] : "System";
 
                     return (
                      <TableRow key={i} selectable={false}>
