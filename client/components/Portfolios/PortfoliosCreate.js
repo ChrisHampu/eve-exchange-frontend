@@ -452,7 +452,7 @@ class PortfoliosCreate extends React.Component {
                 </div> : false
             }
             <div style={{color: "#fff", margin: "1.25rem 0"}}>
-            If the above looks correct, hit Finish to create your new portfolio
+            If the above looks correct, hit Finish to create your new portfolio. Please note that new portfolios will take up to 5 minutes to begin showing data.
             </div>
             {
               this.state.error ?
