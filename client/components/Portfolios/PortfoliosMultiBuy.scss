@@ -1,0 +1,38 @@
+@import '../variables.scss';
+
+.root {
+  display: flex;
+
+  .options {
+
+    padding: 1rem 0 0 1rem;
+
+    .total_price {
+
+      padding-top: 1rem;
+
+      span {
+        font-size: 1.2rem;
+        color: $gold-color;
+      }
+    }
+  }
+
+  .table {
+    padding: 1rem;
+    flex: 1;
+    overflow-y: auto;
+
+    table {
+      background-color: rgb(40, 46, 51) !important;
+    }
+
+    .green {
+      color: $green-color;
+    }
+
+    .red {
+      color: $red-color;
+    }
+  }
+}
