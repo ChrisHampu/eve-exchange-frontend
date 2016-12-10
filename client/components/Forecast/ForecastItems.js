@@ -22,6 +22,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import UpArrow from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 import DownArrow from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
@@ -331,6 +332,14 @@ class ForecastComponent extends React.Component {
                 style={{display: "block", marginBottom: ".8rem"}}
                 onChange={this.setVolumeMax}
                 value={this.props.settings.forecast.max_volume}
+              />
+              <RaisedButton 
+                backgroundColor="rgb(30, 35, 39)"
+                labelColor="rgb(235, 169, 27)"
+                label="Search"
+                disabledBackgroundColor="rgb(30, 35, 39)"
+                disabled={this.state.loading}
+                onTouchTap={()=>this.setState({queueQuery: true})} 
               />
             </div>
             <div className={cx(s.pane, s.larger)}>

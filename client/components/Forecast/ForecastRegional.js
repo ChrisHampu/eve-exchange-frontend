@@ -18,6 +18,7 @@ import OverlayStack from '../OverlayStack/OverlayStack';
 import MarketItemViewComponent from '../MarketBrowser/MarketItemViewComponent';
 import GuidebookLink from '../Guidebook/GuidebookLink';
 
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -332,6 +333,14 @@ class ForecastComponent extends React.Component {
                 style={{display: "block", marginBottom: ".8rem"}}
                 onChange={this.setPriceMax}
                 value={this.props.settings.forecast_regional.max_price}
+              />
+              <RaisedButton 
+                backgroundColor="rgb(30, 35, 39)"
+                labelColor="rgb(235, 169, 27)"
+                label="Search"
+                disabledBackgroundColor="rgb(30, 35, 39)"
+                disabled={this.state.loading}
+                onTouchTap={()=>this.setState({queueQuery: true})} 
               />
             </div>
             <div className={cx(s.pane, s.larger)}>

@@ -73,8 +73,8 @@ class MarketBrowserOrderTable extends React.Component {
 
     const current = this.getMarketAggregates().sort((el1, el2) => el1.time - el2.time)[0] || { sellPercentile: 0, buyPercentile: 0 };
 
-    const topSell = sellOrders.splice(0, Math.min(10, sellOrders.filter(el => el.price > current.sellPercentile).length));
-    const topBuy = buyOrders.splice(0, Math.min(10, buyOrders.filter(el => el.price > current.buyPercentile).length));
+    const topSell = sellOrders.splice(0, Math.min(10, sellOrders.filter(el => el.price >= current.sellPercentile).length));
+    const topBuy = buyOrders.splice(0, Math.min(10, buyOrders.filter(el => el.price <= current.buyPercentile).length));
 
     return (
       <div className={s.market_item_order_container}>
