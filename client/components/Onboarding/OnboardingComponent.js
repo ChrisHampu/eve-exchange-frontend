@@ -74,7 +74,7 @@ export default class OnboardingComponent extends React.Component {
               onClick={()=>this.setRoute(this.state.loggedIn?"/dashboard":"/login")}
             />
             <div className={s.button_blurb}>
-            No registration required, instance access
+            No registration required, instant access
             </div>
           </div>
         </div>
