@@ -1,0 +1,34 @@
+@import '../variables.scss';
+
+.root {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+
+  .table {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: $base-color-darker;
+  }
+
+  .paginator {
+    background-color: $base-color-darkest;
+    border-top: 1px solid $base-color-darkest;
+
+    span {
+      padding: 0.75rem;
+      color: $gold-color;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    span.active {
+      background-color: $base-color-darker;
+    }
+
+    span:hover {
+      background-color: $base-color-darker;
+    }
+  } 
+}

@@ -11,15 +11,16 @@ import { getAuthToken } from '../../deepstream';
 import { itemIDToName } from '../../market';
 import { formatNumberUnit, formatPercent } from '../../utilities';
 import { APIEndpointURL } from '../../globals';
+import PaginatedTable from '../UI/PaginatedTable';
 
 // Components';
 import OverlayStack from '../OverlayStack/OverlayStack';
 import MarketItemViewComponent from '../MarketBrowser/MarketItemViewComponent';
 import GuidebookLink from '../Guidebook/GuidebookLink';
 
+import { TableHeaderColumn } from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -177,78 +178,65 @@ class ForecastComponent extends React.Component {
 
         results = results.sort((el1, el2) => !this.state.direction ? el1.volume_sma - el2.volume_sma : el2.volume_sma - el1.volume_sma);
       }
-
-      results = results.slice(0, 100);
-
     }
 
     return (
-      <div style={{"paddingLeft": "1rem"}}>
+      <div style={{"paddingLeft": "1rem", height: "100%", overflow: "hidden", display: "flex", flexDirection: "column"}}>
         <div className={s.header}>
           <div className={s.title}>
           Results
           </div>
           <div className={s.counter}>
-          Showing {results.length} results
+          Retrieved {results.length} results across {Math.ceil(results.length / 100)} page(s)
           </div>
         </div>
-        <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
-          <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-            <TableRow selectable={false}>
-              <TableHeaderColumn style={{textAlign: "center"}}>
-                <div className={s.table_header} onClick={()=>this.setSort(0)}>
-                Name
-                {
-                  this.state.sort == 0 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
-                }
-                </div>
-              </TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>
-                <div className={s.table_header} onClick={()=>this.setSort(1)}>
-                Price
-                {
-                  this.state.sort == 1 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
-                }
-                </div>
-              </TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>
-                <div className={s.table_header} onClick={()=>this.setSort(2)}>
-                Spread
-                {
-                  this.state.sort == 2 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
-                }
-                </div>
-              </TableHeaderColumn>
-              <TableHeaderColumn style={{textAlign: "center"}}>
-                <div className={s.table_header} onClick={()=>this.setSort(3)}>
-                Volume
-                {
-                  this.state.sort == 3 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
-                }
-                </div>
-              </TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
-            {
-              !this.state.searchResults || this.state.searchResults.length === 0 ?
-                <TableRow selectable={false}>
-                  <TableRowColumn>No records available</TableRowColumn>
-                </TableRow>
-                :
-                results.map((el, i) => {
-                  return (
-                    <tr key={i} className={s.row}>
-                      <td className={s.column}><span className={s.browser_route} onClick={()=>this.setState({showItem: el.type})}>{itemIDToName(el.type)}</span></td>
-                      <td className={s.column}>{formatNumberUnit(el.buyPercentile || 0)}</td>
-                      <td className={s.column}>{formatPercent(el.spread_sma || 0)}%</td>
-                      <td className={s.column}>{el.volume_sma ? el.volume_sma.toFixed(0) : 0}</td>
-                    </tr>
-                  )
-                })
-            }
-          </TableBody>
-        </Table>
+        <PaginatedTable
+          headers={[
+            <TableHeaderColumn style={{textAlign: "center"}} key={0}>
+              <div className={s.table_header} onClick={()=>this.setSort(0)}>
+              Name
+              {
+                this.state.sort == 0 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+              }
+              </div>
+            </TableHeaderColumn>,
+            <TableHeaderColumn style={{textAlign: "center"}} key={1}>
+              <div className={s.table_header} onClick={()=>this.setSort(1)}>
+              Price
+              {
+                this.state.sort == 1 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+              }
+              </div>
+            </TableHeaderColumn>,
+            <TableHeaderColumn style={{textAlign: "center"}} key={2}>
+              <div className={s.table_header} onClick={()=>this.setSort(2)}>
+              Spread
+              {
+                this.state.sort == 2 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+              }
+              </div>
+            </TableHeaderColumn>,
+            <TableHeaderColumn style={{textAlign: "center"}} key={3}>
+
+              <div className={s.table_header} onClick={()=>this.setSort(3)}>
+              Volume
+              {
+                this.state.sort == 3 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+              }
+              </div>
+            </TableHeaderColumn>
+          ]}
+          items={results.map((el, i) => {
+            return (
+              <tr key={i} className={s.row}>
+                <td className={s.column}><span className={s.browser_route} onClick={()=>this.setState({showItem: el.type})}>{itemIDToName(el.type)}</span></td>
+                <td className={s.column}>{formatNumberUnit(el.buyPercentile || 0)}</td>
+                <td className={s.column}>{formatPercent(el.spread_sma || 0)}%</td>
+                <td className={s.column}>{el.volume_sma ? el.volume_sma.toFixed(0) : 0}</td>
+              </tr>
+            )
+          })}
+        />
       </div>
     )
   }
