@@ -5,9 +5,10 @@ import store from '../../store';
 import cx from 'classnames';
 import s from './ProfitTransactions.scss'
 import { formatNumberUnit, prettyDate } from '../../utilities';
+import PaginatedTable from '../UI/PaginatedTable';
 
 import CircularProgress from 'material-ui/CircularProgress';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
 class ProfitTransactions extends React.Component {
 
@@ -27,45 +28,27 @@ class ProfitTransactions extends React.Component {
   render() {
 
     return (
-      <div style={{marginBottom: "2rem"}}>
-      {
-        !this.props.transactions ?
-          <div style={{display: "flex", alignItems: "center", width: "100%", height: "100%"}}>
-            <CircularProgress color="#eba91b" style={{margin: "0 auto"}}/>
-          </div>
-          :
-          <Table selectable={false} style={{backgroundColor: "rgb(40, 46, 51)"}}>
-            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-              <TableRow selectable={false}>
-                <TableHeaderColumn style={{textAlign: "center"}}>When</TableHeaderColumn>
-                <TableHeaderColumn style={{textAlign: "center"}}>Item Name</TableHeaderColumn>
-                <TableHeaderColumn style={{textAlign: "center"}}>Profit</TableHeaderColumn>
-                <TableHeaderColumn style={{textAlign: "center"}}>Volume Sold</TableHeaderColumn>
-                <TableHeaderColumn style={{textAlign: "center"}}>Who</TableHeaderColumn>
+      <div style={{height: "100%", overflow: "hidden", display: "flex"}}>
+        <PaginatedTable
+          headers={[
+            <TableHeaderColumn style={{textAlign: "center"}}>When</TableHeaderColumn>,
+            <TableHeaderColumn style={{textAlign: "center"}}>Item Name</TableHeaderColumn>,
+            <TableHeaderColumn style={{textAlign: "center"}}>Profit</TableHeaderColumn>,
+            <TableHeaderColumn style={{textAlign: "center"}}>Volume Sold</TableHeaderColumn>,
+            <TableHeaderColumn style={{textAlign: "center"}}>Who</TableHeaderColumn>
+          ]}
+          items={this.props.transactions.sort((el1, el2) => new Date(el2.time) - new Date(el1.time)).map((el, i) => {
+            return (
+             <TableRow key={i} selectable={false}>
+                <TableRowColumn style={{textAlign: "center"}}>{prettyDate(el.time)}</TableRowColumn>
+                <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{el.name}</span></TableRowColumn>
+                <TableRowColumn style={this.formatColoured(el.totalProfit)}>{formatNumberUnit(el.totalProfit)}</TableRowColumn>
+                <TableRowColumn style={{textAlign: "center"}}>{el.quantity}</TableRowColumn>
+                <TableRowColumn style={{textAlign: "center"}}>{el.who}</TableRowColumn>
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-              {
-                this.props.transactions.length === 0 ?
-                  <TableRow selectable={false}>
-                    <TableRowColumn>No records available</TableRowColumn>
-                  </TableRow>
-                  :
-                  this.props.transactions.sort((el1, el2) => new Date(el2.time) - new Date(el1.time)).map((el, i) => {
-                    return (
-                     <TableRow key={i} selectable={false}>
-                        <TableRowColumn style={{textAlign: "center"}}>{prettyDate(el.time)}</TableRowColumn>
-                        <TableRowColumn style={{textAlign: "center"}}><span className={s.browser_route} onClick={()=>{this.setRoute(`/dashboard/browser/${el.type}`)}}>{el.name}</span></TableRowColumn>
-                        <TableRowColumn style={this.formatColoured(el.totalProfit)}>{formatNumberUnit(el.totalProfit)}</TableRowColumn>
-                        <TableRowColumn style={{textAlign: "center"}}>{el.quantity}</TableRowColumn>
-                        <TableRowColumn style={{textAlign: "center"}}>{el.who}</TableRowColumn>
-                      </TableRow>
-                    )
-                  })
-              }
-            </TableBody>
-          </Table>
-      }
+            )
+          })}
+        />
       </div>
     );
   }
