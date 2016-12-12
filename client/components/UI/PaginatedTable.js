@@ -10,7 +10,8 @@ export default class PaginatedTable extends React.Component {
     items: React.PropTypes.array,
     headers: React.PropTypes.array,
     itemsPerPage: React.PropTypes.number,
-    showPagination: React.PropTypes.bool
+    showPagination: React.PropTypes.bool,
+    blurb: React.PropTypes.string
   };
 
   constructor(props) {
@@ -65,7 +66,7 @@ export default class PaginatedTable extends React.Component {
               {
                 !this.props.items || this.props.items.length === 0 ?
                   <TableRow selectable={false}>
-                    <TableRowColumn>No records available</TableRowColumn>
+                    <TableRowColumn>{this.props.blurb || "No records available"}</TableRowColumn>
                   </TableRow>
                   :
                   this.getItems()
