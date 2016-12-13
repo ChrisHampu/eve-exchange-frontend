@@ -142,7 +142,11 @@ class ProfileView extends React.Component {
                 titleColor={this.props.subscription.premium?"rgb(235, 169, 27)":"rgba(255, 255, 255, 0.870588)"}
               />
               <CardText>
-                <div>Master Account { master ? <span>- Wallet Balance: {formatNumber(master.wallet_balance||0)} ISK</span>:null}</div>
+                {
+                  master.error ? 
+                  <div className={s.disabled}>Profit tracking is paused: {master.error}</div> :
+                  <div>Master Account { master ? <span>- Wallet Balance: {formatNumber(master.wallet_balance||0)} ISK</span>:null}</div>
+                }
               </CardText>
               <CardText 
                 expandable={true}
