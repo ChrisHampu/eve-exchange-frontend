@@ -178,6 +178,10 @@ class ForecastComponent extends React.Component {
 
         results = results.sort((el1, el2) => !this.state.direction ? el1.volume_sma - el2.volume_sma : el2.volume_sma - el1.volume_sma);
       }
+      else if (this.state.sort === 4) {
+
+        results = results.sort((el1, el2) => !this.state.direction ? el1.velocity - el2.velocity : el2.velocity - el1.velocity);
+      }
     }
 
     return (
@@ -224,6 +228,15 @@ class ForecastComponent extends React.Component {
                 this.state.sort == 3 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
               }
               </div>
+            </TableHeaderColumn>,
+            <TableHeaderColumn style={{textAlign: "center"}} key={4}>
+
+              <div className={s.table_header} onClick={()=>this.setSort(4)}>
+              Velocity
+              {
+                this.state.sort == 4 ? this.state.direction === 0 ? <UpArrow /> : <DownArrow /> : null
+              }
+              </div>
             </TableHeaderColumn>
           ]}
           items={results.map((el, i) => {
@@ -233,6 +246,7 @@ class ForecastComponent extends React.Component {
                 <td className={s.column}>{formatNumberUnit(el.buyPercentile || 0)}</td>
                 <td className={s.column}>{formatPercent(el.spread_sma || 0)}%</td>
                 <td className={s.column}>{el.volume_sma ? el.volume_sma.toFixed(0) : 0}</td>
+                <td className={s.column} style={{color: el.velocity>0?"#4CAF50":"#F44336"}}>{formatNumberUnit(el.velocity || 0)}</td>
               </tr>
             )
           })}
