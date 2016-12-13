@@ -48,7 +48,7 @@ class ProfitTransactions extends React.Component {
               </TableRow>
             )
           })}
-          blurb="Profit data will begin updating on an hourly schedule after adding an API key"
+          blurb="Profit data will begin updating on an hourly schedule after adding an API key and making a sale"
         />
       </div>
     );
