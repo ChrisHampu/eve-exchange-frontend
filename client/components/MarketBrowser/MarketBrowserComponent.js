@@ -56,7 +56,7 @@ export default class MarketBrowserComponent extends React.Component {
         </div>
         {
           getMarketGroupTree(this.state.searchText).map((el, i) => {
-            return(<MarketBrowserListItem selector={(item)=>{this.selectItem(item);}} element={el} key={i} depth={0} />);
+            return(<MarketBrowserListItem selector={(item)=>{this.selectItem(item);}} element={el} key={i} depth={0} open={this.state.searchText.length >= 3} />);
           })
         }
       </div>

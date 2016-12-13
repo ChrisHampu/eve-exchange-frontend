@@ -12,15 +12,23 @@ export default class MarketBrowserListItem extends React.Component {
   static propTypes = {
     element: React.PropTypes.object,
     depth: React.PropTypes.number,
-    selector: React.PropTypes.func
+    selector: React.PropTypes.func,
+    open: React.PropTypes.bool
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      childrenVisible: false
+      childrenVisible: props.open || false
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    
+    this.setState({
+      childrenVisible: nextProps.open || false
+    });
   }
 
   renderItems() {
@@ -48,7 +56,7 @@ export default class MarketBrowserListItem extends React.Component {
 
     return (
       this.props.element.childGroups.map((el, i) => {
-        return (<MarketBrowserListItem selector={this.props.selector} depth={this.props.depth+1} element={el} key={i} />);
+        return (<MarketBrowserListItem selector={this.props.selector} depth={this.props.depth+1} element={el} key={i} open={this.props.open} />);
       })
     );
   }
