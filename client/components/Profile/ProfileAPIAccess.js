@@ -193,6 +193,7 @@ class APIAccess extends React.Component {
         }
         <div></div>
         <div>
+          <p>The API access cost is prorated from the current day to the day your premium subscription renews, and will then cost the full amount to renew alongside your premium subscription.</p>
           <p>Benefits of subscribing to API access includes access to all 23+ endpoints fully documented at <a target="_blank" href="https://api.eve.exchange">our API page</a>.</p>
           <p>Including the following useful endpoints:</p>
           <ul>
