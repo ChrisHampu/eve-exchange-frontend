@@ -143,7 +143,7 @@ class ProfileView extends React.Component {
               />
               <CardText>
                 {
-                  master.error ? 
+                  master && master.error ? 
                   <div className={s.disabled}>Profit tracking is paused: {master.error}</div> :
                   <div>Master Account { master ? <span>- Wallet Balance: {formatNumber(master.wallet_balance||0)} ISK</span>:null}</div>
                 }
