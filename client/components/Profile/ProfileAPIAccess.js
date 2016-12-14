@@ -31,6 +31,25 @@ class APIAccess extends React.Component {
     return 150000000;
   }
 
+  getAccessCostProrate() {
+
+    // Find when subscription renews
+    const renewal = new Date(new Date(this.props.subscription.subscription_date).getTime() + 2592000000);
+    // Current date
+    const current = new Date();
+
+    // Offset from renewal date to today
+    const offset = renewal.getTime() - current.getTime();
+
+    // Convert from milliseconds to number of days
+    const days = Math.floor(offset / 1000 / 60 / 60 / 24);
+
+    // Cost is total cost - prorated
+    const cost = this.getAccessCost() - Math.max(0, Math.min(this.getAccessCost(), 5000000 * (29 - days)));
+
+    return cost;
+  }
+
   openSubUpgrade = () => this.setState({subUpgradeDialogOpen: true});
   closeSubUpgrade = () => this.setState({subUpgradeDialogOpen: false});
 
@@ -182,6 +201,12 @@ class APIAccess extends React.Component {
             <div className={s2.info_value}>{this.props.subscription.api_access===true?<div style={{color: "#4CAF50"}}>Enabled</div>:<div style={{color: "#F44336"}}>Disabled</div>}</div>
           </div>
           <div className={s2.info_row}>
+            <div className={s2.info_key}>Initial Access Cost (Prorated)</div>
+            <div className={s2.info_value}>
+            {formatNumber(this.getAccessCostProrate())} ISK
+            </div>
+          </div>
+          <div className={s2.info_row}>
             <div className={s2.info_key}>Access Cost (Monthly)</div>
             <div className={s2.info_value}>
             {formatNumber(this.getAccessCost())} ISK
@@ -193,7 +218,7 @@ class APIAccess extends React.Component {
         }
         <div></div>
         <div>
-          <p>The API access cost is prorated from the current day to the day your premium subscription renews, and will then cost the full amount to renew alongside your premium subscription.</p>
+          <p>The API access cost is prorated from the current day to the day your premium subscription renews, and will then cost the full amount to renew alongside your premium subscription. Premium must be maintained otherwise API access will not renew and will be disabled.</p>
           <p>Benefits of subscribing to API access includes access to all 23+ endpoints fully documented at <a target="_blank" href="https://api.eve.exchange">our API page</a>.</p>
           <p>Including the following useful endpoints:</p>
           <ul>
