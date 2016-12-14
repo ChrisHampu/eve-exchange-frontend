@@ -200,14 +200,17 @@ class APIAccess extends React.Component {
             <div className={s2.info_key}>Access Status</div>
             <div className={s2.info_value}>{this.props.subscription.api_access===true?<div style={{color: "#4CAF50"}}>Enabled</div>:<div style={{color: "#F44336"}}>Disabled</div>}</div>
           </div>
+          {
+            this.props.subscription.api_access===false?
+            <div className={s2.info_row}>
+              <div className={s2.info_key}>Initial Access Cost (Prorated)</div>
+              <div className={s2.info_value}>
+              {formatNumber(this.getAccessCostProrate())} ISK
+              </div>
+            </div> : false
+          }
           <div className={s2.info_row}>
-            <div className={s2.info_key}>Initial Access Cost (Prorated)</div>
-            <div className={s2.info_value}>
-            {formatNumber(this.getAccessCostProrate())} ISK
-            </div>
-          </div>
-          <div className={s2.info_row}>
-            <div className={s2.info_key}>Access Cost (Monthly)</div>
+            <div className={s2.info_key}>Renewal Cost (Monthly)</div>
             <div className={s2.info_value}>
             {formatNumber(this.getAccessCost())} ISK
             </div>
