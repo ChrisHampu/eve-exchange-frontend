@@ -16,6 +16,7 @@ import AdminLoginLog from '../components/Admin/AdminLoginLog';
 import AdminAuditLog from '../components/Admin/AdminAuditLog';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
+import FeedsComponent from '../components/feeds/FeedsComponent';
 import NotificationsComponent from '../components/Notifications/NotificationsComponent';
 import ProfitComponent from '../components/Profit/ProfitComponent';
 import ProfitTopItems from '../components/Profit/ProfitTopItems';
@@ -69,7 +70,9 @@ export default (
           <Route path="apikey" component={ProfileAPIAccess} />
           <Route path=":id" component={ProfitProfileStatistics} />
         </Route>
-        <Route path="notifications" components={{main: NotificationsComponent }} />
+        <Route path="feeds" components={{main: FeedsComponent }}>
+          <Route path="notifications" components={{main: NotificationsComponent }} />
+        </Route>
         <Route path="browser" components={{main: MarketBrowserComponent}}>
           <Route path=":id" component={MarketItemViewComponent} />
         </Route>
