@@ -55,8 +55,8 @@ const MainMenu = [
     "perm": "standard"
   },
   {
-    "name": "Notifications",
-    "route": "/dashboard/notifications",
+    "name": "Feeds",
+    "route": "/dashboard/feeds",
     "icon": <NotificationsIcon />,
     "perm": "standard"
   },
@@ -291,7 +291,7 @@ class Dashboard extends React.Component {
           <div className={s.slideout_header}>
             <div className={s.slideout_info}>
               {this.props.auth.name}
-              <IconButton style={{width: "36px", height: "36px", "right": "0.5rem", "bottom": "0.5rem", "position": "absolute"}} tooltip="Notifications" onClick={()=>this.slideoutMenuClickItem("/dashboard/notifications")}>
+              <IconButton style={{width: "36px", height: "36px", "right": "0.5rem", "bottom": "0.5rem", "position": "absolute"}} tooltip="Notifications" onClick={()=>this.slideoutMenuClickItem("/dashboard/feeds/notifications")}>
                 <NotificationsIcon />
               </IconButton>
             </div>
@@ -324,7 +324,7 @@ class Dashboard extends React.Component {
                   className={cx(s.dashboard_header_notifications, { [s.dashboard_header_notifications_unread]: this.props.notifications.filter(el => el.read === false).length > 0 })}
                   badgeContent={this.props.notifications.filter(el => el.read === false).length}
                 >
-                  <IconButton style={{width: "56px", height: "56px"}} tooltip="Notifications" onClick={()=>this.context.router.push("/dashboard/notifications")}>
+                  <IconButton style={{width: "56px", height: "56px"}} tooltip="Notifications" onClick={()=>this.context.router.push("/dashboard/feeds/notifications")}>
                     <NotificationsIcon />
                   </IconButton>
                 </Badge>

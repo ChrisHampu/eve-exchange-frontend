@@ -2,7 +2,10 @@
 
 .root {
   color: #fff;
-
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+    
   .read_button_all {
     max-width: 200px;
     margin-bottom: 1.5rem;
