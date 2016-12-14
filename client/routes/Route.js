@@ -16,7 +16,7 @@ import AdminLoginLog from '../components/Admin/AdminLoginLog';
 import AdminAuditLog from '../components/Admin/AdminAuditLog';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
-import FeedsComponent from '../components/feeds/FeedsComponent';
+import FeedsComponent from '../components/Feeds/FeedsComponent';
 import NotificationsComponent from '../components/Notifications/NotificationsComponent';
 import ProfitComponent from '../components/Profit/ProfitComponent';
 import ProfitTopItems from '../components/Profit/ProfitTopItems';
