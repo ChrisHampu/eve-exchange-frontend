@@ -17,7 +17,7 @@ export default class Feeds extends React.Component {
         <DashboardPageMenu menu={{
             'Notifications': "/dashboard/feeds/notifications"
           }}
-          location={this.props.location}
+          location={this.props.location.pathname==="/dashboard/feeds"?{pathname:"/dashboard/feeds/notifications"}:this.props.location}
         />
           <DashboardPageBody children={this.props.children} defaultComponent={<NotificationsComponent />} />
       </DashboardPage>
