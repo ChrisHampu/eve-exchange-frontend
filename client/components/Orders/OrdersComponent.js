@@ -155,7 +155,11 @@ class OrdersComponent extends React.Component {
             {
               orders.length === 0 ?
                 <TableRow selectable={false}>
-                  <TableRowColumn>No records available</TableRowColumn>
+                  {
+                    this.props.settings.profiles.length === 0 ? 
+                    <TableRowColumn>Orders will be begin to show within an hour of an API key being added, and on and hourly schedule afterwards</TableRowColumn> 
+                    : <TableRowColumn>You do not have any active orders currently. Orders are updated on an hourly schedule and will show within an hour of being created</TableRowColumn>
+                  }
                 </TableRow>
                 :
                 orders.map((el, i) => {
@@ -179,7 +183,7 @@ class OrdersComponent extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { orders: store.market.user_orders, sde:store.sde };
+  return { orders: store.market.user_orders, sde:store.sde, settings: store.settings };
 }
 
 export default connect(mapStateToProps)(OrdersComponent);
