@@ -17,7 +17,8 @@ import AdminAuditLog from '../components/Admin/AdminAuditLog';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
 import FeedsComponent from '../components/Feeds/FeedsComponent';
-import NotificationsComponent from '../components/Notifications/NotificationsComponent';
+import NotificationsComponent from '../components/Feeds/NotificationsComponent';
+import ChangelogComponent from '../components/Feeds/ChangelogComponent';
 import ProfitComponent from '../components/Profit/ProfitComponent';
 import ProfitTopItems from '../components/Profit/ProfitTopItems';
 import ProfitAlltime from '../components/Profit/ProfitAlltime';
@@ -71,7 +72,8 @@ export default (
           <Route path=":id" component={ProfitProfileStatistics} />
         </Route>
         <Route path="feeds" components={{main: FeedsComponent }}>
-          <Route path="notifications" components={{main: NotificationsComponent }} />
+          <Route path="notifications" components={NotificationsComponent} />
+          <Route path="changelog" components={ChangelogComponent} />
         </Route>
         <Route path="browser" components={{main: MarketBrowserComponent}}>
           <Route path=":id" component={MarketItemViewComponent} />

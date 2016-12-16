@@ -356,7 +356,7 @@ class Dashboard extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { auth: store.auth, notifications: store.notifications, subscription: store.subscription };
+  return { auth: store.auth, notifications: store.feeds.notifications, subscription: store.subscription };
 }
 
 export default connect(mapStateToProps)(Dashboard);

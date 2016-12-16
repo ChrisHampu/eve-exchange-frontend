@@ -77,9 +77,9 @@ class Notifications extends React.Component {
         <RaisedButton className={s.read_button_all} fullWidth={false} label="MARK ALL AS READ" backgroundColor="#262b2f" labelColor="rgb(217, 217, 217)" onMouseDown={()=>{this.markAllRead()}} />
         <PaginatedTable
           headers={[
-            <TableHeaderColumn style={{textAlign: "left"}}>Message</TableHeaderColumn>,
-            <TableHeaderColumn style={{textAlign: "left", "width": "200px"}}>When</TableHeaderColumn>,
-            <TableHeaderColumn style={{textAlign: "left", "width": "50px"}}>Read</TableHeaderColumn>
+            <TableHeaderColumn key={0} style={{textAlign: "left"}}>Message</TableHeaderColumn>,
+            <TableHeaderColumn key={1} style={{textAlign: "left", "width": "200px"}}>When</TableHeaderColumn>,
+            <TableHeaderColumn key={2} style={{textAlign: "left", "width": "50px"}}>Read</TableHeaderColumn>
           ]}
           items={this.props.notifications.map((el, i) => {
             return (
@@ -101,7 +101,7 @@ class Notifications extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { notifications: store.notifications };
+  return { notifications: store.feeds.notifications };
 }
 
 export default connect(mapStateToProps)(Notifications);
