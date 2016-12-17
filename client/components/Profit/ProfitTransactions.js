@@ -31,11 +31,11 @@ class ProfitTransactions extends React.Component {
       <div style={{height: "100%", overflow: "hidden", display: "flex"}}>
         <PaginatedTable
           headers={[
-            <TableHeaderColumn style={{textAlign: "center"}}>When</TableHeaderColumn>,
-            <TableHeaderColumn style={{textAlign: "center"}}>Item Name</TableHeaderColumn>,
-            <TableHeaderColumn style={{textAlign: "center"}}>Profit</TableHeaderColumn>,
-            <TableHeaderColumn style={{textAlign: "center"}}>Volume Sold</TableHeaderColumn>,
-            <TableHeaderColumn style={{textAlign: "center"}}>Who</TableHeaderColumn>
+            <TableHeaderColumn key={0} style={{textAlign: "center"}}>When</TableHeaderColumn>,
+            <TableHeaderColumn key={1} style={{textAlign: "center"}}>Item Name</TableHeaderColumn>,
+            <TableHeaderColumn key={2} style={{textAlign: "center"}}>Profit</TableHeaderColumn>,
+            <TableHeaderColumn key={3} style={{textAlign: "center"}}>Volume Sold</TableHeaderColumn>,
+            <TableHeaderColumn key={4} style={{textAlign: "center"}}>Who</TableHeaderColumn>
           ]}
           items={this.props.transactions.sort((el1, el2) => new Date(el2.time) - new Date(el1.time)).map((el, i) => {
             return (
