@@ -115,12 +115,12 @@ class ForecastComponent extends React.Component {
     this.updateSearch();
   }
 
-  setSpreadMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_spread', parseFloat(event.target.value) || null)) };
-  setSpreadMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_spread', parseFloat(event.target.value) || null)) };
-  setVolumeMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_volume', parseFloat(event.target.value) || null)) };
-  setVolumeMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_volume', parseFloat(event.target.value) || null)) };
-  setPriceMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_buy', parseFloat(event.target.value) || null)) };
-  setPriceMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_buy', parseFloat(event.target.value) || null)) };
+  setSpreadMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_spread', parseFloat(event.target.value) || 0)) };
+  setSpreadMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_spread', parseFloat(event.target.value) || 0)) };
+  setVolumeMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_volume', parseFloat(event.target.value) || 0)) };
+  setVolumeMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_volume', parseFloat(event.target.value) || 0)) };
+  setPriceMin = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('min_buy', parseFloat(event.target.value) || 0)) };
+  setPriceMax = (event) => { this.setState({queueQuery: true}); store.dispatch(updateForecastSetting('max_buy', parseFloat(event.target.value) || 0)) };
 
   setSort = (value) => this.setState({sort: value, direction: value === this.state.sort ? this.state.direction === 1 ? 0 : 1 : this.state.direction});
 
