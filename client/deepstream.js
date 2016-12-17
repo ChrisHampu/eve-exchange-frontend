@@ -2,11 +2,11 @@ import Deepstream from 'deepstream.io-client-js';
 import store from './store';
 import { updateUser } from './actions/authActions';
 import { updateUserSettings } from './actions/settingsActions';
-import { updateNotifications } from './actions/notificationsActions';
 import { updateSubscription } from './actions/subscriptionActions';
 import { setUserOrders } from './actions/marketActions';
 import { updateAllSubscriptions, updateLoginLog, updateAuditLog } from './actions/adminActions';
 import { updatePortfolios } from './actions/portfoliosActions';
+import { updateAllFeeds } from './actions/feedsActions';
 import { sendAppNotification } from './actions/./appActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions } from './actions/profitActions';
 import 'whatwg-fetch';
@@ -164,16 +164,6 @@ function setDeepstreamSubscriptions(user_info) {
       store.dispatch(updateDailyChart(daily));
     });
 
-    deepstream.record.getRecord(`notifications/${user_info.user_id}`).subscribe(data => {
-
-      if (!data || data.length === 0 || !Array.isArray(data)) {
-        store.dispatch(updateNotifications([]));
-        return;
-      }
-
-      store.dispatch(updateNotifications(data.sort((el1, el2) => new Date(el2.time) - new Date(el1.time))));
-    });
-
     deepstream.record.getRecord(`subscription/${user_info.user_id}`).subscribe(data => {
 
       store.dispatch(updateSubscription(user_info.user_id, data));
@@ -197,6 +187,12 @@ function setDeepstreamSubscriptions(user_info) {
 
       store.dispatch(updatePortfolios(portfolios));
     });
+
+    deepstream.record.getRecord(`feeds/${user_info.user_id}`).subscribe(feeds => {
+
+      store.dispatch(updateAllFeeds(feeds));
+    });
+
   } catch(err) {
     console.log("There was an error while subscribing to user data", err);
   }
