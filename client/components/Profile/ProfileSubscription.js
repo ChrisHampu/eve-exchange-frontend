@@ -81,7 +81,8 @@ class Subscription extends React.Component {
       }
     } else {
       info = <span>If you downgrade your account, you will lose access to all premium features and forfeit the remaining time for your active subscription.<br />
-                Your balance will remain the same and can be used to upgrade again.</span>;
+                Note: Unless you manually make a deposit by sending us ISK, your subscription will automatically expire at the date listed above and will not renew. We cannot withdraw ISK from your characters.
+              </span>;
     }
 
     return (
