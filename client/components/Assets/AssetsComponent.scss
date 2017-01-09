@@ -18,3 +18,26 @@
     vertical-align: middle;
   }
 }
+
+.assets_search {
+
+  font-weight: 300;  
+
+  label {
+    color: $gold-color !important;
+    line-height: 0px !important;
+    z-index: 0 !important;
+  }
+
+  input {
+    margin-top: 0 !important;
+  }
+
+  hr:first-child {
+    border-color: rgba(255,255,255,0.5) !important;
+  }
+
+  hr:not(:first-child) {
+    border-color: $gold-color !important;
+  }
+}

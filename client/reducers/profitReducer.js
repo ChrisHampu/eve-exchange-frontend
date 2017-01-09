@@ -35,7 +35,8 @@ const initialState = {
       profit: 0
     }
   },
-  transactions: []
+  transactions: [],
+  assets: []
 };
 
 export default function profit(state = initialState, action) {
@@ -96,6 +97,13 @@ export default function profit(state = initialState, action) {
       }
 
       return { ...state, transactions: action.transactions };
+
+    case "UPDATE_ASSETS":
+      if (!action.assets) {
+        return state;
+      }
+
+      return { ...state, assets: action.assets };
 
     default:
       return state;

@@ -17,3 +17,7 @@ export function updateAlltimeStats(stats) {
 export function updateTransactions(transactions) {
   return { type: "UPDATE_TRANSACTIONS", transactions };
 }
+
+export function updateAssets(assets) {
+  return { type: "UPDATE_ASSETS", assets };
+}

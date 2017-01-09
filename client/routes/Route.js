@@ -35,6 +35,7 @@ import PortfoliosViewAll from '../components/Portfolios/PortfoliosViewAll';
 import PortfoliosViewSingle from '../components/Portfolios/PortfoliosViewSingle';
 import ProfitProfileStatistics from '../components/Profit/ProfitProfileStatistics';
 import ProfitTopProfiles from '../components/Profit/ProfitProfiles';
+import AssetsComponent from '../components/Assets/AssetsComponent';
 
 // Guidebook
 import GuidebookComponent from '../components/Guidebook/GuidebookComponent';
@@ -79,6 +80,7 @@ export default (
           <Route path=":id" component={MarketItemViewComponent} />
         </Route>
         <Route path="orders" components={{main: OrdersComponent}} />
+        <Route path="assets" components={{main: AssetsComponent}} />
         <Route path="forecast" components={{main: ForecastComponent}} onEnter={requireAccess("premium")}>
           <Route path="regional" component={ForecastRegional} />
         </Route>

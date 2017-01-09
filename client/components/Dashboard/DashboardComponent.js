@@ -40,6 +40,7 @@ import GuidebookIcon from 'material-ui/svg-icons/av/library-books';
 import LogIcon from 'material-ui/svg-icons/action/assignment-turned-in';
 import LockIcon from 'material-ui/svg-icons/action/lock-outline';
 import StarIcon from 'material-ui/svg-icons/action/grade';
+import AssetsIcon from 'material-ui/svg-icons/action/work';
 
 const MainMenu = [
   {
@@ -92,6 +93,12 @@ const MarketMenu = [
     "route": "/dashboard/profit",
     "icon": <ProfitIcon />,
     "perm": "standard"
+  },
+  {
+    "name": "Assets",
+    "route": "/dashboard/assets",
+    "icon": <AssetsIcon />,
+    "perm": "premium"
   },
   {
     "name": "Forecast",
