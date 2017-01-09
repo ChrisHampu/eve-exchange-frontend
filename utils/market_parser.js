@@ -5,7 +5,7 @@ fetch = require('node-fetch');
 
 xml2js = require('xml2js');
 
-var exclude_blueprints = true;
+var exclude_blueprints = false;
 
 var parser = new xml2js.Parser();
 
@@ -41,7 +41,7 @@ function findItems(obj) {
 
         obj.items.push({id: i, name: items[i].name.en});
 
-        id2name[i] = items[i].name.en;
+        //id2name[i] = items[i].name.en;
         id2volume[parseInt(i)] = items[i].volume;
       }
     }
@@ -71,6 +71,15 @@ try {
 
   var ids = [];
   var ids_str = [];
+
+  for (var i in items) {
+
+    if (items[i].published === false) {
+      continue;
+    }
+
+    id2name[i] = items[i].name.en;
+  }
 
   for(var i in _yaml) {
 
