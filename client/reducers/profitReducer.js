@@ -36,7 +36,10 @@ const initialState = {
     }
   },
   transactions: [],
-  assets: []
+  assets: {
+    list: [],
+    total_value: 0
+  }
 };
 
 export default function profit(state = initialState, action) {

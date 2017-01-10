@@ -115,9 +115,9 @@ class AssetsComponent extends React.Component {
 
   render() {
 
-    let assets = this.props.assets || [];
+    let assets = this.props.assets.list || [];
 
-    if (this.props.assets.length) {
+    if (this.props.assets.list.length) {
 
       if (this.state.searchText.length > 0) {
 
@@ -237,14 +237,6 @@ class AssetsComponent extends React.Component {
     );
   }
 }
-
-/*                    <TableRow key={i} selectable={false}>
-                      <TableRowColumn style={{textAlign: "center"}}>{itemIDToName(el.typeID)}</TableRowColumn>
-                      <TableRowColumn style={{textAlign: "center"}}>{formatNumberUnit(parseInt(el.quantity))}</TableRowColumn>
-                      <TableRowColumn style={{textAlign: "center"}}>{this.getLocationName(el.locationID)}</TableRowColumn>
-                      <TableRowColumn style={{textAlign: "center"}}>{el.who}</TableRowColumn>
-                    </TableRow>
-                    */
 
 const mapStateToProps = function(store) {
   return { assets: store.profit.assets, sde: store.sde, settings: store.settings };

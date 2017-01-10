@@ -98,7 +98,7 @@ const MarketMenu = [
     "name": "Assets",
     "route": "/dashboard/assets",
     "icon": <AssetsIcon />,
-    "perm": "premium"
+    "perm": "standard"
   },
   {
     "name": "Forecast",
