@@ -66,7 +66,7 @@ class ForecastComponent extends React.Component {
       if (this.props.settings.forecast.min_spread) {
         params += `minspread=${this.props.settings.forecast.min_spread}&`;
       }
-      if (this.props.settings.forecast.min_volum) {
+      if (this.props.settings.forecast.min_volume) {
         params += `minvolume=${this.props.settings.forecast.min_volume}&`;
       }
       if (this.props.settings.forecast.min_buy) {
