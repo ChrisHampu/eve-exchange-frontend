@@ -27,7 +27,7 @@ export default class MarketBrowserListItem extends React.Component {
   componentWillReceiveProps(nextProps) {
     
     this.setState({
-      childrenVisible: nextProps.open || false
+      childrenVisible: this.state.childrenVisible || nextProps.open || false
     });
   }
 
