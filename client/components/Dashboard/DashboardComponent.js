@@ -21,6 +21,8 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import Drawer from 'material-ui/Drawer';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 // Icons
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
@@ -152,7 +154,8 @@ class Dashboard extends React.Component {
 
     this.state = {
       showMenu: null,
-      collapsed: false
+      collapsed: false,
+      logoutRequested: false
     };
   }
 
@@ -193,12 +196,16 @@ class Dashboard extends React.Component {
   renderMenu(items) {
 
     return items.map((item, i) => {
+
+      const functor = item.route === "/logout" ? 
+        () => this.setState({logoutRequested: true}) : () => this.setRoute(item.route);
+
       return (item.perm === "premium" ? userHasPremium() : userHasGroup(item.perm) ) ?
         this.state.collapsed ?
-          <IconButton key={i} onTouchTap={()=>{ this.setRoute(item.route); }} className={this.getPathClass(item)}>
+          <IconButton key={i} onTouchTap={functor} className={this.getPathClass(item)}>
             {item.icon}
           </IconButton> :
-        <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
+        <MenuItem key={i} onTouchTap={functor} type="text" style={{cursor: "pointer"}}
           className={this.getPathClass(item)}
           primaryText={item.name} leftIcon={item.icon}
         /> : null;
@@ -251,6 +258,28 @@ class Dashboard extends React.Component {
 
     return (
       <div className={s.root}>
+        <Dialog
+          actions={[
+            <FlatButton
+              label="Cancel"
+              labelStyle={{color: "rgb(235, 169, 27)"}}
+              primary={true}
+              onTouchTap={()=>this.setState({logoutRequested: false})}
+            />,
+            <FlatButton
+              label="Confirm"
+              labelStyle={{color: "rgb(235, 169, 27)"}}
+              primary={true}
+              keyboardFocused={true}
+              onTouchTap={()=>this.setRoute("/logout")}
+            />
+          ]}
+          modal={false}
+          open={this.state.logoutRequested}
+          onRequestClose={()=>this.setState({logoutRequested: false})}
+        >
+          Are you sure you want to log out?
+        </Dialog>
         <Paper zDepth={2} className={cx(s.sidebar_container, {[s.collapsed]: this.state.collapsed})}>
           <div className={s.sidebar_inner}>
             <div className={s.sidebar_title}>
