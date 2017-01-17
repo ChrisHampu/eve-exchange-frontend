@@ -31,7 +31,8 @@ class ChartContainer extends React.Component {
     getTooltipPresentation: React.PropTypes.func.isRequired,
     overrideWidth: React.PropTypes.number,
     overrideHeight: React.PropTypes.number,
-    totalDataSize: React.PropTypes.number
+    totalDataSize: React.PropTypes.number,
+    defaultFrequency: React.PropTypes.number
   };
 
   static childContextTypes = {
@@ -58,7 +59,7 @@ class ChartContainer extends React.Component {
       width: 0,
       containerHeight: 0,
       containerWidth: 0,
-      frequency: this.props.frequencyLevels ? Object.keys(this.props.frequencyLevels)[0] : "minutes",
+      frequency: this.props.frequencyLevels ? Object.keys(this.props.frequencyLevels)[this.props.defaultFrequency || 0] : "minutes",
       scrollPercent: 1,
       pageSize: 30,
       dataSize: 0,

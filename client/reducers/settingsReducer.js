@@ -10,6 +10,7 @@ const initialState = {
   market: {
     region: 10000002,
     default_tab: 0,
+    default_timespan: 0,
     simulation_broker_fee: 0,
     simulation_sales_tax: 0,
     simulation_margin: 0,

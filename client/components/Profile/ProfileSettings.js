@@ -104,7 +104,7 @@ class Settings extends React.Component {
             <div className={s.settings_header}>
             Default Hub
             </div>
-            <SelectField value={this.props.settings.market.region} onChange={(event, index, value) => this._updateMarketSetting('region', value)}>
+            <SelectField value={this.props.settings.market.region||10000002} onChange={(event, index, value) => this._updateMarketSetting('region', value)}>
               <MenuItem value={10000002} primaryText="Jita" />
               <MenuItem value={10000043} primaryText="Amarr" />
               <MenuItem value={10000032} primaryText="Dodixie" />
@@ -120,6 +120,16 @@ class Settings extends React.Component {
               <MenuItem value={0} primaryText="Chart" />
               <MenuItem value={1} primaryText="Price Ladder" />
               <MenuItem value={2} primaryText="Simulate" />
+            </SelectField>
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Default Chart Timespan
+            </div>
+            <SelectField value={this.props.settings.market.default_timespan||0} onChange={(event, index, value) => this._updateMarketSetting('default_timespan', value)}>
+              <MenuItem value={0} primaryText="5 Minutes" />
+              <MenuItem value={1} primaryText="Hourly" />
+              <MenuItem value={2} primaryText="Daily" />
             </SelectField>
           </div>
           <div className={s.settings_body}>

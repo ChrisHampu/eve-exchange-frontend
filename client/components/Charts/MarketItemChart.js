@@ -117,7 +117,7 @@ class MarketItemChart extends React.Component {
       return null;
     }
 
-    const region = this.props.region || store.getState().settings.market.region;
+    const region = this.props.region || store.getState().settings.market.region || 10000002;
 
     if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
 
@@ -175,7 +175,7 @@ class MarketItemChart extends React.Component {
       return null;
     }
 
-    const region = this.props.region || store.getState().settings.market.region;
+    const region = this.props.region || store.getState().settings.market.region || 10000002;
 
     if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
 
@@ -221,7 +221,7 @@ class MarketItemChart extends React.Component {
 
     if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
 
-      const region = this.props.region || store.getState().settings.market.region;
+      const region = this.props.region || store.getState().settings.market.region || 10000002;
 
       switch(this.refs.container.getFrequency()) {
         case "minutes":
@@ -357,6 +357,7 @@ class MarketItemChart extends React.Component {
         overrideWidth={this.props.width}
         overrideHeight={this.props.height}
         totalDataSize={this.getDataSize()}
+        defaultFrequency={this.props.frequency}
       >
         <g>
         {this.renderLegend()}
@@ -402,7 +403,7 @@ class MarketItemChart extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { market: store.market, chart_visuals: store.settings.chart_visuals };
+  return { market: store.market, chart_visuals: store.settings.chart_visuals, frequency: store.settings.market.default_timespan };
 }
 
 export default connect(mapStateToProps)(MarketItemChart);
