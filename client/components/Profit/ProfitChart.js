@@ -9,8 +9,6 @@ import ChartContainer from '../Charts/ChartContainer';
 import BarChartData from '../Charts/BarChartData';
 import Axis from '../Charts/Axis';
 import Indicator from '../Charts/Indicator';
-import Line from '../Charts/Line';
-import Tooltip from '../Charts/Tooltip';
 import Scrollbar from '../Charts/Scrollbar';
 
 import CircularProgress from 'material-ui/CircularProgress';
@@ -28,7 +26,9 @@ class ProfitChart extends React.Component {
     this.state = {
       xScale: scaleUtc(),
       profitScale: scaleLinear(),
-      taxScale: scaleLinear()
+      taxScale: scaleLinear(),
+      focusedElement: null,
+      focusedElementIndex: -1
     }
   }
 
@@ -171,16 +171,19 @@ class ProfitChart extends React.Component {
     this.refs.container.handleScrollChange(scroll);
   }
 
-  getTooltipPresentation(el) {
-    return { 
-      view: 
-        <div>
-          Profit: {formatNumber(el.profit)}<br />
-          Taxes: {formatNumber(el.taxes)}<br />
-          Broker: {formatNumber(el.broker)}<br />
-        </div>,
-      offset: 30
+
+  getLegend() {
+
+    if (!this.refs.container) {
+      return;
     }
+
+    const legend = [];
+
+    legend.push({fill: "#4CAF50", text: "Profit", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.profit) : 0, postfix: ""});
+    legend.push({fill: "#F44336", text: "Fees", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.taxes+this.state.focusedElement.broker) : 0, postfix: ""});
+
+    return legend;
   }
 
   render() {
@@ -199,23 +202,24 @@ class ProfitChart extends React.Component {
           data={data}
           title={this.props.title}
           onChartChanged={()=>this.chartChanged()}
-          getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
           getHitTestableData={()=>this.getHitTestableData()}
           totalDataSize={this.getChartDataSize()}
+          legend={this.getLegend()}
+          onFocusElement={(el, index)=>this.setState({focusedElement: el, focusedElementIndex: index})}
         >
+          <Axis anchor="left" scale={this.state.profitScale} ticks={5} tickSize={-width} suppressLabels={true} style={{opacity: 0.5}}/>
+
           <Axis anchor="left" scale={this.state.profitScale} ticks={5} formatISK={true} />
           <Axis anchor="right" scale={this.state.taxScale} ticks={5} style={{transform: `translateX(${width}px)`}} formatISK={true} />
           <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
           {
             data && data.length > 0 ?
             <g>
-              <Line fill="#F44336" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => Math.abs(el.taxes) + Math.abs(el.broker)} />
-              <Line fill="#4CAF50" mouseOut={(ev)=>{this.handleMouseOut(ev);}} mouseOver={(ev,item,presentation)=>{ this.handleMouseOver(ev,item,presentation);}} viewportHeight={height} data={this.getChartData()} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => el.profit} />
+              <Indicator thickLine={true} circleColour="#F44336" lineColour="#F44336" viewportHeight={height} data={this.getChartData()} focusedIndex={this.state.focusedElementIndex} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => Math.abs(el.taxes) + Math.abs(el.broker)} />
+              <Indicator thickLine={true} circleColour="#4CAF50" lineColour="#4CAF50" viewportHeight={height} data={this.getChartData()} focusedIndex={this.state.focusedElementIndex} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => el.profit} />
               <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
            </g> : false
           }
-          <text transform={`translate(-55,0)rotate(270 0 ${Math.round(height/2)})`} fill="#4CAF50" fontSize="20" x="0" y={Math.round(height/2)} textAnchor="middle" alignmentBaseline="middle">Profit</text>
-          <text transform={`translate(+55,0)rotate(90 ${width} ${Math.round(height/2)})`} fill="#F44336" fontSize="20" x={width} y={Math.round(height/2)} textAnchor="middle" alignmentBaseline="middle">Broker + Taxes</text>
         </ChartContainer>
      </div>
     );

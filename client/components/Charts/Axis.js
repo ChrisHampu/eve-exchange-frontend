@@ -12,7 +12,8 @@ export default class Axis extends React.Component {
 
     format: React.PropTypes.string,
     formatISK: React.PropTypes.bool,
-    tickSize: React.PropTypes.number
+    tickSize: React.PropTypes.number,
+    suppressLabels: React.PropTypes.bool
   };
 
   constructor(props) {
@@ -51,6 +52,10 @@ export default class Axis extends React.Component {
     }
 
     this.state.axis(select(this.refs.axis));
+
+    if (this.props.suppressLabels) {
+      this.state.axis.tickFormat("");
+    }
 
     if (this.props.formatISK) {
 

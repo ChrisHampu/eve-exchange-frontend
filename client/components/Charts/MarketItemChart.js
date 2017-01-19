@@ -11,7 +11,6 @@ import BarChartData from './BarChartData';
 import Axis from './Axis';
 import Indicator from './Indicator';
 import Area from './Area';
-import Tooltip from './Tooltip';
 import Scrollbar from './Scrollbar';
 
 class MarketItemChart extends React.Component {
@@ -36,6 +35,8 @@ class MarketItemChart extends React.Component {
       ohlcHeight: 0,
       ohlcOffset: 0,
       volHeight: 0,
+      focusedElement: null,
+      focusedElementIndex: -1
     }
   }
 
@@ -262,81 +263,42 @@ class MarketItemChart extends React.Component {
     this.refs.container.handleScrollChange(scroll);
   }
 
-  getTooltipPresentation(el) {
-    return { 
-      view: 
-        <div>
-          Buy: {formatNumber(el.buyPercentile)}<br />
-          Sell: {formatNumber(el.sellPercentile)}<br />
-          Spread: {Math.round(el.spread*Math.pow(10,2))/Math.pow(10,2)}%<br />
-          {
-            this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ?
-               <span>Spread SMA: {Math.round((el.spread_sma || 0)*Math.pow(10,2))/Math.pow(10,2)}%<br /></span>
-               : false
-          }
-          Volume: {formatNumber(el.tradeVolume || 0)}<br />
-          {
-            this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma ?
-               <span>Volume SMA: {formatNumber(el.volume_sma || 0)}<br /></span>
-               : false
-          }
-        </div>,
-      offset: 30 + (this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma ? 10 : 0) + (this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ? 10 : 0)
-    }
-  }
-
-  renderLegend() {
+  getLegend() {
 
     if (!this.refs.container) {
       return;
     }
 
     const legend = [];
-    let offset = 15;
-    let yOffset = 5;
 
-    const addLegend = (fill, text, _offset) => {
-
-      if ((offset + _offset) > this.refs.container.getWidth()) {
-
-        yOffset += 22;
-        offset = 15;
-      }
-
-      legend.push(<text key={legend.length} fill={fill} fontSize="16" x={offset} y={yOffset} textAnchor="start" alignmentBaseline="middle">{text}</text>);
-      offset += _offset;
-    };
+    const addLegend = (fill, text, value, postfix) => legend.push({fill, text, value: this.state.focusedElement ? formatNumber(this.state.focusedElement[value]) : 0, postfix: postfix || ""});
 
     if (this.props.chart_visuals.price) {
 
-      addLegend("#59c8e2", "Buy Price", 74);
+      addLegend("#59c8e2", "Buy Price", 'buyPercentile');
     }
 
     if (this.props.chart_visuals.spread) {
 
-      addLegend("#5CEF70", "Spread", 58);
+      addLegend("#5CEF70", "Spread", 'spread', '%');
     }
 
     if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma) {
 
-      addLegend("#F8654F", "7 Day Spread SMA", 140);
+      addLegend("#F8654F", "7 Day Spread SMA", 'spread_sma', '%');
     }
 
     if (this.props.chart_visuals.volume) {
 
-      addLegend("#4090A2", "Volume", 60);
+      addLegend("#4090A2", "Volume", 'tradeVolume');
     }
 
     if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma) {
 
-      addLegend("#eba91b", "7 Day Volume SMA", 140);
+      addLegend("#eba91b", "7 Day Volume SMA", 'volume_sma');
     }
 
-    return (
-      <g>
-      {legend}
-      </g>
-    );
+    return legend;
   }
 
   render() {
@@ -347,7 +309,6 @@ class MarketItemChart extends React.Component {
 
     return (
       <ChartContainer 
-        getTooltipPresentation={(el)=>this.getTooltipPresentation(el)} 
         getHitTestableData={()=>this.getHitTestableData()} 
         frequencyLevels={{minutes: "5 Minutes", hours: "1 Hour", daily: "1 Day"}} 
         ref="container"
@@ -358,10 +319,11 @@ class MarketItemChart extends React.Component {
         overrideHeight={this.props.height}
         totalDataSize={this.getDataSize()}
         defaultFrequency={this.props.frequency}
+        legend={this.getLegend()}
+        onFocusElement={(el, index)=>this.setState({focusedElement: el, focusedElementIndex: index})}
       >
-        <g>
-        {this.renderLegend()}
-        </g>
+        <Axis anchor="left" scale={this.state.yScale} ticks={5} tickSize={-width} suppressLabels={true} style={{opacity: 0.5}}/>
+        <Axis anchor="left" scale={this.state.volScale} ticks={5} tickSize={-width} suppressLabels={true} style={{opacity: 0.5, transform: `translateY(${this.state.ohlcOffset}px)`}} />
 
         <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
         <Axis anchor="left" scale={this.state.yScale} ticks={5} formatISK={true} />
@@ -372,7 +334,7 @@ class MarketItemChart extends React.Component {
           <g>
             {
               this.props.chart_visuals.price ?
-                <Area viewportHeight={this.state.ohlcHeight} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyPercentile} />
+                <Area viewportHeight={this.state.ohlcHeight} data={data} focusedIndex={this.state.focusedElementIndex} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.buyPercentile} />
                 : false
             }
             {
@@ -382,16 +344,16 @@ class MarketItemChart extends React.Component {
             }
             {
               this.props.chart_visuals.spread ?
-                <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />
+                <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} focusedIndex={this.state.focusedElementIndex} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />
                 : false
             }
             { this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ? 
-                <Indicator thickLine={true} lineColour="#F8654F" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => (el.spread_sma || 0)/100 } />
+                <Indicator thickLine={true} lineColour="#F8654F" data={data} xScale={this.state.xScale} focusedIndex={this.state.focusedElementIndex} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => (el.spread_sma || 0)/100 } />
                 : false
             }
 
             { this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma ? 
-                <Indicator thickLine={true} lineColour="#eba91b" data={data} heightOffset={height-this.state.volHeight} xScale={this.state.xScale} yScale={this.state.volScale} xAccessor={el => el.time} yAccessor={el => el.volume_sma || 0} />
+                <Indicator thickLine={true} lineColour="#eba91b" data={data} focusedIndex={this.state.focusedElementIndex} heightOffset={height-this.state.volHeight} xScale={this.state.xScale} yScale={this.state.volScale} xAccessor={el => el.time} yAccessor={el => el.volume_sma || 0} />
                 : false
             }
             <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />

@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import React from 'react';
 import Circle from './Circle';
-import { curveCatmullRom, line } from '../../vendor/d3';
+import { curveCardinal, line } from '../../vendor/d3';
 
 export default class Indicator extends React.Component {
 
@@ -16,7 +16,8 @@ export default class Indicator extends React.Component {
     showCircles: React.PropTypes.bool,
     lineColour: React.PropTypes.string,
     circleColour: React.PropTypes.string,
-    thickLine: React.PropTypes.bool
+    thickLine: React.PropTypes.bool,
+    focusedIndex: React.PropTypes.number
   };
 
   constructor(props) {
@@ -34,7 +35,7 @@ export default class Indicator extends React.Component {
     const _line = line()
       .x(d => this.props.xScale(this.props.xAccessor(d)))
       .y(d => this.props.yScale(this.props.yAccessor(d)) + offset)
-      .curve(curveCatmullRom.alpha(0.5));
+      .curve(curveCardinal.tension(0.8));
 
     const linepath = _line(this.props.data);
 
@@ -42,6 +43,8 @@ export default class Indicator extends React.Component {
     const circleColour = this.props.circleColour || "#eba91b";
 
     const stroke = this.props.thickLine ? 3 : 2;
+
+    const focusedEl = this.props.data[this.props.focusedIndex >= 0 ? this.props.focusedIndex : 0];
 
     return (
       <g>
@@ -52,11 +55,15 @@ export default class Indicator extends React.Component {
           strokeWidth={stroke}
         />
       {
-        this.props.showCircles && this.props.data.map((el, i) => {
-          return (
-            <Circle fill={circleColour} data={el} key={i} cx={this.props.xScale(this.props.xAccessor(el))} cy={this.props.yScale(this.props.yAccessor(el))+(this.props.heightOffset||0)} r={5} />
-          );
-        })
+        this.props.focusedIndex >= 0 ?
+          <Circle 
+            style={{"stroke": "#fff", "strokeWidth": 2}} 
+            fill={circleColour} 
+            data={focusedEl} 
+            cx={this.props.xScale(this.props.xAccessor(focusedEl))} 
+            cy={this.props.yScale(this.props.yAccessor(focusedEl))+(this.props.heightOffset||0)}
+            r={6}
+          /> : null
       }
       </g>
     )

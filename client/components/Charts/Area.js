@@ -58,7 +58,7 @@ export default class Area extends React.Component {
         </defs>
         <path
           d={path}
-          fill="url(#linear)"
+          fill="rgba(89, 200, 226, 0.1)"
         />
         <path
           d={linepath}
@@ -67,19 +67,15 @@ export default class Area extends React.Component {
           strokeWidth={3}
         />
         {
-        this.props.data.map((el, i) => {
-          return (
+          this.props.focusedIndex >= 0 ?
             <Circle
               fill="rgb(89, 200, 226)"
-              data={el}
-              key={i}
-              cx={this.props.xScale(this.props.xAccessor(el))}
-              cy={this.props.yScale(this.props.yAccessor(el))}
-              r={this.state.closestPoint === el ? 8 : 5}
-              style={{transition: "r 350ms ease-in-out"}}
-            />
-          );
-        })
+              data={this.props.data[this.props.focusedIndex]}
+              cx={this.props.xScale(this.props.xAccessor(this.props.data[this.props.focusedIndex]))}
+              cy={this.props.yScale(this.props.yAccessor(this.props.data[this.props.focusedIndex]))}
+              style={{"stroke": "#fff", "strokeWidth": 2}}
+              r={6}
+            /> : null
         }
       </g>
     );

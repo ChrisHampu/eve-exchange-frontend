@@ -4,8 +4,6 @@ import ReactDOM from 'react-dom';
 import s from './ChartContainer.scss';
 import { formatDate } from '../../utilities';
 
-import Tooltip from './Tooltip';
-
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -28,11 +26,11 @@ class ChartContainer extends React.Component {
     marginRight: React.PropTypes.number,
     marginLeft: React.PropTypes.number,
     getHitTestableData: React.PropTypes.func.isRequired,
-    getTooltipPresentation: React.PropTypes.func.isRequired,
     overrideWidth: React.PropTypes.number,
     overrideHeight: React.PropTypes.number,
     totalDataSize: React.PropTypes.number,
-    defaultFrequency: React.PropTypes.number
+    defaultFrequency: React.PropTypes.number,
+    onFocusElement: React.PropTypes.func
   };
 
   static childContextTypes = {
@@ -71,7 +69,8 @@ class ChartContainer extends React.Component {
         100
       ],
       zoom: 1,
-      header: 48
+      header: 70,
+      mouseX: 0
     };
 
     this.mounted = false;
@@ -178,7 +177,6 @@ class ChartContainer extends React.Component {
 
   handleMouseOut(ev) {
 
-    this.refs.tooltip.hideTooltip();
   }
 
   setFrequency = (event, index, value) => {
@@ -192,6 +190,7 @@ class ChartContainer extends React.Component {
     this.state.frequency = Object.keys(this.props.frequencyLevels)[value]
 
     this.props.onChartChanged();
+    this.props.onFocusElement(null, -1);
 
     this.setState({
       frequency: Object.keys(this.props.frequencyLevels)[value]
@@ -210,7 +209,6 @@ class ChartContainer extends React.Component {
 
     if (left < this.state.margin.left || left > this.state.width + this.state.margin.left 
       || top < this.state.margin.top || top > this.state.height + this.state.margin.top) {
-      this.refs.tooltip.hideTooltip();
       return;
     }
 
@@ -228,10 +226,16 @@ class ChartContainer extends React.Component {
         return (Math.abs(cur - adjustedLeft) < Math.abs(prev -adjustedLeft) ? cur : prev);
     });
       
-    const el = this.props.data[hits.indexOf(hitX)];
-    const presentation = this.props.getTooltipPresentation(el);
+    const hitIndex = hits.indexOf(hitX)
+    const el = this.props.data[hitIndex];
 
-    this.refs.tooltip.showTooltip(left, top-presentation.offset, presentation.view);
+    this.setState({
+      mouseX: hitX
+    });
+
+    if (this.props.onFocusElement) {
+      this.props.onFocusElement(el, hitIndex);
+    }
   }
 
   handleScrollChange(scroll) {
@@ -297,35 +301,29 @@ class ChartContainer extends React.Component {
     return (
       <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%", width: "100%" }}>
         <div ref="header">
-          {
-            this.props.title ? 
-              <div style={{display: "inline-block", color: "#59c8e2", marginRight: "1rem", verticalAlign: "middle"}}>
-              {this.props.title}
-              </div>
-              : false
-          }
-          <div style={{display: "inline-block", marginRight: "1rem", verticalAlign: "middle"}}>
-          {
-            this.props.frequencyLevels ? 
-            <SelectField style={{width: "150px"}} value={Object.keys(this.props.frequencyLevels).findIndex(el=>el===this.state.frequency)} onChange={this.setFrequency}>
-              {
-                Object.keys(this.props.frequencyLevels).map((el, i) => {
-                  return (
-                    <MenuItem key={i} type="text" value={i} primaryText={this.props.frequencyLevels[el]} style={{cursor: "pointer"}} />
-                  )
-                })
-              }
-            </SelectField> : false
-          }
-          </div>
-          <div style={{display: "inline-block"}}>
+          <div>
             {
-              data.length > 0 ?
-              <div style={{verticalAlign: "middle", display: "inline-block"}}>
-                Showing <i>{formatDate(data[data.length - 1].time)}</i> to <i>{formatDate(data[0].time)}</i>
-              </div> : false
+              this.props.title ? 
+                <div style={{display: "inline-block", color: "#59c8e2", marginRight: "1rem", verticalAlign: "middle"}}>
+                {this.props.title}
+                </div>
+                : false
             }
-            <div style={{display: "inline-block", marginLeft: "1rem", verticalAlign: "middle"}}>
+            <div style={{display: "inline-block", marginRight: "1rem", verticalAlign: "middle"}}>
+            {
+              this.props.frequencyLevels ? 
+              <SelectField style={{width: "150px"}} value={Object.keys(this.props.frequencyLevels).findIndex(el=>el===this.state.frequency)} onChange={this.setFrequency}>
+                {
+                  Object.keys(this.props.frequencyLevels).map((el, i) => {
+                    return (
+                      <MenuItem key={i} type="text" value={i} primaryText={this.props.frequencyLevels[el]} style={{cursor: "pointer"}} />
+                    )
+                  })
+                }
+              </SelectField> : false
+            }
+            </div>
+            <div style={{display: "inline-block", verticalAlign: "middle"}}>
               <IconButton tooltip="Zoom In" onClick={()=>this.increaseZoom()}>
                 <PlusIcon />
               </IconButton>
@@ -334,14 +332,26 @@ class ChartContainer extends React.Component {
               </IconButton>
             </div>
           </div>
+          <div>
+          {
+            this.props.legend && this.props.legend.length ? this.props.legend.map((item, i) => 
+              <div key={i} style={{display: "inline-block", borderBottom: "2px solid", borderBottomColor: item.fill, color: "rgb(185, 197, 208)", marginRight: "10px", paddingBottom: "3px"}}>
+                {item.text} / <span style={{color: "#fff"}}>{item.value}{item.postfix}</span>
+              </div>
+            ) : null
+          }
+          </div>
         </div>
         <div ref="chart_anchor" className={s.chart}>
           <svg onMouseMove={(ev) => this.handleMouseMove(ev)} onMouseOut={()=>this.handleMouseOut()} width="100%" height="100%" >
             <g style={{transform: `translate(${this.state.margin.left}px, ${this.state.margin.top}px)`}}>
+              {
+                this.state.mouseX > 0 ?
+                 <line x1={this.state.mouseX} x2={this.state.mouseX} y1={this.state.margin.top} y2={this.state.height} style={{stroke: "#FEB100", strokeDasharray: 2, strokeWidth: 1}}/> : null
+              }
               {this.props.children}
             </g>
           </svg>
-          <Tooltip ref="tooltip" />
         </div>
       </div>
     );
