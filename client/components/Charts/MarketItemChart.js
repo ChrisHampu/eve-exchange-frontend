@@ -348,7 +348,7 @@ class MarketItemChart extends React.Component {
                 : false
             }
             { this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma ? 
-                <Indicator thickLine={true} lineColour="#F8654F" data={data} xScale={this.state.xScale} focusedIndex={this.state.focusedElementIndex} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => (el.spread_sma || 0)/100 } />
+                <Indicator thickLine={true} lineColour="#F8654F" circleColour="#F8654F" data={data} xScale={this.state.xScale} focusedIndex={this.state.focusedElementIndex} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => (el.spread_sma || 0)/100 } />
                 : false
             }
 
