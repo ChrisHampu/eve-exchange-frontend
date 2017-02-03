@@ -5,6 +5,8 @@ import store from '../../store';
 import { scaleUtc, scaleLinear, timeHour, timeMinute, timeDay } from '../../vendor/d3';
 import { formatNumber } from '../../utilities';
 import { userHasPremium } from '../../auth';
+import { getMarketItemNames, itemNameToID, itemIDToName, subscribeItem, unsubscribeItem } from '../../market';
+import { sendAppNotification } from '../../actions/appActions';
 
 import ChartContainer from './ChartContainer';
 import BarChartData from './BarChartData';
@@ -12,6 +14,12 @@ import Axis from './Axis';
 import Indicator from './Indicator';
 import Area from './Area';
 import Scrollbar from './Scrollbar';
+
+import AutoComplete from 'material-ui/AutoComplete';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
 
 class MarketItemChart extends React.Component {
 
@@ -36,7 +44,19 @@ class MarketItemChart extends React.Component {
       ohlcOffset: 0,
       volHeight: 0,
       focusedElement: null,
-      focusedElementIndex: -1
+      focusedElementIndex: -1,
+      comparisonColors: [
+        "#59c8e2",
+        "#5CEF70",
+        "#F8654F",
+        "#4090A2",
+        "#eba91b",
+        "#7E57C2",
+        "#E91E63",
+        "#795548"
+      ],
+      comparisonItems: [],
+      comparisonType: 'buyPercentile'
     }
   }
 
@@ -44,13 +64,31 @@ class MarketItemChart extends React.Component {
 
     const timePadding = 60000;
 
-    const data = this.getAggregateData();
+    let data = this.getAggregateData(this.props.item.id);
 
     if (!data) {
       return;
     }
 
-    const completeData = this.getCompleteAggregateData();
+    let completeData = this.getCompleteAggregateData(this.props.item.id);
+
+    // Append data for comparison items
+    if (this.state.comparisonItems.length !== 0) {
+
+      this.state.comparisonItems.forEach(id => {
+
+        const _data = this.getAggregateData(id);
+
+        // If null, then this item hasn't yet been loaded
+        if (!_data) {
+          return;
+        }
+
+        data = data.concat(_data);
+
+        completeData = completeData.concat(this.getCompleteAggregateData(id));
+      });
+    }
 
     this.state.ohlcHeight = Math.floor(this.refs.container.getHeight()*0.70);
     this.state.ohlcOffset = Math.floor(this.refs.container.getHeight()*0.75);
@@ -67,7 +105,16 @@ class MarketItemChart extends React.Component {
       new Date(maxDate.getTime())
     ]);
 
-    this.state.yScale.domain([Math.min(...completeData.map((el) => { return el.buyPercentile})), Math.max(...completeData.map((el) => { return el.buyPercentile}))]);
+    if (this.state.comparisonItems.length > 0) {
+
+      if (this.isComparisonSpread()) {
+        this.state.yScale.domain([Math.min(...completeData.map((el) => { return Math.max(0, el[this.state.comparisonType]) / 100 })), Math.max(...completeData.map((el) => { return Math.max(0, el[this.state.comparisonType]) / 100 }))]);
+      } else {
+        this.state.yScale.domain([Math.min(...completeData.map((el) => { return el[this.state.comparisonType]})), Math.max(...completeData.map((el) => { return el[this.state.comparisonType]}))]);
+      }
+    } else {
+      this.state.yScale.domain([Math.min(...completeData.map((el) => { return el.buyPercentile})), Math.max(...completeData.map((el) => { return el.buyPercentile}))]);
+    }
 
     this.state.volScale.domain([Math.floor(Math.min(...completeData.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0}))), Math.ceil(Math.max(...completeData.map((el) => { return el.tradeVolume !== undefined ? el.tradeVolume : 0})))]);
 
@@ -84,7 +131,7 @@ class MarketItemChart extends React.Component {
     this.state.percentScale.clamp(true);
 
     this.state.xScale.nice(this.refs.container.getFrequency() === "minutes" ? timeMinute : (this.refs.container.getFrequency() === "hours" ? timeHour : timeDay));
-    this.state.yScale.nice([5]);
+    this.state.yScale.nice([this.isComparisonSpread()?1:5]);
 
     this.state.percentScale.nice([1]);
 
@@ -111,23 +158,36 @@ class MarketItemChart extends React.Component {
     this.updateScales();
   }
 
-  getAggregateData() {
+  componentDidUpdate(prevProps, prevState) {
+
+    if (this.refs.container.getFrequency() !== "daily" && (this.state.comparisonType === 'volume_sma' || this.state.comparisonType === 'spread_sma')) {
+      this.setState({
+        comparisonType: 'buyPercentile'
+      });
+    }
+
+    if (prevState.comparisonType !== this.state.comparisonType) {
+      this.updateScales();
+    }
+  }
+
+  getAggregateData(itemID) {
 
     // Check if still loading components
-    if (!this.refs.container || !this.props.item) {
+    if (!this.refs.container || !itemID) {
       return null;
     }
 
     const region = this.props.region || store.getState().settings.market.region || 10000002;
 
-    if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
+    if (typeof this.props.market.item[itemID] !== 'undefined') {
 
       switch(this.refs.container.getFrequency()) {
         case "minutes":
-          if (!this.props.market.item[this.props.item.id].minutes) {
+          if (!this.props.market.item[itemID].minutes) {
             return null;
           }
-          var arr = this.props.market.item[this.props.item.id].minutes[region];
+          var arr = this.props.market.item[itemID].minutes[region];
           if (!arr) {
             return null;
           }
@@ -138,10 +198,10 @@ class MarketItemChart extends React.Component {
           }
           return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
         case "hours":
-          if (!this.props.market.item[this.props.item.id].hours) {
+          if (!this.props.market.item[itemID].hours) {
             return null;
           }
-          var arr = this.props.market.item[this.props.item.id].hours[region];
+          var arr = this.props.market.item[itemID].hours[region];
           if (!arr) {
             return null;
           }
@@ -151,10 +211,10 @@ class MarketItemChart extends React.Component {
           }
           return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
         case "daily":
-          if (!this.props.market.item[this.props.item.id].daily) {
+          if (!this.props.market.item[itemID].daily) {
             return null;
           }
-          var arr = this.props.market.item[this.props.item.id].daily[region];
+          var arr = this.props.market.item[itemID].daily[region];
           if (!arr) {
             return null;
           }
@@ -169,41 +229,41 @@ class MarketItemChart extends React.Component {
     return null;
   }
 
-  getCompleteAggregateData() {
+  getCompleteAggregateData(itemID) {
 
     // Check if still loading components
-    if (!this.refs.container|| !this.props.item) {
+    if (!this.refs.container|| !itemID) {
       return null;
     }
 
     const region = this.props.region || store.getState().settings.market.region || 10000002;
 
-    if (typeof this.props.market.item[this.props.item.id] !== 'undefined') {
+    if (typeof this.props.market.item[itemID] !== 'undefined') {
 
       switch(this.refs.container.getFrequency()) {
         case "minutes":
-          if (!this.props.market.item[this.props.item.id].minutes) {
+          if (!this.props.market.item[itemID].minutes) {
             return null;
           }
-          var arr = this.props.market.item[this.props.item.id].minutes[region];
+          var arr = this.props.market.item[itemID].minutes[region];
           if (!arr) {
             return null;
           }
           return arr;
         case "hours":
-          if (!this.props.market.item[this.props.item.id].hours) {
+          if (!this.props.market.item[itemID].hours) {
             return null;
           }
-          var arr = this.props.market.item[this.props.item.id].hours[region];
+          var arr = this.props.market.item[itemID].hours[region];
           if (!arr) {
             return null;
           }
           return arr;
         case "daily":
-          if (!this.props.market.item[this.props.item.id].daily) {
+          if (!this.props.market.item[itemID].daily) {
             return null;
           }
-          var arr = this.props.market.item[this.props.item.id].daily[region];
+          var arr = this.props.market.item[itemID].daily[region];
           if (!arr) {
             return null;
           }
@@ -239,7 +299,7 @@ class MarketItemChart extends React.Component {
 
   getHitTestableData() {
 
-    const data = this.getAggregateData();
+    const data = this.getAggregateData(this.props.item.id);
 
     if (!data) { 
       return [];
@@ -252,11 +312,6 @@ class MarketItemChart extends React.Component {
 
     this.updateScales();
   }
-
-  setFrequency = (event, index, value) => {
-
-    this.refs.container.setFrequency(event, index, value);
-  };
 
   handleScrollChange(scroll) {
 
@@ -271,39 +326,154 @@ class MarketItemChart extends React.Component {
 
     const legend = [];
 
-    const addLegend = (fill, text, value, postfix) => legend.push({fill, text, value: this.state.focusedElement ? formatNumber(this.state.focusedElement[value]) : 0, postfix: postfix || ""});
+    if (this.state.comparisonItems.length === 0) {
 
-    if (this.props.chart_visuals.price) {
+      const addLegend = (fill, text, value, postfix) => legend.push({fill, text, value: this.state.focusedElement ? formatNumber(this.state.focusedElement[value]) : 0, postfix: postfix || ""});
 
-      addLegend("#59c8e2", "Buy Price", 'buyPercentile');
-    }
+      if (this.props.chart_visuals.price) {
 
-    if (this.props.chart_visuals.spread) {
+        addLegend("#59c8e2", "Buy Price", 'buyPercentile');
+      }
 
-      addLegend("#5CEF70", "Spread", 'spread', '%');
-    }
+      if (this.props.chart_visuals.spread) {
 
-    if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma) {
+        addLegend("#5CEF70", "Spread", 'spread', '%');
+      }
 
-      addLegend("#F8654F", "7 Day Spread SMA", 'spread_sma', '%');
-    }
+      if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.spread_sma) {
 
-    if (this.props.chart_visuals.volume) {
+        addLegend("#F8654F", "7 Day Spread SMA", 'spread_sma', '%');
+      }
 
-      addLegend("#4090A2", "Volume", 'tradeVolume');
-    }
+      if (this.props.chart_visuals.volume) {
 
-    if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma) {
+        addLegend("#4090A2", "Volume", 'tradeVolume');
+      }
 
-      addLegend("#eba91b", "7 Day Volume SMA", 'volume_sma');
+      if (this.refs.container && this.refs.container.getFrequency() === "daily" && this.props.chart_visuals.volume_sma) {
+
+        addLegend("#eba91b", "7 Day Volume SMA", 'volume_sma');
+      }
+    } else {
+
+      const addLegend = (fill, id, valueType, postfix) => {
+        
+        let value = 0;
+        const data = this.getAggregateData(id);
+
+        // Check if this dataset is still loading
+        if (data && data.length >= this.state.focusedElementIndex && data[this.state.focusedElementIndex]) {
+
+          value = formatNumber(data[this.state.focusedElementIndex][valueType]);
+        }
+
+        legend.push({
+          button: <IconButton
+            style={{width: 19, height: 19, padding: "0 0 1px 0", verticalAlign: "bottom"}}
+            iconStyle={{width: 18, height: 18}}
+            onClick={() => {
+              const items = this.state.comparisonItems;
+              items.splice(items.findIndex(el=>el===id), 1);
+
+              this.setState({comparisonItems: items});
+            }}
+          >
+            <CloseIcon />
+          </IconButton>,
+          fill,
+          value,
+          text: itemIDToName(id),
+          postfix: this.isComparisonSpread() ? '%' : ""
+        });
+      };
+
+      // Add main item
+      legend.push({
+        fill: this.state.comparisonColors[0],
+        text: itemIDToName(this.props.item.id),
+        value: this.state.focusedElement ? formatNumber(this.state.focusedElement[this.state.comparisonType]) : 0,
+        postfix: this.isComparisonSpread() ? '%' : ""
+      });
+
+      // Then add the comparisons
+      this.state.comparisonItems.forEach((el, i) => {
+
+        addLegend(this.state.comparisonColors[i+1], el, this.state.comparisonType);
+      });
     }
 
     return legend;
   }
 
+  updateTradingSearch = (chosenRequest, index) => {
+
+    const items = getMarketItemNames();
+
+    if (items.indexOf(chosenRequest) === -1) {
+
+      // TODO: Notify user item is invalid
+      store.dispatch(sendAppNotification("Not a valid item", 5000));
+      return;
+    }
+
+    if (this.state.comparisonItems.length >= 5) {
+
+      // TODO: Notify user of max number of comparisons
+      store.dispatch(sendAppNotification("There's a limit of 5 comparisons at a time", 5000));
+      return;
+    }
+
+    const itemID = itemNameToID(chosenRequest);
+
+    if (this.state.comparisonItems.indexOf(itemID) !== -1) {
+
+      store.dispatch(sendAppNotification("Item is already being compared", 5000));
+      return;
+    }
+
+    const comparisons = this.state.comparisonItems;
+
+    comparisons.push(itemID);
+
+    subscribeItem(itemID, 0);
+
+    this.setState({
+      comparisonItems: comparisons
+    });
+  };
+
+  updateTradingSearchText = (text) => {
+
+    // No-op
+  };
+
+  setComparisonType = (event, index, value) => {
+
+    this.setState({
+      comparisonType: value
+    });
+  };
+
+  getComparisonIndicator(id, index, data) {
+
+    const colour = this.state.comparisonColors[index + 1];
+
+    if (this.state.comparisonType === 'spread') {
+      return <Indicator key={id} thickLine={true} circleColour={colour} lineColour={colour} data={data} focusedIndex={this.state.focusedElementIndex} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.spread/100} />;
+    } else if (this.state.comparisonType === 'spread_sma') {
+      return <Indicator key={id} thickLine={true} circleColour={colour} lineColour={colour} data={data} focusedIndex={this.state.focusedElementIndex} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => (el.spread_sma || 0)/100} />;
+    }
+    
+    return <Indicator key={id} thickLine={true} circleColour={colour} lineColour={colour} data={data} xScale={this.state.xScale} focusedIndex={this.state.focusedElementIndex} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el[this.state.comparisonType]} />;
+  }
+
+  isComparisonSpread() {
+    return this.state.comparisonType === 'spread' || this.state.comparisonType === 'spread_sma';
+  }
+
   render() {
 
-    const data = this.getAggregateData();
+    const data = this.getAggregateData(this.props.item.id);
     const width = this.refs.container ? this.refs.container.getWidth() : 0;
     const height = this.refs.container ? this.refs.container.getHeight() : 0;
 
@@ -321,15 +491,65 @@ class MarketItemChart extends React.Component {
         defaultFrequency={this.props.frequency}
         legend={this.getLegend()}
         onFocusElement={(el, index)=>this.setState({focusedElement: el, focusedElementIndex: index})}
+        widgets={
+          <div>
+            <AutoComplete
+              dataSource={getMarketItemNames()}
+              filter={AutoComplete.caseInsensitiveFilter}
+              maxSearchResults={5}
+              menuStyle={{cursor: "pointer"}}
+              onNewRequest={this.updateTradingSearch}
+              onUpdateInput={this.updateTradingSearchText}
+              hintText="Compare item"
+              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+              style={{marginRight: "1rem", verticalAlign: "middle"}}
+            />
+            {
+              this.state.comparisonItems.length > 0 && this.refs.container.getFrequency() === "daily" ?
+                <SelectField style={{width: "150px", verticalAlign: "middle"}} value={this.state.comparisonType} onChange={this.setComparisonType}>
+                  <MenuItem key={0} type="text" value="buyPercentile" primaryText="Price" style={{cursor: "pointer"}} />
+                  <MenuItem key={1} type="text" value="spread" primaryText="Spread" style={{cursor: "pointer"}} />
+                  <MenuItem key={2} type="text" value="tradeVolume" primaryText="Volume" style={{cursor: "pointer"}} />
+                  <MenuItem key={3} type="text" value="spread_sma" primaryText="Spread SMA" style={{cursor: "pointer"}} />
+                  <MenuItem key={4} type="text" value="volume_sma" primaryText="Volume SMA" style={{cursor: "pointer"}} />
+                </SelectField>
+              : this.state.comparisonItems.length > 0 ?
+                <SelectField style={{width: "150px", verticalAlign: "middle"}} value={this.state.comparisonType} onChange={this.setComparisonType}>
+                  <MenuItem key={0} type="text" value="buyPercentile" primaryText="Price" style={{cursor: "pointer"}} />
+                  <MenuItem key={1} type="text" value="spread" primaryText="Spread" style={{cursor: "pointer"}} />
+                  <MenuItem key={2} type="text" value="tradeVolume" primaryText="Volume" style={{cursor: "pointer"}} />
+                </SelectField> : false
+            }
+          </div>
+        }
       >
-        <Axis anchor="left" scale={this.state.yScale} ticks={5} tickSize={-width} suppressLabels={true} style={{opacity: 0.5}}/>
+        <Axis anchor="left" scale={this.state.yScale} ticks={10} tickSize={-width} suppressLabels={true} style={{opacity: 0.5}}/>
         <Axis anchor="left" scale={this.state.volScale} ticks={5} tickSize={-width} suppressLabels={true} style={{opacity: 0.5, transform: `translateY(${this.state.ohlcOffset}px)`}} />
 
         <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
-        <Axis anchor="left" scale={this.state.yScale} ticks={5} formatISK={true} />
+        <Axis anchor="left" scale={this.state.yScale} ticks={10} formatISK={!this.isComparisonSpread()} format={this.isComparisonSpread() ? "%" : null} />
         <Axis anchor="left" scale={this.state.volScale} ticks={5} style={{transform: `translateY(${this.state.ohlcOffset}px)`}} formatISK={true} />
         <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${width}px)`}} format="%" />
         {
+          data && data.length > 0 && this.state.comparisonItems.length > 0 ?
+          <g>
+            {this.getComparisonIndicator(this.props.item.id, -1, data)}
+            {
+              this.state.comparisonItems.map((id, i) => {
+
+                const _data = this.getAggregateData(id);
+
+                if (!_data || _data.length === 0) {
+                  return;
+                }
+
+                return this.getComparisonIndicator(id, i, _data);
+              })
+            }
+            <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
+          </g>
+          :
           data && data.length > 0 ?
           <g>
             {

@@ -30,7 +30,8 @@ class ChartContainer extends React.Component {
     overrideHeight: React.PropTypes.number,
     totalDataSize: React.PropTypes.number,
     defaultFrequency: React.PropTypes.number,
-    onFocusElement: React.PropTypes.func
+    onFocusElement: React.PropTypes.func,
+    widgets: React.PropTypes.object
   };
 
   static childContextTypes = {
@@ -331,12 +332,15 @@ class ChartContainer extends React.Component {
                 <MinusIcon />
               </IconButton>
             </div>
+            <div style={{marginLeft: "1rem", display: "inline-block", verticalAlign: "middle"}}>
+              {this.props.widgets}
+            </div>
           </div>
           <div>
           {
             this.props.legend && this.props.legend.length ? this.props.legend.map((item, i) => 
               <div key={i} style={{display: "inline-block", borderBottom: "2px solid", borderBottomColor: item.fill, color: "rgb(185, 197, 208)", marginRight: "10px", paddingBottom: "3px"}}>
-                {item.text} / <span style={{color: "#fff"}}>{item.value}{item.postfix}</span>
+                {item.button} {item.text} / <span style={{color: "#fff"}}>{item.value}{item.postfix}</span>
               </div>
             ) : null
           }
