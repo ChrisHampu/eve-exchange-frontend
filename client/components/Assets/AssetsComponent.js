@@ -122,7 +122,7 @@ class AssetsComponent extends React.Component {
       if (this.state.searchText.length > 0) {
 
         assets = assets.filter(el =>
-          itemIDToName(el.typeID).toLowerCase().match(this.state.searchText) ||
+          (itemIDToName(el.typeID) || "").toLowerCase().match(this.state.searchText) ||
           (this.props.sde.stationid2name[parseInt(el.locationID)] || "").toLowerCase().match(this.state.searchText) ||
           el.who.toLowerCase().match(this.state.searchText)
         );
