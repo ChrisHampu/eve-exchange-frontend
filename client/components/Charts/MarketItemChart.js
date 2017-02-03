@@ -493,18 +493,20 @@ class MarketItemChart extends React.Component {
         onFocusElement={(el, index)=>this.setState({focusedElement: el, focusedElementIndex: index})}
         widgets={
           <div>
-            <AutoComplete
-              dataSource={getMarketItemNames()}
-              filter={AutoComplete.caseInsensitiveFilter}
-              maxSearchResults={5}
-              menuStyle={{cursor: "pointer"}}
-              onNewRequest={this.updateTradingSearch}
-              onUpdateInput={this.updateTradingSearchText}
-              hintText="Compare item"
-              underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
-              underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
-              style={{marginRight: "1rem", verticalAlign: "middle"}}
-            />
+            <div style={{marginRight: "1rem", verticalAlign: "middle", width:"150px"}}>
+              <AutoComplete
+                dataSource={getMarketItemNames()}
+                filter={AutoComplete.caseInsensitiveFilter}
+                maxSearchResults={5}
+                menuStyle={{cursor: "pointer"}}
+                onNewRequest={this.updateTradingSearch}
+                onUpdateInput={this.updateTradingSearchText}
+                hintText="Compare item"
+                underlineStyle={{borderColor: "rgba(255, 255, 255, 0.298039)"}}
+                underlineFocusStyle={{borderColor: "rgb(235, 169, 27)"}}
+                fullWidth={true}
+              />
+            </div>
             {
               this.state.comparisonItems.length > 0 && this.refs.container.getFrequency() === "daily" ?
                 <SelectField style={{width: "150px", verticalAlign: "middle"}} value={this.state.comparisonType} onChange={this.setComparisonType}>
