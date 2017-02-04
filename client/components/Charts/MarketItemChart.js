@@ -493,7 +493,7 @@ class MarketItemChart extends React.Component {
         onFocusElement={(el, index)=>this.setState({focusedElement: el, focusedElementIndex: index})}
         widgets={
           <div>
-            <div style={{marginRight: "1rem", verticalAlign: "middle", width:"150px"}}>
+            <div style={{marginRight: "1rem", verticalAlign: "middle", width:"150px", display: "inline-block"}}>
               <AutoComplete
                 dataSource={getMarketItemNames()}
                 filter={AutoComplete.caseInsensitiveFilter}
