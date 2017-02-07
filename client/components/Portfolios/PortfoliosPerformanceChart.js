@@ -31,6 +31,8 @@ export default class PortfoliosPerformanceChart extends React.Component {
       ohlcHeight: 0,
       ohlcOffset: 0,
       volHeight: 0,
+      focusedElement: null,
+      focusedElementIndex: -1
     }
   }
 
@@ -196,50 +198,26 @@ export default class PortfoliosPerformanceChart extends React.Component {
     }
   }
 
-  renderLegend() {
+  getLegend() {
 
     if (!this.refs.container) {
       return;
     }
 
     const legend = [];
-    let offset = 15;
-    let yOffset = 5;
-
-    const addLegend = (fill, text, _offset) => {
-
-      if ((offset + _offset) > this.refs.container.getWidth()) {
-
-        yOffset += 22;
-        offset = 15;
-      }
-
-      legend.push(<text key={legend.length} fill={fill} fontSize="16" x={offset} y={yOffset} textAnchor="start" alignmentBaseline="middle">{text}</text>);
-      offset += _offset;
-    };
 
     if (this.props.portfolio.type === 0) {
 
-      addLegend("#59c8e2", "Portfolio Value", 112);
-
-      addLegend("#eba91b", "Average Spread", 118);
-
-      addLegend("#5CEF70", "Growth", 58);
-
+      legend.push({fill: "#59c8e2", text: "Component Value", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.portfolioValue) : 0, postfix: ""});
+      legend.push({fill: "#eba91b", text: "Average Spread", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.avgSpread) : 0, postfix: "%"});
+      legend.push({fill: "#5CEF70", text: "Growth", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.growth) : 0, postfix: "%"});
     } else {
-
-      addLegend("#59c8e2", "Component Value", 136);
-
-      addLegend("#eba91b", "Material Value", 112);
-
-      addLegend("#5CEF70", "Profit Margin", 58);
+      legend.push({fill: "#59c8e2", text: "Component Value", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.portfolioValue) : 0, postfix: ""});
+      legend.push({fill: "#eba91b", text: "Material Value", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.materialValue) : 0, postfix: ""});
+      legend.push({fill: "#5CEF70", text: "Profit Margin", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.industrySpread) : 0, postfix: "%"});
     }
 
-    return (
-      <g>
-      {legend}
-      </g>
-    );
+    return legend;
   }
 
   renderCharts(data) {
@@ -251,17 +229,17 @@ export default class PortfoliosPerformanceChart extends React.Component {
     if (this.props.portfolio.type === 0) {
       return (
         <g>
-          <Area viewportHeight={this.state.height} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
-          <Indicator thickLine={true} circleColour="#eba91b" lineColour="#eba91b" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.avgSpread/100} />
-          <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.growth/100} />
+          <Area focusedIndex={this.state.focusedElementIndex} viewportHeight={this.state.height} data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
+          <Indicator focusedIndex={this.state.focusedElementIndex} thickLine={true} circleColour="#eba91b" lineColour="#eba91b" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.avgSpread/100} />
+          <Indicator focusedIndex={this.state.focusedElementIndex} thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.growth/100} />
         </g>
       )
     } else {
       return (
         <g>
-          <Indicator thickLine={true} circleColour="#59c8e2" lineColour="#59c8e2" data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
-          <Indicator thickLine={true} circleColour="#eba91b" lineColour="#eba91b" data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.materialValue} />
-          <Indicator thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.industrySpread/100} />
+          <Indicator focusedIndex={this.state.focusedElementIndex} thickLine={true} circleColour="#59c8e2" lineColour="#59c8e2" data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.portfolioValue} />
+          <Indicator focusedIndex={this.state.focusedElementIndex} thickLine={true} circleColour="#eba91b" lineColour="#eba91b" data={data} xScale={this.state.xScale} yScale={this.state.yScale} xAccessor={el => el.time} yAccessor={el => el.materialValue} />
+          <Indicator focusedIndex={this.state.focusedElementIndex} thickLine={true} circleColour="#5CEF70" lineColour="#5CEF70" data={data} xScale={this.state.xScale} yScale={this.state.percentScale} xAccessor={el => el.time} yAccessor={el => el.industrySpread/100} />
         </g>
       )
     }
@@ -285,10 +263,11 @@ export default class PortfoliosPerformanceChart extends React.Component {
         overrideHeight={this.props.height}
         overrideWidth={this.props.width}
         totalDataSize={this.getDataSize()}
+        legend={this.getLegend()}
+        onFocusElement={(el, index)=>this.setState({focusedElement: el, focusedElementIndex: index})}
       >
-        <g>
-        {this.renderLegend()}
-        </g>
+        <Axis anchor="left" scale={this.state.yScale} ticks={5} tickSize={-width} suppressLabels={true} style={{opacity: 0.5}}/>
+
         <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
         <Axis anchor="left" scale={this.state.yScale} ticks={5} formatISK={true} />
         <Axis anchor="right" scale={this.state.percentScale} ticks={10} style={{transform: `translateX(${width}px)`}} format="%" />
