@@ -1,0 +1,96 @@
+@import '../variables.scss';
+
+.root {
+
+  .empty {
+    font-size: 1.1rem;
+  }
+
+  .table {
+    .table_header {
+      border-bottom: solid 1px #585f67;
+      padding: 1rem 1rem .5rem;
+
+      .table_title {
+        width: 16.66666%;
+        display: inline-block;
+        color: $gold-color;
+        font-size: 0.7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+    }
+
+    .table_content {
+
+      .table_row {
+        padding: 1rem;
+        border-bottom: solid 1px #585f67;
+
+        &:hover {
+          background-color: rgb(40, 46, 51);
+        }
+
+        .table_column {
+          display: inline-block;
+          width: 16.66666%;
+          vertical-align: middle;
+        }
+      }
+    }
+
+    .arrow {
+      margin-right: 0.15rem;
+      vertical-align: middle;
+      display: inline-block;
+
+      svg {
+        width: 30px !important;
+        height: 30px !important;
+        fill: $gold-color !important;
+      }
+
+      &.negative {
+        transform: rotate(90deg);
+        svg {
+          fill: $red-color !important;
+        }
+      }
+      &.positive {
+        transform: rotate(-90deg);
+        svg {
+          fill: $green-color !important;
+        }
+      }
+    }
+
+    .name {
+      font-size: 1.05rem;
+      color: $gold-color;
+
+      &:hover {
+        color: $gold-color-lighter;
+        cursor: pointer;
+      }
+    }
+
+    .price {
+      vertical-align: middle;
+      display: inline-block;
+      font-size: 1.05rem;
+      color: $white;
+    }
+
+    .change {
+      text-align: left;
+
+      &.positive {
+        color: $green-color;
+      }
+
+      &.negative {
+        color: $red-color; 
+      }
+    }
+  }
+}

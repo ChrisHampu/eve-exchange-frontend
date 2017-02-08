@@ -43,6 +43,7 @@ import LogIcon from 'material-ui/svg-icons/action/assignment-turned-in';
 import LockIcon from 'material-ui/svg-icons/action/lock-outline';
 import StarIcon from 'material-ui/svg-icons/action/grade';
 import AssetsIcon from 'material-ui/svg-icons/action/work';
+import TickersIcon from 'material-ui/svg-icons/action/swap-vert';
 
 const MainMenu = [
   {
@@ -113,6 +114,12 @@ const MarketMenu = [
     "route": "/dashboard/portfolios",
     "icon": <PortfoliosIcon />,
     "perm": "premium"
+  },
+  {
+    "name": "Tickers",
+    "route": "/dashboard/tickers",
+    "icon": <TickersIcon />,
+    "perm": "standard"
   }
 ];
 

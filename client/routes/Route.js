@@ -36,6 +36,11 @@ import PortfoliosViewSingle from '../components/Portfolios/PortfoliosViewSingle'
 import ProfitProfileStatistics from '../components/Profit/ProfitProfileStatistics';
 import ProfitTopProfiles from '../components/Profit/ProfitProfiles';
 import AssetsComponent from '../components/Assets/AssetsComponent';
+import TickersComponent from '../components/Tickers/TickersComponent';
+import TickerList from '../components/Tickers/TickerList';
+import TickerView from '../components/Tickers/TickerView';
+import TickerAnalysis from '../components/Tickers/TickerAnalysis';
+import TickerWatchlist from '../components/Tickers/TickerWatchlist';
 
 // Guidebook
 import GuidebookComponent from '../components/Guidebook/GuidebookComponent';
@@ -95,6 +100,12 @@ export default (
           <Route path="view" component={PortfoliosViewAll}>
             <Route path=":id" component={PortfoliosViewSingle} />
           </Route>
+        </Route>
+        <Route path="tickers" components={{main: TickersComponent}}>
+          <Route path="all" component={TickerList} />
+          <Route path="analysis" component={TickerAnalysis} />
+          <Route path="watchlist" component={TickerWatchlist} />
+          <Route path=":name" component={TickerView} />
         </Route>
         <Route path="admin" components={{main: AdminComponent}} onEnter={requireAccess("admin")}/>
         <Route path="users" components={{main: UsersComponent}} onEnter={requireAccess("admin")}>

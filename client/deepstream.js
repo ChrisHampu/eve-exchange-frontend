@@ -8,6 +8,7 @@ import { updateAllSubscriptions, updateLoginLog, updateAuditLog } from './action
 import { updatePortfolios } from './actions/portfoliosActions';
 import { updateAllFeeds } from './actions/feedsActions';
 import { sendAppNotification } from './actions/./appActions';
+import { updateTickers } from './actions/tickersActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions, updateAssets } from './actions/profitActions';
 import 'whatwg-fetch';
 import xml2js from 'xml-json-parser';
@@ -200,6 +201,11 @@ function setDeepstreamSubscriptions(user_info) {
     deepstream.record.getRecord(`feeds/${user_info.user_id}`).subscribe(feeds => {
 
       store.dispatch(updateAllFeeds(feeds));
+    });
+
+    deepstream.record.getRecord(`tickers`).subscribe(tickers => {
+
+      store.dispatch(updateTickers(tickers));
     });
 
   } catch(err) {

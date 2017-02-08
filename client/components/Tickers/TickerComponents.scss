@@ -1,0 +1,54 @@
+@import '../variables.scss';
+
+.root {
+  margin-top: 1.5rem;
+
+  .name {
+    font-size: 1.05rem;
+  }
+
+  .price {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 1.05rem;
+  }
+
+  .arrow {
+    display: inline-block;
+    vertical-align: middle;
+
+    svg {
+      width: 28px !important;
+      height: 28px !important;
+      fill: $gold-color !important;
+    }
+
+    &.positive {
+      transform: rotate(-90deg);
+
+      svg {
+        fill: $green-color !important;
+      }
+    }
+
+    &.negative {
+      transform: rotate(90deg);
+
+      svg {
+        fill: $red-color !important;
+      }
+    }
+  }
+
+  .change {
+    text-align: left;
+
+    &.positive {
+      color: $green-color;
+    }
+
+    &.negative {
+      color: $red-color; 
+    }
+  }
+}
