@@ -23,8 +23,6 @@ class TickerView extends React.Component {
 
   isWatchlisted(ticker) {
 
-    console.log(this.props.watchlist, ticker.name);
-
     return this.props.watchlist.indexOf(ticker.name) !== -1;
   }
 
