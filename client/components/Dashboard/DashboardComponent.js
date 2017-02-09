@@ -119,7 +119,7 @@ const MarketMenu = [
     "name": "Tickers",
     "route": "/dashboard/tickers",
     "icon": <TickersIcon />,
-    "perm": "standard"
+    "perm": "admin"
   }
 ];
 
