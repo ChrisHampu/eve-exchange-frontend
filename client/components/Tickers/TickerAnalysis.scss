@@ -2,6 +2,8 @@
 
 .root {
   display: flex;
+  flex-direction: column;
+  
   .header {
     .menu {
       position: absolute;
@@ -27,84 +29,90 @@
     }
   }
 
-  .pane {
-    flex: 1;
-    display: inline-block;
+  .body {
+    display: flex;
+    width: 100%;
+    height: 100%;
 
-    &:first-child {
-      margin-right: 2rem;
-    }
+    .pane {
+      flex: 1;
+      display: inline-block;
 
-    .group {
-      margin-bottom: 1.5rem;
-
-      .group_title {
-        text-align: center;
-        color: $gold-color;
-        font-weight: 300;
-        font-size: 1.5rem;
-        text-transform: uppercase;
+      &:first-child {
+        margin-right: 2rem;
       }
 
-      .table {
+      .group {
+        margin-bottom: 1.5rem;
 
-        .table_header {
-          border-bottom: solid 1px #585f67;
-          padding: 1rem 1rem .5rem;
-
-          .table_title {
-            width: 25%;
-            display: inline-block;
-            color: $gold-color;
-            font-size: 0.7rem;
-            font-weight: bold;
-            text-transform: uppercase;
-          }
+        .group_title {
+          text-align: center;
+          color: $gold-color;
+          font-weight: 300;
+          font-size: 1.5rem;
+          text-transform: uppercase;
         }
 
-        .table_content {
+        .table {
 
-          .table_row {
-            padding: 1rem;
+          .table_header {
             border-bottom: solid 1px #585f67;
+            padding: 1rem 1rem .5rem;
 
-            &:hover {
-              background-color: rgb(40, 46, 51);
-            }
-
-            .table_column {
-              display: inline-block; 
+            .table_title {
               width: 25%;
+              display: inline-block;
+              color: $gold-color;
+              font-size: 0.7rem;
+              font-weight: bold;
+              text-transform: uppercase;
+            }
+          }
+
+          .table_content {
+
+            .table_row {
+              padding: 1rem;
+              border-bottom: solid 1px #585f67;
+
+              &:hover {
+                background-color: rgb(40, 46, 51);
+              }
+
+              .table_column {
+                display: inline-block; 
+                width: 25%;
+              }
             }
           }
         }
       }
-    }
 
-    .name {
-      font-size: 1.05rem;
-      color: $gold-color;
+      .name {
+        font-size: 1.05rem;
+        color: $gold-color;
 
-      &:hover {
-        color: $gold-color-lighter;
-        cursor: pointer;
-      }
-    }
-
-    .price {
-      font-size: 1.05rem;
-      color: $white;
-    }
-
-    .change {
-      text-align: left;
-
-      &.positive {
-        color: $green-color;
+        &:hover {
+          color: $gold-color-lighter;
+          cursor: pointer;
+        }
       }
 
-      &.negative {
-        color: $red-color; 
+      .price {
+        font-size: 1.05rem;
+        color: $white;
+      }
+
+      .change {
+        text-align: left;
+
+        &.positive {
+          color: $green-color;
+        }
+
+        &.negative {
+          color: $red-color; 
+        }
       }
     }
   }

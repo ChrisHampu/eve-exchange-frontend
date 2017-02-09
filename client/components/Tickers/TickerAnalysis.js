@@ -70,110 +70,112 @@ class TickerAnalysis extends React.Component {
             </IconMenu>
           </div>
         </div>
-        <div className={s.pane}>
-          <div className={s.group}>
-            <div className={s.group_title}>
-            Gainers
-            </div>
-            <div className={s.table}>
-              <div className={s.table_header}>
-                <div className={s.table_title}>
-                Name
-                </div>
-                <div className={s.table_title}>
-                index
-                </div>
-                <div className={s.table_title}>
-                Change
-                </div>
-                <div className={s.table_title}>
-                Percent
-                </div>
+        <div className={s.body}>
+          <div className={s.pane}>
+            <div className={s.group}>
+              <div className={s.group_title}>
+              Gainers
               </div>
-              <div className={s.table_content}>
-              {
-                highest.map((el, i) => {
+              <div className={s.table}>
+                <div className={s.table_header}>
+                  <div className={s.table_title}>
+                  Name
+                  </div>
+                  <div className={s.table_title}>
+                  index
+                  </div>
+                  <div className={s.table_title}>
+                  Change
+                  </div>
+                  <div className={s.table_title}>
+                  Percent
+                  </div>
+                </div>
+                <div className={s.table_content}>
+                {
+                  highest.map((el, i) => {
 
-                  const changeType = el.indexChange > 0 ? 1 : el.indexChange < 0 ? -1 : 0;
+                    const changeType = el.indexChange > 0 ? 1 : el.indexChange < 0 ? -1 : 0;
 
-                  return (
-                    <div className={s.table_row} key={i}>
-                      <div className={s.table_column}>
-                        <div className={s.name} onClick={()=>this.context.router.push(`/dashboard/tickers/${el.name}`)}>{el.name}</div>
-                      </div>
-                      <div className={s.table_column}>
-                        <div className={s.price}>
-                        {formatNumber(el.index)}
+                    return (
+                      <div className={s.table_row} key={i}>
+                        <div className={s.table_column}>
+                          <div className={s.name} onClick={()=>this.context.router.push(`/dashboard/tickers/${el.name}`)}>{el.name}</div>
+                        </div>
+                        <div className={s.table_column}>
+                          <div className={s.price}>
+                          {formatNumber(el.index)}
+                          </div>
+                        </div>
+                        <div className={s.table_column}>
+                          <div className={cx(s.change, {[s.positive]:changeType===1, [s.negative]:changeType===-1})}>
+                          {el.indexChange>0?"+":""}{formatNumber(el.indexChange)}
+                          </div>
+                        </div>
+                        <div className={s.table_column}>
+                          <div className={cx(s.change, {[s.positive]:changeType===1, [s.negative]:changeType===-1})}>
+                          {el.indexChange>0?"+":""}{formatPercent(el.indexChangePercent)}%
+                          </div>
                         </div>
                       </div>
-                      <div className={s.table_column}>
-                        <div className={cx(s.change, {[s.positive]:changeType===1, [s.negative]:changeType===-1})}>
-                        {el.indexChange>0?"+":""}{formatNumber(el.indexChange)}
-                        </div>
-                      </div>
-                      <div className={s.table_column}>
-                        <div className={cx(s.change, {[s.positive]:changeType===1, [s.negative]:changeType===-1})}>
-                        {el.indexChange>0?"+":""}{formatPercent(el.indexChangePercent)}%
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })
-              }
+                    )
+                  })
+                }
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className={s.pane}>
-          <div className={s.group}>
-            <div className={s.group_title}>
-            Losers
-            </div>
-            <div className={s.table}>
-              <div className={s.table_header}>
-                <div className={s.table_title}>
-                Name
-                </div>
-                <div className={s.table_title}>
-                index
-                </div>
-                <div className={s.table_title}>
-                Change
-                </div>
-                <div className={s.table_title}>
-                Percent
-                </div>
+          <div className={s.pane}>
+            <div className={s.group}>
+              <div className={s.group_title}>
+              Losers
               </div>
-              <div className={s.table_content}>
-              {
-                lowest.map((el, i) => {
+              <div className={s.table}>
+                <div className={s.table_header}>
+                  <div className={s.table_title}>
+                  Name
+                  </div>
+                  <div className={s.table_title}>
+                  index
+                  </div>
+                  <div className={s.table_title}>
+                  Change
+                  </div>
+                  <div className={s.table_title}>
+                  Percent
+                  </div>
+                </div>
+                <div className={s.table_content}>
+                {
+                  lowest.map((el, i) => {
 
-                  const changeType = el.indexChange > 0 ? 1 : el.indexChange < 0 ? -1 : 0;
+                    const changeType = el.indexChange > 0 ? 1 : el.indexChange < 0 ? -1 : 0;
 
-                  return (
-                    <div className={s.table_row} key={i}>
-                      <div className={s.table_column}>
-                        <div className={s.name} onClick={()=>this.context.router.push(`/dashboard/tickers/${el.name}`)}>{el.name}</div>
-                      </div>
-                      <div className={s.table_column}>
-                        <div className={s.price}>
-                        {formatNumber(el.index)}
+                    return (
+                      <div className={s.table_row} key={i}>
+                        <div className={s.table_column}>
+                          <div className={s.name} onClick={()=>this.context.router.push(`/dashboard/tickers/${el.name}`)}>{el.name}</div>
+                        </div>
+                        <div className={s.table_column}>
+                          <div className={s.price}>
+                          {formatNumber(el.index)}
+                          </div>
+                        </div>
+                        <div className={s.table_column}>
+                          <div className={cx(s.change, {[s.positive]:changeType===1, [s.negative]:changeType===-1})}>
+                          {el.indexChange>0?"+":""}{formatNumber(el.indexChange)}
+                          </div>
+                        </div>
+                        <div className={s.table_column}>
+                          <div className={cx(s.change, {[s.positive]:changeType===1, [s.negative]:changeType===-1})}>
+                          {el.indexChange>0?"+":""}{formatPercent(el.indexChangePercent)}%
+                          </div>
                         </div>
                       </div>
-                      <div className={s.table_column}>
-                        <div className={cx(s.change, {[s.positive]:changeType===1, [s.negative]:changeType===-1})}>
-                        {el.indexChange>0?"+":""}{formatNumber(el.indexChange)}
-                        </div>
-                      </div>
-                      <div className={s.table_column}>
-                        <div className={cx(s.change, {[s.positive]:changeType===1, [s.negative]:changeType===-1})}>
-                        {el.indexChange>0?"+":""}{formatPercent(el.indexChangePercent)}%
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })
-              }
+                    )
+                  })
+                }
+                </div>
               </div>
             </div>
           </div>
