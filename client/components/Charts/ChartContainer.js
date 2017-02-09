@@ -300,7 +300,7 @@ class ChartContainer extends React.Component {
     const data = this.props.data;
 
     return (
-      <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: "100%", width: "100%" }}>
+      <div style={{ ...this.props.style, display: "flex", flexDirection: "column", position: "relative", height: this.props.overrideHeight || "100%", width: "100%" }}>
         <div ref="header">
           <div>
             {

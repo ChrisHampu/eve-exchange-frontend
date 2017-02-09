@@ -1,0 +1,87 @@
+@import '../variables.scss';
+
+.root {
+  display: flex;
+
+  .pane {
+    flex: 1;
+    display: inline-block;
+
+    &:first-child {
+      margin-right: 2rem;
+    }
+
+    .group {
+      margin-bottom: 1.5rem;
+
+      .group_title {
+        text-align: center;
+        color: $gold-color;
+        font-weight: 300;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+      }
+
+      .table {
+
+        .table_header {
+          border-bottom: solid 1px #585f67;
+          padding: 1rem 1rem .5rem;
+
+          .table_title {
+            width: 25%;
+            display: inline-block;
+            color: $gold-color;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+          }
+        }
+
+        .table_content {
+
+          .table_row {
+            padding: 1rem;
+            border-bottom: solid 1px #585f67;
+
+            &:hover {
+              background-color: rgb(40, 46, 51);
+            }
+
+            .table_column {
+              display: inline-block; 
+              width: 25%;
+            }
+          }
+        }
+      }
+    }
+
+    .name {
+      font-size: 1.05rem;
+      color: $gold-color;
+
+      &:hover {
+        color: $gold-color-lighter;
+        cursor: pointer;
+      }
+    }
+
+    .price {
+      font-size: 1.05rem;
+      color: $white;
+    }
+
+    .change {
+      text-align: left;
+
+      &.positive {
+        color: $green-color;
+      }
+
+      &.negative {
+        color: $red-color; 
+      }
+    }
+  }
+}

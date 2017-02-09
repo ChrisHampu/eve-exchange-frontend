@@ -11,6 +11,7 @@ import portfolios from './reducers/portfoliosReducer';
 import sde from './reducers/sdeReducer';
 import app from './reducers/appReducer';
 import feeds from './reducers/feedsReducer';
+import tickers from './reducers/tickersReducer';
 
 const store = createStore(combineReducers({
   auth,
@@ -24,6 +25,7 @@ const store = createStore(combineReducers({
   sde,
   app,
   feeds,
+  tickers,
   routing
 }), {}, window.devToolsExtension && window.devToolsExtension());
 

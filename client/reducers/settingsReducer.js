@@ -17,7 +17,8 @@ const initialState = {
     simulation_strategy: 0,
     simulation_margin_type: 0,
     simulation_overhead: 0,
-    simulation_wanted_profit: 0
+    simulation_wanted_profit: 0,
+    ticker_watchlist: []
   },
   general: {
     auto_renew: true
@@ -36,7 +37,8 @@ const initialState = {
     market_browser: true,
     forecast: true,
     portfolios: true,
-    subscription: true
+    subscription: true,
+    tickers: true
   },
   forecast: {
     min_buy: 5000000,
@@ -206,6 +208,53 @@ export default function settings(state = initialState, action) {
       }
 
       newSettings = { ...state, forecast_regional: { ...state.forecast_regional, [action.setting]: action.value } }
+
+      saveSettings(newSettings);
+
+      return newSettings;
+
+    case "ADD_TICKER_WATCHLIST":
+
+      if (!action.ticker) {
+        return state;
+      }
+
+      if (!state.market.ticker_watchlist) {
+        newSettings = { ...state, market: { ...state.market, ticker_watchlist: [action.ticker] } };
+        saveSettings(newSettings);
+        return newSettings;
+      }
+
+      if (state.market.ticker_watchlist.indexOf(action.ticker) !== -1) {
+        return state;
+      }
+
+      newSettings = { ...state, market: { ...state.market, ticker_watchlist: [...state.market.ticker_watchlist, action.ticker] } };
+
+      saveSettings(newSettings);
+
+      return newSettings;
+
+    case "REMOVE_TICKER_WATCHLIST":
+
+      if (!action.ticker) {
+        return state;
+      }
+
+      if (!state.market.ticker_watchlist) {
+        newSettings = { ...state, market: { ...state.market, ticker_watchlist: [] } };
+        saveSettings(newSettings);
+        return newSettings;
+      }
+
+      if (state.market.ticker_watchlist.indexOf(action.ticker) === -1) {
+        return state;
+      }
+
+      const tickers = state.market.ticker_watchlist;
+      const index = tickers.indexOf(action.ticker);
+
+      newSettings = { ...state, market: { ...state.market, ticker_watchlist: [...tickers.slice(0, index), ...tickers.slice(index+1)] } };
 
       saveSettings(newSettings);
 

@@ -41,3 +41,11 @@ export function updateForecastSetting(setting, value) {
 export function updateForecastRegionalSetting(setting, value) {
   return { type: "UPDATE_FORECAST_REGIONAL_SETTING", setting, value };
 }
+
+export function addTickerWatchlist(ticker) {
+  return { type: "ADD_TICKER_WATCHLIST", ticker };
+}
+
+export function removeTickerWatchlist(ticker) {
+  return { type: "REMOVE_TICKER_WATCHLIST", ticker };
+}

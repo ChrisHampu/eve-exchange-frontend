@@ -1,0 +1,79 @@
+@import '../variables.scss';
+
+.root {
+  text-align: left;
+
+  .inner {
+    display: inline-block;
+
+    .name {
+
+      color: $gold-color;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .values {
+
+      > div {
+        display: inline-block;
+        vertical-align: bottom;
+      }
+
+      .index {
+        color: $white;
+        font-size: 1.8rem;
+        font-weight: 300;
+      }
+
+      .arrow {
+        margin-right: 0.15rem;
+
+        svg {
+          width: 30px !important;
+          height: 30px !important;
+          fill: $gold-color !important;
+        }
+      }
+
+      .changes {
+
+        text-align: left;
+        margin-left: 0.75rem;
+        color: #d4d3d3;
+      }
+
+      &.positive {
+
+        .changes {
+          color: $green-color;
+        }
+
+        .arrow {
+          transform: rotate(-90deg);
+
+          svg {
+            fill: $green-color !important;
+          }
+        }
+      }
+
+      &.negative {
+
+        .changes {
+          color: $red-color;
+        }
+
+        .arrow {
+          transform: rotate(90deg);
+
+          svg {
+            fill: $red-color !important;
+          }
+        }
+      }
+    }
+  }
+}

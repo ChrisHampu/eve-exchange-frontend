@@ -1,0 +1,45 @@
+@import '../variables.scss';
+
+.root {
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  flex-direction: column;
+
+  .category {
+    display: flex;
+    margin-bottom: 1rem;
+
+    .name {
+      text-transform: uppercase;
+      font-size: 1.75rem;
+      color: $gold-color;
+      width: 150px;
+      padding-top: 2rem;
+    }
+
+    .list {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+
+      .ticker {
+        min-width: 25%;
+        box-sizing: border-box;
+        border-bottom: solid 1px #585f67;
+
+        .container {
+          margin: 0 1rem;
+          padding: 1.5rem;
+          cursor: pointer;
+
+          &:hover {
+            background-color: rgb(40, 46, 51);
+          }
+        }
+      }
+    }
+  }
+}
