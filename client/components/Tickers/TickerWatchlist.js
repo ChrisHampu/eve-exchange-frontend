@@ -68,7 +68,7 @@ class TickerWatchlist extends React.Component {
           {
             tickers.map((el, i) => {
 
-              const changeType = el.indexChange > 0 ? 1 : el.indexChange < 0 ? -1 : 0;
+              const changeType = el.indexChange < 0 ? 1 : el.indexChange < 0 ? -1 : 0;
 
               return (
                 <div className={s.table_row} key={i}>
