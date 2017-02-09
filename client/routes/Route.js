@@ -38,7 +38,7 @@ import ProfitTopProfiles from '../components/Profit/ProfitProfiles';
 import AssetsComponent from '../components/Assets/AssetsComponent';
 import TickersComponent from '../components/Tickers/TickersComponent';
 import TickerList from '../components/Tickers/TickerList';
-import TickerView from '../components/Tickers/TickerView';
+import TickerView from '../components/Tickers/TickerVIew';
 import TickerAnalysis from '../components/Tickers/TickerAnalysis';
 import TickerWatchlist from '../components/Tickers/TickerWatchlist';
 
