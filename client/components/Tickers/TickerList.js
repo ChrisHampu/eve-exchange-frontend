@@ -5,6 +5,7 @@ import cx from 'classnames';
 import s from './TickerList.scss';
 
 import Ticker from './Ticker';
+import GuidebookLink from '../Guidebook/GuidebookLink';
 
 class TickersList extends React.Component {
 
@@ -24,6 +25,7 @@ class TickersList extends React.Component {
 
     return (
       <div className={s.root}>
+        <GuidebookLink settingsKey="tickers" page="tickers" />
         {
           Object.keys(this.props.categories).map(category => {
 

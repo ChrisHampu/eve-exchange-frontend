@@ -2,8 +2,8 @@ const initialState = {
   list: [],
   categories: {
     0: 'ships',
-    1: 'modules',
-    2: 'industry'
+    1: 'industry',
+    2: 'misc'
   }
 };
 

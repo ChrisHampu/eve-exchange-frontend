@@ -37,7 +37,8 @@ const initialState = {
     market_browser: true,
     forecast: true,
     portfolios: true,
-    subscription: true
+    subscription: true,
+    tickers: true
   },
   forecast: {
     min_buy: 5000000,

@@ -30,6 +30,7 @@ export default class TickerComponents extends React.Component {
                 <TableHeaderColumn>Name</TableHeaderColumn>
                 <TableHeaderColumn>Price</TableHeaderColumn>
                 <TableHeaderColumn>Change</TableHeaderColumn>
+                <TableHeaderColumn>Volume Traded</TableHeaderColumn>
                 <TableHeaderColumn>Volume Available</TableHeaderColumn>
                 <TableHeaderColumn>Market Cap</TableHeaderColumn>
               </TableRow>
@@ -62,6 +63,7 @@ export default class TickerComponents extends React.Component {
                       {el.priceChange>0?"+":""}{formatPercent(el.priceChangePercent)}%
                       </div>
                     </TableRowColumn>
+                    <TableRowColumn>{formatNumberUnit(el.tradeVolume)}</TableRowColumn>
                     <TableRowColumn>{formatNumberUnit(el.volume)}</TableRowColumn>
                     <TableRowColumn>{formatNumberUnit(el.marketCap)}</TableRowColumn>
                   </TableRow>
