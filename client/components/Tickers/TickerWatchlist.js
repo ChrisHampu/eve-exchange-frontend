@@ -5,6 +5,11 @@ import cx from 'classnames';
 import s from './TickerWatchlist.scss';
 import { formatNumber, formatNumberUnit, formatPercent } from '../../utilities';
 
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton/IconButton';
+import LeftArrowIcon from 'material-ui/svg-icons/navigation/chevron-left';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Arrow from 'material-ui/svg-icons/av/play-arrow';
 import Equal from 'material-ui/svg-icons/editor/drag-handle';
 
@@ -43,6 +48,28 @@ class TickerWatchlist extends React.Component {
 
     return (
       <div className={s.root}>
+        <div className={s.header}>
+          <div className={s.region}>
+          Region <div className={s.region_name}>{this.props.all_regions[this.state.region]}</div>
+          </div>
+          <div className={s.menu}>
+            <IconMenu
+              iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+              targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            >
+              <MenuItem type="text" primaryText="Change Hub" innerDivStyle={{padding: "0 16px 0 55px"}} style={{cursor: "pointer"}} leftIcon={<LeftArrowIcon />}
+                menuItems={[
+                  <MenuItem type="text" primaryText="Jita" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000002})}/>,
+                  <MenuItem type="text" primaryText="Amarr" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000043})}/>,
+                  <MenuItem type="text" primaryText="Dodixie" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000032})}/>,
+                  <MenuItem type="text" primaryText="Hek" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000042})}/>,
+                  <MenuItem type="text" primaryText="Rens" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000030})}/>
+                ]}
+              />
+            </IconMenu>
+          </div>
+        </div>
         <div className={s.table}>
           <div className={s.table_header}>
             <div className={s.table_title}>
@@ -68,7 +95,7 @@ class TickerWatchlist extends React.Component {
           {
             tickers.map((el, i) => {
 
-              const changeType = el.indexChange < 0 ? 1 : el.indexChange < 0 ? -1 : 0;
+              const changeType = el.indexChange > 0 ? 1 : el.indexChange < 0 ? -1 : 0;
 
               return (
                 <div className={s.table_row} key={i}>
@@ -113,7 +140,7 @@ class TickerWatchlist extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { tickers: store.tickers.list, region: store.settings.market.region, watchlist: store.settings.market.ticker_watchlist || [] };
+  return { tickers: store.tickers.list, region: store.settings.market.region, watchlist: store.settings.market.ticker_watchlist || [], all_regions: store.sde.regions };
 }
 
 export default connect(mapStateToProps)(TickerWatchlist);

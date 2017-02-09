@@ -6,12 +6,25 @@ import s from './TickerAnalysis.scss';
 import { formatNumber, formatPercent } from '../../utilities';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton/IconButton';
+import LeftArrowIcon from 'material-ui/svg-icons/navigation/chevron-left';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 class TickerAnalysis extends React.Component {
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      region: this.props.region
+    };
+  }
 
   render() {
 
@@ -25,7 +38,7 @@ class TickerAnalysis extends React.Component {
 
     const tickers = this.props.tickers.map(el => {
 
-      const region = el.regions[this.props.region];
+      const region = el.regions[this.state.region];
 
       return { name: el.name, ...region };
     });
@@ -35,6 +48,28 @@ class TickerAnalysis extends React.Component {
 
     return (
       <div className={s.root}>
+        <div className={s.header}>
+          <div className={s.region}>
+          Region <div className={s.region_name}>{this.props.all_regions[this.state.region]}</div>
+          </div>
+          <div className={s.menu}>
+            <IconMenu
+              iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+              targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            >
+              <MenuItem type="text" primaryText="Change Hub" innerDivStyle={{padding: "0 16px 0 55px"}} style={{cursor: "pointer"}} leftIcon={<LeftArrowIcon />}
+                menuItems={[
+                  <MenuItem type="text" primaryText="Jita" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000002})}/>,
+                  <MenuItem type="text" primaryText="Amarr" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000043})}/>,
+                  <MenuItem type="text" primaryText="Dodixie" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000032})}/>,
+                  <MenuItem type="text" primaryText="Hek" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000042})}/>,
+                  <MenuItem type="text" primaryText="Rens" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000030})}/>
+                ]}
+              />
+            </IconMenu>
+          </div>
+        </div>
         <div className={s.pane}>
           <div className={s.group}>
             <div className={s.group_title}>
@@ -59,7 +94,7 @@ class TickerAnalysis extends React.Component {
               {
                 highest.map((el, i) => {
 
-                  const changeType = el.indexChange < 0 ? 1 : el.indexChange < 0 ? -1 : 0;
+                  const changeType = el.indexChange > 0 ? 1 : el.indexChange < 0 ? -1 : 0;
 
                   return (
                     <div className={s.table_row} key={i}>
@@ -149,7 +184,7 @@ class TickerAnalysis extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { tickers: store.tickers.list, region: store.settings.market.region };
+  return { tickers: store.tickers.list, region: store.settings.market.region, all_regions: store.sde.regions };
 }
 
 export default connect(mapStateToProps)(TickerAnalysis);

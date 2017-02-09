@@ -18,7 +18,7 @@ export default class Ticker extends React.Component {
     const { name, regions } = this.props;
     const { index, indexChange, indexChangePercent } = regions[this.props.region];
 
-    const changeType = indexChange < 0 ? 1 : indexChange < 0 ? -1 : 0;
+    const changeType = indexChange > 0 ? 1 : indexChange < 0 ? -1 : 0;
 
     return (
       <div className={s.root}>

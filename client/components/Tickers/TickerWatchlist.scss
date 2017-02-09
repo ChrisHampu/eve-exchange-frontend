@@ -5,6 +5,30 @@
   .empty {
     font-size: 1.1rem;
   }
+  .header {
+    .menu {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .region {
+      color: $gold-color;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 1.5rem;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      font-weight: 700;
+
+      .region_name {
+        color: $gold-color;
+        font-size: 1.35rem;
+        font-weight: 300;
+        margin-top: 0.25rem;
+      }
+    }
+  }
 
   .table {
     .table_header {

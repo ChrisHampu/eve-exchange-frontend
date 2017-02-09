@@ -17,7 +17,7 @@ export default class TickersComponent extends React.Component {
             'Watch List': "/dashboard/tickers/watchlist",
             'Analysis': "/dashboard/tickers/analysis"
           }}
-          location={this.props.location}
+          location={this.props.location==="/dashboard/tickers"?"/dashboard/tickers/all":this.props.location}
         />
           <DashboardPageBody children={this.props.children} defaultComponent={<TickerList />} />
       </DashboardPage>

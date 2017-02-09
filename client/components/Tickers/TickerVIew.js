@@ -18,8 +18,17 @@ import IconButton from 'material-ui/IconButton/IconButton';
 
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CheckIcon from 'material-ui/svg-icons/action/check-circle';
+import LeftArrowIcon from 'material-ui/svg-icons/navigation/chevron-left';
 
 class TickerView extends React.Component {
+
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      region: this.props.region
+    };
+  }
 
   isWatchlisted(ticker) {
 
@@ -56,12 +65,15 @@ class TickerView extends React.Component {
       );
     }
 
-    const regionTicker = ticker.regions[this.props.region];
+    const regionTicker = ticker.regions[this.state.region];
 
     return (
       <div className={s.root}>
         <div className={s.ticker}>
-          <Ticker {...ticker} region={this.props.region}/>
+          <Ticker {...ticker} region={this.state.region}/>
+        </div>
+        <div className={s.region}>
+        Region <div className={s.region_name}>{this.props.all_regions[this.state.region]}</div>
         </div>
         <div className={s.pin}>
         {
@@ -82,6 +94,15 @@ class TickerView extends React.Component {
                 <MenuItem type="text" primaryText="Add to Watchlist" innerDivStyle={{padding: "0 16px 0 55px"}} onTouchTap={()=>this.addWatchlist(ticker)} style={{cursor: "pointer"}} insetChildren={true} />
                 : <MenuItem type="text" primaryText="Remove from Watchlist" innerDivStyle={{padding: "0 16px 0 55px"}} onTouchTap={()=>this.removeWatchlist(ticker)} style={{cursor: "pointer"}} insetChildren={true} />
             }
+            <MenuItem type="text" primaryText="Change Hub" innerDivStyle={{padding: "0 16px 0 55px"}} style={{cursor: "pointer"}} leftIcon={<LeftArrowIcon />}
+              menuItems={[
+                <MenuItem type="text" primaryText="Jita" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000002})}/>,
+                <MenuItem type="text" primaryText="Amarr" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000043})}/>,
+                <MenuItem type="text" primaryText="Dodixie" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000032})}/>,
+                <MenuItem type="text" primaryText="Hek" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000042})}/>,
+                <MenuItem type="text" primaryText="Rens" style={{cursor: "pointer"}} onTouchTap={()=>this.setState({region: 10000030})}/>
+              ]}
+            />
           </IconMenu>
         </div>
         <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tabs} contentContainerClassName={s.tab_container}>
@@ -178,7 +199,7 @@ class TickerView extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { tickers: store.tickers.list, region: store.settings.market.region, watchlist: store.settings.market.ticker_watchlist || [] };
+  return { tickers: store.tickers.list, region: store.settings.market.region, watchlist: store.settings.market.ticker_watchlist || [], all_regions: store.sde.regions };
 }
 
 export default connect(mapStateToProps)(TickerView);

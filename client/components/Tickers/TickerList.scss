@@ -5,38 +5,100 @@
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
+  height: 100%;
   flex-direction: column;
 
-  .category {
-    display: flex;
-    margin-bottom: 1rem;
+  .header {
 
-    .name {
-      text-transform: uppercase;
-      font-size: 1.75rem;
-      color: $gold-color;
-      width: 150px;
-      padding-top: 2rem;
+    .items {
+
+      .search {
+        font-weight: 300;  
+        display: inline-block;
+
+        label {
+          color: $gold-color !important;
+          line-height: 0px !important;
+          z-index: 0 !important;
+        }
+
+        input {
+          margin-top: 0 !important;
+        }
+
+        hr:first-child {
+          border-color: rgba(255,255,255,0.5) !important;
+        }
+
+        hr:not(:first-child) {
+          border-color: $gold-color !important;
+        }
+      }
+
+      .menu {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+      }
+
+      .region {
+        color: $gold-color;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 1.5rem;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        font-weight: 700;
+
+        .region_name {
+          color: $gold-color;
+          font-size: 1.35rem;
+          font-weight: 300;
+          margin-top: 0.25rem;
+        }
+      }
     }
+  }
 
-    .list {
-      flex: 1;
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
+  .body {
+    flex: 1;
+    overflow: hidden;
+    .body_container {
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: 100%;
+      .category {
+        display: flex;
+        margin-bottom: 1rem;
 
-      .ticker {
-        min-width: 25%;
-        box-sizing: border-box;
-        border-bottom: solid 1px #585f67;
+        .name {
+          text-transform: uppercase;
+          font-size: 1.75rem;
+          color: $gold-color;
+          width: 150px;
+          padding-top: 2rem;
+        }
 
-        .container {
-          margin: 0 1rem;
-          padding: 1.5rem;
-          cursor: pointer;
+        .list {
+          flex: 1;
+          display: flex;
+          flex-wrap: wrap;
+          flex-direction: row;
 
-          &:hover {
-            background-color: rgb(40, 46, 51);
+          .ticker {
+            min-width: 25%;
+            box-sizing: border-box;
+            border-bottom: solid 1px #585f67;
+
+            .container {
+              margin: 0 1rem;
+              padding: 1.5rem;
+              cursor: pointer;
+
+              &:hover {
+                background-color: rgb(40, 46, 51);
+              }
+            }
           }
         }
       }
