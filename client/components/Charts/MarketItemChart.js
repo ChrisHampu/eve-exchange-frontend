@@ -286,11 +286,11 @@ class MarketItemChart extends React.Component {
 
       switch(this.refs.container.getFrequency()) {
         case "minutes":
-          return this.props.market.item[this.props.item.id].minutes ? this.props.market.item[this.props.item.id].minutes[region].length : 0;
+          return this.props.market.item[this.props.item.id].minutes ? (this.props.market.item[this.props.item.id].minutes[region] ? this.props.market.item[this.props.item.id].minutes[region].length : 0) : 0;
         case "hours":
-          return this.props.market.item[this.props.item.id].hours ? this.props.market.item[this.props.item.id].hours[region].length : 0;
+          return this.props.market.item[this.props.item.id].hours ? (this.props.market.item[this.props.item.id].hours[region] ? this.props.market.item[this.props.item.id].hours[region].length : 0) : 0;
         case "daily":
-          return this.props.market.item[this.props.item.id].daily ? this.props.market.item[this.props.item.id].daily[region].length : 0;
+          return this.props.market.item[this.props.item.id].daily ? (this.props.market.item[this.props.item.id].daily[region] ? this.props.market.item[this.props.item.id].daily[region].length : 0) : 0;
       }
     }
 

@@ -180,6 +180,17 @@ export function getMarketItemNames() {
 
 export function _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin, wanted_margin, overhead) {
 
+  if (data[type][interval].indexOf(region) === -1) {
+    return {
+      buy: 0,
+      sell: 0,
+      tax: 0,
+      broker: 0,
+      overhead: 0,
+      profit: 0
+    };
+  }
+
   const accessor = data[type][interval][region][ data[type][interval][region].length - 1 ];
   const orders = data[type].orders[region];
 
