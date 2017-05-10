@@ -112,7 +112,7 @@ export default class TickerChart extends React.Component {
 
     switch(this.refs.container.getFrequency()) {
       case "hours":
-        var arr = this.props.hourlyChart;
+        var arr = this.props.hourlyChart.sort((el1, el2) => new Date(el2.time) - new Date(el1.time));
         if (!arr) {
           return 0;
         }
@@ -120,7 +120,7 @@ export default class TickerChart extends React.Component {
         return arr.length;
         
       case "days":
-        var arr = this.props.hourlyChart;
+        var arr = this.props.hourlyChart.sort((el1, el2) => new Date(el2.time) - new Date(el1.time));
         if (!arr) {
           return 0;
         }
