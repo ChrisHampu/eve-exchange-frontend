@@ -5,8 +5,8 @@ import babel from 'rollup-plugin-babel';
 import postcss from './utils/postcss/index.js';
 import image from 'rollup-plugin-image';
 import commonjs from 'rollup-plugin-commonjs';
-import builtins from './utils/node-builtins/dist/rollup-plugin-node-builtins.es6.js';
-import globals from './utils/node-globals/dist/rollup-plugin-node-globals.es6.js';
+import builtins from 'rollup-plugin-node-builtins';
+import globals from 'rollup-plugin-node-globals';
 
 // PostCSS plugins
 import _import from 'postcss-import';
@@ -52,6 +52,7 @@ export default {
       presets: ["react", [ "es2015", { modules: false, 'transform-es2015-modules-commonjs': false, 'external-helpers': true } ]],
       plugins: ['external-helpers', "transform-async-to-generator", 'transform-react-jsx','transform-class-properties','transform-object-rest-spread']
     }),
+    builtins(),
     nodeResolve({
       jsnext: true,
       browser: true,
@@ -73,7 +74,6 @@ export default {
       ignoreGlobal: true
     }),
     globals(),
-    builtins(),
     (() => {
 
       const values = {
