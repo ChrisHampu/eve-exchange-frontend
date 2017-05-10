@@ -66,7 +66,7 @@ export default {
       exclude: ['node_modules/process-es6/**', 'node_modules/redux/**'],
       namedExports: {
         'client/vendor/d3.js': ['scaleUtc', 'scaleLinear', 'timeHour', 'timeMinute', 'timeDay', 'line', 'area', 'select', 'axisLeft', 'axisBottom', 'axisRight', 'curveCatmullRom', 'curveCardinal'],
-        'react': ['PropTypes', 'createElement'],
+        'react': ['PropTypes', 'createElement', 'Children', 'Component'],
         'react-router': ['browserHistory'],
         'react-redux': ['Provider']
       },
@@ -84,8 +84,8 @@ export default {
         'var name = message.data\\[ message.action === C.ACTIONS.ACK \\? 1 : 0 \\];': 'var name = message.data[ message.action === C.ACTIONS.ACK ? 1 : 0 ];\nvar processed;',
         'var events = createCommonjsModule\\(function': 'var events_mui = createCommonjsModule(function',
         'var _events = events;': 'var _events = events_mui',
-        'return setInterval\\$1\\( callback, intervalDuration \\);': 'return setInterval( callback, intervalDuration );',
-        'return setTimeout\\$1\\( callback, timeoutDuration \\);': 'return setTimeout( callback, timeoutDuration );'
+        'return setInterval\\$1\\(callback, intervalDuration\\);': 'return setInterval(callback, intervalDuration);',
+        'return setTimeout\\$1\\(callback, timeoutDuration\\);': 'return setTimeout(callback, timeoutDuration);'
       };
 
       const keys = Object.keys(values);
