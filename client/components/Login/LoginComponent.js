@@ -3,8 +3,8 @@ import s from './LoginComponent.scss';
 
 import { APIEndpointURL } from '../../globals';
 
-import sso_image from '../../assets/img/EVESSO_Button.png';
-import logo_image from '../../assets/img/eve-x-logo.png';
+import sso_image from 'assets/img/EVESSO_Button.png';
+import logo_image from 'assets/img/eve-x-logo.png';
 
 export default class Login extends React.Component {
 
@@ -15,11 +15,11 @@ export default class Login extends React.Component {
           <div className={s.text}>
           Sign in to begin using EVE Exchange
           </div>
-          <a href={`${APIEndpointURL}/oauth`} style={{backgroundImage: `url(${sso_image.src})`}}></a>
+          <a href={`${APIEndpointURL}/oauth`} style={{backgroundImage: `url(${sso_image})`}}></a>
         </div>
         <div className={s.hover}>
           <div className={s.logo}>
-            <img src={`${logo_image.src}`} />
+            <img src={logo_image} />
           </div>
         </div>
       </div>

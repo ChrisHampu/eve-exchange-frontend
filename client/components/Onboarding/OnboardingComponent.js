@@ -4,7 +4,11 @@ import s from './Onboarding.scss';
 import cx from 'classnames';
 import { isLoggedIn } from '../../auth';
 
-import logo_image from '../../assets/img/eve-x-logo.png';
+import logo_image from 'assets/img/eve-x-logo.png';
+import landing1 from 'assets/img/Landing1.jpg';
+import landing2 from 'assets/img/Landing2.jpg';
+import landing3 from 'assets/img/Landing3.jpg';
+import landing4 from 'assets/img/Landing4.jpg';
 
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -42,7 +46,7 @@ export default class OnboardingComponent extends React.Component {
   render() {
     return (
       <div className={s.container}>
-        <div className={cx(s.main, s.landing)}>
+        <div className={cx(s.main, s.landing)} style={{background: `#1c1f24 url(${landing1}) no-repeat`}}>
           <div className={s.dashboard}>
             <FlatButton 
               label="Dashboard" 
@@ -109,7 +113,7 @@ export default class OnboardingComponent extends React.Component {
               </div>
             </div>
             <div className={s.image}>
-              <img src="/assets/img/Landing2.jpg" />
+              <img src={landing2} />
             </div>
           </div>
         </div>
@@ -136,7 +140,7 @@ export default class OnboardingComponent extends React.Component {
               </div>
             </div>
             <div className={s.image}>
-              <img src="/assets/img/Landing3.jpg" />
+              <img src={landing3} />
             </div>
           </div>
         </div>
@@ -171,7 +175,7 @@ export default class OnboardingComponent extends React.Component {
               </div>
             </div>
             <div className={s.image}>
-              <img src="/assets/img/Landing4.jpg" />
+              <img src={landing4} />
             </div>
           </div>
         </div>
@@ -293,7 +297,7 @@ export default class OnboardingComponent extends React.Component {
         </div>
         <div className={s.footer}>
           <div className={s.logo}>
-            <img src={`${logo_image.src}`} />
+            <img src={logo_image} />
           </div>
           <div className={s.copyright}>
             Copyright &copy; 2016 <span>EVE Exchange</span>. All EVE related materials are property of CCP Games.

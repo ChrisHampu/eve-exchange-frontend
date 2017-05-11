@@ -9,7 +9,7 @@ import DashboardView from './DashboardView';
 import s from './DashboardComponent.scss';
 import FullscreenComponent from './FullscreenComponent';
 
-import logo_image from '../../assets/img/eve-x-logo.png';
+import logo_image from 'assets/img/eve-x-logo.png';
 
 // Material UI
 import Paper from 'material-ui/Paper';
@@ -290,7 +290,7 @@ class Dashboard extends React.Component {
         <Paper zDepth={2} className={cx(s.sidebar_container, {[s.collapsed]: this.state.collapsed})}>
           <div className={s.sidebar_inner}>
             <div className={s.sidebar_title}>
-              <span className={s.name} onClick={()=>this.setRoute('/')}><img src={`${logo_image.src}`} /></span>
+              <span className={s.name} onClick={()=>this.setRoute('/')}><img src={logo_image} /></span>
             </div>
             <div className={s.sidebar_menu_container}>
               <Divider className={s.divider_line} />
