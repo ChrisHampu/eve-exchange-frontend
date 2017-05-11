@@ -11,19 +11,12 @@ build:
     # Base npm install + configure binaries
     - npm install
     - ln -s $(pwd)/node_modules/.bin/babel /usr/bin/babel
-    - ln -s $(pwd)/node_modules/.bin/rollup /usr/bin/rollup
     # Build client
-    - rollup -c rollup.prod.config.js >> output
-    # Show full build output to console and check for errors
+    - npm run build >> output
+    # Show full build output to console
     - cat output
-    - if grep 'Error:' output; then exit 1; else echo Build success; fi
-    - rm output
     # Build server
     - NODE_ENV=production babel server -d build-server
-    # Copy assets
-    - mkdir build/assets
-    - cp -r client/assets/** build/assets
-    - cp client/index.html build/index.html
   stage: build
   tags:
     - nodejs
