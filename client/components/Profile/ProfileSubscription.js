@@ -35,12 +35,22 @@ class Subscription extends React.Component {
   }
 
   subscriptionLevelToName() {
+
     switch (this.props.subscription.premium) {
       case false:
         return "Free";
       case true:
-        return <span style={{color: "rgb(235, 169, 27)"}}>Premium</span>;
+        if (this.isOnFreeTrial()) {
+          return <span style={{color: "rgb(235, 169, 27)"}}>Premium (Free Trial)</span>;
+        }
+        else {
+          return <span style={{color: "rgb(235, 169, 27)"}}>Premium</span>;
+        }
     }
+  }
+
+  isOnFreeTrial() {
+    return (this.props.subscription.premium && (!this.props.subscription.history || !this.props.subscription.history.length));
   }
 
   renderSubscriptionButtons() {
@@ -322,7 +332,7 @@ class Subscription extends React.Component {
             </div>
             <div className={s.info_row}>
               <div className={s.info_key}>
-                {this.props.settings.general && this.props.settings.general.auto_renew === true?"Renews":"Expires"}
+                {this.props.settings.general && this.props.settings.general.auto_renew === true && !this.isOnFreeTrial() ?"Renews":"Expires"}
               </div>
               <div className={s.info_value}>
                 {this.props.subscription.subscription_date ? formatDate(new Date(new Date(this.props.subscription.subscription_date).getTime() + 2592000000)) : "Never"}
