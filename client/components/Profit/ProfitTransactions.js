@@ -37,7 +37,7 @@ class ProfitTransactions extends React.Component {
             <TableHeaderColumn key={3} style={{textAlign: "center"}}>Volume Sold</TableHeaderColumn>,
             <TableHeaderColumn key={4} style={{textAlign: "center"}}>Who</TableHeaderColumn>
           ]}
-          items={this.props.transactions.sort((el1, el2) => new Date(el2.time) - new Date(el1.time)).map((el, i) => {
+          items={this.props.transactions.map((el, i) => {
             return (
              <TableRow key={i} selectable={false}>
                 <TableRowColumn style={{textAlign: "center"}}>{prettyDate(el.time)}</TableRowColumn>
