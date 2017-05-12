@@ -4,7 +4,6 @@ var cssimport = require('postcss-import');
 var simplevars = require('postcss-simple-vars');
 var nested = require('postcss-nested');
 var cssnext = require('postcss-cssnext');
-//var postcssModules = require('postcss-modules');
 var cssnano = require('cssnano');
 
 var atImport = require('postcss-import');
