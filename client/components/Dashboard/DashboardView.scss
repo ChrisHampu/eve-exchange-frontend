@@ -20,6 +20,15 @@
   }
 }
 
+.link {
+  color: $blue-color;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
 .disclaimer {
   padding-top: 0.5rem;
   color: #BDBDBD;

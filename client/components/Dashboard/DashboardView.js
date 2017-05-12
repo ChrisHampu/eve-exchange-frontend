@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
 import s from './DashboardView.scss';
+import { browserHistory } from 'react-router';
 import { subscribeItem, unsubscribeItem } from '../../market';
 import { unPinChartFromDashboard } from '../../actions/settingsActions';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
@@ -19,10 +20,14 @@ class DashboardView extends React.Component {
     router: React.PropTypes.object.isRequired
   };
 
+  setRoute(route) {
+
+    browserHistory.push(route);
+  }
+
   render() {
 
     const charts = Object.keys(this.props.settings.pinned_charts);
-    const numRows = Math.ceil(charts.length / 2);
 
     return (
       <div className={s.root}>
@@ -34,7 +39,7 @@ class DashboardView extends React.Component {
               Dashboard
               </div>
               <div>
-              You do not have any charts pinned to your dashboard yet.<br />You can do so from the <b>Market Browser</b> by selecting an item and clicking "Pin to Dashboard" from the top right context menu.
+                You do not have any charts pinned to your dashboard yet.<br />You can do so from the <b><span className={s.link} onClick={() => this.setRoute('/dashboard/browser')}>Market Browser</span></b> by selecting an item and clicking <i>Pin to Dashboard</i> from the top right context menu.
               </div>
             </div>
             :
