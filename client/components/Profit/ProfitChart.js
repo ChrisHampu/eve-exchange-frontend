@@ -26,7 +26,6 @@ class ProfitChart extends React.Component {
     this.state = {
       xScale: scaleUtc(),
       profitScale: scaleLinear(),
-      taxScale: scaleLinear(),
       focusedElement: null,
       focusedElementIndex: -1
     }
@@ -58,24 +57,19 @@ class ProfitChart extends React.Component {
     ]);
 
     this.state.profitScale.domain([Math.min(...data.map((el) => { return el.profit})), Math.max(...data.map((el) => { return el.profit}))]);
-    this.state.taxScale.domain([Math.min(...data.map((el) => { return Math.abs(el.taxes)+Math.abs(el.broker)})), Math.max(...data.map((el) => { return Math.abs(el.taxes)+Math.abs(el.broker)}))]);
 
     this.state.xScale.range([0, this.refs.container.getWidth()]);
     this.state.profitScale.range([this.refs.container.getHeight(), 0]);
-    this.state.taxScale.range([this.refs.container.getHeight(), 0]);
 
     this.state.xScale.clamp(true);
     this.state.profitScale.clamp(true);
-    this.state.taxScale.clamp(true);
 
     this.state.xScale.nice(this.refs.container.getFrequency() === "minutes" ? timeMinute : (this.refs.container.getFrequency() === "hours" ? timeHour : timeDay));
     this.state.profitScale.nice([5]);
-    this.state.taxScale.nice([5]);
 
     this.setState({
       xScale: this.state.xScale,
-      profitScale: this.state.profitScale,
-      taxScale: this.state.taxScale
+      profitScale: this.state.profitScale
     });
   }
 
@@ -210,7 +204,6 @@ class ProfitChart extends React.Component {
           <Axis anchor="left" scale={this.state.profitScale} ticks={5} tickSize={-width} suppressLabels={true} style={{opacity: 0.5}}/>
 
           <Axis anchor="left" scale={this.state.profitScale} ticks={5} formatISK={true} />
-          <Axis anchor="right" scale={this.state.taxScale} ticks={5} style={{transform: `translateX(${width}px)`}} formatISK={true} />
           <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
           {
             data && data.length > 0 ?
