@@ -113,6 +113,10 @@
         overflow-y: auto;
         overflow-x: hidden;
 
+        > div {
+          width: auto !important;
+        }
+
         .sidebar_menu_divider {
           text-transform: uppercase;
           padding-top: 1rem;
