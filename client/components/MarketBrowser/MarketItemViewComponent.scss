@@ -71,6 +71,7 @@
     width: 100%;
     border-bottom: 2px solid $base-color-light;
     padding-bottom: 10px;
+    z-index: 1;
 
     .market_item_view_header_name {
       font-size: 1.5rem;
