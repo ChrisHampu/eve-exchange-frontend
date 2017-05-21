@@ -1,12 +1,4 @@
-- eve-mail notifications ***
-
-- ability to ban a user?
-
 - figure out best timezones: EU/US/AUS by analyzing which TZ has the most hourly trades 00-08 08-16 16-24 UTC
-
-- add more docs about everything
-
-- call them alerts instead of notifications
 
 - push/replace state logic - avoid back button hijacking
 
@@ -19,28 +11,9 @@
 
 - fix ie/edge chart rendering
 
-- add a changelog/blog type page
-
 - don't update portfolios for non premiums?
 
 - put password on mongodb wtf
-
-- tickers 2
-  - build regional aggregation data
-  - aggregate all the regions together to build unified data models as "adjusted prices"
-  - use these prices as replacements for calculating portfolios?
-  - use these prices for the tickers
-  - put together a list of all the items for each ticker and decide on what they will be
-
-- chart builder 3
-  - type in any item, add it to the chart
-  - while in market browser, have option to "add to builder"
-  - support multiple time frames
-  - dynamically load item data
-  - region selector
-  - use min/max for the y-axis of overall values
-  - area chart with stacking? or line chart
-  - selector to change visualization: buy/sell, volume, spread, etc
 
 - document portfolio fitting import
 
@@ -52,10 +25,10 @@
 
 - real-time edit through API for all portfolio parameters (like sell price, etc)
 - better mobile optimizations 
-- user-agent headers
 - scroll wheel scroll graphs
 - contracts
-- assets
-- forecast volume filter not working?
-- more error checks to profit pulling script for connections to eve api
-- divide by 0 check needed: line 1346 market.py
+- forecast tool: ignore items that have no sell orders
+
+- add 'profit per item' or trade simulation to item forecast tool - Porstacha Eistiras
+
+- reset alerts to allow immediate triggering

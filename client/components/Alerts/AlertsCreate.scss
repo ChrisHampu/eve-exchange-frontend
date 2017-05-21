@@ -1,0 +1,42 @@
+@import '../variables.scss';
+
+.root {
+    
+    .link {
+        color: $blue-color;
+
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
+    .disclaimer {
+        margin-bottom: 1rem;
+    }
+
+    .text {
+        display: inline-block;
+        height: 72px;
+        vertical-align: middle;
+        line-height: 24px;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        min-width: 70px;
+    }
+
+    .select {
+        margin-right: 1rem;
+    }
+
+    .numberField {
+        vertical-align: top;
+        margin-right: 1rem;
+        vertical-align: text-bottom;
+    }
+
+    .error {
+        margin-top: 1rem;
+        color: $red-color;
+    }
+}

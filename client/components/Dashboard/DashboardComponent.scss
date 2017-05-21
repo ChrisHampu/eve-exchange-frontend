@@ -128,6 +128,24 @@
         .sidebar_menu {
           width: 100% !important;
           display: block !important;
+
+          .menu_item_container {
+            position: relative;
+            
+            .beta_badge {
+              position: absolute;
+              top: 0.75rem;
+              z-index: 1;
+              right: 0.75rem;
+              text-transform: uppercase;
+              font-size: 0.8rem;
+              color: $gold-color;
+              //background-color: $base-color-darkest;
+              padding: 0.25rem;
+              cursor: default;
+              pointer-events: none;
+            }
+          }
         }
 
         .sidebar_menu_item {

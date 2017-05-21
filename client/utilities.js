@@ -2,9 +2,14 @@ import 'whatwg-fetch';
 import xml2js from 'xml-json-parser';
 
 // Formats a raw number with appropriate comma and decimal placement
+
+export function roundNumber(number) {
+  return Math.round(number*Math.pow(10,2))/Math.pow(10,2);
+}
+
 export function formatNumber(number) {
 
-  var _number = Math.round(number*Math.pow(10,2))/Math.pow(10,2);
+  var _number = roundNumber(number);
   var parts = _number.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return parts.join(".");
@@ -87,31 +92,39 @@ export function getMonthNumberToText(month) {
 }
 
 export function prettyDate(time) {
-    var date = time;
+  var date = time;
 
-    if (typeof date === "string") {
-      date = new Date(date);
-    }
+  if (typeof date === "string") {
+    date = new Date(date);
+  }    
 
-    var diff = (((new Date()).getTime() - date.getTime()) / 1000),
-        day_diff = Math.floor(diff / 86400);
+  let diff = diff = (((new Date()).getTime() - date.getTime()) / 1000);
 
-    if (isNaN(day_diff) || day_diff < 0)
-        return;
+  var day_diff = Math.floor(Math.abs(diff) / 86400);
 
-    const week_diff = Math.ceil(day_diff / 7);
-    const month_diff = Math.ceil(day_diff / 30);
+  if (isNaN(day_diff))
+      return;
 
-    return day_diff == 0 && (
-        diff < 60 && "just now" ||
-        diff < 120 && "a minute ago" ||
-        diff < 3600 && Math.floor(diff / 60) + " minutes ago" ||
-        diff < 7200 && "about an hour ago" ||
-        diff < 86400 && `about ${Math.floor(diff / 3600)} hours ago`) ||
-        day_diff == 1 && "a day ago" ||
-        day_diff < 7 && day_diff + " days ago" ||
-        day_diff < 31 && `${week_diff===1?"a":week_diff} week${week_diff===1?"":"s"} ago` ||
-        `${month_diff===1?"a":month_diff} month${month_diff===1?"":"s"} ago`;
+  const week_diff = Math.ceil(day_diff / 7);
+  const month_diff = Math.ceil(day_diff / 30);
+
+  return day_diff == 0 && (
+      diff < -86400 && `in about ${Math.abs(Math.floor(diff / 3600))} hours` ||
+      diff < -7200 && "in about an hour" ||
+      diff < -3600 && `in ${Math.abs(Math.floor(diff / 60))} minutes` ||
+      diff < -120 && "in a minute" ||
+      diff < -60 && "in a moment" ||
+      diff < 60 && "just now" ||
+      diff < 120 && "a minute ago" ||
+      diff < 3600 && Math.floor(diff / 60) + " minutes ago" ||
+      diff < 7200 && "about an hour ago" ||
+      diff < 86400 && `about ${Math.floor(diff / 3600)} hours ago`) ||
+      day_diff < -7 && `in ${Math.abs(diff)} days` ||
+      day_diff == -1 && "in a day" ||
+      day_diff == 1 && "a day ago" ||
+      day_diff < 7 && day_diff + " days ago" ||
+      day_diff < 31 && `${week_diff===1?"a":week_diff} week${week_diff===1?"":"s"} ago` ||
+      `${month_diff===1?"a":month_diff} month${month_diff===1?"":"s"} ago`;
 }
 
 export async function getAPIKeyInfo(keyID, vCode, characterID) {

@@ -1,0 +1,13 @@
+@import '../variables.scss';
+
+.root {
+        
+    .link {
+        color: $blue-color;
+
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+}

@@ -7,6 +7,7 @@ import { sendAppNotification } from '../actions/appActions';
 const initialState = {
   premium: false,
   pinned_charts: [],
+  initialLoad: false,
   market: {
     region: 10000002,
     default_tab: 0,
@@ -53,6 +54,10 @@ const initialState = {
     max_price: 1000000000,
     start_region: 10000043,
     end_region: 10000002
+  },
+  alerts: {
+    canShowBrowserNotification: true,
+    canSendMailNotification: true
   }
 };
 
@@ -88,7 +93,7 @@ export default function settings(state = initialState, action) {
         return { ...state, userID: action.id };
       }
 
-      return { ...state, ...action.settings, userID: action.id };
+      return { ...state, ...action.settings, userID: action.id, initialLoad: true };
 
     case "PIN_CHART":
 
@@ -255,6 +260,30 @@ export default function settings(state = initialState, action) {
       const index = tickers.indexOf(action.ticker);
 
       newSettings = { ...state, market: { ...state.market, ticker_watchlist: [...tickers.slice(0, index), ...tickers.slice(index+1)] } };
+
+      saveSettings(newSettings);
+
+      return newSettings;
+
+    case 'SET_SHOW_BROWSER_PERMISSION':
+
+      if (!action.hasOwnProperty('permission')) {
+        return state;
+      }
+
+      newSettings = { ...state, alerts: { ...state.alerts, canShowBrowserNotification: action.permission } };
+
+      saveSettings(newSettings);
+
+      return newSettings;
+
+    case 'SET_SEND_EVEMAIL_PERMISSION':
+
+      if (!action.hasOwnProperty('permission')) {
+        return state;
+      }
+
+      newSettings = { ...state, alerts: { ...state.alerts, canSendMailNotification: action.permission } };
 
       saveSettings(newSettings);
 

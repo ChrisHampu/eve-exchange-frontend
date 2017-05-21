@@ -12,7 +12,6 @@ import { getAuthToken } from '../../deepstream';
 import { APIEndpointURL } from '../../globals';
 import GuidebookLink from '../Guidebook/GuidebookLink';
 
-import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';

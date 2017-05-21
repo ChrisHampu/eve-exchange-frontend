@@ -1,7 +1,7 @@
 import store from './store';
 import { setAggregateMinuteData, setAggregateHourlyData, setAggregateDailyData, setOrderData } from './actions/marketActions';
 import deepstream from './deepstream';
-import fuzzy from 'fuzzy';
+//import fuzzy from 'fuzzy';
 
 const sde = store.getState().sde;
 
@@ -101,6 +101,10 @@ export function unsubscribeItem(id) {
   delete subscriptions[id];
 }
 
+export function marketItemFilter(searchText, key) {
+  return key.toLowerCase().match(searchText);
+}
+
 export function getMarketGroupTree(searchText) {
 
   if (!searchText || searchText.length === 0) {
@@ -113,7 +117,7 @@ export function getMarketGroupTree(searchText) {
 
     if (group.items && group.items.length) {
 
-      let items = group.items.filter(el=>el.name.toLowerCase().match(_searchText));/*, { extract: item => item.name });*/
+      const items = group.items.filter(el => marketItemFilter(_searchText, el.name));
 
       if (items.length) {
 

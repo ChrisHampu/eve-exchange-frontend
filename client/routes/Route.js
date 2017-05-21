@@ -41,6 +41,9 @@ import TickerList from '../components/Tickers/TickerList';
 import TickerView from '../components/Tickers/TickerVIew';
 import TickerAnalysis from '../components/Tickers/TickerAnalysis';
 import TickerWatchlist from '../components/Tickers/TickerWatchlist';
+import AlertsComponent from '../components/Alerts/AlertsComponent';
+import AlertsView from '../components/Alerts/AlertsView';
+import AlertsCreate from '../components/Alerts/AlertsCreate';
 
 // Guidebook
 import GuidebookComponent from '../components/Guidebook/GuidebookComponent';
@@ -133,6 +136,10 @@ export default (
           <Route path="usecases" component={GuidebookMarketUseCases} />
           <Route path="api" component={GuidebookAPI} />
           <Route path="tickers" component={GuidebookTickers} />
+        </Route>
+        <Route path="alerts" components={{main: AlertsComponent }}>
+          <Route path="view" component={AlertsView} />
+          <Route path="create" component={AlertsCreate} />
         </Route>
       </Route>
     </Route>

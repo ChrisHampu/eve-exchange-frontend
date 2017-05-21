@@ -1,5 +1,6 @@
 import Deepstream from 'deepstream.io-client-js';
 import store from './store';
+import { updateAlertSettings, showBrowserAlert } from './alerts';
 import { updateUser } from './actions/authActions';
 import { updateUserSettings } from './actions/settingsActions';
 import { updateSubscription } from './actions/subscriptionActions';
@@ -9,6 +10,7 @@ import { updatePortfolios } from './actions/portfoliosActions';
 import { updateAllFeeds } from './actions/feedsActions';
 import { sendAppNotification } from './actions/./appActions';
 import { updateTickers } from './actions/tickersActions';
+import { updateAlerts } from './actions/alertActions';
 import { updateToplist, updateHourlyChart, updateDailyChart, updateAlltimeStats, updateTransactions, updateAssets } from './actions/profitActions';
 import 'whatwg-fetch';
 import xml2js from 'xml-json-parser';
@@ -21,42 +23,64 @@ let connected = false;
 
 function parseQuery(str) {
   if (typeof str !== 'string') {
-    return {}
+    return {};
   }
 
-  const str2 = str.trim().replace(/^(\?|#|&)/, '')
+  const str2 = str.trim().replace(/^(\?|#|&)/, '');
 
   if (!str2) {
-    return {}
+    return {};
   }
 
   return str2.split('&').reduce((ret, param) => {
-    const parts = param.replace(/\+/g, ' ').split('=')
+    const parts = param.replace(/\+/g, ' ').split('=');
     // Firefox (pre 40) decodes `%3D` to `=`
     // https://github.com/sindresorhus/query-string/pull/37
-    const key = parts.shift()
-    const val = parts.length > 0 ? parts.join('=') : undefined
+    const key = parts.shift();
+    const val = parts.length > 0 ? parts.join('=') : undefined;
 
-    const key2 = decodeURIComponent(key)
+    const key2 = decodeURIComponent(key);
 
     // missing `=` should be `null`:
     // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
-    const val2 = val === undefined ? null : decodeURIComponent(val)
+    const val2 = val === undefined ? null : decodeURIComponent(val);
 
     if (!ret.hasOwnProperty(key2)) {
-      ret[key2] = val2
+      ret[key2] = val2;
     } else if (Array.isArray(ret[key2])) {
-      ret[key2].push(val2)
+      ret[key2].push(val2);
     } else {
-      ret[key2] = [ ret[key2], val2 ]
+      ret[key2] = [ ret[key2], val2 ];
     }
 
-    return ret
-  }, {})
+    return ret;
+  }, {});
 }
 
 export function setAuthToken(token) {
   window.localStorage.setItem(token_name, token);
+}
+
+export function removeAuthToken() {
+
+  window.localStorage.removeItem(token_name);
+}
+
+function isAuthExpired(token) {
+
+  if (!token) {
+    return true;
+  }
+
+  const meta = JSON.parse(atob(token.split('.')[1]));
+  const exp = meta.exp;
+  const now = new Date().getTime() / 1000;
+
+  if (now > exp) {
+    return true;
+  }
+
+  return false;
 }
 
 export function getAuthToken() {
@@ -71,32 +95,10 @@ export function getAuthToken() {
   return token;
 }
 
-export function removeAuthToken() {
-
-  window.localStorage.removeItem(token_name);
-}
-
-function isAuthExpired(token) {
-
-  if (!token) {
-    return true;
-  }
-
-  const meta = JSON.parse(atob(token.split('.')[1]))
-  const exp = meta.exp
-  const now = new Date().getTime() / 1000
-
-  if (now > exp) {
-    return true;
-  }
-
-  return false;
-}
-
 export function hasAuthToken() {
   const token = getAuthToken();
   if (!token) {
-    return false
+    return false;
   }
   return true;
 }
@@ -118,7 +120,13 @@ function setDeepstreamSubscriptions(user_info) {
   try {
     deepstream.record.getRecord(`settings/${user_info.user_id}`).subscribe(data => {
 
+      const isLoaded = store.getState().settings.initialLoad;
+
       store.dispatch(updateUserSettings(user_info.user_id, data));
+
+      if (!isLoaded && store.getState().settings.initialLoad) {
+        updateAlertSettings();
+      }
     });
 
     deepstream.record.getRecord(`profit_transactions/${user_info.user_id}`).subscribe(transactions => {
@@ -203,27 +211,34 @@ function setDeepstreamSubscriptions(user_info) {
       store.dispatch(updateAllFeeds(feeds));
     });
 
-    deepstream.record.getRecord(`tickers`).subscribe(tickers => {
+    deepstream.record.getRecord('tickers').subscribe(tickers => {
 
       store.dispatch(updateTickers(tickers));
     });
 
-  } catch(err) {
+    deepstream.record.getRecord(`alerts/${user_info.user_id}`).subscribe(alerts => {
+
+      store.dispatch(updateAlerts(alerts));
+    });
+
+    deepstream.event.subscribe(`show_alert/${user_info.user_id}`, showBrowserAlert);
+
+  } catch (err) {
     console.log("There was an error while subscribing to user data", err);
   }
 
   subscribed = true;
 }
 
-function setDeepstreamAdminSubscriptions() { 
- 
+function setDeepstreamAdminSubscriptions() {
+
   deepstream.record.getRecord('admin_subscriptions').subscribe(subs => {
 
     if (!subs) {
       return;
     }
 
-    store.dispatch(updateAllSubscriptions(subs)); 
+    store.dispatch(updateAllSubscriptions(subs));
   });
 
   deepstream.record.getRecord('admin/login_log').subscribe(log => {
@@ -232,7 +247,7 @@ function setDeepstreamAdminSubscriptions() {
       return;
     }
 
-    store.dispatch(updateLoginLog(log)); 
+    store.dispatch(updateLoginLog(log));
   });
 
   deepstream.record.getRecord('admin/audit_log').subscribe(log => {
@@ -241,14 +256,14 @@ function setDeepstreamAdminSubscriptions() {
       return;
     }
 
-    store.dispatch(updateAuditLog(log)); 
+    store.dispatch(updateAuditLog(log));
   });
 }
 
 async function fetchAPIData(user_id) {
 
-  let data = {
-    corporation: ""
+  const data = {
+    corporation: ''
   };
 
   const res = await self.fetch(`https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=${user_id}`);
@@ -281,11 +296,11 @@ export async function deepstreamLogin() {
 
       store.dispatch(sendAppNotification("Authorization token has expired. Please refresh and sign in with SSO again", 5000000000));
 
-      reject("No auth token");
+      reject('No auth token');
       return;
     }
 
-    deepstream.login({token}, function(success, user_data) {
+    deepstream.login({ token }, (success, user_data) => {
       
       if (!success) {
 
@@ -312,7 +327,7 @@ export async function deepstreamLogin() {
 
       resolve();
     });
-  })
+  });
 }
 
 export function deepstreamLogout() {
@@ -333,14 +348,14 @@ deepstream.on('connectionStateChanged', (state) => {
 
   if (state === 'OPEN') {
 
-    if (notifyError == true) {
+    if (notifyError === true) {
 
       store.dispatch(sendAppNotification("Connection to server restored, but application has likely updated and requires refreshing", 5000));
       notifyError = false;
     }
-  } else if(state === 'ERROR') {
+  } else if (state === 'ERROR') {
 
-    if (notifyError == false) {
+    if (notifyError === false) {
       store.dispatch(sendAppNotification("Connection to server lost or application has updated. Please refresh the page in a few moments", 5000));
       notifyError = true;
     }
@@ -349,7 +364,7 @@ deepstream.on('connectionStateChanged', (state) => {
 
 let errorNotified = false;
 
-deepstream.on('error', (err, event, topic) => {
+deepstream.on('error', (err, event) => {
 
   if (!errorNotified && event === 'connectionError') {
     store.dispatch(sendAppNotification("There's a problem connecting to the server. Please refresh the page in a few moments", 5000));

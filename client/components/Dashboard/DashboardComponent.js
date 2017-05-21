@@ -44,6 +44,7 @@ import LockIcon from 'material-ui/svg-icons/action/lock-outline';
 import StarIcon from 'material-ui/svg-icons/action/grade';
 import AssetsIcon from 'material-ui/svg-icons/action/work';
 import TickersIcon from 'material-ui/svg-icons/action/swap-vert';
+import AlertsIcon from 'material-ui/svg-icons/action/alarm';
 
 const MainMenu = [
   {
@@ -102,6 +103,13 @@ const MarketMenu = [
     "route": "/dashboard/assets",
     "icon": <AssetsIcon />,
     "perm": "standard"
+  },
+  {
+    "name": "Alerts",
+    "route": "/dashboard/alerts",
+    "icon": <AlertsIcon />,
+    "perm": "admin",
+    'beta': true
   },
   {
     "name": "Forecast",
@@ -209,13 +217,18 @@ class Dashboard extends React.Component {
 
       return (item.perm === "premium" ? userHasPremium() : userHasGroup(item.perm) ) ?
         this.state.collapsed ?
-          <IconButton key={i} onTouchTap={functor} className={this.getPathClass(item)}>
+          <IconButton key={item.route} onTouchTap={functor} className={this.getPathClass(item)}>
             {item.icon}
           </IconButton> :
-        <MenuItem key={i} onTouchTap={functor} type="text" style={{cursor: "pointer"}}
-          className={this.getPathClass(item)}
-          primaryText={item.name} leftIcon={item.icon}
-        /> : null;
+        <div className={s.menu_item_container} key={item.name}>
+          <MenuItem onTouchTap={functor} type="text" style={{cursor: "pointer"}}
+            className={this.getPathClass(item)}
+            primaryText={item.name} leftIcon={item.icon}
+          />
+          {
+            item.beta && <div className={s.beta_badge}>Beta</div>
+          }
+        </div> : null;
     });
   }
 
@@ -230,11 +243,11 @@ class Dashboard extends React.Component {
         <Menu className={s.sidebar_menu} width={225}>
           {
             AdminMenu.map((item, i) => {
-              return this.state.collapsed ? 
-              <IconButton key={i} onTouchTap={()=>{ this.setRoute(item.route); }} className={this.getPathClass(item)}>
+              return this.state.collapsed ?
+              <IconButton key={item.route} onTouchTap={()=>{ this.setRoute(item.route); }} className={this.getPathClass(item)}>
                 {item.icon}
               </IconButton>
-              : <MenuItem key={i} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
+              : <MenuItem key={item.name} onTouchTap={()=>{ this.setRoute(item.route); }} type="text" style={{cursor: "pointer"}}
                   className={this.getPathClass(item)}
                   primaryText={item.name} leftIcon={item.icon}
                 />;
@@ -250,7 +263,7 @@ class Dashboard extends React.Component {
     return items.map((item, i) => {
       return (item.perm === "premium" ? userHasPremium() : userHasGroup(item.perm) )? 
       <MenuItem 
-        key={i} 
+        key={item.route} 
         onTouchTap={()=>{ this.slideoutMenuClickItem(item.route); }} 
         type="text" 
         style={{cursor: "pointer"}}

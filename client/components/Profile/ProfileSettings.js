@@ -3,11 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';
 import s from './ProfileSettings.scss';
-import cx from 'classnames';
 
 import { updateChartSetting, updateGeneralSetting, updateMarketSetting, updateGuidebookSetting } from '../../actions/settingsActions';
+import { updateAlertSettings } from '../../alerts';
+import { setBrowserNotificationPermission, setMailNotificationPermission } from '../../actions/alertActions';
 
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'; 
 import Checkbox from 'material-ui/Checkbox';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -47,7 +47,30 @@ class Settings extends React.Component {
               className={s.checkbox}
               label="Show Reference Popups"
               checked={!this.props.settings.guidebook.disable}
-              onCheck={(ev, val) => this._updateGuidebookSetting('disable', !val) }
+              onCheck={(ev, val) => this._updateGuidebookSetting('disable', !val)}
+            />
+          </div>
+        </div>
+        <div className={s.settings_area}>
+          <div className={s.settings_area_header}>
+          Alerts
+          </div>
+          <div className={s.settings_body}>
+            <div className={s.settings_header}>
+            Allowed Types
+            </div>
+            <Checkbox
+              className={s.checkbox}
+              label="Browser Notifications"
+              checked={this.props.settings.alerts.canShowBrowserNotification}
+              onCheck={(_, val) =>
+                val ? updateAlertSettings(true) : store.dispatch(setBrowserNotificationPermission(false))}
+            />
+            <Checkbox
+              className={s.checkbox}
+              label="EVE-Mail Notifications"
+              checked={this.props.settings.alerts.canSendMailNotification}
+              onCheck={(ev, val) => store.dispatch(setMailNotificationPermission(val))}
             />
           </div>
         </div>
@@ -267,7 +290,7 @@ class Settings extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { settings: store.settings };
+  return { settings: store.settings, alerts: store.settings };
 }
 
 export default connect(mapStateToProps)(Settings);
