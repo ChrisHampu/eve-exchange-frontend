@@ -109,11 +109,11 @@ export function prettyDate(time) {
   const month_diff = Math.ceil(day_diff / 30);
 
   return day_diff == 0 && (
-      diff < -86400 && `in about ${Math.abs(Math.floor(diff / 3600))} hours` ||
-      diff < -7200 && "in about an hour" ||
-      diff < -3600 && `in ${Math.abs(Math.floor(diff / 60))} minutes` ||
-      diff < -120 && "in a minute" ||
-      diff < -60 && "in a moment" ||
+      diff >= -86400 && diff < -7200 && `in about ${Math.abs(Math.floor(diff / 3600))} hours` ||
+      diff >= -7200 && diff < -3600 && "in about an hour" ||
+      diff >= -3600 && diff < -120 && `in ${Math.abs(Math.floor(diff / 60))} minutes` ||
+      diff >= -120 && diff < -60 && "in a minute" ||
+      diff >= -60 && diff < 0 && "in a moment" ||
       diff < 60 && "just now" ||
       diff < 120 && "a minute ago" ||
       diff < 3600 && Math.floor(diff / 60) + " minutes ago" ||
