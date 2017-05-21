@@ -10,4 +10,23 @@
             cursor: pointer;
         }
     }
+
+    .container {
+        .settings {
+            font-size: 0.75rem;
+            margin-bottom:1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .settings_enabled {
+            color: $green-color;
+        }
+
+        .settings_disabled {
+            color: $red-color;
+        }
+    }
+
+
 }

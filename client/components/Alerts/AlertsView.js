@@ -25,9 +25,18 @@ class AlertsView extends React.Component {
         {
             !this.props.alerts.length ? <div>No alerts have been configured yet. <span className={s.link} onClick={() => this.setRoute('/dashboard/alerts/create')}>Click here</span> to create one.</div>
             : <div className={s.container}>
-            {
-              this.props.alerts.map(el => <AlertsViewSingle key={el._id} {...el} />)
-            }
+              <div className={s.settings}>
+                EVE-Mail is
+                {
+                  this.props.settings.alerts.canSendMailNotification === true ? <span className={s.settings_enabled}> enabled</span> : <span className={s.settings_disabled}> disabled</span>
+                } - Browser notifications are
+                {
+                  this.props.settings.alerts.canShowBrowserNotification === true ? <span className={s.settings_enabled}> enabled</span> : <span className={s.settings_disabled}> disabled</span>
+                } - <span className={s.link} onClick={() => this.setRoute('/dashboard/profile/settings')}>Change Settings</span>
+              </div>
+              {
+                this.props.alerts.map(el => <AlertsViewSingle key={el._id} {...el} />)
+              }
             </div>
         }
       </div>
