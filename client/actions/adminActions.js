@@ -9,3 +9,7 @@ export function updateLoginLog(log) {
 export function updateAuditLog(log) {
   return { type: "UPDATE_AUDIT_LOG", log };
 }
+
+export function updateAlertsLog(log) {
+  return { type: "UPDATE_ALERTS_LOG", log };
+}

@@ -14,6 +14,7 @@ import ProfileAPIAccess from '../components/Profile/ProfileAPIAccess';
 import AdminComponent from '../components/Admin/AdminComponent';
 import AdminLoginLog from '../components/Admin/AdminLoginLog';
 import AdminAuditLog from '../components/Admin/AdminAuditLog';
+import AdminAlertsLog from '../components/Admin/AdminAlertsLog';
 import MarketBrowserComponent from '../components/MarketBrowser/MarketBrowserComponent';
 import MarketItemViewComponent from '../components/MarketBrowser/MarketItemViewComponent';
 import FeedsComponent from '../components/Feeds/FeedsComponent';
@@ -120,6 +121,7 @@ export default (
         </Route>
         <Route path="loginlog" components={{main: AdminLoginLog}} onEnter={requireAccess("admin")} />
         <Route path="auditlog" components={{main: AdminAuditLog}} onEnter={requireAccess("admin")} />
+        <Route path="alertslog" components={{main: AdminAlertsLog}} onEnter={requireAccess("admin")} />
         <Route path="reference" components={{main: GuidebookComponent}}>
           <Route path="contact" component={GuidebookContact} />
           <Route path="forecast" component={GuidebookForecast} />

@@ -155,6 +155,12 @@ const AdminMenu = [
     "route": "/dashboard/auditlog",
     "icon": <LockIcon />,
     "perm": "admin"
+  },
+  {
+    "name": "Alerts Log",
+    "route": "/dashboard/alertslog",
+    "icon": <LogIcon />,
+    "perm": "admin"
   }
 ];
 
