@@ -53,7 +53,9 @@ class AdminAlertsLog extends React.Component {
                   return (
                     <TableRow key={el._id} selectable={false}>
                       <TableRowColumn style={{textAlign: "left"}}>{name}</TableRowColumn>
-                      <TableRowColumn style={{textAlign: "left"}}>{el.message}</TableRowColumn>
+                      <td colSpan='3' style={{paddingLeft: '24px', paddingRight: '24px', height: '48px', textAlign: 'left', fontSize: '13px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', backgroundColor: 'inherit'}}>
+                      {el.message}
+                      </td>
                       <TableRowColumn style={{textAlign: "center"}}>{prettyDate(el.time)}</TableRowColumn>
                     </TableRow>
                   );
