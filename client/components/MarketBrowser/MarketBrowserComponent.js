@@ -66,7 +66,7 @@ export default class MarketBrowserComponent extends React.Component {
   render() {
 
     return (
-      <DashboardPage title="Market Browser" className={s.root}>
+      <DashboardPage className={s.root}>
         <GuidebookLink settingsKey="market_browser" page="browser" />
         <OverlayStack popStack={()=>this.context.router.push('/dashboard/browser')}>
           {this.renderMarketBrowser()}
