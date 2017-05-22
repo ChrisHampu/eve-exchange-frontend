@@ -52,8 +52,7 @@ class AlertsCreate extends React.Component {
 
     const id = itemNameToID(chosen);
 
-    subscribeItem(id);
-    this.setState({ priceAlertItemID: parseInt(id, 10), priceAlertAmount: 0 });
+    this.setState({ priceAlertItemID: parseInt(id, 10), priceAlertAmount: 0 }, () => subscribeItem(id));
   };
 
   setRoute(route) {
