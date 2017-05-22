@@ -26,7 +26,8 @@ class AlertsComponent extends React.Component {
         <DashboardPageMenu
           menu={{
             View: '/dashboard/alerts',
-            Create: '/dashboard/alerts/create'
+            Create: '/dashboard/alerts/create',
+            History: '/dashboard/alerts/history'
           }}
           location={this.props.location}
         />

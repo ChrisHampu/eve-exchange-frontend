@@ -44,6 +44,7 @@ import TickerWatchlist from '../components/Tickers/TickerWatchlist';
 import AlertsComponent from '../components/Alerts/AlertsComponent';
 import AlertsView from '../components/Alerts/AlertsView';
 import AlertsCreate from '../components/Alerts/AlertsCreate';
+import AlertsLog from '../components/Alerts/AlertsLog';
 
 // Guidebook
 import GuidebookComponent from '../components/Guidebook/GuidebookComponent';
@@ -140,6 +141,7 @@ export default (
         <Route path="alerts" components={{main: AlertsComponent }}>
           <Route path="view" component={AlertsView} />
           <Route path="create" component={AlertsCreate} />
+          <Route path="history" component={AlertsLog} />
         </Route>
       </Route>
     </Route>

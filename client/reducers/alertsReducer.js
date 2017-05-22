@@ -1,5 +1,10 @@
 
-export default function alerts(state = [], action) {
+const initialState = {
+  list: [],
+  log: []
+};
+
+export default function alerts(state = initialState, action) {
 
   switch (action.type) {
 

@@ -44,6 +44,6 @@ class AlertsView extends React.Component {
   }
 }
 
-const mapStateToProps = function (store) { return { alerts: store.alerts, settings: store.settings }; };
+const mapStateToProps = function (store) { return { alerts: store.alerts.list, settings: store.settings }; };
 
 export default connect(mapStateToProps)(AlertsView);
