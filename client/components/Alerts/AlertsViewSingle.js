@@ -9,6 +9,7 @@ import { APIEndpointURL } from '../../globals';
 import { getAuthToken } from '../../deepstream';
 import { prettyDate } from '../../utilities';
 import AlertsViewPriceType from './AlertsViewPriceType';
+import AlertsViewSalesType from './AlertsViewSalesType';
 
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -172,6 +173,9 @@ class AlertsViewSingle extends React.Component {
         <div className={s.body}>
           {
             this.props.alertType === 0 && <AlertsViewPriceType {...this.props} />
+          }
+          {
+            this.props.alertType === 1 && <AlertsViewSalesType {...this.props} />
           }
           <div className={s.last_trigger}>
             <div>{!this.props.lastTrigger ? 'Has not triggered yet' : `Triggered ${prettyDate(this.props.lastTrigger)}`}</div>

@@ -31,7 +31,9 @@ class AlertsCreate extends React.Component {
       priceAlertComparator: 0,
       priceAlertAmount: 0,
       priceAlertItemID: 0,
-      processing: false
+      processing: false,
+      salesAlertType: 0,
+      salesAlertProfile: 0
     };
   }
 
@@ -223,6 +225,41 @@ class AlertsCreate extends React.Component {
           />
         </div>
       );
+    } else if (this.state.alertType === 1) {
+      return (
+        <div className={s.row}>
+          <div className={s.row}>
+            <div className={s.text}>For</div>
+            <SelectField
+              floatingLabelText='Profile'
+              value={this.state.salesAlertProfile}
+              onChange={(event, index, value) => this.setState({ salesAlertProfile: value })}
+              className={s.select}
+            >
+              <MenuItem value={0} primaryText='Any Profile' />
+              {
+                this.props.settings.profiles.map(el => {
+                  return el.type === 0 ? <MenuItem key={el.character_id} value={el.character_id} primaryText={el.character_name} />
+                  : <MenuItem key={el.corporation_id} value={el.corporation_id} primaryText={el.corporation_name} />;
+                })
+              }
+            </SelectField>
+          </div>
+          <div className={s.row}>
+            <div className={s.text}>When</div>
+            <SelectField
+              floatingLabelText='Order change'
+              value={this.state.salesAlertType}
+              onChange={(event, index, value) => this.setState({ salesAlertType: value })}
+              className={s.select}
+            >
+              <MenuItem value={0} primaryText='Items Bought' />
+              <MenuItem value={1} primaryText='Items Sold' />
+              <MenuItem value={2} primaryText='Order Fulfilled' />
+            </SelectField>
+          </div>
+        </div>
+      );
     }
 
     return null;
@@ -235,15 +272,13 @@ class AlertsCreate extends React.Component {
             this.state.alertType === 0 && <span>You will receive an alert by eve-mail and/or browser notification when the indicator you select meets the market condition you configure. You can adjust your <span className={s.link} onClick={() => this.setRoute('/dashboard/profile/settings')}>notification settings</span> as well as limit how often (in hours) an alert can be triggered.</span>
           }
           {
-            this.state.alertType === 1 && <span>You will receive an alert by eve-mail and/or browser notification when the indicator you select meets the market condition you configure. You can adjust your <span className={s.link} onClick={() => this.setRoute('/dashboard/profile/settings')}>notification settings</span> as well as limit how often (in hours) an alert can be triggered.</span>
+            this.state.alertType === 1 && <span>You will receive an alert by eve-mail and/or browser notification when an order change meets the conditions you set. You can adjust your <span className={s.link} onClick={() => this.setRoute('/dashboard/profile/settings')}>notification settings</span> as well as limit how often (in hours) an alert can be triggered.</span>
           }
       </div>
     );
   }
 
   render() {
-
-    //             <MenuItem value={1} primaryText='Sales Alert' />
 
     return (
       <div className={s.root}>
@@ -255,6 +290,7 @@ class AlertsCreate extends React.Component {
             onChange={this.onChangeAlertType}
           >
             <MenuItem value={0} primaryText='Price Alert' />
+            <MenuItem value={1} primaryText='Sales Alert' />
           </SelectField>
         </div>
         {this.renderAlertType()}
