@@ -272,7 +272,7 @@ class AlertsCreate extends React.Component {
             this.state.alertType === 0 && <span>You will receive an alert by eve-mail and/or browser notification when the indicator you select meets the market condition you configure. You can adjust your <span className={s.link} onClick={() => this.setRoute('/dashboard/profile/settings')}>notification settings</span> as well as limit how often (in hours) an alert can be triggered.</span>
           }
           {
-            this.state.alertType === 1 && <span>You will receive an alert by eve-mail and/or browser notification when an order change meets the conditions you set. You can adjust your <span className={s.link} onClick={() => this.setRoute('/dashboard/profile/settings')}>notification settings</span> as well as limit how often (in hours) an alert can be triggered.</span>
+            this.state.alertType === 1 && <span>You will receive an alert by eve-mail and/or browser notification when an order change meets the conditions you set. You can adjust your <span className={s.link} onClick={() => this.setRoute('/dashboard/profile/settings')}>notification settings</span> as well as limit how often (in hours) an alert can be triggered.<div>Sales alerts are most effective for long term orders due to limitations with the EVE API & caching.</div></span>
           }
       </div>
     );
