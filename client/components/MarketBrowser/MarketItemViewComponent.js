@@ -24,6 +24,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CheckIcon from 'material-ui/svg-icons/action/check-circle';
 import LeftArrowIcon from 'material-ui/svg-icons/navigation/chevron-left';
 import FullscreenIcon from 'material-ui/svg-icons/navigation/fullscreen';
+import AlarmIcon from 'material-ui/svg-icons/action/alarm-on';
 
 class MarketItemViewComponent extends React.Component {
 
@@ -71,6 +72,10 @@ class MarketItemViewComponent extends React.Component {
   isChartPinned() {
 
     return this.props.settings.pinned_charts[this.state.item.id] || false;
+  }
+
+  hasAlert() {
+    return this.props.alerts.findIndex(el => el.alertType === 0 && el.priceAlertItemID === parseInt(this.state.item.id)) !== -1;
   }
 
   pinChart() {
@@ -129,8 +134,15 @@ class MarketItemViewComponent extends React.Component {
           </div>
           {
             this.isChartPinned() ?
-              <IconButton tooltip="Pinned To Dashboard" disableTouchRipple={true} tooltipPosition="bottom-center" style={{zIndex: 1, cursor: "default", top: "3px", width: 0, height: 0}}>
+              <IconButton tooltip="Pinned To Dashboard" disableTouchRipple={true} tooltipPosition="bottom-center" style={{zIndex: 1, cursor: "default", top: "3px", width: 0, height: 0, marginRight: '0.5rem'}}>
                 <CheckIcon />
+              </IconButton>
+            : false
+          }
+          {
+            this.hasAlert() ?
+              <IconButton tooltip="Has Price Alert" disableTouchRipple={true} tooltipPosition="bottom-center" style={{zIndex: 1, cursor: "default", top: "3px", width: 0, height: 0}}>
+                <AlarmIcon />
               </IconButton>
             : false
           }
@@ -206,7 +218,7 @@ class MarketItemViewComponent extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  return { settings: store.settings, sde: store.sde, market: store.market };
+  return { settings: store.settings, sde: store.sde, market: store.market, alerts: store.alerts.list };
 }
 
 export default connect(mapStateToProps)(MarketItemViewComponent);
