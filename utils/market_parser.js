@@ -74,10 +74,6 @@ try {
 
   for (var i in items) {
 
-    if (items[i].published === false) {
-      continue;
-    }
-
     id2name[i] = items[i].name.en;
   }
 
@@ -96,7 +92,7 @@ try {
       }
 
       // Skip infantry gear & special edition & trade goods
-      if (_yaml[i].marketGroupID === 350001 || _yaml[i].marketGroupID === 63 || _yaml[i].marketGroupID === 1659 || _yaml[i].marketGroupID === 2) {
+      if (_yaml[i].marketGroupID === 350001 || _yaml[i].marketGroupID === 63 || _yaml[i].marketGroupID === 1659) {
         continue;
       }
 
