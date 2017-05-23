@@ -33,7 +33,8 @@ class AlertsCreate extends React.Component {
       priceAlertItemID: 0,
       processing: false,
       salesAlertType: 0,
-      salesAlertProfile: 0
+      salesAlertProfile: 0,
+      priceAlertItemSearch: 0
     };
   }
 
@@ -48,13 +49,41 @@ class AlertsCreate extends React.Component {
   onChangeAlertType = (event, index, value) => this.setState({ alertType: value });
   onChangePriceItem = (chosen) => {
 
+    const id = itemNameToID(chosen);
+
     if (this.state.priceAlertItemID) {
       unsubscribeItem(this.state.priceAlertItemID);
     }
 
-    const id = itemNameToID(chosen);
+    this.setState({ priceAlertItemID: parseInt(id, 10), priceAlertAmount: 0 }, () => setTimeout(() => subscribeItem(id), 250));
+  };
 
-    this.setState({ priceAlertItemID: parseInt(id, 10), priceAlertAmount: 0 }, () => subscribeItem(id));
+  onUpdatePriceItemSearch = (text) => { 
+
+    this.setState({
+      priceAlertItemSearch: text
+    }, () => {
+
+      if (!this.state.priceAlertItemSearch) {
+        this.setError('Enter search text to find an item for the alert');
+        return;
+      }
+
+      const searchText = this.state.priceAlertItemSearch.toLowerCase();
+
+      const searchRes = Object.values(store.getState().sde.market_items).map(el => {
+        return { upper: el, lower: el.toLowerCase() };
+      }).find(el => el.lower === searchText);
+
+      if (!searchRes) {
+        this.setError('Can\'t find an item with the given name. Use the autocomplete to select your item');
+        return;
+      } else {
+        this.setState({
+          error: null
+        }, () => this.onChangePriceItem(searchRes.upper));
+      }
+    });
   };
 
   setRoute(route) {
@@ -130,7 +159,8 @@ class AlertsCreate extends React.Component {
     // Use state, but add/remove wanted or unwanted keys
     const alert = Object.assign({}, this.state, {
       error: undefined,
-      processing: undefined
+      processing: undefined,
+      priceAlertItemSearch: undefined
     });
 
     this.setState({
@@ -188,6 +218,7 @@ class AlertsCreate extends React.Component {
               maxSearchResults={10}
               menuStyle={{ cursor: 'pointer' }}
               onNewRequest={this.onChangePriceItem}
+              onUpdateInput={this.onUpdatePriceItemSearch}
               floatingLabelStyle={{ color: '#BDBDBD' }}
               underlineStyle={{ borderColor: 'rgba(255, 255, 255, 0.298039)' }}
               underlineFocusStyle={{ borderColor: 'rgb(235, 169, 27)' }}
