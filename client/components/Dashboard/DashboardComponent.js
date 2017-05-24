@@ -108,7 +108,7 @@ const MarketMenu = [
     "name": "Alerts",
     "route": "/dashboard/alerts",
     "icon": <AlertsIcon />,
-    "perm": "admin",
+    "perm": "standard",
     'beta': true
   },
   {
