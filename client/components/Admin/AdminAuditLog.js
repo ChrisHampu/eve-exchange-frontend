@@ -6,6 +6,7 @@ import cx from 'classnames';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import { prettyDate } from '../../utilities';
+import { itemIDToName } from '../../market';
 
 class AdminAuditLog extends React.Component {
 
@@ -23,10 +24,36 @@ class AdminAuditLog extends React.Component {
       case 9: return "Expired";
       case 10: return "Withdrawal Request";
       case 11: return "New Account";
+      case 12: return "Enabled API";
+      case 13: return "Disabled API";
+      case 14: return "API Access Expired";
+      case 15: return "API Access Renewed";
+      case 16: return "Created Alert";
+      case 17: return "Deleted Alert";
     }
 
     return "Unknown";
   }
+
+  alertTypeToName(type) {
+    if (type === 0) {
+      return "Price Alert";
+    } else if (type === 1) {
+      return "Sales Alert";
+    }
+
+    return "Unknown Alert";
+  }
+
+  alertVariableToString(type, variable) {
+
+    if (type === 0) {
+      return `for ${itemIDToName(variable)}`; 
+    } else {
+      return ``;
+    }
+  }
+  
 
   actionToMessage(user_id, action, target, balance) {
 
@@ -43,6 +70,8 @@ class AdminAuditLog extends React.Component {
       case 9: return "Subscription has automatically expired and not renewed";
       case 10: return `Initiated a new withdrawal request of ${balance}`;
       case 11: return "Has created a new account";
+      case 16: return `Has created a new ${this.alertTypeToName(target)} ${this.alertVariableToString(target, balance)}`;
+      case 17: return `Has removed an alert from their account`;
     }
 
     return "Unknown action";

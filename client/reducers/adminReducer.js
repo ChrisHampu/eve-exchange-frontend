@@ -32,7 +32,9 @@ const initialState = {
     12: enable api,
     13: disable api,
     14: api expired,
-    15: api renewed
+    15: api renewed,
+    16: created alert,
+    17: deleted alert
   }
 */
 
