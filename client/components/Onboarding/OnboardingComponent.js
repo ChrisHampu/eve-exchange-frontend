@@ -195,7 +195,7 @@ export default class OnboardingComponent extends React.Component {
             Alerts
             </div>
             <div className={s.box_blurb}>
-            TBD
+            Receive eve-mails & browser notifications when items change price or when your orders are completed. Highly configurable options to watch the market in near realtime.
             </div>
           </div>
           <div className={s.box}>
