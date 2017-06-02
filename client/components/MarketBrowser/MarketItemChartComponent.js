@@ -22,6 +22,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import store from '../../store';
 import Measure from '../UI/Measure';
 import Scrollbar from '../Charts/Scrollbar';
 import ChartContainer from '../Charts/ChartContainer';
@@ -37,6 +38,7 @@ import Scale from '../Charts/Scale';
 import { scaleLinear } from '../../vendor/d3';
 import { subscribeItem, unsubscribeItem, itemIDToName, getPaginatedData } from '../../market';
 import { formatNumber } from '../../utilities';
+import { sendAppNotification } from '../../actions/appActions';
 
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
@@ -207,9 +209,15 @@ class MarketItemChartComponent extends React.Component {
 
   addComparisonItem = (itemID) => {
 
+    if (this.state.comparisonItems >= 5) {
+      store.dispatch(sendAppNotification('There\'s a limit of 5 comparisons at a time', 5000));
+      return;
+    }
+
     const items = this.state.comparisonItems;
 
     if (items.indexOf(itemID) !== -1) {
+      store.dispatch(sendAppNotification('Item is already being compared', 5000));
       return;
     }
 
