@@ -200,6 +200,11 @@ class MarketItemChartComponent extends React.Component {
     return legend;
   }
 
+  getVelocityLegend() {
+
+    return [{ fill: '#5CEF70', text: '10 Buy Price Velocity', key: 'velocity', postfix: '' }];
+  }
+
   addComparisonItem = (itemID) => {
 
     const items = this.state.comparisonItems;
@@ -263,7 +268,7 @@ class MarketItemChartComponent extends React.Component {
      */
 
     return (
-      <div>
+      <div style={{ marginBottom: '3rem' }}>
         <ChartFrequencySelector
           frequencyLevels={this.state.frequencyLevels}
           defaultFrequency={this.state.frequency}
@@ -292,6 +297,7 @@ class MarketItemChartComponent extends React.Component {
             leftDataScale={leftScale}
             rightDataAccessor={el => el.spread}
             frequency={this.state.frequency}
+            hasScrollbar
           >
             <Scrollbar onScrollChange={scrollPercent => this.setState({ scrollPercent })} />
             <Axis formatISK tickCount={5} leftDataScale={leftScale.scale} />
@@ -344,6 +350,27 @@ class MarketItemChartComponent extends React.Component {
                 <Indicator thickLine lineColour='#eba91b' />
             }
           </ChartContainer>
+          {
+            this.state.frequency === 'daily' &&
+              <ChartLegend legendItems={this.getVelocityLegend()} data={data} />
+          }
+          {
+            this.state.frequency === 'daily' &&
+              <ChartContainer
+                height={200}
+                scrollPercent={this.state.scrollPercent}
+                pageSize={this.state.zoomLevels[this.state.zoom]}
+                data={data}
+                timeAccessor={el => el.time}
+                leftDataAccessor={el => el.velocity}
+                frequency={this.state.frequency}
+              >
+                <Axis formatISK tickCount={5} />
+                <Axis horizontalLines tickCount={5} />
+                <Axis anchor='bottom' tickCount={5} />
+                <Indicator thickLine lineColour='#5CEF70' circleColour='#5CEF70' />
+              </ChartContainer>
+          }
         </Measure>
       </div>
     );

@@ -66,7 +66,7 @@ export default class Measure extends React.Component {
 
     return (
       <div ref='root'>
-        {React.Children.map(this.props.children, child => React.cloneElement(child, this.state))}
+        {React.Children.map(this.props.children, child => child && React.cloneElement(child, this.state))}
       </div>
     );
   }

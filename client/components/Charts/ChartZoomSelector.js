@@ -29,14 +29,14 @@ export default class ChartZoomSelector extends React.Component {
   increaseZoom() {
 
     this.setState({
-      zoom: Math.min(this.state.zoom + 1, this.props.zoomLevels.length)
+      zoom: Math.max(this.state.zoom - 1, 0)
     }, () => this.zoomChanged());
   }
 
   decreaseZoom() {
 
     this.setState({
-      zoom: Math.max(this.state.zoom - 1, 0)
+      zoom: Math.min(this.state.zoom + 1, this.props.zoomLevels.length - 1)
     }, () => this.zoomChanged());
   }
 

@@ -17,7 +17,6 @@ class ChartContainer extends React.Component {
     children: React.PropTypes.node,
     offsetWidth: React.PropTypes.number,
     height: React.PropTypes.number,
-    margin: React.PropTypes.object,
     timeAccessor: React.PropTypes.func,
     leftDataAccessor: React.PropTypes.func,
     rightDataAccessor: React.PropTypes.func,
@@ -26,18 +25,14 @@ class ChartContainer extends React.Component {
     scrollPercent: React.PropTypes.number,
     pageSize: React.PropTypes.number,
     frequency: React.PropTypes.string,
-    chartState: React.PropTypes.object
+    chartState: React.PropTypes.object,
+    hasScrollbar: React.PropTypes.bool
   };
 
   static defaultProps = {
     height: 200,
-    margin: {
-      top: 10,
-      right: 35,
-      bottom: 45,
-      left: 50
-    },
-    pageSize: 30
+    pageSize: 30,
+    hasScrollbar: false
   };
 
   constructor(props) {
@@ -48,8 +43,20 @@ class ChartContainer extends React.Component {
       leftDataScale: new Scale(scaleLinear, this.props.leftDataAccessor, () => this.getAdjustedHeight(), () => 0, [5]),
       rightDataScale: new Scale(scaleLinear, this.props.rightDataAccessor, () => this.getAdjustedHeight(), () => 0, [5]),
       focusPosition: null,
-      focusIndex: null
+      focusIndex: null,
+      margin: {
+        top: 10,
+        right: 35,
+        bottom: props.hasScrollbar === true ? 45 : 25,
+        left: 50
+      }
     };
+
+    if (props.hasScrollbar === true) {
+
+      console.log('margin');
+      //this.state.margin.bottom = 45;
+    }
   }
 
   componentWillMount() {
@@ -76,11 +83,11 @@ class ChartContainer extends React.Component {
   }
 
   getAdjustedWidth() {
-    return Math.max(0, (this.props.offsetWidth || 0) - this.props.margin.left - this.props.margin.right);
+    return Math.max(0, (this.props.offsetWidth || 0) - this.state.margin.left - this.state.margin.right);
   }
 
   getAdjustedHeight() {
-    return Math.max(0, (this.props.height || 0) - this.props.margin.top - this.props.margin.bottom);
+    return Math.max(0, (this.props.height || 0) - this.state.margin.top - this.state.margin.bottom);
   }
 
   updateScales() {
@@ -119,12 +126,12 @@ class ChartContainer extends React.Component {
     const top = ev.clientY - ev.target.getScreenCTM().f;
     const left = ev.clientX - ev.target.getScreenCTM().e;
 
-    if (left < this.props.margin.left || left > this.props.offsetWidth + this.props.margin.left
-      || top < this.props.margin.top || top > this.props.height + this.props.margin.top) {
+    if (left < this.state.margin.left || left > this.props.offsetWidth + this.state.margin.left
+      || top < this.state.margin.top || top > this.props.height + this.state.margin.top) {
       return;
     }
 
-    const adjustedLeft = left - this.props.margin.left;
+    const adjustedLeft = left - this.state.margin.left;
 
     const testable = this.getHitTestableData();
     const hits = testable;
@@ -169,7 +176,6 @@ class ChartContainer extends React.Component {
       children,
       offsetWidth: width,
       height,
-      margin,
       timeAccessor,
       leftDataAccessor,
       rightDataAccessor,
@@ -183,7 +189,8 @@ class ChartContainer extends React.Component {
     const {
       timeScale,
       leftDataScale,
-      rightDataScale
+      rightDataScale,
+      margin
     } = this.state;
 
     const focusPosition = this.getFocusPosition();
@@ -213,19 +220,19 @@ class ChartContainer extends React.Component {
         <svg onMouseMove={(ev) => this.handleMouseMove(ev)} height={height} width={width}>
           <g style={{ transform: `translate(${margin.left}px, ${margin.top}px)` }}>
             {
-              React.Children.map(children, child =>
-                child && React.cloneElement(child, Object.assign({}, childProps, child.props))
-              )
-            }
-            {
               focusIndex !== null &&
                 <line
                   x1={focusPosition}
                   x2={focusPosition}
-                  y1={this.props.margin.top}
-                  y2={this.props.height - this.props.margin.top - this.props.margin.bottom}
+                  y1={this.state.margin.top}
+                  y2={this.props.height - this.state.margin.top - this.state.margin.bottom}
                   style={{ stroke: '#FEB100', strokeDasharray: 2, strokeWidth: 1 }}
                 />
+            }
+            {
+              React.Children.map(children, child =>
+                child && React.cloneElement(child, Object.assign({}, childProps, child.props))
+              )
             }
           </g>
         </svg>

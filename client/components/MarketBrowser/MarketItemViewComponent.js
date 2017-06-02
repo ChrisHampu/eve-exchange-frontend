@@ -45,8 +45,6 @@ class MarketItemViewComponent extends React.Component {
         name: itemIDToName(this.props.params.id)
       },
       tab: (this.props.settings.market && this.props.settings.market.default_tab != undefined) ? this.props.settings.market.default_tab : 0,
-      width: 0,
-      height: 0,
       regionOverride: null
     };
 
@@ -105,13 +103,6 @@ class MarketItemViewComponent extends React.Component {
     }
 
     return null;
-  }
-
-  componentDidMount() {
-    this.setState({
-      height: ReactDOM.findDOMNode(this.refs.container).clientHeight,
-      width: ReactDOM.findDOMNode(this.refs.container).clientWidth
-    });
   }
 
   render() {
@@ -200,7 +191,7 @@ class MarketItemViewComponent extends React.Component {
               </div>
             </button>
           </div>
-          <div className={s.tabs} ref="container">
+          <div className={s.tabs}>
             <div className={cx(s.tab, { [s.show]: this.state.tab===0})}>
               <MarketItemChartComponent item={this.state.item} region={this.state.regionOverride || undefined} />
             </div>
