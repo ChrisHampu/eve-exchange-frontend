@@ -6,7 +6,7 @@ import s from './FullscreenComponent.scss';
 import { appExitFullscreen } from '../../actions/appActions';
 
 // Possible full screen components
-//import MarketItemChart from '../Charts/MarketItemChart';
+import MarketItemChartComponent from '../MarketBrowser/MarketItemChartComponent';
 import ProfitChart from '../Profit/ProfitChart';
 
 // Material UI
@@ -31,8 +31,8 @@ class FullscreenComponent extends React.Component {
   renderVisual() {
 
     if (this.props.fullscreen.visual_type === 1) {
-      return <div />;
-    } else if(this.props.fullscreen.visual_type === 2) {
+      return <MarketItemChartComponent {...this.props.fullscreen.props} />;
+    } else if (this.props.fullscreen.visual_type === 2) {
       return <ProfitChart {...this.props.fullscreen.props} />;
     }
 
@@ -56,7 +56,9 @@ class FullscreenComponent extends React.Component {
                 </IconButton>
               </div>
             </div>
+            <div style={{ overflowX: 'hidden', overflowY: 'auto', height: '100%' }}>
             {this.renderVisual()}
+            </div>
           </div>
         </div>
       </div>

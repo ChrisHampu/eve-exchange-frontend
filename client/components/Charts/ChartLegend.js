@@ -53,7 +53,7 @@ class ChartLegend extends React.Component {
       <div style={{ paddingBottom: '0.5rem' }}>
       {
         this.props.legendItems.map(el =>
-          <div key={el.text} style={{ display: 'inline-block', borderBottom: '2px solid', borderBottomColor: el.fill, color: 'rgb(185, 197, 208)', marginRight: '10px', paddingBottom: '3px' }}>
+          <div key={el.text} style={{ lineHeight: 'initial', display: 'inline-block', borderBottom: '2px solid', borderBottomColor: el.fill, color: 'rgb(185, 197, 208)', marginRight: '10px', paddingBottom: '3px' }}>
           {el.button} {el.text} / <span style={{ color: '#fff' }}>{el.value || this.getLegendData(el.key)}{el.postfix}</span>
           </div>
         )
