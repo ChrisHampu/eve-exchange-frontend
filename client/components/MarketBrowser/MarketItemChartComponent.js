@@ -202,7 +202,7 @@ class MarketItemChartComponent extends React.Component {
 
   getVelocityLegend() {
 
-    return [{ fill: '#5CEF70', text: '10 Buy Price Velocity', key: 'velocity', postfix: '' }];
+    return [{ fill: '#5CEF70', text: '10 Day Buy Price Velocity', key: 'velocity', postfix: '' }];
   }
 
   addComparisonItem = (itemID) => {
@@ -280,7 +280,7 @@ class MarketItemChartComponent extends React.Component {
           onZoomChanged={zoom => this.setState({ zoom })}
         />
         <MarketItemComparisonSearch
-          comparisonFields={{ buyPercentile: 'Price' }}
+          comparisonFields={{ buyPercentile: 'Price', spread: 'Spread', tradeVolume: 'Trade Volume' }}
           defaultComparison={this.state.initialState.comparisonType}
           onComparisonItemsChanged={this.addComparisonItem}
           onComparisonTypeChanged={comparisonType => this.setState({ comparisonType })}
@@ -293,7 +293,7 @@ class MarketItemChartComponent extends React.Component {
             pageSize={this.state.zoomLevels[this.state.zoom]}
             data={data}
             timeAccessor={el => el.time}
-            leftDataAccessor={el => el.buyPercentile}
+            leftDataAccessor={this.state.comparisonItems.length ? el => el[this.state.comparisonType] : el => el.buyPercentile}
             leftDataScale={leftScale}
             rightDataAccessor={el => el.spread}
             frequency={this.state.frequency}
@@ -311,6 +311,7 @@ class MarketItemChartComponent extends React.Component {
               this.state.comparisonItems.length ?
                 [this.props.item.id, ...this.state.comparisonItems].map((el, i) =>
                   <Indicator
+                    key={i}
                     data={getPaginatedData(this.getAggregateData(el), this.getPageSize(), this.state.scrollPercent)}
                     fullData={this.getAggregateData(el)}
                     thickLine
