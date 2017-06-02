@@ -50,12 +50,6 @@ class ChartContainer extends React.Component {
         left: 50
       }
     };
-
-    if (props.hasScrollbar === true) {
-
-      console.log('margin');
-      //this.state.margin.bottom = 45;
-    }
   }
 
   componentWillMount() {
