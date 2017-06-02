@@ -15,6 +15,7 @@ class ChartContainer extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     offsetWidth: React.PropTypes.number,
+    offsetHeight: React.PropTypes.number,
     height: React.PropTypes.number,
     timeAccessor: React.PropTypes.func,
     leftDataAccessor: React.PropTypes.func,
@@ -29,7 +30,7 @@ class ChartContainer extends React.Component {
   };
 
   static defaultProps = {
-    height: 200,
+    //height: 200,
     pageSize: 30,
     hasScrollbar: false
   };
@@ -80,7 +81,7 @@ class ChartContainer extends React.Component {
   }
 
   getAdjustedHeight() {
-    return Math.max(0, (this.props.height || 0) - this.state.margin.top - this.state.margin.bottom);
+    return Math.max(0, (this.props.height || this.props.offsetHeight || 0) - this.state.margin.top - this.state.margin.bottom);
   }
 
   updateScales() {
@@ -168,7 +169,8 @@ class ChartContainer extends React.Component {
     const {
       children,
       offsetWidth: width,
-      height,
+      height: propHeight,
+      offsetHeight,
       timeAccessor,
       leftDataAccessor,
       rightDataAccessor,
@@ -186,6 +188,7 @@ class ChartContainer extends React.Component {
       margin
     } = this.state;
 
+    const height = propHeight || offsetHeight || 0;
     const focusPosition = this.getFocusPosition();
 
     const childProps = {
@@ -208,6 +211,8 @@ class ChartContainer extends React.Component {
 
     this.updateScales();
 
+    console.log(this.props);
+
     return (
       <div>
         <svg onMouseMove={(ev) => this.handleMouseMove(ev)} height={height} width={width}>
@@ -218,7 +223,7 @@ class ChartContainer extends React.Component {
                   x1={focusPosition}
                   x2={focusPosition}
                   y1={this.state.margin.top}
-                  y2={this.props.height - this.state.margin.top - this.state.margin.bottom}
+                  y2={height - this.state.margin.top - this.state.margin.bottom}
                   style={{ stroke: '#FEB100', strokeDasharray: 2, strokeWidth: 1 }}
                 />
             }

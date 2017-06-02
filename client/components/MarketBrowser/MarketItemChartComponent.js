@@ -1,25 +1,3 @@
-/*
-
-    <ItemView>
-        <ChartView>
-            <Pickers/Zoom/Compare>
-            <Measure>
-                <ChartLegend />
-                <ChartContainer width={} height={400}>
-                    
-                    <LineGraph />
-                    <Scrollbar />
-                <ChartContainer>
-                <ChartLegend />
-                <ChartContainer width={} height={200}>
-                    <BarGraph />
-                    <Scrollbar />
-                <ChartContainer>
-            </Measure>
-        </ChartView>
-    <Item/View>
-*/
-
 import React from 'react';
 import { connect } from 'react-redux';
 import store from '../../store';

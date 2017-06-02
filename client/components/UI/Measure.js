@@ -10,7 +10,7 @@ export default class Measure extends React.Component {
   }
 
   static defaultProps = {
-    properties: ['offsetWidth']
+    properties: ['offsetWidth', 'offsetHeight']
   };
 
   componentDidMount() {
@@ -65,7 +65,7 @@ export default class Measure extends React.Component {
   render() {
 
     return (
-      <div ref='root'>
+      <div ref='root' style={{ flex: 1, lineHeight: 0 }}>
         {React.Children.map(this.props.children, child => child && React.cloneElement(child, this.state))}
       </div>
     );

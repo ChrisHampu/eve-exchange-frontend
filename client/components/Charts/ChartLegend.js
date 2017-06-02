@@ -37,7 +37,7 @@ class ChartLegend extends React.Component {
       return 0;
     }
 
-    if (data.length < chartState.focusIndex) {
+    if (data.length < chartState.focusIndex || data[chartState.focusIndex] === undefined) {
       return 0;
     }
 
