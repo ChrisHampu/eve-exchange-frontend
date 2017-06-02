@@ -6,7 +6,7 @@ import s from './FullscreenComponent.scss';
 import { appExitFullscreen } from '../../actions/appActions';
 
 // Possible full screen components
-import MarketItemChart from '../Charts/MarketItemChart';
+//import MarketItemChart from '../Charts/MarketItemChart';
 import ProfitChart from '../Profit/ProfitChart';
 
 // Material UI
@@ -31,7 +31,7 @@ class FullscreenComponent extends React.Component {
   renderVisual() {
 
     if (this.props.fullscreen.visual_type === 1) {
-      return <MarketItemChart {...this.props.fullscreen.props} />;
+      return <div />;
     } else if(this.props.fullscreen.visual_type === 2) {
       return <ProfitChart {...this.props.fullscreen.props} />;
     }

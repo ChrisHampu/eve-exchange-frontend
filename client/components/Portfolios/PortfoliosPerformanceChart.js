@@ -4,7 +4,7 @@ import { scaleUtc, scaleLinear, timeHour, timeDay } from '../../vendor/d3';
 import { formatNumber } from '../../utilities';
 
 import ChartContainer from '../Charts/ChartContainer';
-import BarChartData from '../Charts/BarChartData';
+//import BarChartData from '../Charts/BarChartData';
 import Axis from '../Charts/Axis';
 import Indicator from '../Charts/Indicator';
 import Area from '../Charts/Area';

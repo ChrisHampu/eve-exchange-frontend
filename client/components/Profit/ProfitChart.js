@@ -6,7 +6,7 @@ import { scaleUtc, scaleLinear, timeHour, timeMinute, timeDay } from '../../vend
 import { formatNumber } from '../../utilities';
 
 import ChartContainer from '../Charts/ChartContainer';
-import BarChartData from '../Charts/BarChartData';
+
 import Axis from '../Charts/Axis';
 import Indicator from '../Charts/Indicator';
 import Scrollbar from '../Charts/Scrollbar';

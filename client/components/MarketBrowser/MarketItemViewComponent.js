@@ -9,10 +9,10 @@ import { pinChartToDashboard, unPinChartFromDashboard } from '../../actions/sett
 import { appEnterFullscreen } from '../../actions/appActions';
 import { userHasPremium } from '../../auth';
 import { formatNumberUnit, formatPercent } from '../../utilities';
+import MarketItemChartComponent from './MarketItemChartComponent';
 
 import MarketBrowserOrderTable from './MarketBrowserOrderTable';
 import MarketBrowserSimulate from './MarketBrowserSimulate';
-import MarketItemChart from '../Charts/MarketItemChart';
 
 import { Tabs, Tab } from 'material-ui/Tabs';
 import IconMenu from 'material-ui/IconMenu';
@@ -202,7 +202,7 @@ class MarketItemViewComponent extends React.Component {
           </div>
           <div className={s.tabs} ref="container">
             <div className={cx(s.tab, { [s.show]: this.state.tab===0})}>
-              <MarketItemChart item={this.state.item} region={this.state.regionOverride} width={this.state.width} height={this.state.height}/>
+              <MarketItemChartComponent item={this.state.item} region={this.state.regionOverride || undefined} />
             </div>
             <div className={cx(s.tab, { [s.show]: this.state.tab===1})}>
               <MarketBrowserOrderTable item={this.state.item} region={this.state.regionOverride} />

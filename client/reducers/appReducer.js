@@ -12,12 +12,15 @@ const initialState = {
         name: "Plex"
       }
     }
+  },
+  charts: {
+    focusIndex: null
   }
 };
 
 export default function auth(state = initialState, action) {
 
-  switch(action.type) {
+  switch (action.type) {
 
     case "APP_SET_NOTIFICATION":
       if (!action.notification) {
@@ -37,7 +40,15 @@ export default function auth(state = initialState, action) {
 
       return { ...state, fullscreen: { visual_type: 0, props: {} } };
 
+    case "RESET_CHART_STATE":
+
+      return { ...state, charts: { ...state.charts, focusedIndex: null } };
+
+    case "SET_CHART_FOCUS":
+
+      return { ...state, charts: { ...state.charts, focusIndex: action.index } };
+
     default:
       return state;
-  }  
+  }
 }
