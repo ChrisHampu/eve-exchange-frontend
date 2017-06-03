@@ -30,7 +30,6 @@ class ProfitChart extends React.Component {
 
     this.state = Object.assign({}, initialState, {
       initialState,
-      comparisonItems: [],
       zoomLevels: [15, 30, 50, 80, 100],
       frequency: 'hours'
     });

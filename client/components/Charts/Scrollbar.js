@@ -67,7 +67,7 @@ export default class Scrollbar extends React.Component {
 
     let barWidth = 0;
 
-    if (this.props.data.length > this.props.pageSize) {
+    if (this.props.data.length >= this.props.pageSize) {
 
       // const minimum = 0;
       const maximum = Math.max(this.props.width, this.props.width * (this.props.fullData.length / this.props.pageSize));

@@ -36,71 +36,15 @@ export default class MarketItemComparisonSearch extends React.Component {
       store.dispatch(sendAppNotification('Not a valid item', 5000));
       return;
     }
-    /*
-    if (this.state.comparisonItems.length >= this.state.limit) {
-      store.dispatch(sendAppNotification(`There\'s a limit of ${this.state.limit} comparisons at a time`, 5000));
-      return;
-    }
-    */
 
     const itemID = itemNameToID(chosenRequest);
-
-    //if (this.state.comparisonItems.indexOf(itemID) !== -1) {
-    //  store.dispatch(sendAppNotification('Item is already being compared', 5000));
-    //  return;
-    //}
-
-    //const comparisons = this.state.comparisonItems;
-
-    //comparisons.push(itemID);
-
 
     if (this.props.onComparisonItemsChanged) {
       this.props.onComparisonItemsChanged(itemID);
     }
   };
 
-  onUpdateInput = (searchText) => {
-    this.setState({
-      searchText
-    }/*, () => {
-
-      if (!this.state.searchText) {
-        return;
-      }
-
-      const search = this.state.searchText.toLowerCase();
-
-      const searchRes = Object.values(store.getState().sde.market_items).map(el => {
-        return { upper: el, lower: el.toLowerCase() };
-      }).find(el => el.lower === search);
-
-      if (!searchRes) {
-        return;
-      }
-
-      const itemID = itemNameToID(searchRes.el);
-
-      console.log('update input', searchText, search, searchRes, this.state.comparisonItems);
-
-      if (this.state.comparisonItems.indexOf(itemID) !== -1) {
-        store.dispatch(sendAppNotification('Item is already being compared', 5000));
-        return;
-      }
-
-      const comparisons = this.state.comparisonItems;
-
-      comparisons.push(itemID);
-
-      this.setState({
-        comparisonItems: comparisons
-      }, () => {
-        if (this.props.onComparisonItemsChanged) {
-          this.props.onComparisonItemsChanged(comparisons);
-        }
-      });
-    }*/);
-  }
+  onUpdateInput = searchText => this.setState({ searchText });
 
   setComparisonType = (_ev, _idx, type) => {
 

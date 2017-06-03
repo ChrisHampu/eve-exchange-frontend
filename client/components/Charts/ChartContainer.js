@@ -46,7 +46,7 @@ class ChartContainer extends React.Component {
       focusIndex: null,
       margin: {
         top: 10,
-        right: 35,
+        right: props.rightDataAccessor ? 45 : 35,
         bottom: props.hasScrollbar === true ? 45 : 25,
         left: 50
       }
@@ -210,8 +210,6 @@ class ChartContainer extends React.Component {
     };
 
     this.updateScales();
-
-    console.log(this.props);
 
     return (
       <div>
