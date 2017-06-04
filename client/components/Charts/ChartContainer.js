@@ -21,6 +21,7 @@ class ChartContainer extends React.Component {
     leftDataAccessor: React.PropTypes.func,
     rightDataAccessor: React.PropTypes.func,
     leftDataScale: React.PropTypes.object,
+    rightDataScale: React.PropTypes.object,
     data: React.PropTypes.array,
     scrollPercent: React.PropTypes.number,
     pageSize: React.PropTypes.number,
@@ -112,7 +113,9 @@ class ChartContainer extends React.Component {
       this.state.leftDataScale.update(data);
     }
 
-    this.state.rightDataScale.update(data);
+    if (!this.props.rightDataScale) {
+      this.state.rightDataScale.update(data);
+    }
   }
 
   throttledMouseMove = throttle((ev) => {
@@ -197,7 +200,7 @@ class ChartContainer extends React.Component {
       height: this.getAdjustedHeight(),
       timeScale: timeScale.scale,
       leftDataScale: this.props.leftDataScale ? this.props.leftDataScale.scale : leftDataScale.scale,
-      rightDataScale: rightDataScale.scale,
+      rightDataScale: this.props.rightDataScale ? this.props.rightDataScale.scale : rightDataScale.scale,
       timeAccessor,
       leftDataAccessor,
       rightDataAccessor,
