@@ -182,6 +182,10 @@ export function getMarketItemNames() {
   return Object.values(sde.market_items);
 }
 
+export function getMarketItemNamesSorted() {
+  return Object.values(sde.market_items).sort((el1, el2) => el1.length - el2.length);
+}
+
 export function _doSimulateTrade(type, quantity, data, settings, region, interval, strategy, margin_type, sales_tax, broker_fee, margin, wanted_margin, overhead) {
 
   if (Object.keys(data[type][interval]).indexOf(region) === -1) {
@@ -302,4 +306,31 @@ export function simulateTrade(type, quantity, data, settings, region) {
   });
 
   return result;
+}
+
+export function getPaginatedData(data, pageSize, scrollPercent) {
+
+  if (!data) {
+    return [];
+  }
+
+  if (data.length === 0) {
+    return data;
+  }
+
+  const sorted = data.sort((el1, el2) => el2.time - el1.time);
+
+  if (sorted.length > 0 && sorted.length < pageSize) {
+    return sorted;
+  }
+
+  if (!scrollPercent) {
+    const d = sorted.slice(Math.max(0, sorted.length - pageSize), sorted.length);
+
+    return d;
+  }
+
+  const slice = Math.floor(sorted.length * scrollPercent);
+
+  return sorted.slice(sorted.length - slice, Math.min(Math.max(sorted.length - slice + pageSize, 0), sorted.length));
 }

@@ -6,66 +6,80 @@ import { curveCardinal, line } from '../../vendor/d3';
 export default class Indicator extends React.Component {
 
   static propTypes = {
-
-    xScale: React.PropTypes.func,
-    yScale: React.PropTypes.func,
-    data: React.PropTypes.array,
-    xAccessor: React.PropTypes.func,
-    yAccessor: React.PropTypes.func,
-    heightOffset: React.PropTypes.number,
     showCircles: React.PropTypes.bool,
     lineColour: React.PropTypes.string,
     circleColour: React.PropTypes.string,
     thickLine: React.PropTypes.bool,
-    focusedIndex: React.PropTypes.number
+    data: React.PropTypes.oneOfType([
+      React.PropTypes.array,
+      React.PropTypes.object
+    ]),
+    fullData: React.PropTypes.oneOfType([
+      React.PropTypes.array,
+      React.PropTypes.object
+    ]),
+    timeScale: React.PropTypes.func,
+    leftDataScale: React.PropTypes.func,
+    timeAccessor: React.PropTypes.func,
+    leftDataAccessor: React.PropTypes.func,
+    rightDataScale: React.PropTypes.func,
+    rightDataAccessor: React.PropTypes.func,
+    height: React.PropTypes.number,
+    focusIndex: React.PropTypes.number,
+    focusPosition: React.PropTypes.number,
+    right: React.PropTypes.bool
+  };
+
+  static defaultProps = {
+    right: false
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      circleFill: "#eba91b"
+      circleFill: '#eba91b'
     };
   }
 
   render() {
 
-    const offset = this.props.heightOffset || 0;
+    if (!this.props.data.length) {
+      return <g />;
+    }
 
     const _line = line()
-      .x(d => this.props.xScale(this.props.xAccessor(d)))
-      .y(d => this.props.yScale(this.props.yAccessor(d)) + offset)
+      .x(d => this.props.timeScale(this.props.timeAccessor(d)))
+      .y(this.props.right ? d => this.props.rightDataScale(this.props.rightDataAccessor(d)) : d => this.props.leftDataScale(this.props.leftDataAccessor(d)))
       .curve(curveCardinal.tension(0.8));
 
     const linepath = _line(this.props.data);
 
-    const lineColour = this.props.lineColour || "#59c8e2";
-    const circleColour = this.props.circleColour || "#eba91b";
+    const lineColour = this.props.lineColour || '#59c8e2';
+    const circleColour = this.props.circleColour || '#eba91b';
 
     const stroke = this.props.thickLine ? 3 : 2;
-
-    const focusedEl = this.props.data[this.props.focusedIndex >= 0 ? this.props.focusedIndex : 0];
 
     return (
       <g>
         <path
           d={linepath}
-          fill="none"
+          fill='none'
           stroke={lineColour}
           strokeWidth={stroke}
         />
       {
-        this.props.focusedIndex >= 0 ?
-          <Circle 
-            style={{"stroke": "#fff", "strokeWidth": 2}} 
-            fill={circleColour} 
-            data={focusedEl} 
-            cx={this.props.xScale(this.props.xAccessor(focusedEl))} 
-            cy={this.props.yScale(this.props.yAccessor(focusedEl))+(this.props.heightOffset||0)}
+        this.props.focusIndex !== null && this.props.focusIndex >= 0 && this.props.focusIndex < this.props.fullData.length ?
+          <Circle
+            style={{ stroke: '#fff', strokeWidth: 2 }}
+            fill={circleColour}
+            data={this.props.fullData[this.props.focusIndex]}
+            cx={this.props.focusPosition}
+            cy={this.props.right ? this.props.rightDataScale(this.props.rightDataAccessor(this.props.fullData[this.props.focusIndex])) : this.props.leftDataScale(this.props.leftDataAccessor(this.props.fullData[this.props.focusIndex]))}
             r={6}
           /> : null
       }
       </g>
-    )
+    );
   }
 }

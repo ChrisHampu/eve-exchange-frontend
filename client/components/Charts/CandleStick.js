@@ -1,6 +1,5 @@
 /* eslint-disable global-require */
 import React from 'react';
-import s from './CandleStick.scss';
 
 export default class CandleStick extends React.Component {
 

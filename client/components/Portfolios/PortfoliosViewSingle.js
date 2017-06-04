@@ -43,42 +43,30 @@ class PortfoliosViewSingle extends React.Component {
     super(props);
 
     this.state = {
-      width: 0,
-      height: 0,
       deleteRequested: false
     };
+  }
+
+  componentWillMount() {
+
+    const portfolio = this.getPortfolio();
+
+    if (portfolio) {
+      if (portfolio.type === 0) {
+        if (!portfolio.portfolioValue) {
+          store.dispatch(sendAppNotification('This portfolio is new and will update within 5 minutes', 10000));
+        }
+      } else if (portfolio.type === 1) {
+        if (!portfolio.materialCost) {
+          store.dispatch(sendAppNotification('This portfolio is new and will update within 5 minutes', 10000));
+        }
+      }
+    }
   }
 
   setRoute(path) {
 
     this.context.router.push(path);
-  }
-
-  updateContainer() {
-
-    if (!this.props.portfolios || !this.getPortfolio() || !this.refs.content) {
-      return;
-    }
-
-    const newHeight = ReactDOM.findDOMNode(this.refs.content).clientHeight - 50; // -50 for the tab header
-    const newWidth = ReactDOM.findDOMNode(this.refs.content).clientWidth;
-
-    if (newHeight != this.state.height || newWidth != this.state.width) {
-      this.setState({
-        width: newWidth,
-        height: newHeight
-      });
-    }
-  }
-
-  componentDidMount() {
-
-    this.updateContainer();
-  }
-
-  componentDidUpdate() {
-
-    this.updateContainer();
   }
 
   getPortfolio() {
@@ -104,8 +92,6 @@ class PortfoliosViewSingle extends React.Component {
         });
 
         const result = await res.json();
-
-        console.log(result);
 
         if (result.error) {
           store.dispatch(sendAppNotification("There was a problem deleting the portfolio. Please refresh"));
@@ -180,7 +166,7 @@ class PortfoliosViewSingle extends React.Component {
             </div>
           </Paper>
           <div className={s.content} ref="content">
-            <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content} onChange={()=>this.refs.chart.updateContainer()}>
+            <Tabs style={{height: "100%", flex: 1, flexDirection: "column"}} className={s.tab_container} contentContainerClassName={s.tab_content}>
               <Tab label="Components" style={{backgroundColor: "rgb(29, 33, 37)"}}>
                 <PortfoliosComponentTable portfolio={portfolio} />
               </Tab>
@@ -191,7 +177,7 @@ class PortfoliosViewSingle extends React.Component {
                   </Tab> : false
               }
               <Tab label="Performance Chart" style={{backgroundColor: "rgb(29, 33, 37)"}}>
-                <PortfoliosPerformanceChart ref="chart" width={this.state.width} height={this.state.height} style={{flex: 1}} portfolio={portfolio} />
+                <PortfoliosPerformanceChart width={this.state.width} height={this.state.height} style={{flex: 1}} portfolio={portfolio} />
               </Tab>
               {
                 portfolio.type === 1 ?

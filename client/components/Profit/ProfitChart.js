@@ -1,17 +1,16 @@
 /* eslint-disable global-require */
 import React from 'react';
 import { connect } from 'react-redux';
-import store from '../../store';
-import { scaleUtc, scaleLinear, timeHour, timeMinute, timeDay } from '../../vendor/d3';
 import { formatNumber } from '../../utilities';
-
+import { getPaginatedData } from '../../market';
+import ChartFrequencySelector from '../Charts/ChartFrequencySelector';
+import ChartZoomSelector from '../Charts/ChartZoomSelector';
 import ChartContainer from '../Charts/ChartContainer';
-import BarChartData from '../Charts/BarChartData';
-import Axis from '../Charts/Axis';
+import ChartLegend from '../Charts/ChartLegend';
 import Indicator from '../Charts/Indicator';
 import Scrollbar from '../Charts/Scrollbar';
-
-import CircularProgress from 'material-ui/CircularProgress';
+import Measure from '../UI/Measure';
+import Axis from '../Charts/Axis';
 
 class ProfitChart extends React.Component {
 
@@ -23,159 +22,46 @@ class ProfitChart extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      xScale: scaleUtc(),
-      profitScale: scaleLinear(),
-      focusedElement: null,
-      focusedElementIndex: -1
-    }
-  }
+    const initialState = {
+      frequencyLevels: { hours: '1 Hour', daily: '1 Day' },
+      zoom: 1,
+      scrollPercent: null
+    };
 
-  updateScales() {
-
-    if (!this.refs.container) {
-      return;
-    }
-
-    let timePadding = 60000;
-
-    const data = this.getChartData();
-
-    if (!data) {
-      return;
-    }
-
-    const minDate = new Date(Math.min(...data.map((el) => { return el.time; })));
-    const maxDate = new Date(Math.max(...data.map((el) => { return el.time; })));
-
-    minDate.setTime(minDate.getTime() - timePadding);
-    maxDate.setTime(maxDate.getTime() + timePadding);
-
-    this.state.xScale.domain([
-      new Date(minDate.getTime()),
-      new Date(maxDate.getTime())
-    ]);
-
-    this.state.profitScale.domain([Math.min(...data.map((el) => { return el.profit})), Math.max(...data.map((el) => { return el.profit}))]);
-
-    this.state.xScale.range([0, this.refs.container.getWidth()]);
-    this.state.profitScale.range([this.refs.container.getHeight(), 0]);
-
-    this.state.xScale.clamp(true);
-    this.state.profitScale.clamp(true);
-
-    this.state.xScale.nice(this.refs.container.getFrequency() === "minutes" ? timeMinute : (this.refs.container.getFrequency() === "hours" ? timeHour : timeDay));
-    this.state.profitScale.nice([5]);
-
-    this.setState({
-      xScale: this.state.xScale,
-      profitScale: this.state.profitScale
+    this.state = Object.assign({}, initialState, {
+      initialState,
+      zoomLevels: [15, 30, 50, 80, 100],
+      frequency: 'hours'
     });
   }
 
   getChartData() {
 
-    // Check if still loading components
-    if (!this.refs.container) {
-      return null;
+    switch (this.state.frequency) {
+      case 'hours':
+      default:
+        return this.props.chart.hourly || [];
+      case 'daily':
+        return this.props.chart.daily || [];
     }
-
-    switch(this.refs.container.getFrequency()) {
-      case "hours":
-        var arr = this.props.chart.hourly;
-        if (!arr) {
-          return null;
-        }
-        var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
-        if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
-          return arr;
-        }
-        return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
-      case "days":
-        var arr = this.props.chart.daily;
-        if (!arr) {
-          return null;
-        }
-        var slice = Math.floor(arr.length * this.refs.container.getScrollPercent());
-        if (arr.length > 0 && arr.length < this.refs.container.getPageSize()) {
-          return arr;
-        }
-        return arr.length === 0 ? arr : arr.slice(arr.length-slice, Math.min(Math.max(arr.length-slice+this.refs.container.getPageSize(), 0), arr.length));
-    }
-
-    return null;
   }
 
-  getChartDataSize() {
-
-    if (!this.refs.container) {
-      return 0;
-    }
-
-    switch(this.refs.container.getFrequency()) {
-      case "hours":
-        var arr = this.props.chart.hourly;
-        if (!arr) {
-          return 0;
-        }
-
-        return arr.length;
-        
-      case "days":
-        var arr = this.props.chart.daily;
-        if (!arr) {
-          return 0;
-        }
-
-        return arr.length;
-    }
-
-    return 0;  
+  getPaginatedChartData() {
+    return getPaginatedData(this.getChartData(), this.state.zoomLevels[this.state.zoom], this.state.scrollPercent);
   }
-
-  getHitTestableData() {
-
-    return this.getChartData().map(el => this.state.xScale(el.time));
-  }
-
-  componentDidMount() {
-
-    this.updateScales();
-  }
-
-  componentWillReceiveProps(nextProps) {
-
-    this.props = nextProps;
-
-    this.updateScales();
-  }
-
-  chartChanged() {
-
-    this.updateScales();
-  }
-
-  setFrequency = (event, index, value) => {
-
-    this.refs.container.setFrequency(event, index, value);
-  };
-
-  handleScrollChange(scroll) {
-
-    this.refs.container.handleScrollChange(scroll);
-  }
-
 
   getLegend() {
 
-    if (!this.refs.container) {
-      return;
+    const legend = [];
+    const focus = this.props.chartState.focusIndex;
+    const data = this.getChartData();
+
+    if (!data || focus === null) {
+      return [];
     }
 
-    const legend = [];
-
-    legend.push({fill: "#4CAF50", text: "Profit", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.profit) : 0, postfix: ""});
-    legend.push({fill: "#F44336", text: "Fees", value: this.state.focusedElement ? formatNumber(this.state.focusedElement.taxes+this.state.focusedElement.broker) : 0, postfix: ""});
+    legend.push({ fill: '#4CAF50', text: 'Profit', value: data.length > focus ? formatNumber(data[focus].profit) : 0, postfix: '' });
+    legend.push({ fill: '#F44336', text: 'Fees', value: data.length > focus ? formatNumber(data[focus].taxes + data[focus].broker) : 0, postfix: '' });
 
     return legend;
   }
@@ -183,44 +69,49 @@ class ProfitChart extends React.Component {
   render() {
 
     const data = this.getChartData();
-    const width = this.refs.container ? this.refs.container.getWidth() : 0;
-    const height = this.refs.container ? this.refs.container.getHeight() : 0;
 
     return (
-      <div style={{width: "100%", height: "100%"}}>
-        <ChartContainer
-          frequencyLevels={{hours: "Hourly", days: "Daily"}}
-          marginLeft={65}
-          marginRight={65}
-          ref="container"
-          data={data}
-          title={this.props.title}
-          onChartChanged={()=>this.chartChanged()}
-          getHitTestableData={()=>this.getHitTestableData()}
-          totalDataSize={this.getChartDataSize()}
-          legend={this.getLegend()}
-          onFocusElement={(el, index)=>this.setState({focusedElement: el, focusedElementIndex: index})}
-        >
-          <Axis anchor="left" scale={this.state.profitScale} ticks={5} tickSize={-width} suppressLabels={true} style={{opacity: 0.5}}/>
-
-          <Axis anchor="left" scale={this.state.profitScale} ticks={5} formatISK={true} />
-          <Axis anchor="bottom" scale={this.state.xScale} ticks={5} style={{transform: `translateY(${height}px)`}} />
-          {
-            data && data.length > 0 ?
-            <g>
-              <Indicator thickLine={true} circleColour="#F44336" lineColour="#F44336" viewportHeight={height} data={this.getChartData()} focusedIndex={this.state.focusedElementIndex} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => Math.abs(el.taxes) + Math.abs(el.broker)} />
-              <Indicator thickLine={true} circleColour="#4CAF50" lineColour="#4CAF50" viewportHeight={height} data={this.getChartData()} focusedIndex={this.state.focusedElementIndex} xScale={this.state.xScale} yScale={this.state.profitScale} xAccessor={(el) => { return el.time;}} yAccessor={(el) => el.profit} />
-              <Scrollbar onScrollChange={scroll=>this.handleScrollChange(scroll)} />
-           </g> : false
-          }
-        </ChartContainer>
-     </div>
+      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'none' }}>
+        <div>
+          <ChartFrequencySelector
+            frequencyLevels={this.state.frequencyLevels}
+            defaultFrequency={this.state.frequency}
+            onFrequencyChanged={frequency => this.setState({ frequency })}
+          />
+          <ChartZoomSelector
+            zoomLevels={this.state.zoomLevels}
+            defaultZoom={this.state.initialState.zoom}
+            onZoomChanged={zoom => this.setState({ zoom })}
+          />
+        </div>
+        <ChartLegend legendItems={this.getLegend()} data={data} />
+        <Measure>
+          <ChartContainer
+            height={600}
+            scrollPercent={this.state.scrollPercent}
+            pageSize={this.state.zoomLevels[this.state.zoom]}
+            data={data}
+            timeAccessor={el => el.time}
+            leftDataAccessor={el => el.profit}
+            rightDataAccessor={() => 0}
+            frequency={this.state.frequency}
+            hasScrollbar
+          >
+            <Scrollbar onScrollChange={scrollPercent => this.setState({ scrollPercent })} />
+            <Axis formatISK tickCount={5} />
+            <Axis horizontalLines tickCount={5} />
+            <Axis anchor='bottom' tickCount={5} />
+            <Indicator thickLine circleColour='#F44336' lineColour='#F44336' leftDataAccessor={el => Math.abs(el.taxes) + Math.abs(el.broker)} />
+            <Indicator thickLine circleColour='#4CAF50' lineColour='#4CAF50' />
+          </ChartContainer>
+        </Measure>
+      </div>
     );
   }
 }
 
 const mapStateToProps = function(store) {
-  return { chart: store.profit.chart };
-}
+  return { chart: store.profit.chart, chartState: store.app.charts };
+};
 
 export default connect(mapStateToProps)(ProfitChart);

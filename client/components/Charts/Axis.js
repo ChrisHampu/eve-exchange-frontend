@@ -12,50 +12,52 @@ export default class Axis extends React.Component {
 
     format: React.PropTypes.string,
     formatISK: React.PropTypes.bool,
-    tickSize: React.PropTypes.number,
-    suppressLabels: React.PropTypes.bool
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
+    anchor: React.PropTypes.string,
+    timeScale: React.PropTypes.func,
+    leftDataScale: React.PropTypes.func,
+    rightDataScale: React.PropTypes.func,
+    className: React.PropTypes.string,
+    style: React.PropTypes.object,
+    horizontalLines: React.PropTypes.bool, // Treat this axis as horizontal lines across the chart
+    tickCount: React.PropTypes.number
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      anchor: this.props.anchor || "left",
-      classname: this.props.className !== undefined ? cx(s.root, this.props.className) : s.root
-    };
-
-    switch (this.state.anchor) {
-
-      case "bottom":
-        this.state.axis = axisBottom(this.props.scale);
-        break;
-      case "left":
-        this.state.axis = axisLeft(this.props.scale);
-        break;
-      case "right":
-        this.state.axis = axisRight(this.props.scale);
-        break;
-    }
-  }
+  static defaultProps = {
+    tickCount: 10,
+    horizontalLines: false,
+    style: {}
+  };
 
   update() {
 
+    let axis = null;
+
+    switch (this.props.anchor) {
+      case 'bottom':
+        axis = axisBottom(this.props.timeScale);
+        break;
+      case 'right':
+        axis = axisRight(this.props.rightDataScale);
+        break;
+      default:
+        axis = axisLeft(this.props.leftDataScale);
+        break;
+    }
+
     if (this.props.format) {
-      this.state.axis.ticks(this.props.ticks, this.props.format);
-    }
-    else {
-      this.state.axis.ticks(this.props.ticks);
-    }
-
-    if (this.props.tickSize) {
-      this.state.axis.tickSize(this.props.tickSize, 0, 0);
+      axis.ticks(this.props.tickCount, this.props.format);
+    } else {
+      axis.ticks(this.props.tickCount);
     }
 
-    this.state.axis(select(this.refs.axis));
-
-    if (this.props.suppressLabels) {
-      this.state.axis.tickFormat("");
+    if (this.props.horizontalLines) {
+      axis.tickSize(-this.props.width, 0, 0);
+      axis.tickFormat('');
     }
+
+    axis(select(this.refs.axis));
 
     if (this.props.formatISK) {
 
@@ -64,14 +66,13 @@ export default class Axis extends React.Component {
       if (children.length > 1) {
 
         for (let i = 1; i < children.length; i++) {
-        
+
           const text = children[i].children[1].innerHTML;
 
-          let num = parseInt(text.replace(/,/g, ""));
+          const num = parseInt(text.replace(/,/g, ''), 10);
 
           children[i].children[1].innerHTML = formatNumberUnit(num);
         }
-        
       }
     }
   }
@@ -88,8 +89,26 @@ export default class Axis extends React.Component {
   }
 
   render() {
+
+    const {
+      height,
+      width,
+      horizontalLines,
+      className,
+      anchor,
+      style: propStyle
+    } = this.props;
+
+    const yt = anchor === 'bottom' ? height : 0;
+    const xt = anchor === 'right' ? width : 0;
+
+    const style = Object.assign({}, {
+      opacity: horizontalLines ? 0.5 : 1,
+      transform: `translateX(${xt}px) translateY(${yt}px)`
+    }, propStyle);
+
     return (
-      <g className={this.state.classname} ref="axis" style={this.props.style} />
-    )
+      <g className={cx(s.root, className)} ref='axis' style={style} />
+    );
   }
 }
