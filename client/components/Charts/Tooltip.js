@@ -83,7 +83,7 @@ export default class Tooltip extends React.Component {
     return (
       <div 
         ref="tooltip"
-        style={{...this.props.style, pointerEvents: "none", cursor: "pointer", transition: "opacity 350ms ease-in-out", fontWeight: "bold", padding: "0.35rem", fontSize: "0.8rem", background: "rgb(38, 43, 47)", display: this.state.tooltipUninteractive ? "none" : "block", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}
+        style={{...this.props.style, pointerEvents: "none", cursor: "pointer", transition: "opacity 350ms ease-in-out", fontWeight: "bold", padding: "0.75rem 0.5rem", fontSize: "0.8rem", background: "rgb(38, 43, 47)", display: this.state.tooltipUninteractive ? "none" : "block", opacity: this.state.tooltipVisible ? 1 : 0, color: "rgb(235, 169, 27)", borderRadius: "4px", position: "absolute", left: this.state.tooltipX, top: this.state.tooltipY}}
         >
         {contents}
       </div>

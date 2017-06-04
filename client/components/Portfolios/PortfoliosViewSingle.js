@@ -47,6 +47,17 @@ class PortfoliosViewSingle extends React.Component {
     };
   }
 
+  componentWillMount() {
+
+    const portfolio = this.getPortfolio();
+
+    if (portfolio) {
+      if (!portfolio.portfolioValue) {
+        store.dispatch(sendAppNotification('This portfolio is new and will update within 5 minutes', 10000));
+      }
+    }
+  }
+
   setRoute(path) {
 
     this.context.router.push(path);
