@@ -118,9 +118,6 @@ class SpiderChartContent extends React.Component {
       return;
     }
 
-    console.log(this.props);
-
-
     const size = this.getSize();
     const radians = Math.PI * 2;
     const componentCount = this.getComponentCount();
