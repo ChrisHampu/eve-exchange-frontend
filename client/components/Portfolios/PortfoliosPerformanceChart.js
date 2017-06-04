@@ -108,6 +108,7 @@ class PortfoliosPerformanceChart extends React.Component {
 
       leftScale.update(data);
     } else {
+
       const matData = data.map(el => [el.materialValue, el.portfolioValue]).reduce((left, right) => left.concat(right), []).map(el => ({ val: el }));
 
       rightScale = new Scale(scaleLinear, el => el.industrySpread / 100, () => 545, () => 0, [1]);
@@ -167,7 +168,7 @@ class PortfoliosPerformanceChart extends React.Component {
             }
             {
               portfolioType === 1 &&
-                <Indicator thickLine circleColour='#59c8e2' lineColour='#59c8e2' data={data} leftDataAccessor={el => el.portfolioValue} />
+                <Indicator thickLine circleColour='#5CEF70' lineColour='#5CEF70' data={data} leftDataAccessor={el => el.industrySpread / 100} />
             }
             {
               portfolioType === 1 &&
@@ -175,7 +176,7 @@ class PortfoliosPerformanceChart extends React.Component {
             }
             {
               portfolioType === 1 &&
-                <Indicator thickLine circleColour='#5CEF70' lineColour='#5CEF70' data={data} rightDataAccessor={el => el.industrySpread / 100} />
+                <Indicator thickLine circleColour='#59c8e2' lineColour='#59c8e2' data={data} rightDataAccessor={el => el.portfolioValue} />
             }
           </ChartContainer>
         </Measure>
