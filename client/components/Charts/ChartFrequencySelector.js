@@ -34,7 +34,7 @@ export default class ChartFrequencySelector extends React.Component {
   render() {
     return (
       <SelectField
-        style={{ width: '150px' }}
+        style={{ width: '150px', verticalAlign: 'middle' }}
         value={Object.keys(this.props.frequencyLevels).findIndex(el => el === this.state.frequency)}
         onChange={this.setFrequency}
       >

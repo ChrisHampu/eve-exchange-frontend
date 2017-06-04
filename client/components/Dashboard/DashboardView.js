@@ -7,6 +7,7 @@ import { subscribeItem, unsubscribeItem } from '../../market';
 import { unPinChartFromDashboard } from '../../actions/settingsActions';
 import DashboardPage from '../DashboardPage/DashboardPageComponent';
 //import MarketItemChart from '../Charts/MarketItemChart';
+import MarketItemChartComponent from '../MarketBrowser/MarketItemChartComponent';
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -66,7 +67,7 @@ class DashboardView extends React.Component {
                       </IconMenu>
                     </div>
                     <div className={s.chart}>
-
+                      <MarketItemChartComponent item={item} dashboardMode />
                     </div>
                   </div>
                 )

@@ -26,12 +26,14 @@ class MarketItemChartComponent extends React.Component {
   static propTypes = {
     item: React.PropTypes.object,
     region: React.PropTypes.number,
-    frequency: React.PropTypes.number
+    frequency: React.PropTypes.number,
+    dashboardMode: React.PropTypes.bool
   };
 
   static defaultProps = {
     region: 10000002,
-    frequency: 0
+    frequency: 0,
+    dashboardMode: false
   };
 
   constructor(props) {
@@ -254,23 +256,31 @@ class MarketItemChartComponent extends React.Component {
      */
 
     return (
-      <div style={{ marginBottom: '3rem' }}>
-        <ChartFrequencySelector
-          frequencyLevels={this.state.frequencyLevels}
-          defaultFrequency={this.state.frequency}
-          onFrequencyChanged={frequency => this.setState({ frequency })}
-        />
-        <ChartZoomSelector
-          zoomLevels={this.state.zoomLevels}
-          defaultZoom={this.state.initialState.zoom}
-          onZoomChanged={zoom => this.setState({ zoom })}
-        />
-        <MarketItemComparisonSearch
-          comparisonFields={{ buyPercentile: 'Price', spread: 'Spread', tradeVolume: 'Trade Volume' }}
-          defaultComparison={this.state.initialState.comparisonType}
-          onComparisonItemsChanged={this.addComparisonItem}
-          onComparisonTypeChanged={comparisonType => this.setState({ comparisonType })}
-        />
+      <div style={{ marginBottom: this.props.dashboardMode ? '1rem' : '3rem', width: '100%' }}>
+        <div>
+          {
+            this.props.dashboardMode &&
+              <div style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '1rem', color: '#eba91b' }}>
+                {this.props.item.name}
+              </div>
+          }
+          <ChartFrequencySelector
+            frequencyLevels={this.state.frequencyLevels}
+            defaultFrequency={this.state.frequency}
+            onFrequencyChanged={frequency => this.setState({ frequency })}
+          />
+          <ChartZoomSelector
+            zoomLevels={this.state.zoomLevels}
+            defaultZoom={this.state.initialState.zoom}
+            onZoomChanged={zoom => this.setState({ zoom })}
+          />
+          <MarketItemComparisonSearch
+            comparisonFields={{ buyPercentile: 'Price', spread: 'Spread', tradeVolume: 'Trade Volume' }}
+            defaultComparison={this.state.initialState.comparisonType}
+            onComparisonItemsChanged={this.addComparisonItem}
+            onComparisonTypeChanged={comparisonType => this.setState({ comparisonType })}
+          />
+        </div>
         <Measure>
           <ChartLegend legendItems={this.state.comparisonItems.length > 0 ? this.getComparisonLegend() : this.getPrimaryLegend()} data={data} />
           <ChartContainer

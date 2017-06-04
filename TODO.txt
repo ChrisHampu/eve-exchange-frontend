@@ -31,12 +31,16 @@
 
 - add 'profit per item' or trade simulation to item forecast tool - Porstacha Eistiras
 
-- alert history log for users + admin
-- in market browser show alert icon 'you have an alert set for this item'
 - 'pause all' button + api endpoint
-- audit log alerts
-- add sell price to sales 'bought # of %s's for %s ISK totalling %s ISK'
+- audit alerts
 - allow editing certain alert parameters directly in the list view. click param -> live edit (price changes) | POST /alerts/modify/_id { 'key': value }
+- auto refresh alerts view page timestamps
 
 - click on indicator values in market browser to toggle their visibility (show by fading out the value box)
 - link pages that rely on APi directly to add api page
+
+- logging in should preserve page user was attempting to visit before redirecting
+
+- scroll charts by dragging
+
+- market item search should only show tradeable items!
