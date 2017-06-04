@@ -5,8 +5,6 @@ import s from './DashboardView.scss';
 import { browserHistory } from 'react-router';
 import { subscribeItem, unsubscribeItem } from '../../market';
 import { unPinChartFromDashboard } from '../../actions/settingsActions';
-import DashboardPage from '../DashboardPage/DashboardPageComponent';
-//import MarketItemChart from '../Charts/MarketItemChart';
 import MarketItemChartComponent from '../MarketBrowser/MarketItemChartComponent';
 
 import IconMenu from 'material-ui/IconMenu';
@@ -24,6 +22,12 @@ class DashboardView extends React.Component {
   setRoute(route) {
 
     browserHistory.push(route);
+  }
+
+  removeChart(id) {
+
+    store.dispatch(unPinChartFromDashboard(id));
+    unsubscribeItem(id);
   }
 
   render() {
@@ -61,7 +65,7 @@ class DashboardView extends React.Component {
                         targetOrigin={{horizontal: 'right', vertical: 'top'}}
                         className={s.chart_menu}
                       >
-                        <MenuItem type="text" primaryText="Remove" onTouchTap={()=>{store.dispatch(unPinChartFromDashboard(item.id))}} style={{cursor: "pointer"}} />
+                        <MenuItem type="text" primaryText="Remove" onTouchTap={() => this.removeChart(item.id)} style={{cursor: "pointer"}} />
                         <MenuItem type="text" primaryText="View in Browser" onTouchTap={()=>{this.context.router.push(`/dashboard/browser/${item.id}`)}} style={{cursor: "pointer"}} />
                         <MenuItem type="text" primaryText="Settings" onTouchTap={()=>{this.context.router.push('dashboard/profile/settings')}} style={{cursor: "pointer"}} />
                       </IconMenu>
